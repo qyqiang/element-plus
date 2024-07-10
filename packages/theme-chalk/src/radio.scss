@@ -48,7 +48,7 @@ $radio-font-size: map.merge(
     box-sizing: border-box;
 
     &.is-checked {
-      border-color: getCssVar('color-primary');
+      //border-color: getCssVar('color-primary');
     }
 
     &.is-disabled {
@@ -90,8 +90,8 @@ $radio-font-size: map.merge(
 
     @include when(disabled) {
       .#{$namespace}-radio__inner {
-        background-color: map.get($radio-disabled, 'input-fill');
-        border-color: map.get($radio-disabled, 'input-border-color');
+        background-color: getCssVar('fill-color', 'disabled');
+        border-color: getCssVar('fill-color', 'disabled');
         cursor: not-allowed;
 
         &::after {
@@ -105,8 +105,8 @@ $radio-font-size: map.merge(
       }
       &.is-checked {
         .#{$namespace}-radio__inner {
-          background-color: map.get($radio-disabled, 'checked-input-fill');
-          border-color: map.get($radio-disabled, 'checked-input-border-color');
+          background-color: getCssVar('fill-color', 'disabled');
+          border-color: getCssVar('fill-color', 'disabled');
 
           &::after {
             background-color: map.get($radio-disabled, 'checked-icon-color');
@@ -121,16 +121,12 @@ $radio-font-size: map.merge(
 
     @include when(checked) {
       .#{$namespace}-radio__inner {
-        border-color: map.get($radio-checked, 'input-border-color');
-        background: map.get($radio-checked, 'icon-color');
+        border-color: getCssVar('border-color', 'checked');
+        background:getCssVar('color-white');
 
         &::after {
           transform: translate(-50%, -50%) scale(1);
         }
-      }
-
-      & + .#{$namespace}-radio__label {
-        color: map.get($radio-checked, 'text-color');
       }
     }
 
@@ -156,10 +152,10 @@ $radio-font-size: map.merge(
     }
 
     &::after {
-      width: 4px;
-      height: 4px;
+      width: 8px;
+      height: 8px;
       border-radius: getCssVar('radio-input-border-radius');
-      background-color: getCssVar('color-white');
+      background-color: getCssVar('border-color', 'checked');
       content: '';
       position: absolute;
       left: 50%;

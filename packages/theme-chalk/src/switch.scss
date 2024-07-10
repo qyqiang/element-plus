@@ -7,72 +7,72 @@
 
 $switch-height: () !default;
 $switch-height: map.merge(
-  (
-    'large': 40px,
-    'default': 32px,
-    'small': 24px,
-  ),
-  $switch-height
+    (
+      'large': 40px,
+      'default': 32px,
+      'small': 24px,
+    ),
+    $switch-height
 );
 
 $switch-font-size: () !default;
 $switch-font-size: map.merge(
-  (
-    'large': 14px,
-    'default': 14px,
-    'small': 12px,
-  ),
-  $switch-font-size
+    (
+      'large': 14px,
+      'default': 14px,
+      'small': 12px,
+    ),
+    $switch-font-size
 );
 
 $switch-core-border-radius: () !default;
 $switch-core-border-radius: map.merge(
-  (
-    'large': 12px,
-    'default': 10px,
-    'small': 8px,
-  ),
-  $switch-core-border-radius
+    (
+      'large': 12px,
+      'default': 10px,
+      'small': 8px,
+    ),
+    $switch-core-border-radius
 );
 
 $switch-core-width: () !default;
 $switch-core-width: map.merge(
-  (
-    'large': 50px,
-    'default': 40px,
-    'small': 30px,
-  ),
-  $switch-core-width
+    (
+      'large': 50px,
+      'default': 40px,
+      'small': 30px,
+    ),
+    $switch-core-width
 );
 
 $switch-core-height: () !default;
 $switch-core-height: map.merge(
-  (
-    'large': 24px,
-    'default': 20px,
-    'small': 16px,
-  ),
-  $switch-core-height
+    (
+      'large': 24px,
+      'default': 20px,
+      'small': 16px,
+    ),
+    $switch-core-height
 );
 
 $switch-button-size: () !default;
 $switch-button-size: map.merge(
-  (
-    'large': 20px,
-    'default': 16px,
-    'small': 12px,
-  ),
-  $switch-button-size
+    (
+      'large': 20px,
+      'default': 16px,
+      'small': 12px,
+    ),
+    $switch-button-size
 );
 
 $switch-content-padding: () !default;
 $switch-content-padding: map.merge(
-  (
-    'large': 6px,
-    'default': 4px,
-    'small': 2px,
-  ),
-  $switch-content-padding
+    (
+      'large': 6px,
+      'default': 4px,
+      'small': 2px,
+    ),
+    $switch-content-padding
 );
 
 @include b(switch) {
@@ -92,6 +92,12 @@ $switch-content-padding: map.merge(
     & .#{$namespace}-switch__core,
     & .#{$namespace}-switch__label {
       cursor: not-allowed;
+      background-color: #c1ccd661 !important;
+
+      .#{$namespace}-switch__action {
+        color: #fff !important;
+        background-color: #2a3d4d2e !important;
+      }
     }
   }
 
@@ -105,15 +111,11 @@ $switch-content-padding: map.merge(
     vertical-align: middle;
     color: getCssVar('text-color', 'primary');
 
-    @include when(active) {
-      color: getCssVar('color-primary');
-    }
-
     @include m(left) {
-      margin-right: 10px;
+      margin-right: 8px;
     }
     @include m(right) {
-      margin-left: 10px;
+      margin-left: 8px;
     }
     & * {
       line-height: 1;
@@ -150,18 +152,13 @@ $switch-content-padding: map.merge(
     align-items: center;
     min-width: map.get($switch-core-width, 'default');
     height: map.get($switch-core-height, 'default');
-    border: 1px solid
-      var(
-        #{getCssVarName('switch-border-color')},
-        #{getCssVar('switch-off-color')}
-      );
     outline: none;
     border-radius: map.get($switch-core-border-radius, 'default');
     box-sizing: border-box;
     background: getCssVar('switch-off-color');
     cursor: pointer;
     transition: border-color getCssVar('transition-duration'),
-      background-color getCssVar('transition-duration');
+    background-color getCssVar('transition-duration');
 
     .#{$namespace}-switch__inner {
       width: 100%;
@@ -179,6 +176,7 @@ $switch-content-padding: map.merge(
         user-select: none;
         @include utils-ellipsis;
       }
+
       padding: 0 #{map.get($switch-content-padding, 'default')} 0 calc(#{map.get(
               $switch-button-size,
               'default'
@@ -187,7 +185,7 @@ $switch-content-padding: map.merge(
 
     .#{$namespace}-switch__action {
       position: absolute;
-      left: 1px;
+      left: 2px;
       border-radius: getCssVar('border-radius-circle');
       transition: all getCssVar('transition-duration');
       width: map.get($switch-button-size, 'default');
@@ -203,8 +201,8 @@ $switch-content-padding: map.merge(
   @include when(checked) {
     .#{$namespace}-switch__core {
       border-color: var(
-        #{getCssVarName('switch-border-color')},
-        #{getCssVar('switch-on-color')}
+          #{getCssVarName('switch-border-color')},
+          #{getCssVar('switch-on-color')}
       );
       background-color: getCssVar('switch-on-color');
 
@@ -230,13 +228,13 @@ $switch-content-padding: map.merge(
     .#{$namespace}-switch__label {
       &.#{$namespace}-switch__label--left {
         span {
-          left: 10px;
+          left: 8px;
         }
       }
 
       &.#{$namespace}-switch__label--right {
         span {
-          right: 10px;
+          right: 8px;
         }
       }
     }
@@ -284,7 +282,7 @@ $switch-content-padding: map.merge(
       @include when(checked) {
         .#{$namespace}-switch__core {
           .#{$namespace}-switch__action {
-            left: calc(100% - #{map.get($switch-button-size, $size) + 1px});
+            left: calc(100% - #{map.get($switch-button-size, $size) + 2px});
           }
 
           .#{$namespace}-switch__inner {

@@ -21,7 +21,8 @@
   @include set-component-css-var('font-size', $font-size);
   @include set-component-css-var('font-family', $font-family);
 
-  @include set-css-var-value('font-weight-primary', 500);
+  @include set-css-var-value('font-weight-primary', 400);
+  @include set-css-var-value('font-weight-medium', 500);
   @include set-css-var-value('font-line-height-primary', 24px);
 
   // z-index --el-index-#{$type}
@@ -48,7 +49,7 @@
 
   // --el-color-#{$type}
   // --el-color-#{$type}-light-{$i}
-  @each $type in (primary, success, warning, danger, error, info) {
+  @each $type in (primary, success, warning, danger, error, info, filled) {
     @include set-css-color-type($colors, $type);
   }
 
@@ -77,9 +78,8 @@
   @include set-css-var-value('border-style', $border-style);
   @include set-css-var-value('border-color-hover', $border-color-hover);
   @include set-css-var-value(
-    'border',
-    getCssVar('border-width') getCssVar('border-style')
-      getCssVar('border-color')
+      'border',
+      getCssVar('border-width') getCssVar('border-style') getCssVar('border-color')
   );
 
   // Svg

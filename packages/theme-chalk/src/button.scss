@@ -8,12 +8,12 @@
 
 $button-icon-span-gap: () !default;
 $button-icon-span-gap: map.merge(
-  (
-    'large': 8px,
-    'default': 6px,
-    'small': 4px,
-  ),
-  $button-icon-span-gap
+    (
+      'large': 8px,
+      'default': 6px,
+      'small': 4px,
+    ),
+    $button-icon-span-gap
 );
 
 @include b(button) {
@@ -21,10 +21,12 @@ $button-icon-span-gap: map.merge(
 }
 
 @include b(button) {
+  font-family: getCssVar('font-family', 'header');
   display: inline-flex;
   justify-content: center;
   align-items: center;
-
+  min-width: 71px;
+  max-width: 180px;
   line-height: 1;
   // min-height will expand when in flex
   height: map.get($input-height, 'default');
@@ -73,10 +75,10 @@ $button-icon-span-gap: map.merge(
   }
 
   @include button-size(
-    map.get($button-padding-vertical, 'default') - $button-border-width,
-    map.get($button-padding-horizontal, 'default') - $button-border-width,
-    map.get($button-font-size, 'default'),
-    map.get($button-border-radius, 'default')
+      map.get($button-padding-vertical, 'default') - $button-border-width,
+      map.get($button-padding-horizontal, 'default') - $button-border-width,
+      map.get($button-font-size, 'small'),
+      map.get($button-border-radius, 'default')
   );
 
   &::-moz-focus-inner {
@@ -87,6 +89,7 @@ $button-icon-span-gap: map.merge(
     & + span {
       margin-left: map.get($button-icon-span-gap, 'default');
     }
+
     svg {
       vertical-align: bottom;
     }
@@ -94,16 +97,16 @@ $button-icon-span-gap: map.merge(
 
   @include when(plain) {
     @include css-var-from-global(
-      ('button', 'hover', 'text-color'),
-      ('color', 'primary')
+          ('button', 'hover', 'text-color'),
+          ('color', 'primary')
     );
     @include css-var-from-global(
-      ('button', 'hover', 'bg-color'),
-      ('fill-color', 'blank')
+          ('button', 'hover', 'bg-color'),
+          ('fill-color', 'blank')
     );
     @include css-var-from-global(
-      ('button', 'hover', 'border-color'),
-      ('color', 'primary')
+          ('button', 'hover', 'border-color'),
+          ('color', 'primary')
     );
   }
 
@@ -117,11 +120,12 @@ $button-icon-span-gap: map.merge(
   @include when(disabled) {
     &,
     &:hover {
-      color: getCssVar('button', 'disabled', 'text-color');
+      color: #5b728261;
       cursor: not-allowed;
       background-image: none;
-      background-color: getCssVar('button', 'disabled', 'bg-color');
-      border-color: getCssVar('button', 'disabled', 'border-color');
+      background-color: #fff;
+      border-color: #d3ddde61;
+      box-shadow: none;
     }
   }
 
@@ -263,8 +267,9 @@ $button-icon-span-gap: map.merge(
     }
   }
 
-  @each $type in (primary, success, warning, danger, info) {
+  @each $type in (primary, success, warning, danger, info, error, filled) {
     @include m($type) {
+      box-shadow: getCssVar('box-shadow', '100');
       @include button-variant($type);
     }
   }
@@ -272,8 +277,8 @@ $button-icon-span-gap: map.merge(
   @each $size in (large, small) {
     @include m($size) {
       @include set-css-var-value(
-        ('button', 'size'),
-        map.get($input-height, $size)
+            ('button', 'size'),
+          map.get($input-height, $size)
       );
 
       height: getCssVar('button', 'size');
@@ -285,10 +290,10 @@ $button-icon-span-gap: map.merge(
       }
 
       @include button-size(
-        map.get($button-padding-vertical, $size) - $button-border-width,
-        map.get($button-padding-horizontal, $size) - $button-border-width,
-        map.get($button-font-size, $size),
-        map.get($button-border-radius, $size)
+          map.get($button-padding-vertical, $size) - $button-border-width,
+          map.get($button-padding-horizontal, $size) - $button-border-width,
+          map.get($button-font-size, $size),
+          map.get($button-border-radius, $size)
       );
 
       @include when(circle) {

@@ -17,17 +17,6 @@
       @change="handleChange"
       @keydown.enter="switchValue"
     />
-    <span
-      v-if="!inlinePrompt && (inactiveIcon || inactiveText)"
-      :class="labelLeftKls"
-    >
-      <el-icon v-if="inactiveIcon">
-        <component :is="inactiveIcon" />
-      </el-icon>
-      <span v-if="!inactiveIcon && inactiveText" :aria-hidden="checked">{{
-        inactiveText
-      }}</span>
-    </span>
     <span ref="core" :class="ns.e('core')" :style="coreStyle">
       <div v-if="inlinePrompt" :class="ns.e('inner')">
         <template v-if="activeIcon || inactiveIcon">
@@ -46,8 +35,30 @@
           <loading />
         </el-icon>
         <slot v-else-if="checked" name="active-action">
-          <el-icon v-if="activeActionIcon">
-            <component :is="activeActionIcon" />
+          <el-icon size="8px">
+            <svg
+              width="13"
+              height="12"
+              viewBox="0 0 13 12"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <g id="fi-bs-check" clip-path="url(#clip0_439_1388)">
+                <path
+                  id="Vector"
+                  d="M4.40004 10.7123C4.23287 10.7124 4.06732 10.6795 3.91289 10.6155C3.75845 10.5515 3.61816 10.4576 3.50004 10.3393L0.719543 7.5603L1.78054 6.4998L4.40004 9.1193L11.2195 2.2998L12.2805 3.3603L5.30004 10.3393C5.18193 10.4576 5.04164 10.5515 4.8872 10.6155C4.73276 10.6795 4.56722 10.7124 4.40004 10.7123Z"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_439_1388">
+                  <rect
+                    width="12"
+                    height="12"
+                    fill="white"
+                    transform="translate(0.5)"
+                  />
+                </clipPath>
+              </defs>
+            </svg>
           </el-icon>
         </slot>
         <slot v-else-if="!checked" name="inactive-action">
@@ -64,9 +75,16 @@
       <el-icon v-if="activeIcon">
         <component :is="activeIcon" />
       </el-icon>
-      <span v-if="!activeIcon && activeText" :aria-hidden="!checked">{{
-        activeText
-      }}</span>
+      <span
+        v-if="!activeIcon && activeText && checked"
+        :aria-hidden="!checked"
+        >{{ activeText }}</span
+      >
+      <span
+        v-if="!inactiveIcon && inactiveText && !checked"
+        :aria-hidden="checked"
+        >{{ inactiveText }}</span
+      >
     </span>
   </div>
 </template>
@@ -101,7 +119,7 @@ const props = defineProps(switchProps)
 const emit = defineEmits(switchEmits)
 
 const { formItem } = useFormItem()
-const switchSize = useFormSize()
+const switchSize = ref('small')
 const ns = useNamespace('switch')
 
 const { inputId } = useFormItemInputId(props, {

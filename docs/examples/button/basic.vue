@@ -6,6 +6,8 @@
     <el-button type="info">Info</el-button>
     <el-button type="warning">Warning</el-button>
     <el-button type="danger">Danger</el-button>
+    <el-button type="error">Error</el-button>
+    <el-button type="filled">Filled</el-button>
   </div>
 
   <div class="mb-4">
