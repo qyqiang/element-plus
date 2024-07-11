@@ -6,8 +6,8 @@
 @include b(table-column) {
   @include m(selection) {
     .cell {
-      padding-left: 14px;
-      padding-right: 14px;
+      padding: 0 8px !important;
+      min-width: auto !important;
     }
   }
 }

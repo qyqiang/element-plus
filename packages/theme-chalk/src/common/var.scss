@@ -17,6 +17,7 @@ $colors: map.deep-merge(
     (
       'white': #ffffff,
       'black': #000000,
+      'secondary': #3e5463,
       'primary': (
         'base': #ff5b05,
       ),
@@ -44,6 +45,7 @@ $colors: map.deep-merge(
 
 $color-white: map.get($colors, 'white') !default;
 $color-black: map.get($colors, 'black') !default;
+$color-secondary: map.get($colors, 'secondary') !default;
 $color-primary: map.get($colors, 'primary', 'base') !default;
 $color-success: map.get($colors, 'success', 'base') !default;
 $color-warning: map.get($colors, 'warning', 'base') !default;
@@ -102,7 +104,7 @@ $text-color: map.merge(
     (
       'primary': #0e171f,
       'regular': #606266,
-      'secondary': #909399,
+      'secondary': #3e5463,
       'placeholder': #a8abb2,
       'disabled': #c0c4cc,
     ),
@@ -114,7 +116,7 @@ $border-color: map.merge(
     (
       '': #828e91,
       'custom': #c1ccd6,
-      'light': #e4e7ed,
+      'light': #e7ecef,
       'lighter': #ebeef5,
       'extra-light': #f2f6fc,
       'dark': #d4d7de,
@@ -865,9 +867,9 @@ $segmented: map.merge(
 $table: () !default;
 $table: map.merge(
     (
-      'border-color': getCssVar('border-color-lighter'),
+      'border-color': getCssVar('border-color-light'),
       'border': 1px solid getCssVar('table-border-color'),
-      'text-color': getCssVar('text-color-regular'),
+      'text-color': getCssVar('text-color-primary'),
       'header-text-color': getCssVar('text-color-secondary'),
       'row-hover-bg-color': getCssVar('fill-color', 'light'),
       'current-row-bg-color': getCssVar('color-primary-light-9'),
@@ -897,7 +899,7 @@ $table-padding: () !default;
 $table-padding: map.merge(
     (
       'large': 12px 0,
-      'default': 8px 0,
+      'default': 12px 0,
       'small': 4px 0,
     ),
     $table-padding
@@ -918,7 +920,7 @@ $table-cell-padding: map.merge(
 $pagination: () !default;
 $pagination: map.merge(
     (
-      'font-size': 14px,
+      'font-size': 12px,
       'bg-color': getCssVar('fill-color', 'blank'),
       'text-color': getCssVar('text-color-primary'),
       'border-radius': 2px,
@@ -934,7 +936,7 @@ $pagination: map.merge(
       'button-height-small': 24px,
       'button-width-large': 40px,
       'button-height-large': 40px,
-      'item-gap': 16px,
+      'item-gap': 40px,
     ),
     $pagination
 );
