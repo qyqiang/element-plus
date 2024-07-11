@@ -2,7 +2,7 @@
 @use '../common/var' as *;
 
 @include b(picker-panel) {
-  color: getCssVar('text-color', 'regular');
+  color: getCssVar('text-color', 'primary');
   background: getCssVar('bg-color', 'overlay');
   border-radius: getCssVar('border-radius-base');
   line-height: 30px;
@@ -24,7 +24,16 @@
 
   @include e(content) {
     position: relative;
-    margin: 15px;
+    .date-picker-table-header {
+
+      th {
+        padding: 8px 0;
+        font-size: 12px;
+        line-height: 16px;
+        color: getCssVar('text-color', 'tertiary');
+        font-weight: 400;
+      }
+    }
   }
 
   @include e(footer) {
@@ -42,7 +51,7 @@
     border: 0;
     background-color: transparent;
     line-height: 28px;
-    font-size: 14px;
+    font-size: 13px;
     color: getCssVar('datepicker-text-color');
     padding-left: 12px;
     text-align: left;
@@ -83,7 +92,8 @@
     background: transparent;
     cursor: pointer;
     outline: none;
-    margin-top: 8px;
+    margin-top: 6px;
+    width: 20px;
 
     &:hover {
       color: getCssVar('datepicker-hover-text-color');
@@ -124,8 +134,8 @@
 }
 
 .#{$namespace}-picker-panel
-  *[slot='sidebar']
-  + .#{$namespace}-picker-panel__body,
+*[slot='sidebar']
++ .#{$namespace}-picker-panel__body,
 .#{$namespace}-picker-panel__sidebar + .#{$namespace}-picker-panel__body {
   margin-left: 110px;
 }

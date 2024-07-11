@@ -4,12 +4,18 @@
     :visible="pickerVisible"
     effect="light"
     pure
+    :show-arrow="false"
     trigger="click"
     v-bind="$attrs"
     role="dialog"
     teleported
     :transition="`${nsDate.namespace.value}-zoom-in-top`"
-    :popper-class="[`${nsDate.namespace.value}-picker__popper`, popperClass]"
+    :popper-class="[
+      `${nsDate.namespace.value}-picker__popper`,
+      popperClass,
+      'date-picker-popover',
+    ]"
+    :offset="5"
     :popper-options="elPopperOptions"
     :fallback-placements="['bottom', 'top', 'right', 'left']"
     :gpu-acceleration="false"

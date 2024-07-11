@@ -103,9 +103,11 @@ $text-color: () !default;
 $text-color: map.merge(
     (
       'primary': #0e171f,
+      'brand': #eb5100,
       'regular': #606266,
       'secondary': #3e5463,
-      'placeholder': #a8abb2,
+      'tertiary': #5b7282,
+      'placeholder': #9fb1bd,
       'disabled': #c0c4cc,
     ),
     $text-color
@@ -1179,13 +1181,13 @@ $rate: map.merge(
 $datepicker: () !default;
 $datepicker: map.merge(
     (
-      'text-color': getCssVar('text-color-regular'),
+      'text-color': getCssVar('text-color-primary'),
       'off-text-color': getCssVar('text-color-placeholder'),
       'header-text-color': getCssVar('text-color-regular'),
       'icon-color': getCssVar('text-color-primary'),
       'border-color': getCssVar('disabled-border-color'),
       'inner-border-color': getCssVar('border-color-light'),
-      'inrange-bg-color': getCssVar('border-color-extra-light'),
+      'inrange-bg-color': #ffece0,
       'inrange-hover-bg-color': getCssVar('border-color-extra-light'),
       'active-color': getCssVar('color-primary'),
       'hover-text-color': getCssVar('color-primary'),

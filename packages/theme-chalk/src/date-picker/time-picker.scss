@@ -83,7 +83,7 @@
       font-weight: 800;
       color: var(
         #{getCssVarName('timepicker-active-color')},
-        #{getCssVar('color-primary')}
+        #{getCssVar('text-color', 'brand')}
       );
     }
   }

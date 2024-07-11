@@ -49,7 +49,7 @@
     cursor: pointer;
 
     &:hover {
-      color: getCssVar('color-primary');
+      color: getCssVar('text-color', 'brand');
     }
 
     &.arrow-up {

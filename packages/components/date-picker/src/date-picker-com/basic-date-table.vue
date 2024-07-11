@@ -11,7 +11,7 @@
     @mouseup="handleMouseUp"
   >
     <tbody ref="tbodyRef">
-      <tr>
+      <tr class="date-picker-table-header">
         <th v-if="showWeekNumber" scope="col">{{ weekLabel }}</th>
         <th
           v-for="(week, key) in WEEKS"

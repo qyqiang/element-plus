@@ -26,7 +26,7 @@
     &.today {
       .cell {
         color: getCssVar('color', 'primary');
-        font-weight: bold;
+        border: 1px solid getCssVar('color-primary');
       }
     }
 
@@ -46,7 +46,6 @@
       display: block;
       line-height: 36px;
       color: getCssVar('datepicker-text-color');
-      border-radius: 18px;
       margin: 0 auto;
       position: absolute;
       left: 50%;
