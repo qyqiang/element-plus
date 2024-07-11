@@ -2,6 +2,7 @@
   <div :ref="composedDialogRef" :class="dialogKls" :style="style" tabindex="-1">
     <header
       ref="headerRef"
+      :style="{ backgroundColor: headerBackgroundColor }"
       :class="[ns.e('header'), { 'show-close': showClose }]"
     >
       <slot name="header">
@@ -16,8 +17,17 @@
         type="button"
         @click="$emit('close')"
       >
-        <el-icon :class="ns.e('close')">
-          <component :is="closeIcon || Close" />
+        <el-icon :class="ns.e('close')" size="24px">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="25"
+            height="24"
+            viewBox="0 0 25 24"
+          >
+            <path
+              d="M19.2068 6.70685L17.7928 5.29285L12.4998 10.5858L7.20685 5.29285L5.79285 6.70685L11.0858 11.9998L5.79285 17.2928L7.20685 18.7068L12.4998 13.4138L17.7928 18.7068L19.2068 17.2928L13.9138 11.9998L19.2068 6.70685Z"
+            />
+          </svg>
         </el-icon>
       </button>
     </header>
@@ -35,12 +45,11 @@ import { computed, inject } from 'vue'
 import { ElIcon } from '@element-plus/components/icon'
 import { FOCUS_TRAP_INJECTION_KEY } from '@element-plus/components/focus-trap'
 import { useDraggable, useLocale } from '@element-plus/hooks'
-import { CloseComponents, composeRefs } from '@element-plus/utils'
+import { composeRefs } from '@element-plus/utils'
 import { dialogInjectionKey } from './constants'
 import { dialogContentEmits, dialogContentProps } from './dialog-content'
 
 const { t } = useLocale()
-const { Close } = CloseComponents
 
 defineOptions({ name: 'ElDialogContent' })
 const props = defineProps(dialogContentProps)

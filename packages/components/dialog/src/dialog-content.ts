@@ -35,6 +35,13 @@ export const dialogContentProps = buildProps({
     default: true,
   },
   /**
+   * @description header background color
+   */
+  headerBackgroundColor: {
+    type: String,
+    default: '#f2f7f7',
+  },
+  /**
    * @description title of Dialog. Can also be passed with a named slot (see the following table)
    */
   title: {

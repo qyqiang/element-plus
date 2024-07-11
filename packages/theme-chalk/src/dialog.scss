@@ -15,7 +15,6 @@
   border-radius: getCssVar('dialog', 'border-radius');
   box-shadow: getCssVar('dialog', 'box-shadow');
   box-sizing: border-box;
-  padding: getCssVar('dialog', 'padding-primary');
   width: var(#{getCssVarName('dialog-width')}, 50%);
   overflow-wrap: break-word;
 
@@ -54,37 +53,28 @@
   }
 
   @include e(header) {
-    padding-bottom: getCssVar('dialog', 'padding-primary');
-
-    &.show-close {
-      padding-right: calc(
-        getCssVar('dialog', 'padding-primary') +
-          var(
-            #{getCssVarName('message-close-size')},
-            map.get($message, 'close-size')
-          )
-      );
-    }
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top-left-radius: getCssVar('dialog', 'border-radius');
+    border-top-right-radius: getCssVar('dialog', 'border-radius');
   }
 
   @include e(headerbtn) {
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 0;
-    width: 48px;
-    height: 48px;
+    width: 32px;
+    height: 32px;
     background: transparent;
     border: none;
     outline: none;
     cursor: pointer;
-    font-size: var(
-      #{getCssVarName('message-close-size')},
-      map.get($message, 'close-size')
-    );
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
 
     .#{$namespace}-dialog__close {
-      color: getCssVar('color', 'info');
+      color: getCssVar('text-color-primary');
       font-size: inherit;
     }
 
@@ -97,18 +87,21 @@
   }
 
   @include e(title) {
+    font-family: getCssVar('font-family', 'header');
     line-height: getCssVar('dialog-font-line-height');
     font-size: getCssVar('dialog-title-font-size');
+    font-weight: 600;
     color: getCssVar('text-color', 'primary');
   }
 
   @include e(body) {
-    color: getCssVar('text-color', 'regular');
+    padding: 16px;
+    color: getCssVar('text-color', 'primary');
     font-size: getCssVar('dialog-content-font-size');
   }
 
   @include e(footer) {
-    padding-top: getCssVar('dialog', 'padding-primary');
+    padding: 12px 16px 24px ;
     text-align: right;
     box-sizing: border-box;
   }
@@ -138,6 +131,7 @@
 
 .dialog-fade-enter-active {
   animation: modal-fade-in getCssVar('transition-duration');
+
   .#{$namespace}-overlay-dialog {
     animation: dialog-fade-in getCssVar('transition-duration');
   }
@@ -145,6 +139,7 @@
 
 .dialog-fade-leave-active {
   animation: modal-fade-out getCssVar('transition-duration');
+
   .#{$namespace}-overlay-dialog {
     animation: dialog-fade-out getCssVar('transition-duration');
   }

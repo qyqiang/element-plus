@@ -61,8 +61,17 @@
                   handleAction(distinguishCancelAndClose ? 'close' : 'cancel')
                 "
               >
-                <el-icon :class="ns.e('close')">
-                  <close />
+                <el-icon :class="ns.e('close')" size="24px">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="25"
+                    height="24"
+                    viewBox="0 0 25 24"
+                  >
+                    <path
+                      d="M19.2068 6.70685L17.7928 5.29285L12.4998 10.5858L7.20685 5.29285L5.79285 6.70685L11.0858 11.9998L5.79285 17.2928L7.20685 18.7068L12.4998 13.4138L17.7928 18.7068L19.2068 17.2928L13.9138 11.9998L19.2068 6.70685Z"
+                    />
+                  </svg>
                 </el-icon>
               </button>
             </div>
@@ -242,6 +251,10 @@ export default defineComponent({
     container: {
       type: String, // default append to body
       default: 'body',
+    },
+    headerBackgroundColor: {
+      type: String,
+      default: '#f2f7f7',
     },
     boxType: {
       type: String as PropType<MessageBoxType>,
