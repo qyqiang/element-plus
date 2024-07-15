@@ -590,13 +590,13 @@ $notification: map.merge(
 $input: () !default;
 $input: map.merge(
     (
-      'text-color': getCssVar('text-color-regular'),
+      'text-color': getCssVar('text-color-primary'),
       'border': getCssVar('border'),
       'hover-border': getCssVar('border-color-hover'),
       'focus-border': getCssVar('color-primary'),
       'transparent-border': 0 0 0 1px transparent inset,
-      'border-color': getCssVar('border-color'),
-      'border-radius': getCssVar('border-radius-base'),
+      'border-color': getCssVar('border-color-custom'),
+      'border-radius': getCssVar('border-radius-custom'),
       'bg-color': getCssVar('fill-color', 'blank'),
       'icon-color': getCssVar('text-color-placeholder'),
       'placeholder-color': getCssVar('text-color-placeholder'),
@@ -611,9 +611,9 @@ $input: map.merge(
 $input-disabled: () !default;
 $input-disabled: map.merge(
     (
-      'fill': getCssVar('disabled-bg-color'),
+      'fill': #f2f5f7,
       'border': getCssVar('disabled-border-color'),
-      'text-color': getCssVar('disabled-text-color'),
+      'text-color': #5b728261,
       'placeholder-color': getCssVar('text-color-placeholder'),
     ),
     $input-disabled
@@ -1017,7 +1017,7 @@ $tag-padding: () !default;
 $tag-padding: map.merge(
     (
       'large': 12px,
-      'default': 10px,
+      'default': 9px,
       'small': 8px,
     ),
     $tag-padding

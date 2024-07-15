@@ -165,7 +165,7 @@ $form-item-label-top-margin-bottom: map.merge(
   }
 
   @include e(error) {
-    color: getCssVar('color-danger');
+    color: getCssVar('color-error');
     font-size: 12px;
     line-height: 1;
     padding-top: #{map.get($form-item-error-padding-top, 'default')};
@@ -189,7 +189,7 @@ $form-item-label-top-margin-bottom: map.merge(
         > .#{$namespace}-form-item__label-wrap
         > .#{$namespace}-form-item__label:before {
           content: '*';
-          color: getCssVar('color-danger');
+          color: getCssVar('color-error');
           margin-right: 4px;
         }
       }
@@ -199,7 +199,7 @@ $form-item-label-top-margin-bottom: map.merge(
         > .#{$namespace}-form-item__label-wrap
         > .#{$namespace}-form-item__label:after {
           content: '*';
-          color: getCssVar('color-danger');
+          color: getCssVar('color-error');
           margin-left: 4px;
         }
       }
@@ -214,7 +214,7 @@ $form-item-label-top-margin-bottom: map.merge(
       &:hover,
       &:focus,
       &.is-focus {
-        box-shadow: 0 0 0 1px getCssVar('color-danger') inset;
+        border-color: getCssVar('color-error');
       }
     }
 
@@ -231,7 +231,7 @@ $form-item-label-top-margin-bottom: map.merge(
     }
 
     .#{$namespace}-input__validateIcon {
-      color: getCssVar('color-danger');
+      color: getCssVar('color-error');
     }
   }
 

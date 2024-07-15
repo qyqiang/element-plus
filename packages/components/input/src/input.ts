@@ -111,6 +111,13 @@ export const inputProps = buildProps({
     default: false,
   },
   /**
+   * @description native floatLabel
+   */
+  floatLabel: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description native input readonly
    */
   clearable: {

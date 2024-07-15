@@ -30,10 +30,10 @@
             </el-icon>
           </span>
         </span>
-
         <input
           :id="inputId"
           ref="input"
+          required
           :class="nsInput.e('inner')"
           v-bind="attrs"
           :minlength="minlength"
@@ -44,7 +44,6 @@
           :autocomplete="autocomplete"
           :tabindex="tabindex"
           :aria-label="label || ariaLabel"
-          :placeholder="placeholder"
           :style="inputStyle"
           :form="form"
           :autofocus="autofocus"
@@ -57,6 +56,7 @@
           @change="handleChange"
           @keydown="handleKeydown"
         />
+        <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
 
         <!-- suffix slot -->
         <span v-if="suffixVisible" :class="nsInput.e('suffix')">
