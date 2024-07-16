@@ -38,6 +38,23 @@
   width: 100%;
   vertical-align: bottom;
   font-size: getCssVar('font-size', 'small');
+  .float-label {
+    position: absolute;
+    left: 12px;
+    top: 11px;
+    color: getCssVarWithDefault(
+        'input-placeholder-color',
+        map.get($input, 'placeholder-color')
+    );
+    background-color: #fff;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    height: 14px;
+    line-height: 1;
+    max-width: calc(100% - 24px);
+  }
 
   @include e(inner) {
     position: relative;
@@ -72,14 +89,20 @@
           map.get($input, 'placeholder-color')
       );
     }
-
     &:hover {
-      @include inset-input-border(#{getCssVar('input', 'hover-border-color')});
+      border-color: #7a909e;
     }
 
     &:focus {
       outline: none;
-      @include inset-input-border(#{getCssVar('input', 'focus-border-color')});
+      border-color: getCssVar('color-primary');
+
+      & ~ .float-label {
+        left: 12px;
+        color: getCssVar('text-color-tertiary');
+        transform: translateY(-17px);
+        transition: transform 100ms ease;
+      }
     }
   }
 
@@ -134,10 +157,6 @@
   vertical-align: middle;
   @include scroll-bar;
 
-  &:hover {
-    border-color: #7a909e;
-  }
-
   & .#{$namespace}-input__clear,
   & .#{$namespace}-input__password {
     color: getCssVar('input-icon-color');
@@ -184,6 +203,13 @@
     transition: getCssVar('transition-box-shadow');
     transform: translate3d(0, 0, 0);
     border: 1px solid getCssVar('border-color-custom');
+    &.pre-star-item:before {
+      position: absolute;
+      left: 4px;
+      font-size: 12px;
+      content: '*';
+      color: getCssVar('color-error');
+    }
     .float-label {
       position: absolute;
       left: 12px;
@@ -208,6 +234,9 @@
         transform: translateY(-17px);
         transition: transform 100ms ease;
       }
+    }
+    &:hover {
+      border-color: #7a909e;
     }
   }
 
@@ -336,7 +365,9 @@
     .#{$namespace}-input__wrapper {
       background-color: map.get($input-disabled, 'fill');
     }
-
+    .float-label {
+      background-color: transparent;
+    }
     .#{$namespace}-input__inner {
       color: #5b728261;
       -webkit-text-fill-color: #5b728261;

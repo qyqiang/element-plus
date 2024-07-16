@@ -6,7 +6,7 @@ import {
 } from '@element-plus/hooks'
 import { buildProps, definePropType, iconPropType } from '@element-plus/utils'
 import { useTooltipContentProps } from '@element-plus/components/tooltip'
-import { CircleClose } from '@element-plus/icons-vue'
+import CrossSmall from '../../../icon/crossSmall.vue'
 import { tagProps } from '../../tag'
 import { defaultProps } from './useProps'
 
@@ -27,6 +27,13 @@ export const SelectProps = buildProps({
     default: 'none',
   },
   /**
+   * @description floatLabel
+   */
+  floatLabel: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description for non-filterable Select, this prop decides if the option menu pops up when the input is focused
    */
   automaticDropdown: Boolean,
@@ -39,7 +46,7 @@ export const SelectProps = buildProps({
    */
   clearIcon: {
     type: iconPropType,
-    default: CircleClose,
+    default: CrossSmall,
   },
   /**
    * @description tooltip theme, built-in theme: `dark` / `light`

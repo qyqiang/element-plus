@@ -75,7 +75,7 @@
               @mousedown.prevent="NOOP"
               @click="clear"
             >
-              <circle-close />
+              <CrossSmall />
             </el-icon>
             <el-icon
               v-if="showPwdVisible"
@@ -108,7 +108,6 @@
         <slot name="append" />
       </div>
     </template>
-
     <!-- textarea -->
     <template v-else>
       <textarea
@@ -124,7 +123,6 @@
         :autocomplete="autocomplete"
         :style="textareaStyle"
         :aria-label="label || ariaLabel"
-        :placeholder="placeholder"
         :form="form"
         :autofocus="autofocus"
         @compositionstart="handleCompositionStart"
@@ -136,6 +134,7 @@
         @change="handleChange"
         @keydown="handleKeydown"
       />
+      <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
       <span
         v-if="isWordLimitVisible"
         :style="countStyle"
@@ -163,11 +162,6 @@ import { useResizeObserver } from '@vueuse/core'
 import { isNil } from 'lodash-unified'
 import { ElIcon } from '@element-plus/components/icon'
 import {
-  CircleClose,
-  Hide as IconHide,
-  View as IconView,
-} from '@element-plus/icons-vue'
-import {
   useFormDisabled,
   useFormItem,
   useFormItemInputId,
@@ -189,6 +183,9 @@ import {
   useNamespace,
 } from '@element-plus/hooks'
 import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import Hide from '../../../icon/hide.vue'
+import View from '../../../icon/view.vue'
+import CrossSmall from '../../../icon/crossSmall.vue'
 import { calcTextareaHeight } from './utils'
 import { inputEmits, inputProps } from './input'
 import type { StyleValue } from 'vue'
@@ -235,6 +232,7 @@ const containerKls = computed(() => [
 const wrapperKls = computed(() => [
   nsInput.e('wrapper'),
   nsInput.is('focus', isFocused.value),
+  props.preStar && !isFocused.value && !textLength.value ? 'pre-star-item' : '',
 ])
 
 const attrs = useAttrs({
@@ -278,9 +276,7 @@ const validateState = computed(() => elFormItem?.validateState || '')
 const validateIcon = computed(
   () => validateState.value && ValidateComponentsMap[validateState.value]
 )
-const passwordIcon = computed(() =>
-  passwordVisible.value ? IconView : IconHide
-)
+const passwordIcon = computed(() => (passwordVisible.value ? View : Hide))
 const containerStyle = computed<StyleValue>(() => [
   rawAttrs.style as StyleValue,
 ])

@@ -34,6 +34,7 @@
         :name="name"
         :model-value="modelValue"
         :aria-label="ariaLabel"
+        :pre-star="preStar"
         @input="handleInput"
         @change="handleChange"
         @focus="handleFocus"

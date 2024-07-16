@@ -27,7 +27,20 @@
         :type="badgeType"
         :class="ns.e('badge')"
       />
-      <el-icon v-if="iconComponent" :class="[ns.e('icon'), typeClass]">
+      <el-icon
+        v-if="iconComponent"
+        :class="[ns.e('icon'), typeClass]"
+        :color="
+          plain
+            ? badgeType === 'warning'
+              ? '#2a3f4d'
+              : '#fff'
+            : badgeType === 'warning'
+            ? '#d9a514'
+            : '#2a3f4d'
+        "
+        size="16px"
+      >
         <component :is="iconComponent" />
       </el-icon>
       <slot>
@@ -47,15 +60,15 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import { useEventListener, useResizeObserver, useTimeoutFn } from '@vueuse/core'
-import { TypeComponents, TypeComponentsMap } from '@element-plus/utils'
-import { EVENT_CODE } from '@element-plus/constants'
 import ElBadge from '@element-plus/components/badge'
 import { useGlobalComponentSettings } from '@element-plus/components/config-provider'
 import { ElIcon } from '@element-plus/components/icon'
-import { messageEmits, messageProps } from './message'
+import { EVENT_CODE } from '@element-plus/constants'
+import { TypeComponents, TypeComponentsMap } from '@element-plus/utils'
 import { getLastOffset, getOffsetOrSpace } from './instance'
-import type { BadgeProps } from '@element-plus/components/badge'
+import { messageEmits, messageProps } from './message'
 import type { CSSProperties } from 'vue'
+import type { BadgeProps } from '@element-plus/components/badge'
 
 const { Close } = TypeComponents
 

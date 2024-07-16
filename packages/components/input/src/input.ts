@@ -118,6 +118,13 @@ export const inputProps = buildProps({
     default: true,
   },
   /**
+   * @description native preStar
+   */
+  preStar: {
+    type: Boolean,
+    default: false,
+  },
+  /**
    * @description native input readonly
    */
   clearable: {

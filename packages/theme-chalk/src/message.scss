@@ -10,7 +10,7 @@
   width: fit-content;
   max-width: calc(100% - 32px);
   box-sizing: border-box;
-  border-radius: getCssVar('border-radius-base');
+  border-radius: getCssVar('border-radius-custom');
   border-width: getCssVar('border-width');
   border-style: getCssVar('border-style');
   border-color: getCssVar('message', 'border-color');
@@ -29,11 +29,6 @@
     justify-content: center;
   }
 
-  @include when(plain) {
-    background-color: getCssVar('bg-color', 'overlay');
-    border-color: getCssVar('bg-color', 'overlay');
-    box-shadow: getCssVar('box-shadow-light');
-  }
 
   p {
     margin: 0;
@@ -42,24 +37,32 @@
   @each $type in (success, info, warning, error) {
     @include m($type) {
       @include css-var-from-global(
-        ('message', 'bg-color'),
-        ('color', $type, 'light-9')
+            ('message', 'bg-color'),
+            ('color', $type, 'light-9')
       );
       @include css-var-from-global(
-        ('message', 'border-color'),
-        ('color', $type, 'light-8')
+            ('message', 'border-color'),
+            ('color', $type)
       );
       @include css-var-from-global(('message', 'text-color'), ('color', $type));
 
       .#{$namespace}-message__content {
-        color: getCssVar('message', 'text-color');
+        color: getCssVar('text-color-secondary');
         overflow-wrap: break-word;
+      }
+      @include when(plain) {
+        @include css-var-from-global(
+              ('message', 'bg-color'),
+              ('color', $type,)
+        );
+        border-color: getCssVar('bg-color', 'overlay');
+
+        .#{$namespace}-message__content {
+          color: #fff;
+        }
       }
     }
 
-    & .#{$namespace}-message-icon--#{$type} {
-      color: getCssVar('message', 'text-color');
-    }
   }
 
   .#{$namespace}-message__badge {
@@ -71,7 +74,9 @@
   @include e(content) {
     padding: 0;
     font-size: 14px;
-    line-height: 1;
+    line-height: 20px;
+    margin-left: 16px !important;
+
     &:focus {
       outline-width: 0;
     }
@@ -85,6 +90,7 @@
     &:focus {
       outline-width: 0;
     }
+
     &:hover {
       color: getCssVar('message', 'close-hover-color');
     }

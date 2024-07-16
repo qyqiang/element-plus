@@ -33,9 +33,11 @@
             nsSelect.is('hovering', states.inputHovering),
             nsSelect.is('filterable', filterable),
             nsSelect.is('disabled', selectDisabled),
+            nsSelect.is('value', hasModelValue),
           ]"
           @click.prevent.stop="toggleMenu"
         >
+          <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
           <div
             v-if="$slots.prefix"
             ref="prefixRef"
@@ -187,7 +189,7 @@
               />
             </div>
             <div
-              v-if="shouldShowPlaceholder"
+              v-if="shouldShowPlaceholder && hasModelValue"
               :class="[
                 nsSelect.e('selected-item'),
                 nsSelect.e('placeholder'),
@@ -198,14 +200,12 @@
               ]"
             >
               <slot
-                v-if="hasModelValue"
                 name="label"
                 :label="currentPlaceholder"
                 :value="modelValue"
               >
                 <span>{{ currentPlaceholder }}</span>
               </slot>
-              <span v-else>{{ currentPlaceholder }}</span>
             </div>
           </div>
           <div ref="suffixRef" :class="nsSelect.e('suffix')">

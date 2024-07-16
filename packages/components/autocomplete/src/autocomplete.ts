@@ -52,6 +52,13 @@ export const autocompleteProps = buildProps({
     default: 300,
   },
   /**
+   * @description preStar
+   */
+  preStar: {
+    type: Boolean,
+    default: false,
+  },
+  /**
    * @description placement of the popup menu
    */
   placement: {

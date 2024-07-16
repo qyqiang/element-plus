@@ -37,23 +37,45 @@
     border-radius: getCssVar('border-radius-base');
     background-color: getCssVar('fill-color', 'blank');
     transition: getCssVar('transition', 'duration');
-    @include mixed-input-border(#{getCssVar('border-color')});
+    border: 1px solid getCssVar('border-color-custom');
 
     &:hover {
-      @include mixed-input-border(#{getCssVar('text-color')});
+      border-color: #7a909e;
     }
-
+    .float-label {
+      position: absolute;
+      color: getCssVarWithDefault(
+          'input-placeholder-color',
+          map.get($input, 'placeholder-color')
+      );
+      background-color: #fff;
+      display: inline-block;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      height: 14px;
+      line-height: 1;
+      max-width: 100%;
+      top: 9px;
+      left: 12px;
+    }
     @include when(filterable) {
       cursor: text;
     }
 
     @include when(focused) {
-      @include mixed-input-border(#{getCssVar('color-primary')});
+      border-color: getCssVar('color-primary');
+      .float-label {
+        color: getCssVar('text-color-tertiary');
+        transform: translateY(-17px);
+        transition: transform 100ms ease;
+      }
     }
-
-    @include when(hovering) {
-      &:not(.is-focused) {
-        @include mixed-input-border(#{getCssVar('border-color-hover')});
+    @include when(value) {
+      .float-label {
+        color: getCssVar('text-color-tertiary');
+        transform: translateY(-17px);
+        transition: transform 100ms ease;
       }
     }
 
@@ -92,8 +114,8 @@
     flex-shrink: 0;
     gap: map.get($select-item-gap, 'default');
     color: var(
-      #{getCssVarName('input-icon-color')},
-      map.get($input, 'icon-color')
+        #{getCssVarName('input-icon-color')},
+        map.get($input, 'icon-color')
     );
   }
 
@@ -103,8 +125,8 @@
     flex-shrink: 0;
     gap: map.get($select-item-gap, 'default');
     color: var(
-      #{getCssVarName('input-icon-color')},
-      map.get($input, 'icon-color')
+        #{getCssVarName('input-icon-color')},
+        map.get($input, 'icon-color')
     );
   }
 
@@ -130,7 +152,7 @@
     gap: map.get($select-item-gap, 'default');
 
     @include when(near) {
-      margin-left: map.get($select-near-margin-left, 'default');
+      //margin-left: map.get($select-near-margin-left, 'default');
     }
 
     .#{$namespace}-tag {
@@ -163,12 +185,13 @@
     position: absolute;
     display: block;
     top: 50%;
+    font-size: 13px;
     transform: translateY(-50%);
     width: 100%;
     @include utils-ellipsis;
     color: var(
-      #{getCssVarName('input-text-color')},
-      map.get($input, 'text-color')
+        #{getCssVarName('input-text-color')},
+        map.get($input, 'text-color')
     );
 
     @include when(transparent) {
@@ -179,9 +202,9 @@
 
   @include e(popper) {
     @include picker-popper(
-      map.get($select-dropdown, 'bg-color'),
-      map.get($select-dropdown, 'border'),
-      map.get($select-dropdown, 'shadow')
+        map.get($select-dropdown, 'bg-color'),
+        map.get($select-dropdown, 'border'),
+        map.get($select-dropdown, 'shadow')
     );
   }
 
