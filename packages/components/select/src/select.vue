@@ -222,14 +222,22 @@
               :class="[nsSelect.e('caret'), nsSelect.e('icon')]"
               @click="handleClearClick"
             >
-              <component :is="clearIcon" />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+              >
+                <path
+                  d="M9.35349 3.35342L8.64648 2.64642L5.99998 5.29292L3.35348 2.64642L2.64648 3.35342L5.29298 5.99992L2.64648 8.64642L3.35348 9.35342L5.99998 6.70692L8.64648 9.35342L9.35349 8.64642L6.70698 5.99992L9.35349 3.35342Z"
+                />
+              </svg>
             </el-icon>
             <el-icon
               v-if="validateState && validateIcon"
               :class="[nsInput.e('icon'), nsInput.e('validateIcon')]"
-            >
-              <component :is="validateIcon" />
-            </el-icon>
+              v-html="validateIcon"
+            />
           </div>
         </div>
       </template>

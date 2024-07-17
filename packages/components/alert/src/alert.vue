@@ -5,9 +5,11 @@
       :class="[ns.b(), ns.m(type), ns.is('center', center), ns.is(effect)]"
       role="alert"
     >
-      <el-icon v-if="showIcon && iconComponent" :class="iconClass">
-        <component :is="iconComponent" />
-      </el-icon>
+      <el-icon
+        v-if="showIcon && iconComponent"
+        :class="iconClass"
+        v-html="iconComponent"
+      />
 
       <div :class="ns.e('content')">
         <span

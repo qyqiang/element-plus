@@ -98,7 +98,6 @@ import {
   useFormDisabled,
   useFormItem,
   useFormItemInputId,
-  useFormSize,
 } from '@element-plus/components/form'
 import { Loading } from '@element-plus/icons-vue'
 import {

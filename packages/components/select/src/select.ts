@@ -6,9 +6,8 @@ import {
 } from '@element-plus/hooks'
 import { buildProps, definePropType, iconPropType } from '@element-plus/utils'
 import { useTooltipContentProps } from '@element-plus/components/tooltip'
-import { ArrowDown } from '@element-plus/icons-vue'
+import { ArrowDown, CircleClose } from '@element-plus/icons-vue'
 import { tagProps } from '@element-plus/components/tag'
-import CrossSmall from '../../../icon/crossSmall.vue'
 import type { Options, Placement } from '@element-plus/components/popper'
 
 export const SelectProps = buildProps({
@@ -180,7 +179,7 @@ export const SelectProps = buildProps({
    */
   clearIcon: {
     type: iconPropType,
-    default: CrossSmall,
+    default: CircleClose,
   },
   /**
    * @description whether the width of the dropdown is the same as the input

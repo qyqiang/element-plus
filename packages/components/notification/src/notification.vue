@@ -14,9 +14,11 @@
       @mouseleave="startTimer"
       @click="onClick"
     >
-      <el-icon v-if="iconComponent" :class="[ns.e('icon'), typeClass]">
-        <component :is="iconComponent" />
-      </el-icon>
+      <el-icon
+        v-if="iconComponent"
+        :class="[ns.e('icon'), typeClass]"
+        v-html="iconComponent"
+      />
       <div :class="ns.e('group')">
         <h2 :class="ns.e('title')" v-text="title" />
         <div

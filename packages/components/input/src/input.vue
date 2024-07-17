@@ -75,14 +75,50 @@
               @mousedown.prevent="NOOP"
               @click="clear"
             >
-              <CrossSmall />
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="12"
+                height="12"
+                viewBox="0 0 12 12"
+              >
+                <path
+                  d="M9.35349 3.35342L8.64648 2.64642L5.99998 5.29292L3.35348 2.64642L2.64648 3.35342L5.29298 5.99992L2.64648 8.64642L3.35348 9.35342L5.99998 6.70692L8.64648 9.35342L9.35349 8.64642L6.70698 5.99992L9.35349 3.35342Z"
+                />
+              </svg>
             </el-icon>
             <el-icon
               v-if="showPwdVisible"
               :class="[nsInput.e('icon'), nsInput.e('password')]"
               @click="handlePasswordVisible"
             >
-              <component :is="passwordIcon" />
+              <svg
+                v-if="passwordVisible"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+                width="24"
+                height="24"
+                fill="#1a1f36"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  id="ujy5xle6ka"
+                  d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                />
+              </svg>
+              <svg
+                v-else
+                width="18"
+                fill="#1a1f36"
+                height="18"
+                viewBox="0 0 18 18"
+                xmlns="http://www.w3.org/2000/svg"
+                xmlns:xlink="http://www.w3.org/1999/xlink"
+              >
+                <path
+                  id="a"
+                  d="M9 5.25c2.07 0 3.75 1.68 3.75 3.75 0 .488-.098.945-.27 1.373l2.19 2.19A8.863 8.863 0 0 0 17.242 9c-1.297-3.293-4.5-5.625-8.25-5.625-1.05 0-2.055.188-2.985.525l1.62 1.62A3.64 3.64 0 0 1 9 5.25zM1.5 3.203l1.71 1.71.345.345A8.853 8.853 0 0 0 .75 9c1.297 3.293 4.5 5.625 8.25 5.625a8.832 8.832 0 0 0 3.285-.63l.315.315 2.197 2.19.953-.953L2.453 2.25l-.953.953zM5.647 7.35 6.81 8.512c-.037.158-.06.323-.06.488A2.247 2.247 0 0 0 9 11.25c.165 0 .33-.023.488-.06l1.162 1.162A3.717 3.717 0 0 1 9 12.75c-2.07 0-3.75-1.68-3.75-3.75 0-.592.15-1.147.397-1.65zm3.233-.585 2.362 2.362.015-.12a2.247 2.247 0 0 0-2.25-2.25l-.127.008z"
+                />
+              </svg>
             </el-icon>
             <span v-if="isWordLimitVisible" :class="nsInput.e('count')">
               <span :class="nsInput.e('count-inner')">
@@ -96,9 +132,8 @@
                 nsInput.e('validateIcon'),
                 nsInput.is('loading', validateState === 'validating'),
               ]"
-            >
-              <component :is="validateIcon" />
-            </el-icon>
+              v-html="validateIcon"
+            />
           </span>
         </span>
       </div>
@@ -183,9 +218,6 @@ import {
   useNamespace,
 } from '@element-plus/hooks'
 import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import Hide from '../../../icon/hide.vue'
-import View from '../../../icon/view.vue'
-import CrossSmall from '../../../icon/crossSmall.vue'
 import { calcTextareaHeight } from './utils'
 import { inputEmits, inputProps } from './input'
 import type { StyleValue } from 'vue'
@@ -276,7 +308,6 @@ const validateState = computed(() => elFormItem?.validateState || '')
 const validateIcon = computed(
   () => validateState.value && ValidateComponentsMap[validateState.value]
 )
-const passwordIcon = computed(() => (passwordVisible.value ? View : Hide))
 const containerStyle = computed<StyleValue>(() => [
   rawAttrs.style as StyleValue,
 ])

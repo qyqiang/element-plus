@@ -44,9 +44,8 @@
                 <el-icon
                   v-if="iconComponent && center"
                   :class="[ns.e('status'), typeClass]"
-                >
-                  <component :is="iconComponent" />
-                </el-icon>
+                  v-html="iconComponent"
+                />
                 <span>{{ title }}</span>
               </div>
               <button
@@ -80,9 +79,8 @@
                 <el-icon
                   v-if="iconComponent && !center && hasMessage"
                   :class="[ns.e('status'), typeClass]"
-                >
-                  <component :is="iconComponent" />
-                </el-icon>
+                  v-html="iconComponent"
+                />
                 <div v-if="hasMessage" :class="ns.e('message')">
                   <slot>
                     <component

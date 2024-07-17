@@ -40,9 +40,8 @@
             : '#2a3f4d'
         "
         size="16px"
-      >
-        <component :is="iconComponent" />
-      </el-icon>
+        v-html="iconComponent"
+      />
       <slot>
         <p v-if="!dangerouslyUseHTMLString" :class="ns.e('content')">
           {{ message }}
