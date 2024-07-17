@@ -70,7 +70,7 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  font-family: getCssVar('font-family', 'header');
+  font-family: var(--header-font-medium);
 
   .#{$namespace}-input__inner {
     text-align: center;

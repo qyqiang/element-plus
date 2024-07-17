@@ -72,7 +72,7 @@
     font-size: getCssVar('messagebox-font-size');
     line-height: getCssVar('messagebox-font-line-height');
     color: getCssVar('messagebox-title-color');
-    font-family: getCssVar('font-family', 'header');
+    font-family: var(--header-font-semibold);
     font-weight: 600;
     color: getCssVar('text-color', 'primary');
   }

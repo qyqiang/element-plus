@@ -21,7 +21,7 @@ $button-icon-span-gap: map.merge(
 }
 
 @include b(button) {
-  font-family: getCssVar('font-family', 'header');
+  font-family: var(--header-font-medium);
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -30,7 +30,6 @@ $button-icon-span-gap: map.merge(
   white-space: nowrap;
   // min-height will expand when in flex
   height: map.get($input-height, 'default');
-  white-space: nowrap;
   cursor: pointer;
   color: getCssVar('button', 'text-color');
   text-align: center;

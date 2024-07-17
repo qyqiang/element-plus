@@ -147,7 +147,7 @@
 
 @include b(input) {
   @include css-var-from-global('input-height', 'component-size');
-  font-family: getCssVar('font-family');
+  font-family: var(--body-font);
   position: relative;
   font-size: getCssVar('font-size', 'small');
   display: inline-flex;
@@ -402,7 +402,7 @@
       font-size: map.get($input-font-size, $size);
 
       @include e(wrapper) {
-        padding: $border-width map.get($input-padding-horizontal, $size);
+        padding: 0 12px;
       }
 
       @include e(inner) {
@@ -415,6 +415,18 @@
         );
       }
     }
+  }
+}
+
+.el-input--large {
+  .el-input__inner:valid ~ .float-label, .el-input__wrapper.is-focus .float-label {
+    transform: translateY(-20px);
+  }
+}
+
+.el-input--small {
+  .el-input__inner:valid ~ .float-label, .el-input__wrapper.is-focus .float-label {
+    transform: translateY(-12px);
   }
 }
 
