@@ -27,122 +27,127 @@
     @hide="onHide"
   >
     <template #default>
-      <el-input
-        v-if="!isRangeInput"
-        :id="(id as string | undefined)"
-        ref="inputRef"
-        container-role="combobox"
-        :model-value="(displayValue as string)"
-        :name="name"
-        :size="pickerSize"
-        :disabled="pickerDisabled"
-        :placeholder="placeholder"
-        :class="[nsDate.b('editor'), nsDate.bm('editor', type), $attrs.class]"
-        :style="$attrs.style"
-        :readonly="
-          !editable ||
-          readonly ||
-          isDatesPicker ||
-          isYearsPicker ||
-          type === 'week'
-        "
-        :aria-label="label || ariaLabel"
-        :tabindex="tabindex"
-        :validate-event="false"
-        @input="onUserInput"
-        @focus="handleFocusInput"
-        @blur="handleBlurInput"
-        @keydown="
-          //
-          handleKeydownInput as any
-        "
-        @change="handleChange"
-        @mousedown="onMouseDownInput"
-        @mouseenter="onMouseEnter"
-        @mouseleave="onMouseLeave"
-        @touchstart.passive="onTouchStartInput"
-        @click.stop
-      >
-        <template #prefix>
+      <span v-if="$slots.open" @click="handleFocusInput">
+        <slot name="open" />
+      </span>
+      <template v-else>
+        <el-input
+          v-if="!isRangeInput"
+          :id="(id as string | undefined)"
+          ref="inputRef"
+          container-role="combobox"
+          :model-value="(displayValue as string)"
+          :name="name"
+          :size="pickerSize"
+          :disabled="pickerDisabled"
+          :placeholder="placeholder"
+          :class="[nsDate.b('editor'), nsDate.bm('editor', type), $attrs.class]"
+          :style="$attrs.style"
+          :readonly="
+            !editable ||
+            readonly ||
+            isDatesPicker ||
+            isYearsPicker ||
+            type === 'week'
+          "
+          :aria-label="label || ariaLabel"
+          :tabindex="tabindex"
+          :validate-event="false"
+          @input="onUserInput"
+          @focus="handleFocusInput"
+          @blur="handleBlurInput"
+          @keydown="
+            //
+            handleKeydownInput as any
+          "
+          @change="handleChange"
+          @mousedown="onMouseDownInput"
+          @mouseenter="onMouseEnter"
+          @mouseleave="onMouseLeave"
+          @touchstart.passive="onTouchStartInput"
+          @click.stop
+        >
+          <template #prefix>
+            <el-icon
+              v-if="triggerIcon"
+              :class="nsInput.e('icon')"
+              @mousedown.prevent="onMouseDownInput"
+              @touchstart.passive="onTouchStartInput"
+            >
+              <component :is="triggerIcon" />
+            </el-icon>
+          </template>
+          <template #suffix>
+            <el-icon
+              v-if="showClose && clearIcon"
+              :class="`${nsInput.e('icon')} clear-icon`"
+              @click.stop="onClearIconClick"
+            >
+              <component :is="clearIcon" />
+            </el-icon>
+          </template>
+        </el-input>
+        <div
+          v-else
+          ref="inputRef"
+          :class="rangeInputKls"
+          :style="($attrs.style as any)"
+          @click="handleFocusInput"
+          @mouseenter="onMouseEnter"
+          @mouseleave="onMouseLeave"
+          @touchstart.passive="onTouchStartInput"
+          @keydown="handleKeydownInput"
+        >
           <el-icon
             v-if="triggerIcon"
-            :class="nsInput.e('icon')"
+            :class="[nsInput.e('icon'), nsRange.e('icon')]"
             @mousedown.prevent="onMouseDownInput"
             @touchstart.passive="onTouchStartInput"
           >
             <component :is="triggerIcon" />
           </el-icon>
-        </template>
-        <template #suffix>
+          <input
+            :id="id && id[0]"
+            autocomplete="off"
+            :name="name && name[0]"
+            :placeholder="startPlaceholder"
+            :value="displayValue && displayValue[0]"
+            :disabled="pickerDisabled"
+            :readonly="!editable || readonly"
+            :class="nsRange.b('input')"
+            @mousedown="onMouseDownInput"
+            @input="handleStartInput"
+            @change="handleStartChange"
+            @focus="handleFocusInput"
+            @blur="handleBlurInput"
+          />
+          <slot name="range-separator">
+            <span :class="nsRange.b('separator')">{{ rangeSeparator }}</span>
+          </slot>
+          <input
+            :id="id && id[1]"
+            autocomplete="off"
+            :name="name && name[1]"
+            :placeholder="endPlaceholder"
+            :value="displayValue && displayValue[1]"
+            :disabled="pickerDisabled"
+            :readonly="!editable || readonly"
+            :class="nsRange.b('input')"
+            @mousedown="onMouseDownInput"
+            @focus="handleFocusInput"
+            @blur="handleBlurInput"
+            @input="handleEndInput"
+            @change="handleEndChange"
+          />
           <el-icon
-            v-if="showClose && clearIcon"
-            :class="`${nsInput.e('icon')} clear-icon`"
-            @click.stop="onClearIconClick"
+            v-if="clearIcon"
+            :class="clearIconKls"
+            @click="onClearIconClick"
           >
             <component :is="clearIcon" />
           </el-icon>
-        </template>
-      </el-input>
-      <div
-        v-else
-        ref="inputRef"
-        :class="rangeInputKls"
-        :style="($attrs.style as any)"
-        @click="handleFocusInput"
-        @mouseenter="onMouseEnter"
-        @mouseleave="onMouseLeave"
-        @touchstart.passive="onTouchStartInput"
-        @keydown="handleKeydownInput"
-      >
-        <el-icon
-          v-if="triggerIcon"
-          :class="[nsInput.e('icon'), nsRange.e('icon')]"
-          @mousedown.prevent="onMouseDownInput"
-          @touchstart.passive="onTouchStartInput"
-        >
-          <component :is="triggerIcon" />
-        </el-icon>
-        <input
-          :id="id && id[0]"
-          autocomplete="off"
-          :name="name && name[0]"
-          :placeholder="startPlaceholder"
-          :value="displayValue && displayValue[0]"
-          :disabled="pickerDisabled"
-          :readonly="!editable || readonly"
-          :class="nsRange.b('input')"
-          @mousedown="onMouseDownInput"
-          @input="handleStartInput"
-          @change="handleStartChange"
-          @focus="handleFocusInput"
-          @blur="handleBlurInput"
-        />
-        <slot name="range-separator">
-          <span :class="nsRange.b('separator')">{{ rangeSeparator }}</span>
-        </slot>
-        <input
-          :id="id && id[1]"
-          autocomplete="off"
-          :name="name && name[1]"
-          :placeholder="endPlaceholder"
-          :value="displayValue && displayValue[1]"
-          :disabled="pickerDisabled"
-          :readonly="!editable || readonly"
-          :class="nsRange.b('input')"
-          @mousedown="onMouseDownInput"
-          @focus="handleFocusInput"
-          @blur="handleBlurInput"
-          @input="handleEndInput"
-          @change="handleEndChange"
-        />
-        <el-icon
-          v-if="clearIcon"
-          :class="clearIconKls"
-          @click="onClearIconClick"
-        >
-          <component :is="clearIcon" />
-        </el-icon>
-      </div>
+        </div>
+      </template>
     </template>
     <template #content>
       <slot
