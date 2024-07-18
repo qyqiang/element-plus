@@ -100,7 +100,7 @@
       & ~ .float-label {
         left: 12px;
         color: getCssVar('text-color-tertiary');
-        transform: translateY(-17px);
+        transform: translateY(-16px);
         transition: transform 100ms ease;
       }
     }
@@ -189,7 +189,7 @@
     flex-grow: 1;
     align-items: center;
     justify-content: center;
-    padding: $border-width map.get($input-padding-horizontal, 'default');
+    padding: 0 map.get($input-padding-horizontal, 'default');
     background-color: var(
         #{getCssVarName('input-bg-color')},
         map.get($input, 'bg-color')
@@ -231,7 +231,7 @@
       .float-label {
         left: 12px;
         color: getCssVar('text-color-tertiary');
-        transform: translateY(-17px);
+        transform: translateY(-16px);
         transition: transform 100ms ease;
       }
     }

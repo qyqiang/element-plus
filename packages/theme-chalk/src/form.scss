@@ -236,7 +236,7 @@ $form-item-label-top-margin-bottom: map.merge(
     .float-label {
       left: 12px;
       color: getCssVar('text-color-tertiary');
-      transform: translateY(-17px);
+      transform: translateY(-16px);
       transition: transform 100ms ease;
     }
     .el-input--large {
