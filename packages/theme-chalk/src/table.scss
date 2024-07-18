@@ -201,19 +201,6 @@
     }
   }
 
-  @each $size in (large, default, small) {
-    @include m($size) {
-      font-size: map.get($table-font-size, $size);
-
-      .#{$namespace}-table__cell {
-        padding: map.get($table-padding, $size);
-      }
-
-      .cell {
-        padding: map.get($table-cell-padding, $size);
-      }
-    }
-  }
 
   tr {
     background-color: getCssVar('table-tr-bg-color');

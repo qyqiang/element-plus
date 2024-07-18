@@ -59,12 +59,6 @@ $dropdown-divider-width: 1px !default;
 
     // using attributes selector to override
 
-    @include picker-popper(
-      getCssVar('bg-color', 'overlay'),
-      1px solid getCssVar('border-color-light'),
-      getCssVar('dropdown-menu-box-shadow')
-    );
-
     .#{$namespace}-dropdown-menu {
       border: none;
     }

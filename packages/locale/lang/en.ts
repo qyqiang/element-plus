@@ -100,7 +100,7 @@ export default {
     },
     pagination: {
       goto: 'Go to',
-      pagesize: '/page',
+      pagesize: ' / page',
       total: 'Total {total}',
       pageClassifier: '',
       page: 'Page',

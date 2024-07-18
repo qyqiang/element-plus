@@ -16,6 +16,7 @@
   min-width: 10px;
   overflow-wrap: break-word;
   visibility: visible;
+  box-shadow: getCssVar('box-shadow-300');
 
   $arrow-selector: #{& + '__arrow'};
 

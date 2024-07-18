@@ -51,7 +51,7 @@ export const popoverProps = buildProps({
   },
   showArrow: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   persistent: {
     type: Boolean,

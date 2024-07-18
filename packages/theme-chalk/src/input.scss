@@ -227,7 +227,7 @@
       max-width: calc(100% - 24px);
     }
     @include when(focus) {
-      border-color: getCssVar('color-primary');
+      border-color: getCssVar('color-primary') !important;
       .float-label {
         left: 12px;
         color: getCssVar('text-color-tertiary');
