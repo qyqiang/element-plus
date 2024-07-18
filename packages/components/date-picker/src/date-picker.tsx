@@ -84,6 +84,7 @@ export default defineComponent({
               <Component {...scopedProps} />
             ),
             'range-separator': slots['range-separator'],
+            open: slots['open'],
           }}
         </CommonPicker>
       )
