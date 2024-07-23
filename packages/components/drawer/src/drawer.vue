@@ -66,7 +66,17 @@
                 type="button"
                 @click="handleClose"
               >
-                <el-icon :class="ns.e('close')"><close /></el-icon>
+                <el-icon :class="ns.e('close')" size="12px"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                  >
+                    <path
+                      d="M11 1.87969L10.1203 1L6 5.12072L1.87969 1L1 1.87969L5.12072 6L1 10.1203L1.87969 11L6 6.87928L10.1203 11L11 10.1203L6.87928 6L11 1.87969Z"
+                    /></svg
+                ></el-icon>
               </button>
             </header>
             <template v-if="rendered">
@@ -86,7 +96,6 @@
 
 <script lang="ts" setup>
 import { computed, ref, useSlots } from 'vue'
-import { Close } from '@element-plus/icons-vue'
 
 import { ElOverlay } from '@element-plus/components/overlay'
 import ElFocusTrap from '@element-plus/components/focus-trap'

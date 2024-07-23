@@ -30,22 +30,24 @@ $directions: rtl, ltr, ttb, btt;
   }
 
   &__header {
+    box-sizing: content-box;
+    background-color: #279c9c;
     align-items: center;
-    color: rgb(114, 118, 123);
+    color: #fff;
     display: flex;
     margin-bottom: 32px;
-    padding: getCssVar('drawer-padding-primary');
-    padding-bottom: 0;
+    padding: 19px 32px;
     & > :first-child {
       flex: 1;
     }
   }
 
   &__title {
-    margin: 0;
     flex: 1;
-    line-height: inherit;
-    font-size: 16px;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: var(--header-font-bold);
+    line-height: 32px;
   }
 
   @include e(footer) {
