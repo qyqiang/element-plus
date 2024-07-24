@@ -142,6 +142,13 @@ export const SelectProps = buildProps({
     default: true,
   },
   /**
+   * @description preStar
+   */
+  preStar: {
+    type: Boolean,
+    default: false,
+  },
+  /**
    * @description unique identity key name for value, required when value is an object
    */
   valueKey: {

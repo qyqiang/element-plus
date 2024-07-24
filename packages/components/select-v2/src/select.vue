@@ -34,6 +34,7 @@
             nsSelect.is('filterable', filterable),
             nsSelect.is('disabled', selectDisabled),
             nsSelect.is('value', hasModelValue),
+            preStar && !isFocused && !hasModelValue ? 'pre-star-item' : '',
           ]"
           @click.prevent.stop="toggleMenu"
         >

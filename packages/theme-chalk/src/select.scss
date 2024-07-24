@@ -38,7 +38,13 @@
     background-color: getCssVar('fill-color', 'blank');
     transition: getCssVar('transition', 'duration');
     border: 1px solid getCssVar('border-color-custom');
-
+    &.pre-star-item:before {
+      position: absolute;
+      left: 4px;
+      font-size: 12px;
+      content: '*';
+      color: getCssVar('color-error');
+    }
     &:hover {
       border-color: #7a909e;
     }

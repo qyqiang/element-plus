@@ -9,11 +9,11 @@
     :size="formSize"
     status-icon
   >
-    <el-form-item label="Activity name" prop="name">
-      <el-input v-model="ruleForm.name" />
+    <el-form-item label="Activity name" prop="name" pre-star>
+      <el-input v-model="ruleForm.name" pre-star />
     </el-form-item>
     <el-form-item label="Activity zone" prop="region">
-      <el-select v-model="ruleForm.region" placeholder="Activity zone">
+      <el-select v-model="ruleForm.region" placeholder="Activity zone" pre-star>
         <el-option label="Zone one" value="shanghai" />
         <el-option label="Zone two" value="beijing" />
       </el-select>
@@ -111,7 +111,7 @@ interface RuleForm {
 const formSize = ref<ComponentSize>('default')
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
-  name: 'Hello',
+  name: '',
   region: '',
   count: '',
   date1: '',

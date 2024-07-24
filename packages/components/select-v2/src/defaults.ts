@@ -34,6 +34,13 @@ export const SelectProps = buildProps({
     default: true,
   },
   /**
+   * @description preStar
+   */
+  preStar: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description for non-filterable Select, this prop decides if the option menu pops up when the input is focused
    */
   automaticDropdown: Boolean,
