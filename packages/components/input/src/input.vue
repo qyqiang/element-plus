@@ -25,7 +25,7 @@
         <span v-if="$slots.prefix || prefixIcon" :class="nsInput.e('prefix')">
           <span :class="nsInput.e('prefix-inner')">
             <slot name="prefix" />
-            <el-icon v-if="prefixIcon" :class="nsInput.e('icon')">
+            <el-icon v-if="prefixIcon" :class="nsInput.e('icon')" size="12px">
               <component :is="prefixIcon" />
             </el-icon>
           </span>
@@ -56,7 +56,12 @@
           @change="handleChange"
           @keydown="handleKeydown"
         />
-        <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
+        <span
+          v-if="floatLabel"
+          class="float-label"
+          :class="{ 'prefix-label': $slots.prefix || prefixIcon }"
+          >{{ placeholder }}</span
+        >
 
         <!-- suffix slot -->
         <span v-if="suffixVisible" :class="nsInput.e('suffix')">

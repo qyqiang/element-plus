@@ -225,6 +225,10 @@
       height: 14px;
       line-height: 1;
       max-width: calc(100% - 24px);
+
+      &.prefix-label {
+        left: 32px;
+      }
     }
     @include when(focus) {
       border-color: getCssVar('color-primary') !important;
@@ -315,8 +319,10 @@
       justify-content: center;
 
       @if $slot == prefix {
+        padding: 0 2px;
+
         > :last-child {
-          margin-right: 8px;
+          //margin-right: 8px;
         }
 
         > :first-child {
