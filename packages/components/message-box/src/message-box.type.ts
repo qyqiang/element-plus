@@ -70,6 +70,11 @@ export interface ElMessageBoxOptions {
    */
   autofocus?: boolean
 
+  /**
+   * reverse button when need change button location
+   */
+  reverseBtn?: boolean
+
   /** Callback before MessageBox closes, and it will prevent MessageBox from closing */
   beforeClose?: (
     action: Action,

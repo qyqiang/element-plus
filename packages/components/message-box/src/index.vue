@@ -121,33 +121,35 @@
               </div>
             </div>
             <div :class="ns.e('btns')">
-              <el-button
-                v-if="showCancelButton"
-                :loading="cancelButtonLoading"
-                :loading-icon="cancelButtonLoadingIcon"
-                :class="[cancelButtonClass]"
-                :round="roundButton"
-                :size="btnSize"
-                @click="handleAction('cancel')"
-                @keydown.prevent.enter="handleAction('cancel')"
-              >
-                {{ cancelButtonText || t('el.messagebox.cancel') }}
-              </el-button>
-              <el-button
-                v-show="showConfirmButton"
-                ref="confirmRef"
-                type="primary"
-                :loading="confirmButtonLoading"
-                :loading-icon="confirmButtonLoadingIcon"
-                :class="[confirmButtonClasses]"
-                :round="roundButton"
-                :disabled="confirmButtonDisabled"
-                :size="btnSize"
-                @click="handleAction('confirm')"
-                @keydown.prevent.enter="handleAction('confirm')"
-              >
-                {{ confirmButtonText || t('el.messagebox.confirm') }}
-              </el-button>
+              <div class="flex" :class="{ 'reverse-btn': reverseBtn }">
+                <el-button
+                  v-if="showCancelButton"
+                  :loading="cancelButtonLoading"
+                  :loading-icon="cancelButtonLoadingIcon"
+                  :class="[cancelButtonClass, reverseBtn ? 'ml-2' : '']"
+                  :round="roundButton"
+                  :size="btnSize"
+                  @click="handleAction('cancel')"
+                  @keydown.prevent.enter="handleAction('cancel')"
+                >
+                  {{ cancelButtonText || t('el.messagebox.cancel') }}
+                </el-button>
+                <el-button
+                  v-show="showConfirmButton"
+                  ref="confirmRef"
+                  type="primary"
+                  :loading="confirmButtonLoading"
+                  :loading-icon="confirmButtonLoadingIcon"
+                  :class="[confirmButtonClasses, !reverseBtn ? 'ml-2' : '']"
+                  :round="roundButton"
+                  :disabled="confirmButtonDisabled"
+                  :size="btnSize"
+                  @click="handleAction('confirm')"
+                  @keydown.prevent.enter="handleAction('confirm')"
+                >
+                  {{ confirmButtonText || t('el.messagebox.confirm') }}
+                </el-button>
+              </div>
             </div>
           </div>
         </el-focus-trap>
@@ -218,6 +220,10 @@ export default defineComponent({
     modal: {
       type: Boolean,
       default: true,
+    },
+    reverseBtn: {
+      type: Boolean,
+      default: false,
     },
     lockScroll: {
       type: Boolean,
