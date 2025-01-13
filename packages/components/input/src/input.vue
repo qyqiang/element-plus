@@ -1,6 +1,5 @@
 <template>
   <div
-    v-bind="containerAttrs"
     :class="[
       containerKls,
       {
@@ -9,7 +8,6 @@
       },
     ]"
     :style="containerStyle"
-    :role="containerRole"
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
@@ -44,15 +42,15 @@
           :autocomplete="autocomplete"
           :tabindex="tabindex"
           :aria-label="label || ariaLabel"
+          :placeholder="placeholder"
           :style="inputStyle"
           :form="form"
           :autofocus="autofocus"
+          :role="containerRole"
           @compositionstart="handleCompositionStart"
           @compositionupdate="handleCompositionUpdate"
           @compositionend="handleCompositionEnd"
           @input="handleInput"
-          @focus="handleFocus"
-          @blur="handleBlur"
           @change="handleChange"
           @keydown="handleKeydown"
         />
@@ -163,8 +161,11 @@
         :autocomplete="autocomplete"
         :style="textareaStyle"
         :aria-label="label || ariaLabel"
+        :placeholder="placeholder"
         :form="form"
         :autofocus="autofocus"
+        :rows="rows"
+        :role="containerRole"
         @compositionstart="handleCompositionStart"
         @compositionupdate="handleCompositionUpdate"
         @compositionend="handleCompositionEnd"
@@ -212,13 +213,12 @@ import {
   ValidateComponentsMap,
   debugWarn,
   isClient,
-  isKorean,
   isObject,
 } from '@element-plus/utils'
 import {
   useAttrs,
+  useComposition,
   useCursor,
-  useDeprecated,
   useFocusController,
   useNamespace,
 } from '@element-plus/hooks'
@@ -237,17 +237,8 @@ const props = defineProps(inputProps)
 const emit = defineEmits(inputEmits)
 
 const rawAttrs = useRawAttrs()
+const attrs = useAttrs()
 const slots = useSlots()
-
-const containerAttrs = computed(() => {
-  const comboBoxAttrs: Record<string, unknown> = {}
-  if (props.containerRole === 'combobox') {
-    comboBoxAttrs['aria-haspopup'] = rawAttrs['aria-haspopup']
-    comboBoxAttrs['aria-owns'] = rawAttrs['aria-owns']
-    comboBoxAttrs['aria-expanded'] = rawAttrs['aria-expanded']
-  }
-  return comboBoxAttrs
-})
 
 const containerKls = computed(() => [
   props.type === 'textarea' ? nsTextarea.b() : nsInput.b(),
@@ -272,11 +263,6 @@ const wrapperKls = computed(() => [
   props.preStar && !isFocused.value && !textLength.value ? 'pre-star-item' : '',
 ])
 
-const attrs = useAttrs({
-  excludeKeys: computed<string[]>(() => {
-    return Object.keys(containerAttrs.value)
-  }),
-})
 const { form: elForm, formItem: elFormItem } = useFormItem()
 const { inputId } = useFormItemInputId(props, {
   formItemContext: elFormItem,
@@ -290,16 +276,19 @@ const input = shallowRef<HTMLInputElement>()
 const textarea = shallowRef<HTMLTextAreaElement>()
 
 const hovering = ref(false)
-const isComposing = ref(false)
 const passwordVisible = ref(false)
 const countStyle = ref<StyleValue>()
 const textareaCalcStyle = shallowRef(props.inputStyle)
 
 const _ref = computed(() => input.value || textarea.value)
 
+// wrapperRef for type="text", handleFocus and handleBlur for type="textarea"
 const { wrapperRef, isFocused, handleFocus, handleBlur } = useFocusController(
   _ref,
   {
+    beforeFocus() {
+      return inputDisabled.value
+    },
     afterBlur() {
       if (props.validateEvent) {
         elFormItem?.validate?.('blur').catch((err) => debugWarn(err))
@@ -336,7 +325,6 @@ const showPwdVisible = computed(
   () =>
     props.showPassword &&
     !inputDisabled.value &&
-    !props.readonly &&
     !!nativeInputValue.value &&
     (!!nativeInputValue.value || isFocused.value)
 )
@@ -466,36 +454,21 @@ const handleChange = (event: Event) => {
   emit('change', (event.target as TargetElement).value)
 }
 
-const handleCompositionStart = (event: CompositionEvent) => {
-  emit('compositionstart', event)
-  isComposing.value = true
-}
-
-const handleCompositionUpdate = (event: CompositionEvent) => {
-  emit('compositionupdate', event)
-  const text = (event.target as HTMLInputElement)?.value
-  const lastCharacter = text[text.length - 1] || ''
-  isComposing.value = !isKorean(lastCharacter)
-}
-
-const handleCompositionEnd = (event: CompositionEvent) => {
-  emit('compositionend', event)
-  if (isComposing.value) {
-    isComposing.value = false
-    handleInput(event)
-  }
-}
+const {
+  isComposing,
+  handleCompositionStart,
+  handleCompositionUpdate,
+  handleCompositionEnd,
+} = useComposition({ emit, afterComposition: handleInput })
 
 const handlePasswordVisible = () => {
+  recordCursor()
   passwordVisible.value = !passwordVisible.value
-  focus()
+  // The native input needs a little time to regain focus
+  setTimeout(setCursor)
 }
 
-const focus = async () => {
-  // see: https://github.com/ElemeFE/element/issues/18573
-  await nextTick()
-  _ref.value?.focus()
-}
+const focus = () => _ref.value?.focus()
 
 const blur = () => _ref.value?.blur()
 
@@ -562,17 +535,6 @@ onMounted(() => {
   nextTick(resizeTextarea)
 })
 
-useDeprecated(
-  {
-    from: 'label',
-    replacement: 'aria-label',
-    version: '2.8.0',
-    scope: 'el-input',
-    ref: 'https://element-plus.org/en-US/component/input.html',
-  },
-  computed(() => !!props.label)
-)
-
 defineExpose({
   /** @description HTML input element */
   input,
@@ -585,6 +547,9 @@ defineExpose({
 
   /** @description from props (used on unit test) */
   autosize: toRef(props, 'autosize'),
+
+  /** @description is input composing */
+  isComposing,
 
   /** @description HTML input element native method */
   focus,

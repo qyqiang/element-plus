@@ -197,6 +197,7 @@
           <month-table
             v-if="currentView === 'month'"
             ref="currentViewRef"
+            :selection-mode="selectionMode"
             :date="innerDate"
             :parsed-value="parsedValue"
             :disabled-date="disabledDate"
@@ -207,7 +208,7 @@
     </div>
     <div v-show="footerVisible" :class="ppNs.e('footer')">
       <el-button
-        v-show="selectionMode !== 'dates' && selectionMode !== 'years'"
+        v-show="!isMultipleType && showNow"
         text
         size="small"
         :class="ppNs.e('link-btn')"
@@ -255,6 +256,7 @@ import { isArray, isFunction } from '@element-plus/utils'
 import { EVENT_CODE } from '@element-plus/constants'
 import { TOOLTIP_INJECTION_KEY } from '@element-plus/components/tooltip'
 import { panelDatePickProps } from '../props/panel-date-pick'
+import { getValidDateOfMonth, getValidDateOfYear } from '../utils'
 import DateTable from './basic-date-table.vue'
 import MonthTable from './basic-month-table.vue'
 import YearTable from './basic-year-table.vue'
@@ -265,6 +267,7 @@ import type { PanelDatePickProps } from '../props/panel-date-pick'
 import type {
   DateTableEmits,
   DatesPickerEmits,
+  MonthsPickerEmits,
   WeekPickerEmits,
   YearsPickerEmits,
 } from '../props/basic-date-table'
@@ -433,8 +436,17 @@ const handleShortcutClick = (shortcut: Shortcut) => {
 
 const selectionMode = computed<DatePickType>(() => {
   const { type } = props
-  if (['week', 'month', 'year', 'years', 'dates'].includes(type)) return type
+  if (['week', 'month', 'months', 'year', 'years', 'dates'].includes(type))
+    return type
   return 'date' as DatePickType
+})
+
+const isMultipleType = computed(() => {
+  return (
+    selectionMode.value === 'dates' ||
+    selectionMode.value === 'months' ||
+    selectionMode.value === 'years'
+  )
 })
 
 const keyboardMode = computed<string>(() => {
@@ -445,11 +457,27 @@ const keyboardMode = computed<string>(() => {
 
 const hasShortcuts = computed(() => !!shortcuts.length)
 
-const handleMonthPick = async (month: number) => {
-  innerDate.value = innerDate.value.startOf('month').month(month)
+const handleMonthPick = async (
+  month: number | MonthsPickerEmits,
+  keepOpen?: boolean
+) => {
   if (selectionMode.value === 'month') {
+    innerDate.value = getValidDateOfMonth(
+      innerDate.value.year(),
+      month as number,
+      lang.value,
+      disabledDate
+    )
     emit(innerDate.value, false)
+  } else if (selectionMode.value === 'months') {
+    emit(month as MonthsPickerEmits, keepOpen ?? true)
   } else {
+    innerDate.value = getValidDateOfMonth(
+      innerDate.value.year(),
+      month as number,
+      lang.value,
+      disabledDate
+    )
     currentView.value = 'date'
     if (['month', 'year', 'date', 'week'].includes(selectionMode.value)) {
       emit(innerDate.value, true)
@@ -465,12 +493,14 @@ const handleYearPick = async (
   keepOpen?: boolean
 ) => {
   if (selectionMode.value === 'year') {
-    innerDate.value = innerDate.value.startOf('year').year(year as number)
+    const data = innerDate.value.startOf('year').year(year as number)
+    innerDate.value = getValidDateOfYear(data, lang.value, disabledDate)
     emit(innerDate.value, false)
   } else if (selectionMode.value === 'years') {
     emit(year as YearsPickerEmits, keepOpen ?? true)
   } else {
-    innerDate.value = innerDate.value.year(year as number)
+    const data = innerDate.value.year(year as number)
+    innerDate.value = getValidDateOfYear(data, lang.value, disabledDate)
     currentView.value = 'month'
     if (['month', 'year', 'date', 'week'].includes(selectionMode.value)) {
       emit(innerDate.value, true)
@@ -494,9 +524,15 @@ const showTime = computed(
 const footerVisible = computed(() => {
   const showDateFooter = showTime.value || selectionMode.value === 'dates'
   const showYearFooter = selectionMode.value === 'years'
+  const showMonthFooter = selectionMode.value === 'months'
   const isDateView = currentView.value === 'date'
   const isYearView = currentView.value === 'year'
-  return (showDateFooter && isDateView) || (showYearFooter && isYearView)
+  const isMonthView = currentView.value === 'month'
+  return (
+    (showDateFooter && isDateView) ||
+    (showYearFooter && isYearView) ||
+    (showMonthFooter && isMonthView)
+  )
 })
 
 const disabledConfirm = computed(() => {
@@ -508,7 +544,7 @@ const disabledConfirm = computed(() => {
   return disabledDate(props.parsedValue.toDate())
 })
 const onConfirm = () => {
-  if (selectionMode.value === 'dates' || selectionMode.value === 'years') {
+  if (isMultipleType.value) {
     emit(props.parsedValue as Dayjs[])
   } else {
     // deal with the scenario where: user opens the date time picker, then confirm without doing anything
@@ -655,12 +691,17 @@ const getDefaultValue = () => {
   return parseDate
 }
 
-const handleFocusPicker = async () => {
+const handleFocusPicker = () => {
   if (['week', 'month', 'year', 'date'].includes(selectionMode.value)) {
     currentViewRef.value?.focus()
-    if (selectionMode.value === 'week') {
-      handleKeyControl(EVENT_CODE.down)
-    }
+  }
+}
+
+const _handleFocusPicker = () => {
+  handleFocusPicker()
+  // TODO: After focus the date input, the first time you use the ArrowDown keys, you cannot focus on the date cell
+  if (selectionMode.value === 'week') {
+    handleKeyControl(EVENT_CODE.down)
   }
 }
 
@@ -780,6 +821,9 @@ watch(
     } else if (val === 'years') {
       currentView.value = 'year'
       return
+    } else if (val === 'months') {
+      currentView.value = 'month'
+      return
     }
     currentView.value = 'date'
   },
@@ -807,9 +851,8 @@ watch(
   () => props.parsedValue,
   (val) => {
     if (val) {
-      if (selectionMode.value === 'dates' || selectionMode.value === 'years')
-        return
-      if (Array.isArray(val)) return
+      if (isMultipleType.value) return
+      if (isArray(val)) return
       innerDate.value = val
     } else {
       innerDate.value = getDefaultValue()
@@ -821,5 +864,5 @@ watch(
 contextEmit('set-picker-option', ['isValidValue', isValidValue])
 contextEmit('set-picker-option', ['formatToString', formatToString])
 contextEmit('set-picker-option', ['parseUserInput', parseUserInput])
-contextEmit('set-picker-option', ['handleFocusPicker', handleFocusPicker])
+contextEmit('set-picker-option', ['handleFocusPicker', _handleFocusPicker])
 </script>

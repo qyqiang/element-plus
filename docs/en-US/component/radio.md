@@ -20,13 +20,15 @@ If you are using a version **less than** ^(2.6.0), please refer to:
 
 :::
 
-``` vue
-<el-radio-group v-model="radio1">
-  <!-- works when >=2.6.0, recommended ✔️ not work when <2.6.0 ❌ -->
-  <el-radio value="Value 1">Option 1</el-radio>
-  <!-- works when <2.6.0, deprecated act as value when >=3.0.0 -->
-  <el-radio label="Label 2 & Value 2">Option 2</el-radio>
-</el-radio-group>
+```vue
+<template>
+  <el-radio-group v-model="radio1">
+    <!-- works when >=2.6.0, recommended ✔️ not work when <2.6.0 ❌ -->
+    <el-radio value="Value 1">Option 1</el-radio>
+    <!-- works when <2.6.0, deprecated act as value when >=3.0.0 -->
+    <el-radio label="Label 2 & Value 2">Option 2</el-radio>
+  </el-radio-group>
+</template>
 ```
 
 ## Basic usage
@@ -115,10 +117,10 @@ radio/with-borders
 | text-color                  | font color when button is active                  | ^[string]                          | #ffffff |
 | fill                        | border and background color when button is active | ^[string]                          | #409eff |
 | validate-event              | whether to trigger form validation                | ^[boolean]                         | true    |
-| label ^(a11y) ^(deprecated) | same as `aria-label` in RadioGroup                | ^[string]                          | —       |
 | aria-label ^(a11y) ^(2.7.2) | same as `aria-label` in RadioGroup                | ^[string]                          | —       |
 | name                        | native `name` attribute                           | ^[string]                          | —       |
 | id                          | native `id` attribute                             | ^[string]                          | —       |
+| label ^(a11y) ^(deprecated) | same as `aria-label` in RadioGroup                | ^[string]                          | —       |
 
 ### RadioGroup Events
 

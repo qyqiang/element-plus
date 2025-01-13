@@ -13,7 +13,7 @@
     cursor: pointer;
     position: relative;
 
-    & div {
+    @include b(date-table-cell) {
       height: 48px;
       padding: 6px 0;
       box-sizing: border-box;
@@ -43,7 +43,7 @@
       }
     }
 
-    &.disabled .cell {
+    &.disabled .#{$namespace}-date-table-cell__text {
       background-color: getCssVar('fill-color', 'light');
       cursor: not-allowed;
       color: getCssVar('text-color', 'placeholder');
@@ -53,7 +53,7 @@
       }
     }
 
-    .cell {
+    @include b(date-table-cell__text) {
       width: 54px;
       height: 36px;
       display: block;
@@ -66,7 +66,7 @@
 
     }
 
-    &.in-range div {
+    &.in-range .#{$namespace}-date-table-cell {
       background-color: getCssVar('datepicker-inrange-bg-color');
 
       &:hover {
@@ -82,8 +82,8 @@
       }
     }
 
-    &.start-date div,
-    &.end-date div {
+    &.start-date .#{$namespace}-date-table-cell,
+    &.end-date .#{$namespace}-date-table-cell {
       background-color: getCssVar('color-primary');
 
       .cell {
@@ -91,30 +91,30 @@
       }
     }
 
-    &.start-date .cell,
-    &.end-date .cell {
+    &.start-date .#{$namespace}-date-table-cell__text,
+    &.end-date .#{$namespace}-date-table-cell__text {
       color: $color-white;
     }
 
-    &.start-date div {
+    &.start-date .#{$namespace}-date-table-cell {
       margin-left: 3px;
       border-top-left-radius: 8px;
       border-bottom-left-radius: 8px;
     }
 
-    &.end-date div {
+    &.end-date .#{$namespace}-date-table-cell {
       margin-right: 3px;
       border-top-right-radius: 8px;
       border-bottom-right-radius: 8px;
     }
 
-    &.current:not(.disabled) div {
+    &.current:not(.disabled) .#{$namespace}-date-table-cell {
       border-radius: 24px;
       margin-left: 3px;
       margin-right: 3px;
     }
 
-    &.current:not(.disabled) .cell {
+    &.current:not(.disabled) .#{$namespace}-date-table-cell__text {
       color: $color-white;
       background-color: getCssVar('datepicker-active-color');
     }
@@ -122,7 +122,7 @@
     &:focus-visible {
       outline: none;
 
-      .cell {
+      .#{$namespace}-date-table-cell__text {
         outline: 2px solid getCssVar('datepicker-active-color');
         outline-offset: 1px;
       }

@@ -5,7 +5,6 @@
     :class="[nsSelect.b(), nsSelect.m(selectSize)]"
     @[mouseEnterEventName]="states.inputHovering = true"
     @mouseleave="states.inputHovering = false"
-    @click.prevent.stop="toggleMenu"
   >
     <el-tooltip
       ref="tooltipRef"
@@ -22,6 +21,9 @@
       :stop-popper-mouse-event="false"
       :gpu-acceleration="false"
       :persistent="persistent"
+      :append-to="appendTo"
+      :show-arrow="showArrow"
+      :offset="offset"
       @before-show="handleMenuEnter"
       @hide="states.isBeforeHide = false"
     >
@@ -37,6 +39,7 @@
             nsSelect.is('value', hasModelValue),
             preStar && !isFocused && !hasModelValue ? 'pre-star-item' : '',
           ]"
+          @click.prevent="toggleMenu"
         >
           <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
           <div
@@ -143,7 +146,6 @@
               </el-tooltip>
             </slot>
             <div
-              v-if="!selectDisabled"
               :class="[
                 nsSelect.e('selected-item'),
                 nsSelect.e('input-wrapper'),
@@ -160,6 +162,7 @@
                 :disabled="selectDisabled"
                 :autocomplete="autocomplete"
                 :style="inputStyle"
+                :tabindex="tabindex"
                 role="combobox"
                 :readonly="!filterable"
                 spellcheck="false"
@@ -169,8 +172,6 @@
                 :aria-label="ariaLabel"
                 aria-autocomplete="none"
                 aria-haspopup="listbox"
-                @focus="handleFocus"
-                @blur="handleBlur"
                 @keydown.down.stop.prevent="navigateOptions('next')"
                 @keydown.up.stop.prevent="navigateOptions('prev')"
                 @keydown.esc.stop.prevent="handleEsc"
@@ -229,7 +230,11 @@
             </el-icon>
             <el-icon
               v-if="showClose && clearIcon"
-              :class="[nsSelect.e('caret'), nsSelect.e('icon')]"
+              :class="[
+                nsSelect.e('caret'),
+                nsSelect.e('icon'),
+                nsSelect.e('clear'),
+              ]"
               @click="handleClearClick"
             >
               <svg
@@ -245,7 +250,11 @@
             </el-icon>
             <el-icon
               v-if="validateState && validateIcon"
-              :class="[nsInput.e('icon'), nsInput.e('validateIcon')]"
+              :class="[
+                nsInput.e('icon'),
+                nsInput.e('validateIcon'),
+                nsInput.is('loading', validateState === 'validating'),
+              ]"
               v-html="validateIcon"
             />
           </div>
@@ -309,14 +318,15 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
-import { defineComponent, provide, reactive } from 'vue'
+import { computed, defineComponent, provide, reactive, toRefs } from 'vue'
 import { ClickOutside } from '@element-plus/directives'
 import ElTooltip from '@element-plus/components/tooltip'
 import ElScrollbar from '@element-plus/components/scrollbar'
 import ElTag from '@element-plus/components/tag'
 import ElIcon from '@element-plus/components/icon'
 import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import { isArray } from '@element-plus/utils'
+import { useCalcInputWidth } from '@element-plus/hooks'
 import ElOption from './option.vue'
 import ElSelectMenu from './select-dropdown.vue'
 import { useSelect } from './useSelect'
@@ -352,12 +362,30 @@ export default defineComponent({
   ],
 
   setup(props, { emit }) {
-    const API = useSelect(props, emit)
+    const modelValue = computed(() => {
+      const { modelValue: rawModelValue, multiple } = props
+      const fallback = multiple ? [] : undefined
+      // When it is array, we check if this is multi-select.
+      // Based on the result we get
+      if (isArray(rawModelValue)) {
+        return multiple ? rawModelValue : fallback
+      }
+
+      return multiple ? fallback : rawModelValue
+    })
+
+    const _props = reactive({
+      ...toRefs(props),
+      modelValue,
+    })
+
+    const API = useSelect(_props, emit)
+    const { calculatorRef, inputStyle } = useCalcInputWidth()
 
     provide(
       selectKey,
       reactive({
-        props,
+        props: _props,
         states: API.states,
         optionsArray: API.optionsArray,
         handleOptionSelect: API.handleOptionSelect,
@@ -368,8 +396,19 @@ export default defineComponent({
       }) as unknown as SelectContext
     )
 
+    const selectedLabel = computed(() => {
+      if (!props.multiple) {
+        return API.states.selectedLabel
+      }
+      return API.states.selected.map((i: any) => i.currentLabel as string)
+    })
+
     return {
       ...API,
+      modelValue,
+      selectedLabel,
+      calculatorRef,
+      inputStyle,
     }
   },
 })
