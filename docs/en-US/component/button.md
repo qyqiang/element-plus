@@ -7,6 +7,14 @@ lang: en-US
 
 Commonly used button.
 
+## Demo
+
+:::demo
+
+button/beyond
+
+:::
+
 ## Basic usage
 
 :::demo Use `type`, `plain`, `round` and `circle` to define Button's style.
