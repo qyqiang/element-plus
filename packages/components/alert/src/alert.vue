@@ -9,8 +9,7 @@
         v-if="showIcon && iconComponent"
         :class="[ns.e('icon'), { [ns.is('big')]: hasDesc }]"
         v-html="iconComponent"
-      >
-      </el-icon>
+      />
 
       <div :class="ns.e('content')">
         <span
