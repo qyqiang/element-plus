@@ -12,7 +12,7 @@ interface UseInputTagDomOptions {
   inputValue: Ref<string | undefined>
   size: ComputedRef<ComponentSize>
   validateState: ComputedRef<string>
-  validateIcon: ComputedRef<boolean>
+  validateIcon: ComputedRef<string>
   needStatusIcon: ComputedRef<boolean>
 }
 

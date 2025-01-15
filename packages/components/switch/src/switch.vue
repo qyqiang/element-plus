@@ -142,12 +142,6 @@ const switchKls = computed(() => [
   ns.is('checked', checked.value),
 ])
 
-const labelLeftKls = computed(() => [
-  ns.e('label'),
-  ns.em('label', 'left'),
-  ns.is('active', !checked.value),
-])
-
 const labelRightKls = computed(() => [
   ns.e('label'),
   ns.em('label', 'right'),

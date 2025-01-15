@@ -93,7 +93,7 @@ export const TypeComponentsMap = {
 }
 
 export const ValidateComponentsMap = {
-  validating: loading,
-  success: circleCheck,
-  error: warning,
+  validating: loading as any,
+  success: circleCheck as any,
+  error: warning as any,
 }
