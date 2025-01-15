@@ -47,3 +47,80 @@
   font-size: var(--p-font-size-500);
   line-height: var(--p-font-line-height-500);
 }
+// body/body-md
+.body-md {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-600);
+  font-weight: var(--p-font-weight-regular);
+  line-height: var(--p-font-line-height-600);
+}
+
+.body-md-underline {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-600);
+  font-weight: var(--p-font-weight-regular);
+  line-height: var(--p-font-line-height-600);
+  text-decoration-line: underline;
+}
+
+.body-md-medium {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-600);
+  font-weight: var(--p-font-weight-medium);
+  line-height: var(--p-font-line-height-600);
+}
+
+.body-md-medium-underline {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-600);
+  font-weight: var(--p-font-weight-medium);
+  line-height: var(--p-font-line-height-600);
+  text-decoration-line: underline;
+}
+
+.body-md-semibold {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-600);
+  font-weight: var(--p-font-weight-semibold);
+  line-height: var(--p-font-line-height-600);
+}
+
+.body-md-bold {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-550);
+  font-weight: var(--p-font-weight-bold);
+  line-height: var(--p-font-line-height-500);
+}
+.body-md-numeric {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-550);
+  font-weight: var(--p-font-weight-regular);
+  line-height: var(--p-font-line-height-500);
+}
+.body-md-medium-numeric {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-550);
+  font-weight: var(--p-font-weight-medium);
+  line-height: var(--p-font-line-height-500);
+}
+.body-md-semibold-numeric {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-550);
+  font-weight: var(--p-font-weight-semibold);
+  line-height: var(--p-font-line-height-500);
+}
+
+// body/body-sm
+.body-sm {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-500);
+  font-weight: var(--p-font-weight-regular);
+  line-height: var(--p-font-line-height-500);
+}
+.body-sm-underline {
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-500);
+  font-weight: var(--p-font-weight-regular);
+  line-height: var(--p-font-line-height-500);
+  text-decoration-line: underline;
+}

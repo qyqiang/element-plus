@@ -102,7 +102,15 @@
       disabled
       :style="statusColor['-20']"
     >
-      Label<el-icon><ArrowDown /></el-icon>
+      Disabled<el-icon><ArrowDown /></el-icon>
+    </el-button>
+    <el-button
+      class="beyond-button-tag"
+      round
+      loading
+      :style="statusColor['-99']"
+    >
+      Loading<el-icon><ArrowDown /></el-icon>
     </el-button>
     <el-button class="beyond-button-tag" round :style="statusColor[1]">
       Label<el-icon><ArrowDown /></el-icon>

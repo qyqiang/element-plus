@@ -1,9 +1,3 @@
-@mixin loading-after {
-  .is-loading::after {
-    border-color: var(--color-gray-gray-300);
-    border-top-color: transparent;
-  }
-}
 .el-button {
   font-weight: var(--p-font-weight-semibold);
   font-family: var(--p-font-family-title);
@@ -22,7 +16,7 @@
         content: '';
         width: 1em;
         height: 1em;
-        border: 0.12rem solid var(--white);
+        border: 0.12rem solid var(--color-gray-gray-300);
         border-top-color: transparent;
         border-radius: 100%;
       }
@@ -67,9 +61,6 @@
   &.is-disabled:hover {
     color: var(--color-gray-gray-300);
     background-color: var(--color-gray-gray-100);
-    & {
-      @include loading-after;
-    }
   }
 }
 
@@ -88,9 +79,6 @@
   &.is-loading {
     border-color: var(--color-gray-gray-200);
     color: var(--color-gray-gray-300);
-    & {
-      @include loading-after;
-    }
   }
   &.active {
     background-color: var(--color-gray-gray-50);
@@ -108,9 +96,6 @@
     color: var(--color-gray-gray-300);
     background-color: var(--color-gray-gray-50);
     border: 1px solid var(--color-gray-gray-200);
-    & {
-      @include loading-after;
-    }
   }
   .el-checkbox {
     --el-checkbox-checked-text-color: var(--white);
@@ -132,9 +117,6 @@
   }
   &.is-loading {
     color: var(--color-gray-gray-300);
-    & {
-      @include loading-after;
-    }
   }
   &.active {
     border: 1px solid var(--color-cloudy-gray-cloudy-gray-600);
@@ -159,13 +141,23 @@
     }
     &:hover {
       &::before {
-        background-color: rgb(255, 255, 255, 0.15);
+        background-color: rgb(255, 255, 255, 0.38);
       }
     }
     &:active {
       &::before {
-        background-color: rgba(0, 0, 0, 0.07);
+        background-color: rgba(0, 0, 0, 0.13);
       }
     }
+  }
+  &.is-loading,
+  &.is-disabled {
+    > span > .el-icon {
+      display: none;
+    }
+  }
+  &.is-loading {
+    color: var(--color-gray-gray-300) !important;
+    background-color: var(--color-gray-gray-100) !important;
   }
 }
