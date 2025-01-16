@@ -5,6 +5,15 @@ lang: en-US
 
 # Input
 
+## Demo
+
+:::demo
+
+input/beyond
+
+:::
+
+
 Input data using mouse or keyboard.
 
 :::warning

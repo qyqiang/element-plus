@@ -41,7 +41,13 @@
           ]"
           @click.prevent="toggleMenu"
         >
-          <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
+          <span
+            v-if="floatLabel"
+            class="float-label"
+            :class="{ 'prefix-label': $slots.prefix }"
+          >
+            {{ placeholder }}
+          </span>
           <div
             v-if="$slots.prefix"
             ref="prefixRef"
@@ -191,9 +197,8 @@
                 v-text="states.inputValue"
               />
             </div>
-
             <div
-              v-if="shouldShowPlaceholder && hasModelValue"
+              v-if="!floatLabel || (shouldShowPlaceholder && hasModelValue)"
               :class="[
                 nsSelect.e('selected-item'),
                 nsSelect.e('placeholder'),
@@ -213,6 +218,7 @@
             </div>
           </div>
           <div ref="suffixRef" :class="nsSelect.e('suffix')">
+            {{ labelSuffix }}
             <el-icon
               v-if="iconComponent && !showClose"
               :class="[nsSelect.e('caret'), nsSelect.e('icon'), iconReverse]"

@@ -203,6 +203,10 @@ export const SelectProps = buildProps({
     type: iconPropType,
     default: ArrowDown,
   },
+  labelSuffix: {
+    type: String,
+    default: '',
+  },
   /**
    * @description tag type
    */
