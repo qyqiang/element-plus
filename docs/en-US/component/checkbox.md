@@ -5,6 +5,15 @@ lang: en-US
 
 # Checkbox
 
+## Demo
+
+:::demo
+
+checkbox/beyond
+
+:::
+
+
 A group of options for multiple choices.
 
 :::warning
