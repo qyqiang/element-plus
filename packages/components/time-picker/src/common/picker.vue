@@ -28,118 +28,118 @@
     @hide="onHide"
   >
     <template #default>
-       <span v-if="$slots.open" @click="handleFocusInput">
+      <span v-if="$slots.open" @click="handleFocusInput">
         <slot name="open" />
       </span>
       <template v-else>
-      <el-input
-        v-if="!isRangeInput"
-        :id="(id as string | undefined)"
-        ref="inputRef"
-        container-role="combobox"
-        :model-value="(displayValue as string)"
-        :name="name"
-        :size="pickerSize"
-        :disabled="pickerDisabled"
-        :placeholder="placeholder"
-        :class="[nsDate.b('editor'), nsDate.bm('editor', type), $attrs.class]"
-        :style="$attrs.style"
-        :readonly="
-          !editable ||
-          readonly ||
-          isDatesPicker ||
-          isMonthsPicker ||
-          isYearsPicker ||
-          type === 'week'
-        "
-        :aria-label="label || ariaLabel"
-        :tabindex="tabindex"
-        :validate-event="false"
-        @input="onUserInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @keydown="handleKeydownInput"
-        @change="handleChange"
-        @mousedown="onMouseDownInput"
-        @mouseenter="onMouseEnter"
-        @mouseleave="onMouseLeave"
-        @touchstart.passive="onTouchStartInput"
-        @click.stop
-      >
-        <template #prefix>
-          <el-icon
-            v-if="triggerIcon"
-            :class="nsInput.e('icon')"
-            @mousedown.prevent="onMouseDownInput"
-            @touchstart.passive="onTouchStartInput"
-          >
-            <component :is="triggerIcon" />
-          </el-icon>
-        </template>
-        <template #suffix>
-          <el-icon
-            v-if="showClose && clearIcon"
-            :class="`${nsInput.e('icon')} clear-icon`"
-            @mousedown.prevent="NOOP"
-            @click="onClearIconClick"
-          >
-            <component :is="clearIcon" />
-          </el-icon>
-        </template>
-      </el-input>
-      <picker-range-trigger
-        v-else
-        :id="(id as string[] | undefined)"
-        ref="inputRef"
-        :model-value="displayValue"
-        :name="(name as string[] | undefined)"
-        :disabled="pickerDisabled"
-        :readonly="!editable || readonly"
-        :start-placeholder="startPlaceholder"
-        :end-placeholder="endPlaceholder"
-        :class="rangeInputKls"
-        :style="$attrs.style"
-        :aria-label="ariaLabel"
-        :tabindex="tabindex"
-        autocomplete="off"
-        role="combobox"
-        @click="onMouseDownInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @start-input="handleStartInput"
-        @start-change="handleStartChange"
-        @end-input="handleEndInput"
-        @end-change="handleEndChange"
-        @mousedown="onMouseDownInput"
-        @mouseenter="onMouseEnter"
-        @mouseleave="onMouseLeave"
-        @touchstart.passive="onTouchStartInput"
-        @keydown="handleKeydownInput"
-      >
-        <template #prefix>
-          <el-icon
-            v-if="triggerIcon"
-            :class="[nsInput.e('icon'), nsRange.e('icon')]"
-          >
-            <component :is="triggerIcon" />
-          </el-icon>
-        </template>
-        <template #range-separator>
-          <slot name="range-separator">
-            <span :class="nsRange.b('separator')">{{ rangeSeparator }}</span>
-          </slot>
-        </template>
-        <template #suffix>
-          <el-icon
-            v-if="clearIcon"
-            :class="clearIconKls"
-            @mousedown.prevent="NOOP"
-            @click="onClearIconClick"
-          >
-            <component :is="clearIcon" />
-          </el-icon>
-        </template>
-      </picker-range-trigger>
+        <el-input
+          v-if="!isRangeInput"
+          :id="(id as string | undefined)"
+          ref="inputRef"
+          container-role="combobox"
+          :model-value="(displayValue as string)"
+          :name="name"
+          :size="pickerSize"
+          :disabled="pickerDisabled"
+          :placeholder="placeholder"
+          :class="[nsDate.b('editor'), nsDate.bm('editor', type), $attrs.class]"
+          :style="$attrs.style"
+          :readonly="
+            !editable ||
+            readonly ||
+            isDatesPicker ||
+            isMonthsPicker ||
+            isYearsPicker ||
+            type === 'week'
+          "
+          :aria-label="ariaLabel"
+          :tabindex="tabindex"
+          :validate-event="false"
+          @input="onUserInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          @keydown="handleKeydownInput"
+          @change="handleChange"
+          @mousedown="onMouseDownInput"
+          @mouseenter="onMouseEnter"
+          @mouseleave="onMouseLeave"
+          @touchstart.passive="onTouchStartInput"
+          @click.stop
+        >
+          <template #prefix>
+            <el-icon
+              v-if="triggerIcon"
+              :class="nsInput.e('icon')"
+              @mousedown.prevent="onMouseDownInput"
+              @touchstart.passive="onTouchStartInput"
+            >
+              <component :is="triggerIcon" />
+            </el-icon>
+          </template>
+          <template #suffix>
+            <el-icon
+              v-if="showClose && clearIcon"
+              :class="`${nsInput.e('icon')} clear-icon`"
+              @mousedown.prevent="NOOP"
+              @click="onClearIconClick"
+            >
+              <component :is="clearIcon" />
+            </el-icon>
+          </template>
+        </el-input>
+        <picker-range-trigger
+          v-else
+          :id="(id as string[] | undefined)"
+          ref="inputRef"
+          :model-value="displayValue"
+          :name="(name as string[] | undefined)"
+          :disabled="pickerDisabled"
+          :readonly="!editable || readonly"
+          :start-placeholder="startPlaceholder"
+          :end-placeholder="endPlaceholder"
+          :class="rangeInputKls"
+          :style="$attrs.style"
+          :aria-label="ariaLabel"
+          :tabindex="tabindex"
+          autocomplete="off"
+          role="combobox"
+          @click="onMouseDownInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
+          @start-input="handleStartInput"
+          @start-change="handleStartChange"
+          @end-input="handleEndInput"
+          @end-change="handleEndChange"
+          @mousedown="onMouseDownInput"
+          @mouseenter="onMouseEnter"
+          @mouseleave="onMouseLeave"
+          @touchstart.passive="onTouchStartInput"
+          @keydown="handleKeydownInput"
+        >
+          <template #prefix>
+            <el-icon
+              v-if="triggerIcon"
+              :class="[nsInput.e('icon'), nsRange.e('icon')]"
+            >
+              <component :is="triggerIcon" />
+            </el-icon>
+          </template>
+          <template #range-separator>
+            <slot name="range-separator">
+              <span :class="nsRange.b('separator')">{{ rangeSeparator }}</span>
+            </slot>
+          </template>
+          <template #suffix>
+            <el-icon
+              v-if="clearIcon"
+              :class="clearIconKls"
+              @mousedown.prevent="NOOP"
+              @click="onClearIconClick"
+            >
+              <component :is="clearIcon" />
+            </el-icon>
+          </template>
+        </picker-range-trigger>
       </template>
     </template>
     <template #content>
@@ -712,6 +712,14 @@ const onPanelChange = (
 
 const focus = () => {
   inputRef.value?.focus()
+}
+
+const handleFocusInput = (e?: FocusEvent) => {
+  if (props.readonly || pickerDisabled.value || pickerVisible.value) {
+    return
+  }
+  pickerVisible.value = true
+  emit('focus', e)
 }
 
 const blur = () => {

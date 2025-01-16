@@ -255,8 +255,7 @@
                 nsInput.is('loading', validateState === 'validating'),
               ]"
               v-html="validateIcon"
-            >
-            </el-icon>
+            />
           </div>
         </div>
       </template>
