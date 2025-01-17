@@ -81,7 +81,10 @@
     </template>
   </el-input>
   <el-form-item style="width: 240px" error="Input is required">
-    <el-input type="password" autocomplete="off" />
+    <el-input autocomplete="off" />
+  </el-form-item>
+  <el-form-item style="width: 240px">
+    <el-input :prefix-icon="Search" pre-star />
   </el-form-item>
 
   <h5>Width Header</h5>
