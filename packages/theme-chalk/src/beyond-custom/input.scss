@@ -1,0 +1,18 @@
+.el-input {
+  --el-border-color-custom: var(--color-gray-gray-300);
+  box-shadow: none;
+  .el-input__inner {
+    color: var(--color-gray-gray-990);
+  }
+  .el-input__prefix-inner,
+  .el-input__suffix-inner {
+    color: var(--color-gray-gray-800);
+  }
+
+  &.is-disabled {
+    border-color: var(--color-gray-gray-100);
+    .el-input__wrapper {
+      border-color: var(--color-gray-gray-100);
+    }
+  }
+}

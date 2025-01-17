@@ -1,0 +1,36 @@
+.el-select {
+  border: none;
+  .el-select__placeholder {
+    font-size: var(--p-font-size-500);
+  }
+  .el-select__prefix,
+  .el-select__suffix {
+    color: var(--color-gray-gray-800);
+  }
+  .el-select__wrapper {
+    &.is-disabled {
+      border-color: var(--color-gray-gray-100);
+    }
+    .prefix-label {
+      &.float-label {
+        left: 28px;
+        top: 9px;
+      }
+    }
+    &.is-focused {
+      .prefix-label {
+        &.float-label {
+          left: 12px;
+        }
+      }
+    }
+
+    &:has(.el-select__placeholder) {
+      .prefix-label {
+        &.float-label {
+          left: 12px;
+        }
+      }
+    }
+  }
+}

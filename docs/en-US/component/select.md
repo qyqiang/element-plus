@@ -5,6 +5,15 @@ lang: en-US
 
 # Select
 
+## Demo
+
+:::demo
+
+select/beyond
+
+:::
+
+
 When there are plenty of options, use a drop-down menu to display and select desired ones.
 
 :::tip
