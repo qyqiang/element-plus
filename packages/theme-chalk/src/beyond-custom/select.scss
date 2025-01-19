@@ -1,3 +1,5 @@
+@use './font.scss' as *;
+
 .el-select {
   border: none;
   .el-select__placeholder {
@@ -32,5 +34,17 @@
         }
       }
     }
+  }
+  .el-select__selection {
+    .el-tag {
+      border-radius: var(--radius-raidus-300);
+      background-color: var(--color-gray-gray-100);
+    }
+  }
+}
+.el-select-dropdown {
+  .el-select-group__title {
+    color: var(--color-gray-gray-990);
+    @include heading-heading-xsm;
   }
 }

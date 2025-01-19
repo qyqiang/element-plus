@@ -175,7 +175,14 @@
         @change="handleChange"
         @keydown="handleKeydown"
       />
-      <span v-if="floatLabel" class="float-label">{{ placeholder }}</span>
+      <span
+        v-if="floatLabel"
+        class="float-label"
+        :class="{ 'has-value': !!modelValue }"
+        @click="handleTextareaFocus"
+      >
+        {{ placeholder }}
+      </span>
       <span
         v-if="isWordLimitVisible"
         :style="countStyle"
@@ -366,6 +373,9 @@ useResizeObserver(textarea, (entries) => {
   }
 })
 
+const handleTextareaFocus = () => {
+  textarea.value?.focus()
+}
 const resizeTextarea = () => {
   const { type, autosize } = props
 
