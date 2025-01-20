@@ -1,6 +1,5 @@
 .el-input {
   --el-border-color-custom: var(--color-gray-gray-300);
-  box-shadow: none;
   .el-input__inner {
     color: var(--color-gray-gray-990);
   }
@@ -12,7 +11,34 @@
   &.is-disabled {
     border-color: var(--color-gray-gray-100);
     .el-input__wrapper {
+      box-shadow: none;
       border-color: var(--color-gray-gray-100);
     }
   }
 }
+
+.el-textarea {
+  --el-border-color-custom: var(--color-gray-gray-300);
+  &.is-disabled {
+    border-color: var(--color-gray-gray-100);
+    .el-textarea__inner {
+      box-shadow: none;
+      border-color: var(--color-gray-gray-100);
+    }
+    .float-label {
+      background-color: transparent;
+    }
+  }
+  .float-label.has-value {
+    transform: translateY(-16px);
+  }
+
+  .el-textarea__inner {
+    &.is-focus {
+      ~ .float-label {
+        transform: translateY(-16px);
+      }
+    }
+  }
+}
+

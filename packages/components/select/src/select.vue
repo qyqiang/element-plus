@@ -219,6 +219,9 @@
           </div>
           <div ref="suffixRef" :class="nsSelect.e('suffix')">
             {{ labelSuffix }}
+            <template v-if="$slots.info">
+              <slot name="info" />
+            </template>
             <el-icon
               v-if="iconComponent && !showClose"
               :class="[nsSelect.e('caret'), nsSelect.e('icon'), iconReverse]"
