@@ -200,29 +200,6 @@ const options2 = [
     ],
   },
 ]
-const groupedOptions = [
-  {
-    category: '水果',
-    options: [
-      { value: 'apple', label: '苹果' },
-      { value: 'banana', label: '香蕉' },
-    ],
-  },
-  {
-    category: '蔬菜',
-    options: [
-      { value: 'carrot', label: '胡萝卜' },
-      { value: 'broccoli', label: '西兰花' },
-    ],
-  },
-  {
-    category: '饮料',
-    options: [
-      { value: 'cola', label: '可乐' },
-      { value: 'juice', label: '果汁' },
-    ],
-  },
-]
 </script>
 
 <style scoped>
