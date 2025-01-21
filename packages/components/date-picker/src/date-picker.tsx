@@ -19,7 +19,7 @@ import {
 } from '@element-plus/components/time-picker'
 import { ROOT_PICKER_INJECTION_KEY } from './constants'
 
-import { datePickerProps, selectType } from './props/date-picker'
+import { SelectType, datePickerProps } from './props/date-picker'
 import { getPanel } from './panel-utils'
 import type { DatePickerExpose } from './instance'
 
@@ -46,9 +46,9 @@ export default defineComponent({
       pickerNs: ns,
     })
 
-    const selectType = ref<selectType | undefined>(props.typeList?.[0])
+    const selectType = ref<SelectType | undefined>(props.typeList?.[0])
 
-    const handleRadioChange = (value: selectType) => {
+    const handleRadioChange = (value: SelectType) => {
       selectType.value = value
     }
     const commonPicker = ref<InstanceType<typeof CommonPicker>>()
