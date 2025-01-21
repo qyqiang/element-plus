@@ -12,6 +12,7 @@
   .el-select__wrapper {
     &.is-disabled {
       border-color: var(--color-gray-gray-100);
+      box-shadow: none;
     }
     .prefix-label {
       &.float-label {
@@ -46,5 +47,8 @@
   .el-select-group__title {
     color: var(--color-gray-gray-990);
     @include heading-heading-xsm;
+  }
+  .el-select-dropdown__item {
+    font-size: var(--p-font-size-500);
   }
 }

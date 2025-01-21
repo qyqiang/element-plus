@@ -7,6 +7,14 @@ lang: en-US
 
 Informs users while preserving the current page state.
 
+## Demo
+
+:::demo
+
+dialog/beyond
+
+:::
+
 ## Basic usage
 
 Dialog pops up a dialog box, and it's quite customizable.

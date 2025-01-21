@@ -22,7 +22,7 @@
       v-model="value2"
       :float-label="false"
       label-suffix="Unit"
-      placeholder="Select"
+      placeholder="Disabled"
       style="width: 240px"
       disabled
     >
@@ -38,8 +38,9 @@
     </el-select>
     <el-select
       v-model="value1"
+      :float-label="false"
       multiple
-      placeholder="Select"
+      placeholder="Width Footer"
       style="width: 240px"
     >
       <el-option
@@ -48,6 +49,15 @@
         :label="item.label"
         :value="item.value"
       />
+      <template #footer>
+        <div class="flex justify-between">
+          <el-button type="text">Reset</el-button>
+          <div>
+            <el-button type="primary">Cancel</el-button>
+            <el-button>Reset</el-button>
+          </div>
+        </div>
+      </template>
     </el-select>
   </div>
 
@@ -123,12 +133,28 @@
     <template #footer>
       <div class="flex justify-between">
         <el-button type="text">Reset</el-button>
-        <div class="is-justify-space-between">
+        <div>
           <el-button type="primary">Cancel</el-button>
           <el-button>Reset</el-button>
         </div>
       </div>
     </template>
+  </el-select>
+  <el-select v-model="value" placeholder="Select" style="width: 240px">
+    <el-option-group
+      v-for="group in options2"
+      :key="group.label"
+      :label="group.label"
+    >
+      <el-option
+        v-for="item in group.options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+        <el-checkbox :label="item.label" @change="toggleOption" />
+      </el-option>
+    </el-option-group>
   </el-select>
 </template>
 
@@ -141,7 +167,16 @@ const value1 = ref([])
 const value2 = ref('')
 const value3 = ref('')
 const value4 = ref('')
-
+const selectedOptions = ref<string[]>([])
+const toggleOption = (value) => {
+  if (selectedOptions.value.includes(value)) {
+    selectedOptions.value = selectedOptions.value.filter(
+      (item) => item !== value
+    )
+  } else {
+    selectedOptions.value.push(value)
+  }
+}
 const options = [
   {
     value: 'Option1',
