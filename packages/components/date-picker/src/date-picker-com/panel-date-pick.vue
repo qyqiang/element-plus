@@ -129,6 +129,27 @@
             @click="showPicker('month')"
             >{{ t(`el.datepicker.month${month + 1}`) }}</span
           >
+          <span :class="dpNs.e('custom-now-btn')">
+            <button type="button" :class="ppNs.e('icon-btn')">
+              <el-icon size="16px" @click="setNow">
+                <svg
+                  width="16"
+                  height="16"
+                  viewBox="0 0 16 16"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <g id="fi-ss-small-undo-alt">
+                    <path
+                      id="Vector"
+                      d="M11.069 5.88475L5.02766 5.89723L6.20495 4.76619L5.43876 4L3.65061 5.78814C3.44745 5.99137 3.33331 6.26697 3.33331 6.55433C3.33331 6.8417 3.44745 7.1173 3.65061 7.32052L5.43876 9.10867L6.20495 8.34247L5.01157 7.19437H10.7885C10.8364 7.19437 10.8824 7.2134 10.9163 7.24727C10.9501 7.28114 10.9692 7.32708 10.9692 7.37499L10.9163 11.1527C10.9163 11.2006 10.8972 11.2466 10.8634 11.2804C10.8295 11.3143 10.7835 11.3333 10.7356 11.3333H4.05267V12.6667H11C11.3353 12.6667 11.6569 12.5335 11.894 12.2963C12.1311 12.0592 12.2643 11.7376 12.2643 11.4023L12.3333 7.1491C12.3333 6.81377 12.2001 6.49218 11.963 6.25507C11.7259 6.01796 11.4043 5.88475 11.069 5.88475Z"
+                      fill="#2A3F4D"
+                    />
+                  </g>
+                </svg>
+              </el-icon>
+            </button>
+          </span>
           <span :class="dpNs.e('next-btn')">
             <button
               v-show="currentView === 'date'"
@@ -414,6 +435,10 @@ const yearLabel = computed(() => {
 type Shortcut = {
   value: (() => Dayjs) | Dayjs
   onClick?: (ctx: Omit<SetupContext, 'expose'>) => void
+}
+
+const setNow = () => {
+  emit(dayjs(new Date()).locale(lang.value))
 }
 
 const handleShortcutClick = (shortcut: Shortcut) => {

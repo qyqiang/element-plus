@@ -1,4 +1,4 @@
-import { defineComponent, provide, reactive, ref, toRef } from 'vue'
+import { computed, defineComponent, provide, reactive, ref, toRef } from 'vue'
 import dayjs from 'dayjs'
 import customParseFormat from 'dayjs/plugin/customParseFormat.js'
 import advancedFormat from 'dayjs/plugin/advancedFormat.js'
@@ -8,6 +8,7 @@ import weekYear from 'dayjs/plugin/weekYear.js'
 import dayOfYear from 'dayjs/plugin/dayOfYear.js'
 import isSameOrAfter from 'dayjs/plugin/isSameOrAfter.js'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore.js'
+import { ElRadioButton, ElRadioGroup } from '@element-plus/components/radio'
 import { useNamespace } from '@element-plus/hooks'
 import {
   CommonPicker,
@@ -18,7 +19,7 @@ import {
 } from '@element-plus/components/time-picker'
 import { ROOT_PICKER_INJECTION_KEY } from './constants'
 
-import { datePickerProps } from './props/date-picker'
+import { datePickerProps, selectType } from './props/date-picker'
 import { getPanel } from './panel-utils'
 import type { DatePickerExpose } from './instance'
 
@@ -45,8 +46,14 @@ export default defineComponent({
       pickerNs: ns,
     })
 
+    const selectType = ref<selectType | undefined>(props.typeList?.[0])
+
+    const handleRadioChange = (value: selectType) => {
+      selectType.value = value
+    }
     const commonPicker = ref<InstanceType<typeof CommonPicker>>()
     const refProps: DatePickerExpose = {
+      selectType,
       focus: () => {
         commonPicker.value?.focus()
       },
@@ -67,33 +74,56 @@ export default defineComponent({
       emit('update:modelValue', val)
     }
 
+    const componentType = computed(() => {
+      return selectType.value || props.type
+    })
+
     return () => {
       // since props always have all defined keys on it, {format, ...props} will always overwrite format
       // pick props.format or provide default value here before spreading
       const format =
         props.format ??
-        (DEFAULT_FORMATS_DATEPICKER[props.type] || DEFAULT_FORMATS_DATE)
+        (DEFAULT_FORMATS_DATEPICKER[componentType.value] ||
+          DEFAULT_FORMATS_DATE)
 
-      const Component = getPanel(props.type)
+      const Component = getPanel(componentType.value)
 
       return (
         <CommonPicker
           {...props}
           format={format}
-          type={props.type}
+          type={componentType.value}
           ref={commonPicker}
           onUpdate:modelValue={onModelValueUpdated}
         >
           {{
             default: (scopedProps: /**FIXME: remove any type */ any) => (
-              <Component {...scopedProps}>
-                {{
-                  'prev-month': slots['prev-month'],
-                  'next-month': slots['next-month'],
-                  'prev-year': slots['prev-year'],
-                  'next-year': slots['next-year'],
-                }}
-              </Component>
+              <>
+                {props.typeList?.length > 0 && (
+                  <ElRadioGroup
+                    value={selectType.value}
+                    onChange={handleRadioChange}
+                    size="small"
+                  >
+                    {props.typeList.map((type) => (
+                      <ElRadioButton
+                        key={type}
+                        value={type}
+                        label={type}
+                        class={{ 'is-active': selectType.value === type }}
+                      />
+                    ))}
+                  </ElRadioGroup>
+                )}
+                <Component {...scopedProps}>
+                  {{
+                    'prev-month': slots['prev-month'],
+                    'next-month': slots['next-month'],
+                    'prev-year': slots['prev-year'],
+                    'next-year': slots['next-year'],
+                  }}
+                </Component>
+              </>
             ),
             'range-separator': slots['range-separator'],
             open: slots['open'],
