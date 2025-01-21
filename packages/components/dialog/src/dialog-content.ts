@@ -1,4 +1,10 @@
 import { buildProps, iconPropType } from '@element-plus/utils'
+import type { PropType } from 'vue'
+
+export enum HeaderType {
+  Error = 'error',
+  Warning = 'warning',
+}
 
 export const dialogContentProps = buildProps({
   /**
@@ -51,7 +57,14 @@ export const dialogContentProps = buildProps({
    */
   headerBackgroundColor: {
     type: String,
-    default: '#f2f7f7',
+    default: '',
+  },
+  /**
+   * @description header type
+   */
+  headerType: {
+    type: String as PropType<HeaderType>,
+    default: '',
   },
   /**
    * @description title of Dialog. Can also be passed with a named slot (see the following table)

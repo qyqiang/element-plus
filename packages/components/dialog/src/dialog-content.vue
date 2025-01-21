@@ -2,11 +2,26 @@
   <div :ref="composedDialogRef" :class="dialogKls" :style="style" tabindex="-1">
     <header
       ref="headerRef"
-      :style="{ backgroundColor: headerBackgroundColor }"
+      :style="{ backgroundColor: headerBgColor }"
       :class="[ns.e('header'), headerClass, { 'show-close': showClose }]"
     >
       <slot name="header">
-        <span role="heading" :aria-level="ariaLevel" :class="ns.e('title')">
+        <span
+          role="heading"
+          :aria-level="ariaLevel"
+          :class="[
+            ns.e('title'),
+            { error: headerType === HeaderType.Error },
+            { warning: headerType === HeaderType.Warning },
+            'flex items-center',
+          ]"
+        >
+          <el-icon v-if="headerType === HeaderType.Error" size="18">
+            <WarnTriangleFilled />
+          </el-icon>
+          <el-icon v-else-if="headerType === HeaderType.Warning" size="18">
+            <WarningFilled />
+          </el-icon>
           {{ title }}
         </span>
       </slot>
@@ -46,8 +61,13 @@ import { ElIcon } from '@element-plus/components/icon'
 import { FOCUS_TRAP_INJECTION_KEY } from '@element-plus/components/focus-trap'
 import { useDraggable, useLocale } from '@element-plus/hooks'
 import { composeRefs } from '@element-plus/utils'
+import { WarnTriangleFilled, WarningFilled } from '@element-plus/icons-vue'
 import { dialogInjectionKey } from './constants'
-import { dialogContentEmits, dialogContentProps } from './dialog-content'
+import {
+  HeaderType,
+  dialogContentEmits,
+  dialogContentProps,
+} from './dialog-content'
 
 const { t } = useLocale()
 
@@ -68,6 +88,13 @@ const dialogKls = computed(() => [
 
 const composedDialogRef = composeRefs(focusTrapRef, dialogRef)
 
+const headerBgColor = computed(() => {
+  if (props.headerBackgroundColor) return props.headerBackgroundColor
+  if (props.headerType === HeaderType.Error) return 'var(--color-red-red-100)'
+  if (props.headerType === HeaderType.Warning)
+    return 'var(--color-yellow-yellow-100)'
+  return undefined
+})
 const draggable = computed(() => props.draggable)
 const overflow = computed(() => props.overflow)
 const { resetPosition } = useDraggable(

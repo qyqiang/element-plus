@@ -52,6 +52,8 @@
               :footer-class="footerClass"
               :show-close="showClose"
               :title="title"
+              :header-background-color="headerBackgroundColor"
+              :header-type="headerType"
               :aria-level="headerAriaLevel"
               @close="handleClose"
             >

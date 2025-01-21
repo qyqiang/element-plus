@@ -1,0 +1,37 @@
+@use './font.scss' as *;
+
+.el-dialog {
+  .el-dialog__body {
+    @include body-md;
+  }
+  .el-dialog__title {
+    &.error,
+    &.warning {
+      .el-icon {
+        margin-right: var(--space-150);
+      }
+    }
+    &.error {
+      .el-icon {
+        > svg > path {
+          fill: var(--color-red-red-600);
+        }
+      }
+    }
+    &.warning {
+      .el-icon {
+        > svg > path {
+          fill: var(--color-yellow-yellow-400);
+        }
+      }
+    }
+  }
+
+  .hints {
+    color: var(--color-gray-gray-500);
+    @include body-md;
+    .header {
+      font-weight: var(--p-font-weight-bold);
+    }
+  }
+}

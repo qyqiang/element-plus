@@ -1,0 +1,15 @@
+.date-picker-popover {
+  &.el-popper.is-light {
+    box-shadow: var(--shadow-300);
+  }
+}
+
+.el-picker-panel *[slot='sidebar'],
+.el-picker-panel__sidebar {
+  top: 1px;
+  bottom: 1px;
+}
+
+.el-month-table td.current:not(.disabled) .el-date-table-cell {
+  border-radius: 0;
+}
