@@ -11,6 +11,9 @@ import {
   watch,
 } from 'vue'
 import ElCheckbox from '@element-plus/components/checkbox'
+import ElButton from '@element-plus/components/button'
+import ElIcon from '@element-plus/components/icon'
+import { Bottom } from '@element-plus/icons-vue'
 import { useNamespace } from '@element-plus/hooks'
 import FilterPanel from '../filter-panel.vue'
 import useLayoutObserver from '../layout-observer'
@@ -255,19 +258,40 @@ export default defineComponent({
                         'span',
                         {
                           onClick: ($event) => handleSortClick($event, column),
-                          class: 'caret-wrapper',
+                          // class: 'caret-wrapper',
                         },
                         [
-                          h('i', {
-                            onClick: ($event) =>
-                              handleSortClick($event, column, 'ascending'),
-                            class: 'sort-caret ascending',
-                          }),
-                          h('i', {
-                            onClick: ($event) =>
-                              handleSortClick($event, column, 'descending'),
-                            class: 'sort-caret descending',
-                          }),
+                          // element-plus
+                          // h('i', {
+                          //   onClick: ($event) =>
+                          //     handleSortClick($event, column, 'ascending'),
+                          //   class: 'sort-caret ascending',
+                          // }),
+                          // h('i', {
+                          //   onClick: ($event) =>
+                          //     handleSortClick($event, column, 'descending'),
+                          //   class: 'sort-caret descending',
+                          // }),
+
+                          // beyond v3
+                          h(
+                            ElButton,
+                            {
+                              class: 'sort-caret-custom',
+                              type: 'text',
+                              size: 'small',
+                            },
+                            {
+                              default: () =>
+                                h(
+                                  ElIcon,
+                                  { class: 'icon-arrow' },
+                                  {
+                                    default: () => h(Bottom),
+                                  }
+                                ),
+                            }
+                          ),
                         ]
                       ),
                     column.filterable &&

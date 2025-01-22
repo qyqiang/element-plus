@@ -38,11 +38,14 @@
 .heading-heading-md {
   @include heading-heading-md;
 }
-.heading-heading-sm {
+@mixin heading-heading-sm {
   font-family: var(--p-font-family-title);
   font-weight: var(--p-font-weight-semibold);
   font-size: var(--p-font-size-550);
   line-height: var(--p-font-line-height-500);
+}
+.heading-heading-sm {
+  @include heading-heading-sm;
 }
 
 @mixin heading-heading-xsm {

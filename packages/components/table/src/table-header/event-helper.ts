@@ -22,7 +22,8 @@ function useEvent<T>(props: TableHeaderProps<T>, emit) {
 
   const handleHeaderClick = (event: Event, column: TableColumnCtx<T>) => {
     if (!column.filters && column.sortable) {
-      handleSortClick(event, column, false)
+      // v3: disable title click event
+      // handleSortClick(event, column, false)
     } else if (column.filterable && !column.sortable) {
       handleFilterClick(event)
     }

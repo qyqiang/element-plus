@@ -38,7 +38,9 @@
     :prefix="$"
   >
     <template #suffix>
-      <el-icon><ArrowDown /></el-icon>
+      <el-tooltip content="info xx" effect="light">
+        <el-icon><InfoFilled /></el-icon>
+      </el-tooltip>
     </template>
   </el-input>
   <el-input
@@ -117,11 +119,7 @@
       :autosize="{ minRows: 2, maxRows: 4 }"
       type="textarea"
       placeholder="Please input"
-    >
-      <template #header>
-        <el-icon><InfoFilled /></el-icon>
-      </template>
-    </el-input>
+    />
     <el-form-item style="width: 240px">
       <el-input
         :prefix-icon="Search"
