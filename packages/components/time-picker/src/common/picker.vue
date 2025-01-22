@@ -28,7 +28,7 @@
     @hide="onHide"
   >
     <template #default>
-      <span v-if="$slots.open" @click="handleFocusInput">
+      <span v-if="$slots.open" @click="handleFocus">
         <slot name="open" />
       </span>
       <template v-else>
@@ -712,14 +712,6 @@ const onPanelChange = (
 
 const focus = () => {
   inputRef.value?.focus()
-}
-
-const handleFocusInput = (e?: FocusEvent) => {
-  if (props.readonly || pickerDisabled.value || pickerVisible.value) {
-    return
-  }
-  pickerVisible.value = true
-  emit('focus', e)
 }
 
 const blur = () => {

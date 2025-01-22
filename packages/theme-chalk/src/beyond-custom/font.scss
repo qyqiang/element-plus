@@ -104,7 +104,10 @@
   font-variant-numeric: lining-nums tabular-nums;
 }
 .body-md-medium-numeric {
-  @include body-md;
+  font-family: var(--p-font-family-sans);
+  font-size: var(--p-font-size-550);
+  font-weight: var(--p-font-weight-medium);
+  line-height: var(--p-font-line-height-500);
   font-variant-numeric: lining-nums tabular-nums;
 }
 .body-md-semibold-numeric {

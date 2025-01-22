@@ -7,6 +7,14 @@ lang: en-US
 
 Use Date Picker for date input.
 
+## Demo
+
+:::demo
+
+date-picker/beyond
+
+:::
+
 ## Enter Date
 
 Basic date picker measured by 'day'.

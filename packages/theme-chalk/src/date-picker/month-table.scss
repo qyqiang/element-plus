@@ -19,21 +19,17 @@
       box-sizing: border-box;
 
       &:hover {
-        background-color: getCssVar('color-primary');
-
-        .cell {
-          color: $color-white !important;
+        .#{$namespace}-date-table-cell__text {
+          background-color: getCssVar('color-primary');
+          color: $color-white;
         }
       }
     }
 
     &.today {
-      div {
+      .#{$namespace}-date-table-cell__text {
         border: 1px solid getCssVar('color-primary');
-
-        .cell {
-          color: getCssVar('text-color', 'brand');
-        }
+        color: getCssVar('color-primary');
       }
 
 
