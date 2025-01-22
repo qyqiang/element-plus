@@ -10,7 +10,20 @@ export const tagProps = buildProps({
    */
   type: {
     type: String,
-    values: ['primary', 'success', 'info', 'warning', 'danger'],
+    values: [
+      'primary',
+      'success',
+      'info',
+      'warning',
+      'danger',
+      // beyond ui
+      'gray',
+      'blue',
+      'cyan',
+      'green',
+      'orange',
+      'red',
+    ],
     default: 'primary',
   },
   /**
