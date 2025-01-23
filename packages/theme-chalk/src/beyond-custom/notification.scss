@@ -1,0 +1,50 @@
+.el-notification--success--wrapper {
+  background-color: var(--color-lime-lime-50);
+  border-color: var(--color-lime-lime-400);
+}
+.el-notification--warning--wrapper {
+  background-color: var(--color-yellow-yellow-100);
+  border-color: var(--color-yellow-yellow-400);
+}
+.el-notification--info--wrapper {
+  background-color: var(--color-gray-gray-50);
+  border-color: var(--color-gray-gray-300);
+}
+.el-notification--error--wrapper {
+  background-color: var(--color-red-red-100);
+  border-color: var(--color-red-red-400);
+}
+.el-notification {
+  .el-notification__icon {
+    font-size: var(--p-font-size-600);
+  }
+}
+.el-notification__group {
+  margin-left: var(--space-250);
+  .el-button {
+    background-color: transparent;
+    position: relative;
+    overflow: hidden;
+    &:active,
+    &:hover {
+      > span::before {
+        content: '';
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+      }
+    }
+    &:hover {
+      > span::before {
+        background-color: rgb(255, 255, 255, 0.3);
+      }
+    }
+    &:active {
+      > span::before {
+        background-color: rgba(0, 0, 0, 0.06);
+      }
+    }
+  }
+}

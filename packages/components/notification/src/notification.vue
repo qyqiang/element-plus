@@ -7,7 +7,12 @@
     <div
       v-show="visible"
       :id="id"
-      :class="[ns.b(), customClass, horizontalClass]"
+      :class="[
+        ns.b(),
+        customClass,
+        horizontalClass,
+        typeClass ? `${typeClass}--wrapper` : '',
+      ]"
       :style="positionStyle"
       role="alert"
       @mouseenter="clearTimer"
@@ -71,7 +76,7 @@ const typeClass = computed(() => {
 })
 
 const iconComponent = computed(() => {
-  if (!props.type) return props.icon
+  if (!props.type) return props.icon || TypeComponentsMap.info
   return TypeComponentsMap[props.type] || props.icon
 })
 
