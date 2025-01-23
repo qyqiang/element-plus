@@ -9,14 +9,15 @@
 @include b(popper) {
   position: absolute;
   border-radius: getCssVar('popper', 'border-radius');
-  padding: 5px 11px;
+  border-radius: var(--radius-raidus-100);
+  padding: 3px 11px;
   z-index: 2000;
   font-size: 12px;
   line-height: 20px;
   min-width: 10px;
   overflow-wrap: break-word;
   visibility: visible;
-  box-shadow: getCssVar('box-shadow-300');
+  box-shadow: var(--shadow-400);
 
   $arrow-selector: #{& + '__arrow'};
 

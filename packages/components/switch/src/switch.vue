@@ -35,7 +35,7 @@
           <loading />
         </el-icon>
         <slot v-else-if="checked" name="active-action">
-          <el-icon size="8px">
+          <el-icon :size="switchSize === 'small' ? 8 : 12">
             <svg
               width="13"
               height="12"
@@ -103,6 +103,7 @@ import {
   useFormDisabled,
   useFormItem,
   useFormItemInputId,
+  useFormSize,
 } from '@element-plus/components/form'
 import { Loading } from '@element-plus/icons-vue'
 import {
@@ -123,7 +124,7 @@ const props = defineProps(switchProps)
 const emit = defineEmits(switchEmits)
 
 const { formItem } = useFormItem()
-const switchSize = ref('small')
+const switchSize = useFormSize()
 const ns = useNamespace('switch')
 
 const { inputId } = useFormItemInputId(props, {
