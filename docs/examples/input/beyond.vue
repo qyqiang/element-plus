@@ -138,6 +138,22 @@
     </el-form-item>
     <el-input
       v-model="textarea3"
+      style="width: 240px"
+      :autosize="{ minRows: 2, maxRows: 4 }"
+      type="textarea"
+      placeholder="Please input"
+    >
+      <template #textareaPrefix>
+        <el-icon><Search /></el-icon>
+      </template>
+      <template #textareaSuffix>
+        <el-tooltip content="info xx" effect="light">
+          <el-icon color="var(--color-red-red-600)"><WarningFilled /></el-icon>
+        </el-tooltip>
+      </template>
+    </el-input>
+    <el-input
+      v-model="textarea3"
       disabled
       style="width: 240px"
       :autosize="{ minRows: 2, maxRows: 4 }"
@@ -149,7 +165,12 @@
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { ArrowDown, InfoFilled, Search } from '@element-plus/icons-vue'
+import {
+  ArrowDown,
+  InfoFilled,
+  Search,
+  WarningFilled,
+} from '@element-plus/icons-vue'
 
 const input = ref('')
 const input2 = ref('')

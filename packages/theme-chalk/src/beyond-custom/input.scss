@@ -40,5 +40,40 @@
       }
     }
   }
-}
 
+  // textarea-prefix
+  &:has(.textarea-prefix) {
+    .el-textarea__inner {
+      padding-left: 32px;
+    }
+    .textarea-prefix {
+      position: absolute;
+      left: 12px;
+      top: 10px;
+    }
+    .float-label {
+      left: 32px;
+    }
+    .el-textarea__inner {
+      &.is-focus {
+        ~ .float-label {
+          transform: translate(-20px, -16px);
+        }
+      }
+    }
+    .float-label.has-value {
+      transform: translate(-20px, -16px);
+    }
+  }
+  // textarea-suffix
+  &:has(.textarea-suffix) {
+    .el-textarea__inner {
+      padding-right: 23px;
+    }
+    .textarea-suffix {
+      position: absolute;
+      right: 8px;
+      top: 10px;
+    }
+  }
+}

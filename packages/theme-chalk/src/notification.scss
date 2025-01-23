@@ -8,7 +8,7 @@
 
 @include b(notification) {
   display: flex;
-  width: getCssVar('notification-width');
+  width: 288px;
   padding: getCssVar('notification-padding');
   border-radius: getCssVar('notification-radius');
   box-sizing: border-box;

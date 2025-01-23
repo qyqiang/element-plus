@@ -92,12 +92,14 @@ $switch-content-padding: map.merge(
     & .#{$namespace}-switch__core,
     & .#{$namespace}-switch__label {
       cursor: not-allowed;
-      background-color: #c1ccd661 !important;
 
       .#{$namespace}-switch__action {
         color: #fff !important;
-        background-color: #2a3d4d2e !important;
+        background-color: var(--color-gray-gray-400)!important;
       }
+    }
+    & .#{$namespace}-switch__core {
+      background-color: var(--color-gray-gray-200) !important;;
     }
   }
 
@@ -140,7 +142,7 @@ $switch-content-padding: map.merge(
 
     &:focus-visible {
       & ~ .#{$namespace}-switch__core {
-        outline: 2px solid getCssVar('switch-on-color');
+        outline: 2px solid rgba(36, 48, 55, 0.8);
         outline-offset: 1px;
       }
     }

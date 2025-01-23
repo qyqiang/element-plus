@@ -175,6 +175,12 @@
         @change="handleChange"
         @keydown="handleKeydown"
       />
+      <span v-if="$slots.textareaPrefix" class="textarea-prefix">
+        <slot name="textareaPrefix" />
+      </span>
+      <span v-if="$slots.textareaSuffix" class="textarea-suffix">
+        <slot name="textareaSuffix" />
+      </span>
       <span
         v-if="floatLabel"
         class="float-label"

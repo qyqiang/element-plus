@@ -7,6 +7,14 @@ lang: en-US
 
 Displays a global notification message at a corner of the page.
 
+## Demo
+
+:::demo
+
+notification/beyond
+
+:::
+
 ## Basic usage
 
 :::demo Element Plus has registered the `$notify` method and it receives an object as its parameter. In the simplest case, you can set the `title` field and the` message` field for the title and body of the notification. By default, the notification automatically closes after 4500ms, but by setting `duration` you can control its duration. Specifically, if set to `0`, it will not close automatically. Note that `duration` receives a `Number` in milliseconds.

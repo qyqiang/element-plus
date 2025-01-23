@@ -83,7 +83,7 @@ const handleSortChange = ({ prop, order }) => {
 const tableData = ref([
   {
     id: 1,
-    date: '2016-05-01',
+    date: '2016-06-01',
     name: 'Tom1',
     state: 'California',
     city: 'Los Angeles',
@@ -150,6 +150,7 @@ const tableColumns = ref<any[]>([
     prop: 'date',
     label: 'Date',
     width: '120',
+    sortable: true,
   },
   {
     prop: 'state',
