@@ -109,7 +109,9 @@
         :value="item.value"
       />
       <template #info>
-        <el-icon><InfoFilled /></el-icon>
+        <el-tooltip content="info xx" placement="top" effect="light">
+          <el-icon><InfoFilled /></el-icon>
+        </el-tooltip>
       </template>
     </el-select>
   </div>

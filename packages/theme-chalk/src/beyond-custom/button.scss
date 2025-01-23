@@ -99,6 +99,9 @@
     --el-checkbox-checked-text-color: var(--white);
     --el-checkbox-text-color: var(--white);
   }
+  .el-checkbox__label {
+    color: var(--white);
+  }
 }
 
 .el-button--text {
@@ -116,7 +119,8 @@
   &.is-loading {
     color: var(--color-gray-gray-300);
   }
-  &.active {
+  &.active,
+  &.active:hover {
     border: 1px solid var(--color-cloudy-gray-cloudy-gray-600);
   }
 }
