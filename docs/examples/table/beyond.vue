@@ -37,7 +37,7 @@
           v-if="item?.editable"
           :row="row"
           :property="item?.prop"
-          @on-submit="(val: string) => handleSubmit(val, item?.prop)"
+          @on-submit="(val: string) => handleSubmit(val, row)"
         />
       </template>
     </el-table-column>
@@ -74,8 +74,8 @@ const multipleSelection = ref<User[]>([])
 const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val
 }
-const handleSubmit = (value: string, prop: string) => {
-  console.log('submit', value, prop)
+const handleSubmit = (value: string, row: any) => {
+  console.log('submit', value, row)
 }
 const handleSortChange = ({ prop, order }) => {
   console.log(prop, order)

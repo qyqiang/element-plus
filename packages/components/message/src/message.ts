@@ -28,6 +28,8 @@ export const messageDefaults = mutable({
   duration: 3000,
   icon: undefined,
   id: '',
+  title: '',
+  effect: 'light',
   message: '',
   onClose: undefined,
   showClose: false,
@@ -82,6 +84,34 @@ export const messageProps = buildProps({
   id: {
     type: String,
     default: messageDefaults.id,
+  },
+  /**
+   * @description title text
+   */
+  title: {
+    type: String,
+    default: messageDefaults.title,
+  },
+  /**
+   * @description effect
+   */
+  effect: {
+    type: definePropType<'dark' | 'light'>(String),
+    default: messageDefaults.effect,
+  },
+  /**
+   * @description label text
+   */
+  label: {
+    type: String,
+    default: '',
+  },
+  /**
+   * @description label click
+   */
+  onLabelClick: {
+    type: Function,
+    default: () => null,
   },
   /**
    * @description message text

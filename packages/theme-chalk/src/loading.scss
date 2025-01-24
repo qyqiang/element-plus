@@ -60,15 +60,16 @@
     display: inline;
     height: getCssVar('loading-spinner-size');
     width: getCssVar('loading-spinner-size');
-    animation: loading-rotate 2s linear infinite;
+    animation: loading-rotate 1s linear infinite;
   }
 
   .path {
-    animation: loading-dash 1.5s ease-in-out infinite;
+    //animation: loading-dash 1.5s ease-in-out infinite;
     stroke-dasharray: 90, 150;
     stroke-dashoffset: 0;
-    stroke-width: 2;
-    stroke: getCssVar('color-primary');
+    stroke-width: 4;
+    stroke: var(--color-gray-gray-500);
+    opacity: 0.38;
     stroke-linecap: round;
   }
 

@@ -8,7 +8,8 @@
 
 @include b(message) {
   width: fit-content;
-  max-width: calc(100% - 32px);
+  //max-width: calc(100% - 32px);
+  max-width: 1000px;
   box-sizing: border-box;
   border-radius: getCssVar('border-radius-custom');
   border-width: getCssVar('border-width');
@@ -22,7 +23,7 @@
   transition: opacity getCssVar('transition-duration'), transform 0.4s, top 0.4s;
   padding: getCssVar('message', 'padding');
   display: flex;
-  align-items: center;
+  //align-items: center;
   gap: 8px;
 
   @include when(center) {
@@ -75,7 +76,6 @@
     padding: 0;
     font-size: 14px;
     line-height: 20px;
-    margin-left: 16px !important;
 
     &:focus {
       outline-width: 0;

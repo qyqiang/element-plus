@@ -15,6 +15,7 @@
         ns.is('closable', showClose),
         ns.is('plain', plain),
         customClass,
+        `is-${effect}`,
       ]"
       :style="customStyle"
       role="alert"
@@ -44,11 +45,22 @@
       />
       <slot>
         <p v-if="!dangerouslyUseHTMLString" :class="ns.e('content')">
+          <span v-if="title" :class="ns.e('title')">
+            {{ title }}
+          </span>
           {{ message }}
         </p>
         <!-- Caution here, message could've been compromised, never use user's input as message -->
         <p v-else :class="ns.e('content')" v-html="message" />
       </slot>
+      <el-button
+        v-if="label"
+        plain
+        :class="ns.e('labelBtn')"
+        @click="onLabelClick"
+      >
+        {{ label }}
+      </el-button>
       <el-icon v-if="showClose" :class="ns.e('closeBtn')" @click.stop="close">
         <Close />
       </el-icon>

@@ -14,7 +14,7 @@
       .sort-caret-custom {
         &.el-button {
           padding: 5px 6px;
-          font-size: 14px;
+          font-size: var(--p-font-size-550);
         }
         .icon-arrow {
           margin-left: 0;
