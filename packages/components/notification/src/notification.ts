@@ -54,6 +54,20 @@ export const notificationProps = buildProps({
     default: '',
   },
   /**
+   * @description label text
+   */
+  label: {
+    type: String,
+    default: '',
+  },
+  /**
+   * @description label click
+   */
+  onLabelClick: {
+    type: Function,
+    default: () => null,
+  },
+  /**
    * @description offset from the top edge of the screen. Every Notification instance of the same moment should have the same offset
    */
   offset: {
