@@ -1,6 +1,12 @@
 @use './font.scss' as *;
 
 .el-dialog {
+  .el-dialog__header {
+    background-color: var(--color-cloudy-gray-cloudy-gray-50);
+  }
+  .el-dialog__title {
+    color: var(--color-gray-gray-990);
+  }
   .el-dialog__body {
     @include body-md;
   }

@@ -3,11 +3,12 @@
     HeaderType: warning
   </el-button>
   <el-button plain @click="handleOpen('error')"> HeaderType: error </el-button>
+  <el-button plain @click="handleOpen()"> Base </el-button>
   <el-divider />
 
   <el-dialog
     v-model="centerDialogVisible"
-    :title="`${headerType} type`"
+    :title="`Type ${headerType || 'base'} `"
     width="380"
     align-center
     :header-type="headerType"
@@ -40,7 +41,7 @@
 import { ref } from 'vue'
 
 const centerDialogVisible = ref(false)
-const headerType = ref('error')
+const headerType = ref<string | undefined>('error')
 const HINTS = [
   {
     id: 1,
@@ -58,7 +59,7 @@ const HINTS = [
       'Lorem ipsum dolor. Sit amet magna donec neque ut nunc dui eget. Ut dui eu torquent neque maecenas.',
   },
 ]
-const handleOpen = (type) => {
+const handleOpen = (type?: string) => {
   centerDialogVisible.value = true
   headerType.value = type
 }
