@@ -2,7 +2,9 @@
   --el-transition-duration: 0.15s;
   --el-border-color-base: #e3e8ee;
   --el-color-primary: #ff5b05;
+  --el-color-info: #090f14;
   --el-button-text-color: #0e171f;
+  --el-button-danger-hover-color: #eb5100;
   --animate-duration: 1s;
   --animate-delay: 1s;
   --animate-repeat: 1;
@@ -17,7 +19,6 @@
   --p-font-weight-medium: 500; // Don’t use in Montserrat
   --p-font-weight-semibold: 600;
   --p-font-weight-bold: 700;
-  --el-color-info: #090f14;
   // letter-spacing
   --p-font-letter-spacing-densest: -0.5px;
   --p-font-letter-spacing-denser: -0.3px;
@@ -184,8 +185,7 @@
   //text
   --color-text-text-primary: #0e171f;
   --color-text-text-placeholder: #9fb1bd;
-  --color-text-text-secondary: #3e5463;
-  --el-button-danger-hover-color: #eb5100;
+  --color-text-text-secondary: var(--color-gray-gray-700);
 
   //space
   --space-0: 0;

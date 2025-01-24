@@ -7,6 +7,16 @@ lang: en-US
 
 Used to show feedback after an activity. The difference with Notification is that the latter is often used to show a system level passive notification.
 
+
+## Demo
+
+:::demo
+
+message/beyond
+
+:::
+
+
 ## Basic usage
 
 Displays at the top, and disappears after 3 seconds.
