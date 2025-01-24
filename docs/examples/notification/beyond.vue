@@ -66,11 +66,10 @@ const open6 = () => {
   ElNotification({
     title: 'Click me',
     type: 'success',
-    message: renderMsgContent({
-      message: 'This is a message',
-      onClick: handleClick,
-      buttonText: 'Click me',
-    }),
+    message:
+      'This is a message. This is a message. This is a message. This is a message. ',
+    label: 'Download',
+    onLabelClick: handleClick,
   })
 }
 </script>

@@ -32,7 +32,12 @@
           :style="!!title ? undefined : { margin: 0 }"
         >
           <slot>
-            <p v-if="!dangerouslyUseHTMLString">{{ message }}</p>
+            <div v-if="!dangerouslyUseHTMLString">
+              {{ message }}
+              <div v-if="label" class="mt-5">
+                <el-button plain @click="onLabelClick">{{ label }}</el-button>
+              </div>
+            </div>
             <!-- Caution here, message could've been compromised, never use user's input as message -->
             <p v-else v-html="message" />
           </slot>
