@@ -53,13 +53,6 @@ jobs:
               ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
-      - name: Init Crowdin token
-        run: pnpm run docs:crowdin-credentials
-        env:
-          CROWDIN_TOKEN: ${{secrets.CROWDIN_TOKEN}}
-
-      - name: Pull Crowdin translations
-        run: cd docs && pnpm exec crowdin download -l zh-CN && pnpm exec crowdin download -l es-ES
 
       - name: Generate common locale
         run: pnpm docs:gen-locale
@@ -67,10 +60,6 @@ jobs:
       - name: Install latest Element Plus
         run: cd docs && pnpm i element-plus@latest
 
-      - name: Build Metadata
-        run: cd internal/metadata && pnpm build
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build with VitePress
         run:  pnpm docs:build
         env:
