@@ -1,6 +1,6 @@
 import { isExternal } from 'vitepress/dist/client/shared'
 import { ensureLang } from '../utils/lang'
-import navLocale from '../i18n/pages/sidebar.json'
+import navLocale from '../../../docs/.vitepress/i18n/pages/sidebar.json'
 
 // Mapping the first sub link to the nav link to avoid 404 error.
 
