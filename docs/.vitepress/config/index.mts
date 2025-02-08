@@ -53,7 +53,7 @@ const setupConfig = (configEnv) => {
     title: 'Element Plus',
     description: 'A Vue 3 based component library for designers and developers',
     lastUpdated: true,
-    base: '/element-plus/',
+    base: '/en-US/',
     head,
     themeConfig: {
       repo: REPO_PATH,
