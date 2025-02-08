@@ -30,19 +30,53 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # - uses: pnpm/action-setup@v3 # 如果使用 pnpm，请取消注释
-      # - uses: oven-sh/setup-bun@v1 # 如果使用 Bun，请取消注释
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm # 或 pnpm / yarn
       - name: Setup Pages
         uses: actions/configure-pages@v4
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+           echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+           restore-keys: |
+              ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
-        run: pnpm install # 或 pnpm install / yarn install 
+        run: pnpm i --frozen-lockfile
+      - name: Init Crowdin token
+        run: pnpm run docs:crowdin-credentials
+        env:
+          CROWDIN_TOKEN: ${{secrets.CROWDIN_TOKEN}}
+
+      - name: Pull Crowdin translations
+        run: cd docs && pnpm exec crowdin download -l zh-CN && pnpm exec crowdin download -l es-ES
+
+      - name: Generate common locale
+        run: pnpm docs:gen-locale
+
+      - name: Install latest Element Plus
+        run: cd docs && pnpm i element-plus@latest
+
+      - name: Build Metadata
+        run: cd internal/metadata && pnpm build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Build with VitePress
-        run: install docs:build # 或 pnpm docs:build / yarn docs:build 
+        run:  pnpm docs:build
+        env:
+          DOC_ENV: production
+          NODE_OPTIONS: --max-old-space-size=4096
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
