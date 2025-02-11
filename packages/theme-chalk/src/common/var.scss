@@ -1092,7 +1092,7 @@ $popover: map.merge(
 $popper: () !default;
 $popper: map.merge(
     (
-      'border-radius': var(#{getCssVarName('popover-border-radius')}, 8px),
+      'border-radius': var(--radius-raidus-100),
     ),
     $popper
 );

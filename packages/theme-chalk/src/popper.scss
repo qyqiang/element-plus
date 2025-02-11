@@ -9,7 +9,6 @@
 @include b(popper) {
   position: absolute;
   border-radius: getCssVar('popper', 'border-radius');
-  border-radius: var(--radius-raidus-100);
   padding: 3px 11px;
   z-index: 2000;
   font-size: 12px;

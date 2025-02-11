@@ -14,3 +14,8 @@
     }
   }
 }
+
+.el-popper.is-light[role='tooltip'] {
+  padding: 4px 8px;
+  @include body-md;
+}
