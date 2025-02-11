@@ -1,0 +1,16 @@
+.menu-popper.el-popover.el-popper {
+  padding: 16px 14px 14px;
+  box-shadow: var(--shadow-300);
+  border-radius: 4px;
+  border: none;
+
+  .sub-wrap {
+    .title {
+      font-family: var(--p-font-family-sans);
+      font-weight: var(--p-font-weight-semibold);
+      font-size: var(--p-font-size-600);
+      line-height: var(--p-font-line-height-600);
+      padding-left: 8px;
+    }
+  }
+}

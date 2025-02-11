@@ -20,6 +20,7 @@
     color getCssVar('transition-duration');
   box-sizing: border-box;
   white-space: nowrap;
+  border-radius: 8px;
 
   * {
     vertical-align: bottom;
@@ -37,7 +38,6 @@
   &:hover {
     background-color: getCssVar('menu-hover-bg-color');
   }
-
   @include when(disabled) {
     opacity: 0.25;
     cursor: not-allowed;
@@ -51,7 +51,6 @@
 }
 
 @include b(menu) {
-  border-right: solid 1px getCssVar('menu-border-color');
   list-style: none;
   position: relative;
   margin: 0;
@@ -172,8 +171,7 @@
   }
   @include m(collapse) {
     width: calc(
-      #{getCssVar('menu-icon-width')} + #{getCssVar('menu-base-level-padding')} *
-        2
+      #{getCssVar('menu-icon-width')} + 16px
     );
 
     > .#{$namespace}-menu-item,
@@ -234,14 +232,16 @@
   @include menu-item;
 
   & [class^='#{$namespace}-icon'] {
-    margin-right: 5px;
+    margin-right: 12px;
     width: getCssVar('menu-icon-width');
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
     vertical-align: middle;
   }
   @include when(active) {
     color: getCssVar('menu-active-color');
+    background-color: getCssVar('menu-hover-bg-color');
+    font-weight: var(--p-font-weight-bold);
     i {
       color: inherit;
     }
@@ -298,10 +298,10 @@
   }
   .#{$namespace}-icon {
     vertical-align: middle;
-    margin-right: 5px;
+    margin-right: 12px;
     width: getCssVar('menu-icon-width');
     text-align: center;
-    font-size: 18px;
+    font-size: 16px;
 
     &.#{$namespace}-sub-menu__icon-more {
       margin-right: 0 !important;

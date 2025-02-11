@@ -279,6 +279,7 @@ export default defineComponent({
       if (props.mode === 'horizontal' || props.collapse) {
         openedMenus.value = []
       }
+      if (props.collapse) return
 
       const { index, indexPath } = menuItem
       if (isNil(index) || isNil(indexPath)) return

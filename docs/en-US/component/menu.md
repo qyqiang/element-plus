@@ -6,6 +6,13 @@ lang: en-US
 # Menu
 
 Menu that provides navigation for your website.
+## Demo
+
+:::demo
+
+menu/demo
+
+:::
 
 ::: tip
 

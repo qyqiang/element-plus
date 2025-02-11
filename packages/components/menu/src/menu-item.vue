@@ -19,6 +19,7 @@
       placement="right"
       :fallback-placements="['left']"
       persistent
+      :disabled="true"
     >
       <template #content>
         <slot name="title" />
