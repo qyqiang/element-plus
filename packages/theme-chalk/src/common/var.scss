@@ -1040,9 +1040,9 @@ $pagination: map.merge(
     (
       'font-size': 12px,
       'bg-color': getCssVar('fill-color', 'blank'),
-      'text-color': getCssVar('text-color-primary'),
       'border-radius': 2px,
-      'button-color': getCssVar('text-color-primary'),
+      'button-color': var(--color-icon-primary),
+      'text-color': var(--color-text-text-primary),
       'button-width': 32px,
       'button-height': 32px,
       'button-disabled-color': getCssVar('text-color-placeholder'),

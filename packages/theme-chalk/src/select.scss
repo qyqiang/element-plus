@@ -190,7 +190,7 @@
   }
 
   @include e(placeholder) {
-    font-family: var(--header-font-medium);
+    font-family: var(--body-font);
     font-weight: 500;
     position: absolute;
     z-index: -1;

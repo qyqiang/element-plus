@@ -1,6 +1,7 @@
 <template>
   <span :class="ns.e('sizes')">
     <el-select
+      class="pagination-select"
       :model-value="innerPageSize"
       :disabled="disabled"
       :popper-class="popperClass"

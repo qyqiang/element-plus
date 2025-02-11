@@ -1,0 +1,14 @@
+@use './font.scss' as *;
+
+.el-pager li {
+  font-family: var(--p-font-family-title);
+  font-weight: 600;
+}
+
+.pagination-select {
+  .el-select__placeholder {
+    font-size: var(--p-font-size-400);
+    font-weight: var(--p-font-weight-semibold);
+  }
+}
+

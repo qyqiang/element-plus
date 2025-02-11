@@ -11,7 +11,6 @@
   min-width: getCssVar('pagination-button-width');
   height: getCssVar('pagination-button-height');
   line-height: getCssVar('pagination-button-height');
-  color: getCssVar('pagination-button-color');
   background: getCssVar('pagination-bg-color');
   padding: 0 4px;
   border: none;
@@ -43,14 +42,15 @@
       font-weight: bold;
       color: getCssVar('text-color', 'secondary');
     }
-    &:hover{
+
+    &:hover {
       color: getCssVar('pagination-text-color');
     }
   }
 
   &:disabled,
   &.is-disabled {
-    color: getCssVar('pagination-button-disabled-color');
+    color: var(--color-gray-gray-200);
     background-color: getCssVar('pagination-button-disabled-bg-color');
     cursor: not-allowed;
   }
@@ -70,7 +70,7 @@
   font-weight: 500;
   display: flex;
   align-items: center;
-  font-family: var(--header-font-medium);
+  font-family: var(--body-font);
 
   .#{$namespace}-input__inner {
     text-align: center;
@@ -78,11 +78,12 @@
   }
 
   .#{$namespace}-select {
-    width: 110px;
+    width: 105px;
   }
 
   button {
     @include pagination-button;
+    color: getCssVar('pagination-button-color');
   }
 
   .btn-prev,
@@ -240,5 +241,6 @@
 
   li {
     @include pagination-button;
+    color: getCssVar('pagination-text-color');
   }
 }

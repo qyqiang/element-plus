@@ -7,6 +7,12 @@ lang: en-US
 
 If you have too much data to display in one page, use pagination.
 
+## Demo
+
+:::demo
+pagination/demo
+:::
+
 ## Basic usage
 
 :::demo Set `layout` with different pagination elements you wish to display separated with a comma. Pagination elements are: `prev` (a button navigating to the previous page), `next` (a button navigating to the next page), `pager` (page list), `jumper` (a jump-to input), `total` (total item count), `sizes` (a select to determine page size) and `->`(every element after this symbol will be pulled to the right).

@@ -1,22 +1,11 @@
 @use './font.scss' as *;
 
 .el-menu {
-  font-family: var(--p-font-family-sans);
-  font-size: var(--p-font-size-550);
-  font-weight: var(--p-font-weight-regular);
-  line-height: var(--p-font-line-height-500);
+  @include body-md;
 
   .el-sub-menu, .el-menu-item {
     margin-bottom: 8px;
     position: relative;
-
-    //&:after {
-    //  position: absolute;
-    //  background-color: red;
-    //  content: '';
-    //  height: 1px;
-    //  width: 100%;
-    //}
   }
 }
 
