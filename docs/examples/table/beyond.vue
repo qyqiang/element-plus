@@ -32,14 +32,14 @@
       :sortable="item?.sortable"
       :width="item?.width"
     >
-      <template #default="{ row }">
-        <ElTableEditableCell
-          v-if="item?.editable"
-          :row="row"
-          :property="item?.prop"
-          @on-submit="(val: string) => handleSubmit(val, row)"
-        />
-      </template>
+      <!--      <template #default="{ row }">-->
+      <!--        <ElTableEditableCell-->
+      <!--          v-if="item?.editable"-->
+      <!--          :row="row"-->
+      <!--          :property="item?.prop"-->
+      <!--          @on-submit="(val: string) => handleSubmit(val, row)"-->
+      <!--        />-->
+      <!--      </template>-->
     </el-table-column>
 
     <el-table-column fixed="right" label="Operations" min-width="130">
@@ -60,7 +60,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { WarningFilled } from '@element-plus/icons-vue'
-import { ElTableEditableCell } from '@element-plus/components/table'
+// import { ElTableEditableCell } from '@element-plus/components/table'
 
 interface User {
   id: number
