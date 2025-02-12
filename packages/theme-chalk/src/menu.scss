@@ -170,9 +170,7 @@
     }
   }
   @include m(collapse) {
-    width: calc(
-      #{getCssVar('menu-icon-width')} + 16px
-    );
+    width: calc(#{getCssVar('menu-icon-width')} + 16px);
 
     > .#{$namespace}-menu-item,
     > .#{$namespace}-sub-menu > .#{$namespace}-sub-menu__title,

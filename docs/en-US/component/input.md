@@ -13,7 +13,6 @@ input/beyond
 
 :::
 
-
 Input data using mouse or keyboard.
 
 :::warning

@@ -122,7 +122,7 @@ $radio-font-size: map.merge(
     @include when(checked) {
       .#{$namespace}-radio__inner {
         border-color: getCssVar('border-color', 'checked');
-        background:getCssVar('color-white');
+        background: getCssVar('color-white');
 
         &::after {
           transform: translate(-50%, -50%) scale(1);

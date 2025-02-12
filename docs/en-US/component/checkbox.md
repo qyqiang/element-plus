@@ -13,7 +13,6 @@ checkbox/beyond
 
 :::
 
-
 A group of options for multiple choices.
 
 :::warning

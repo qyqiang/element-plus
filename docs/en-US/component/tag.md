@@ -9,7 +9,7 @@ Used for marking and selection.
 
 ## Demo
 
-`type` added:  `gray`, `blue`, `cyan`, `green`, `orange`, `red`.
+`type` added: `gray`, `blue`, `cyan`, `green`, `orange`, `red`.
 
 :::demo
 

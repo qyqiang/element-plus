@@ -31,9 +31,7 @@
     position: fixed;
 
     .#{$namespace}-loading-spinner {
-      margin-top: calc(
-        (0 - getCssVar('loading-fullscreen-spinner-size')) / 2
-      );
+      margin-top: calc((0 - getCssVar('loading-fullscreen-spinner-size')) / 2);
 
       .circular {
         height: getCssVar('loading-fullscreen-spinner-size');

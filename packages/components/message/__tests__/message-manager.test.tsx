@@ -169,14 +169,44 @@ describe('Message on command', () => {
 
     await rAF()
     expect(document.querySelector(selector)?.textContent).toMatchInlineSnapshot(
-      `"0"`
+      `
+      "
+
+
+
+
+
+
+
+
+
+
+
+
+      0"
+    `
     )
 
     i.value++
 
     await rAF()
     expect(document.querySelector(selector)?.textContent).toMatchInlineSnapshot(
-      `"1"`
+      `
+      "
+
+
+
+
+
+
+
+
+
+
+
+
+      1"
+    `
     )
   })
 

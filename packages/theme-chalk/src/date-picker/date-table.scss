@@ -34,7 +34,8 @@
           color: getCssVar('text-color', 'brand');
         }
 
-        .start-date .el-date-table-cell__text, .end-date .el-date-table-cell__text {
+        .start-date .el-date-table-cell__text,
+        .end-date .el-date-table-cell__text {
           color: #fff;
         }
       }
@@ -87,7 +88,7 @@
     }
 
     &.available:hover {
-      background-color: getCssVar("color-primary");
+      background-color: getCssVar('color-primary');
 
       .#{$namespace}-date-table-cell__text {
         color: #fff;
@@ -98,7 +99,6 @@
       background-color: getCssVar('datepicker-inrange-bg-color');
       color: getCssVar('text-color', 'brand');
     }
-
 
     &.current:not(.disabled) {
       background-color: getCssVar('datepicker-active-color');

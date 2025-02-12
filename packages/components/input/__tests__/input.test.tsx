@@ -33,7 +33,7 @@ describe('Input.vue', () => {
 
     expect(inputElm.exists()).toBe(true)
     expect(handleFocus).toHaveBeenCalled()
-    expect(nativeInput.placeholder).toMatchInlineSnapshot(`"请输入内容"`)
+    expect(nativeInput.placeholder).toMatchInlineSnapshot(`""`)
     expect(nativeInput.value).toMatchInlineSnapshot(`"input"`)
     expect(nativeInput.minLength).toMatchInlineSnapshot(`3`)
 

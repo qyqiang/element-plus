@@ -32,7 +32,6 @@
         color: getCssVar('color-primary');
       }
 
-
       &.start-date .cell,
       &.end-date .cell {
         color: $color-white;
@@ -59,7 +58,6 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-
     }
 
     &.in-range .#{$namespace}-date-table-cell {

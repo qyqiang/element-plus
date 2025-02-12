@@ -72,6 +72,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import { useEventListener, useResizeObserver, useTimeoutFn } from '@vueuse/core'
 import ElBadge from '@element-plus/components/badge'
+import ElButton from '@element-plus/components/button'
 import { useGlobalComponentSettings } from '@element-plus/components/config-provider'
 import { ElIcon } from '@element-plus/components/icon'
 import { EVENT_CODE } from '@element-plus/constants'
@@ -133,6 +134,11 @@ function clearTimer() {
 
 function close() {
   visible.value = false
+}
+
+function onLabelClick() {
+  if (!props.onLabelClick) return
+  props.onLabelClick()
 }
 
 function keydown({ code }: KeyboardEvent) {

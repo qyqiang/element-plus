@@ -54,6 +54,7 @@ import { computed, onMounted, ref } from 'vue'
 import { useEventListener, useTimeoutFn } from '@vueuse/core'
 import { CloseComponents, TypeComponentsMap } from '@element-plus/utils'
 import { EVENT_CODE } from '@element-plus/constants'
+import ElButton from '@element-plus/components/button'
 import { ElIcon } from '@element-plus/components/icon'
 import { useGlobalComponentSettings } from '@element-plus/components/config-provider'
 import { notificationEmits, notificationProps } from './notification'
@@ -99,6 +100,11 @@ const positionStyle = computed<CSSProperties>(() => {
     zIndex: props.zIndex ?? currentZIndex.value,
   }
 })
+
+function onLabelClick() {
+  if (!props.onLabelClick) return
+  props.onLabelClick()
+}
 
 function startTimer() {
   if (props.duration > 0) {

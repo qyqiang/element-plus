@@ -15,7 +15,6 @@ switch/beyond
 
 :::
 
-
 ## Basic usage
 
 :::demo Bind `v-model` to a `Boolean` typed variable. The `--el-switch-on-color` and `--el-switch-off-color` CSS variables decides the background color in two states.

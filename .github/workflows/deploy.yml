@@ -42,15 +42,15 @@ jobs:
       - name: Get pnpm store directory
         id: pnpm-cache
         run: |
-           echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
+          echo "pnpm_cache_dir=$(pnpm store path)" >> $GITHUB_OUTPUT
 
       - uses: actions/cache@v4
         name: Setup pnpm cache
         with:
-           path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-           restore-keys: |
-              ${{ runner.os }}-pnpm-store-
+          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
       - name: Install dependencies
         run: pnpm i --frozen-lockfile
 
@@ -61,7 +61,7 @@ jobs:
         run: cd docs && pnpm i element-plus@latest
 
       - name: Build with VitePress
-        run:  pnpm docs:build
+        run: pnpm docs:build
         env:
           DOC_ENV: production
           NODE_OPTIONS: --max-old-space-size=4096
@@ -83,5 +83,3 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-
-
