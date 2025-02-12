@@ -1,8 +1,8 @@
 import type { ComponentPublicInstance, Ref } from 'vue'
-import type { DatePickerProps, selectType } from './props/date-picker'
+import type { DatePickerProps, SelectType } from './props/date-picker'
 
 export type DatePickerExpose = {
-  selectType: Ref<selectType | undefined>
+  selectType: Ref<SelectType | undefined>
   focus: () => void
   blur: () => void
   handleOpen: () => void

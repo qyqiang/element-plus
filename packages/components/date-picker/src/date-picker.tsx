@@ -48,7 +48,7 @@ export default defineComponent({
 
     const selectType = ref<SelectType | undefined>(props.typeList?.[0])
 
-    const handleRadioChange = (value: SelectType) => {
+    const handleRadioChange = (value: any) => {
       selectType.value = value
     }
     const commonPicker = ref<InstanceType<typeof CommonPicker>>()
@@ -101,7 +101,7 @@ export default defineComponent({
               <>
                 {props.typeList?.length > 0 && (
                   <ElRadioGroup
-                    value={selectType.value}
+                    modelValue={selectType.value}
                     onChange={handleRadioChange}
                     size="small"
                   >
