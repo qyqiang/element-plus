@@ -82,8 +82,8 @@
   }
 
   button {
-    @include pagination-button;
     color: getCssVar('pagination-button-color');
+    @include pagination-button;
   }
 
   .btn-prev,
@@ -240,7 +240,7 @@
   align-items: center;
 
   li {
-    @include pagination-button;
     color: getCssVar('pagination-text-color');
+    @include pagination-button;
   }
 }
