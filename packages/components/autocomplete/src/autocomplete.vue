@@ -358,6 +358,8 @@ const highlight = (index: number) => {
 }
 
 const stopHandle = onClickOutside(listboxRef, () => {
+  // Prevent closing if focus is inside popper content
+  if (popperRef.value?.isFocusInsideContent()) return
   suggestionVisible.value && close()
 })
 

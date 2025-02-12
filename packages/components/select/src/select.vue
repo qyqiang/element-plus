@@ -289,6 +289,7 @@
             role="listbox"
             :aria-label="ariaLabel"
             aria-orientation="vertical"
+            @scroll="popupScroll"
           >
             <el-option
               v-if="showNewOption"
@@ -368,6 +369,7 @@ export default defineComponent({
     'visible-change',
     'focus',
     'blur',
+    'popup-scroll',
   ],
 
   setup(props, { emit }) {

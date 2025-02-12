@@ -76,7 +76,7 @@ menu/popper-offset
 
 ## Menu API
 
-### Menu Attributes
+### Attributes
 
 | Name                            | Description                                                                                                                                                           | Type                                   | Default  |
 | ------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------- | -------- |
@@ -100,7 +100,7 @@ menu/popper-offset
 | text-color ^(deprecated)        | text color of Menu (hex format) ( use `--el-menu-text-color` in a style class instead)                                                                                | ^[string]                              | #303133  |
 | active-text-color ^(deprecated) | text color of currently active menu item (hex format) ( use `--el-menu-active-color` in a style class instead)                                                        | ^[string]                              | #409eff  |
 
-### Menu Events
+### Events
 
 | Name   | Description                               | Type                         |
 | ------ | ----------------------------------------- | ---------------------------- |
@@ -108,13 +108,13 @@ menu/popper-offset
 | open   | callback function when sub-menu expands   | ^[Function]`MenuOpenEvent`   |
 | close  | callback function when sub-menu collapses | ^[Function]`MenuCloseEvent`  |
 
-### Menu Slots
+### Slots
 
 | Name    | Description               | Subtags                               |
 | ------- | ------------------------- | ------------------------------------- |
 | default | customize default content | SubMenu / Menu-Item / Menu-Item-Group |
 
-### Menu Exposes
+### Exposes
 
 | Name  | Description                                                            | Type                                 |
 | ----- | ---------------------------------------------------------------------- | ------------------------------------ |
@@ -123,7 +123,7 @@ menu/popper-offset
 
 ## SubMenu API
 
-### SubMenu Attributes
+### Attributes
 
 | Name                | Description                                                                                                                                   | Type                     | Default   |
 | ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ | --------- |
@@ -139,7 +139,7 @@ menu/popper-offset
 | collapse-close-icon | Icon when menu are collapsed and submenu are closed, `collapse-close-icon` and `collapse-open-icon` need to be passed together to take effect | ^[string] / ^[Component] | —         |
 | collapse-open-icon  | Icon when menu are collapsed and submenu are opened, `collapse-open-icon` and `collapse-close-icon` need to be passed together to take effect | ^[string] / ^[Component] | —         |
 
-### SubMenu Slots
+### Slots
 
 | Name    | Description               | Subtags                               |
 | ------- | ------------------------- | ------------------------------------- |
@@ -148,7 +148,7 @@ menu/popper-offset
 
 ## Menu-Item API
 
-### Menu-Item Attributes
+### Attributes
 
 | Name     | Description                          | Type                  | Default |
 | -------- | ------------------------------------ | --------------------- | ------- |
@@ -156,13 +156,13 @@ menu/popper-offset
 | route    | Vue Router Route Location Parameters | ^[string] / ^[object] | —       |
 | disabled | whether disabled                     | ^[boolean]            | false   |
 
-### Menu-Item Events
+### Events
 
 | Name  | Description                                                                  | Type                                            |
 | ----- | ---------------------------------------------------------------------------- | ----------------------------------------------- |
 | click | callback function when menu-item is clicked, the param is menu-item instance | ^[Function]`(item: MenuItemRegistered) => void` |
 
-### Menu-Item Slots
+### Slots
 
 | Name    | Description               |
 | ------- | ------------------------- |
@@ -171,13 +171,13 @@ menu/popper-offset
 
 ## Menu-Item-Group API
 
-### Menu-Item-Group Attributes
+### Attributes
 
 | Name  | Description | Type      | Default |
 | ----- | ----------- | --------- | ------- |
 | title | group title | ^[string] | —       |
 
-### Menu-Item-Group Slots
+### Slots
 
 | Name    | Description               | Subtags   |
 | ------- | ------------------------- | --------- |
