@@ -6,6 +6,14 @@ lang: en-US
 # Tabs
 
 Divide data collections which are related yet belong to different types.
+## Demo
+
+
+:::demo
+
+tabs/demo
+
+:::
 
 ## Basic usage
 

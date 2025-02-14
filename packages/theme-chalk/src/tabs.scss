@@ -23,10 +23,8 @@
     height: 2px;
     background-color: getCssVar('color-primary');
     z-index: 1;
-    transition: width getCssVar('transition-duration')
-        getCssVar('transition-function-ease-in-out-bezier'),
-      transform getCssVar('transition-duration')
-        getCssVar('transition-function-ease-in-out-bezier');
+    transition: width getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier'),
+    transform getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
     list-style: none;
   }
   @include e(new-tab) {
@@ -120,19 +118,24 @@
     }
   }
   @include e(item) {
-    padding: 7px 16px;
+    width: 148px;
+    padding: 6px 12px;
     height: getCssVar('tabs', 'header-height');
-    box-sizing: content-box;
+    box-sizing: border-box;
     display: flex;
     align-items: center;
-    justify-content: center;
     list-style: none;
     font-family: var(--body-font);
     font-size: getCssVar('font-size-small');
-    font-weight: 500;
+    font-weight: 400;
     line-height: 20px;
     color: getCssVar('text-color', 'tertiary');
     position: relative;
+    margin-left: 12px;
+    border-radius: 4px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
 
     &:focus,
     &:focus:active {
@@ -147,8 +150,7 @@
     & .is-icon-close {
       border-radius: 50%;
       text-align: center;
-      transition: all getCssVar('transition-duration')
-        getCssVar('transition-function-ease-in-out-bezier');
+      transition: all getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
       margin-left: 5px;
 
       &:before {
@@ -184,10 +186,11 @@
   @include m((top, bottom)) {
     > .#{$namespace}-tabs__header {
       .#{$namespace}-tabs__item:nth-child(2) {
-        padding-left: 0;
+        //padding-left: 0;
       }
+
       .#{$namespace}-tabs__item:last-child {
-        padding-right: 0;
+        //padding-right: 0;
       }
     }
 
@@ -195,17 +198,17 @@
     &.#{$namespace}-tabs--card {
       > .#{$namespace}-tabs__header {
         .#{$namespace}-tabs__item:nth-child(2) {
-          padding-left: 20px;
+          //padding-left: 20px;
         }
+
         .#{$namespace}-tabs__item:last-child {
-          padding-right: 20px;
+          //padding-right: 20px;
         }
       }
     }
   }
   @include m(card) {
     > .#{$namespace}-tabs__header {
-      border-bottom: 1px solid getCssVar('border-color-light');
       height: getCssVar('tabs', 'header-height');
     }
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__nav-wrap::after {
@@ -232,10 +235,8 @@
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__item {
       border-bottom: 1px solid transparent;
       border-left: 1px solid getCssVar('border-color-light');
-      transition: color getCssVar('transition-duration')
-          getCssVar('transition-function-ease-in-out-bezier'),
-        padding getCssVar('transition-duration')
-          getCssVar('transition-function-ease-in-out-bezier');
+      transition: color getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier'),
+      padding getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
 
       &:first-child {
         border-left: none;
@@ -267,44 +268,42 @@
     }
   }
   @include m(border-card) {
-    background: getCssVar('bg-color', 'overlay');
-    border: 1px solid getCssVar('border-color-custom');
+    //background: getCssVar('bg-color', 'overlay');
+    //border: 1px solid getCssVar('border-color-custom');
 
     > .#{$namespace}-tabs__content {
-      padding: 15px;
+      display: none;
     }
     > .#{$namespace}-tabs__header {
-      background-color: #f0f5f7;
-      border-bottom: 1px solid getCssVar('border-color-custom');
       margin: 0;
     }
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__nav-wrap::after {
       content: none;
     }
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__item {
-      transition: all getCssVar('transition-duration')
-        getCssVar('transition-function-ease-in-out-bezier');
-      border: 1px solid transparent;
-      margin-top: -1px;
-      color: getCssVar('text-color', 'secondary');
+      transition: all getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
+      color: var(--color-gray-gray-500);
 
       &:first-child {
-        margin-left: -1px;
+        margin-left: 0;
       }
 
       & + .#{$namespace}-tabs__item {
-        margin-left: -1px;
-        border-right-color: getCssVar('border-color-custom');
-        border-left-color: getCssVar('border-color-custom');
+        //margin-left: -1px;
+        //border-right-color: getCssVar('border-color-custom');
+        //border-left-color: getCssVar('border-color-custom');
       }
 
       &.is-active {
         color: getCssVar('text-color-primary');
-        background-color: getCssVar('bg-color', 'overlay');
+        background-color: var(--color-gray-gray-200);
+        font-weight: 600;
       }
 
       &:not(.is-disabled):hover {
-        color: getCssVar('color-primary');
+        color: var(--color-text-text-primary);
+        background-color: var(--color-bg-surface-tab-surface-hover);
+        font-weight: 600;
       }
 
       &.is-disabled {
@@ -313,8 +312,8 @@
     }
 
     > .#{$namespace}-tabs__header
-      .is-scrollable
-      .#{$namespace}-tabs__item:first-child {
+    .is-scrollable
+    .#{$namespace}-tabs__item:first-child {
       margin-left: 0;
     }
   }

@@ -1429,7 +1429,7 @@ $timeline: map.merge(
 $tabs: () !default;
 $tabs: map.merge(
   (
-    'header-height': 20px,
+    'header-height': 32px,
   ),
   $tabs
 );
