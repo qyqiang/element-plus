@@ -8,7 +8,7 @@ lang: en-US
 Commonly used button.
 
 ## Demo
-
+For icon button, please add class name `icon-button`
 :::demo
 
 button/beyond

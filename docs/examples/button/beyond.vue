@@ -1,22 +1,38 @@
 <template>
   <div>
     <h5>Primary</h5>
+    <el-button type="primary">ok</el-button>
     <el-button type="primary">Primary</el-button>
     <el-button type="primary" disabled>Disabled</el-button>
     <el-button type="primary" loading>Loading</el-button>
     <el-button type="primary" :icon="Edit">Loading</el-button>
     <el-button type="primary" :icon="Edit" disabled>Loading</el-button>
     <el-button type="primary">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button type="primary" disabled>
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
-    <el-button type="primary" :icon="Delete" disabled />
-    <el-button type="primary" :icon="Delete" />
+    <el-button type="primary" :icon="Delete" disabled class="icon-button" />
+    <el-button type="primary" :icon="Delete" class="icon-button" />
     <el-divider />
   </div>
-
+  <div>
+    <el-button type="primary">Primary</el-button>
+    <el-button type="success">Success</el-button>
+    <el-button type="info">Info</el-button>
+    <el-button type="warning">Warning</el-button>
+    <el-button type="danger">Danger</el-button>
+    <el-button type="error">Error</el-button>
+    <el-button type="filled">Filled</el-button>
+  </div>
+  <el-divider />
   <div>
     <h5>Outlined</h5>
     <el-button plain>Outlined</el-button>
@@ -26,10 +42,16 @@
     <el-button plain :icon="Edit">Loading</el-button>
     <el-button plain :icon="Edit" disabled>Loading</el-button>
     <el-button plain>
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button plain disabled>
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button plain>
       <el-checkbox label="Label" />
@@ -37,8 +59,8 @@
     <el-button plain disabled>
       <el-checkbox disabled label="Label" />
     </el-button>
-    <el-button plain :icon="Delete" disabled />
-    <el-button plain :icon="Delete" />
+    <el-button plain :icon="Delete" disabled class="icon-button" />
+    <el-button plain :icon="Delete" class="icon-button" />
     <el-divider />
   </div>
 
@@ -50,10 +72,16 @@
     <el-button type="filled" :icon="Edit">Loading</el-button>
     <el-button type="filled" :icon="Edit" disabled>Loading</el-button>
     <el-button type="filled">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button type="filled" disabled>
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button type="filled">
       <el-checkbox label="Label" />
@@ -75,10 +103,16 @@
     <el-button type="text" :icon="Edit">Loading</el-button>
     <el-button type="text" :icon="Edit" disabled>Loading</el-button>
     <el-button type="text">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button type="text" disabled>
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button type="text">
       <el-checkbox label="Label" />
@@ -94,7 +128,10 @@
   <div>
     <h5>Button Tag</h5>
     <el-button class="beyond-button-tag" round :style="statusColor['-20']">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button
       class="beyond-button-tag"
@@ -102,7 +139,10 @@
       disabled
       :style="statusColor['-20']"
     >
-      Disabled<el-icon><ArrowDown /></el-icon>
+      Disabled
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button
       class="beyond-button-tag"
@@ -110,19 +150,34 @@
       loading
       :style="statusColor['-99']"
     >
-      Loading<el-icon><ArrowDown /></el-icon>
+      Loading
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button class="beyond-button-tag" round :style="statusColor[1]">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button class="beyond-button-tag" round :style="statusColor[5]">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button class="beyond-button-tag" round :style="statusColor[10]">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
     <el-button class="beyond-button-tag" round :style="statusColor['-99']">
-      Label<el-icon><ArrowDown /></el-icon>
+      Label
+      <el-icon>
+        <ArrowDown />
+      </el-icon>
     </el-button>
   </div>
 </template>
