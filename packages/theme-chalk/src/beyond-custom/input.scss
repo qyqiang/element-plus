@@ -1,3 +1,4 @@
+@use '../mixins/mixins' as *;
 .el-input {
   --el-border-color-custom: var(--color-gray-gray-300);
   .el-input__inner {
@@ -30,7 +31,7 @@
     }
   }
   .float-label.has-value {
-    transform: translateY(-16px);
+    @include float-label-value
   }
 
   .el-textarea__inner {
@@ -52,7 +53,7 @@
       top: 10px;
     }
     .float-label {
-      left: 32px;
+      left: 26px;
     }
     .el-textarea__inner {
       &.is-focus {

@@ -17,6 +17,7 @@
         :closable="closable"
         :type="tagType"
         :effect="tagEffect"
+        round
         :draggable="closable && draggable"
         disable-transitions
         @close="handleRemoveTag(index)"

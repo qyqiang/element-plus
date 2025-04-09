@@ -30,7 +30,7 @@ export const inputTagProps = buildProps({
   /**
    * @description tag type
    */
-  tagType: { ...tagProps.type, default: 'info' },
+  tagType: { ...tagProps.type, default: 'gray' },
   /**
    * @description tag effect
    */

@@ -1,98 +1,4 @@
 <template>
-  <h5>Clean</h5>
-  <el-input
-    v-model="input"
-    :float-label="false"
-    style="width: 240px"
-    placeholder="Please input"
-  />
-  <el-input
-    v-model="input2"
-    :float-label="false"
-    style="width: 240px"
-    placeholder="Please input"
-    :prefix="$"
-  >
-    <template #prefix>
-      <span>$</span>
-    </template>
-  </el-input>
-  <el-input
-    v-model="input3"
-    :float-label="false"
-    style="width: 240px"
-    placeholder="Please input"
-    :prefix="$"
-  >
-    <template #suffix>
-      <el-icon><ArrowDown /></el-icon>
-    </template>
-  </el-input>
-
-  <el-input
-    v-model="input4"
-    :float-label="false"
-    style="width: 240px"
-    :prefix-icon="Search"
-    placeholder="Please input"
-    :prefix="$"
-  >
-    <template #suffix>
-      <el-tooltip content="info xx" effect="light">
-        <el-icon><InfoFilled /></el-icon>
-      </el-tooltip>
-    </template>
-  </el-input>
-  <el-input
-    v-model="input5"
-    :float-label="false"
-    style="width: 240px"
-    :prefix-icon="Search"
-    placeholder="Please input"
-    :prefix="$"
-  >
-    <template #suffix>
-      Unit<el-icon><ArrowDown /></el-icon>
-    </template>
-  </el-input>
-
-  <el-input
-    v-model="input6"
-    disabled
-    :float-label="false"
-    style="width: 240px"
-    :prefix-icon="Search"
-    placeholder="Please input"
-    :prefix="$"
-  >
-    <template #suffix>
-      Unit<el-icon><ArrowDown /></el-icon>
-    </template>
-  </el-input>
-  <el-input
-    v-model="input7"
-    aria-required="true"
-    :float-label="false"
-    style="width: 240px"
-    :prefix-icon="Search"
-    placeholder="Please input"
-    :prefix="$"
-  >
-    <template #suffix>
-      Unit<el-icon><ArrowDown /></el-icon>
-    </template>
-  </el-input>
-
-  <el-input
-    v-model="textarea1"
-    disabled
-    :float-label="false"
-    style="width: 240px"
-    :autosize="{ minRows: 2, maxRows: 4 }"
-    type="textarea"
-    placeholder="Please input"
-  />
-
   <h5>Width Header</h5>
   <el-divider />
   <div class="flex flex-wrap gap-4 items-center">
@@ -147,8 +53,13 @@
         <el-icon><Search /></el-icon>
       </template>
       <template #textareaSuffix>
-        <el-tooltip content="info xx" effect="light">
-          <el-icon color="var(--color-red-red-600)"><WarningFilled /></el-icon>
+        <el-tooltip
+          content="info xx"
+          effect="light"
+          placement="top"
+          :offset="4"
+        >
+          <el-icon><WarningFilled /></el-icon>
         </el-tooltip>
       </template>
     </el-input>
@@ -161,6 +72,16 @@
       placeholder="Please input"
     />
   </div>
+
+  <el-divider />
+  <h5>Clean</h5>
+  <el-divider />
+  <el-input
+    v-model="input"
+    :float-label="false"
+    style="width: 240px"
+    placeholder="Please input"
+  />
 </template>
 
 <script lang="ts" setup>
