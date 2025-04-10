@@ -108,7 +108,7 @@ $switch-content-padding: map.merge(
     height: map.get($switch-core-height, 'default');
     display: inline-block;
     font-size: map.get($switch-font-size, 'default');
-    font-weight: 500;
+    font-weight: 400;
     cursor: pointer;
     vertical-align: middle;
     color: getCssVar('text-color', 'primary');
@@ -227,7 +227,7 @@ $switch-content-padding: map.merge(
   }
 
   @include when(disabled) {
-    opacity: 0.6;
+    //opacity: 0.6;
   }
 
   @include m(wide) {
