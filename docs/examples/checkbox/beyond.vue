@@ -5,6 +5,12 @@
     <el-checkbox v-model="checked3" disabled />
     <el-checkbox :error="isError" />
     <el-checkbox :indeterminate="isIndeterminate" />
+    <el-checkbox v-model="checked3" :is-show="true" label="show model" />
+    <el-checkbox
+      :is-show="true"
+      :indeterminate="isIndeterminate"
+      label="show model"
+    />
   </div>
   <el-divider />
   <div>
@@ -12,7 +18,7 @@
     <el-checkbox v-model="checked2" label="Option 2" disabled />
     <el-checkbox v-model="checked3" label="Option 3" disabled />
     <el-checkbox label="Error" :error="isError" />
-    <el-checkbox :indeterminate="isIndeterminate">Indeterminate </el-checkbox>
+    <el-checkbox :indeterminate="isIndeterminate">Indeterminate</el-checkbox>
   </div>
 </template>
 

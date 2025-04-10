@@ -38,6 +38,10 @@ export const checkboxProps = {
    */
   disabled: Boolean,
   /**
+   * @description whether the Checkbox is display
+   */
+  isShow: Boolean,
+  /**
    * @description if the Checkbox is checked
    */
   checked: Boolean,

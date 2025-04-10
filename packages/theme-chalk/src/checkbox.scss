@@ -158,7 +158,6 @@ $checkbox-bordered-input-width: map.merge(
       }
 
       & + span.#{$namespace}-checkbox__label {
-        color: getCssVar('disabled-text-color');
         cursor: not-allowed;
       }
     }
@@ -210,7 +209,9 @@ $checkbox-bordered-input-width: map.merge(
     }
   }
   @include e(inner) {
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
     border: getCssVar('checkbox-input-border');
     border-radius: getCssVar('checkbox-border-radius');
@@ -227,21 +228,21 @@ $checkbox-bordered-input-width: map.merge(
       border-color: getCssVar('checkbox-input-border-color-hover');
     }
 
-    &::after {
-      box-sizing: content-box;
-      content: '';
-      border: 1px solid transparent;
-      border-left: 0;
-      border-top: 0;
-      height: 10px;
-      left: 5px;
-      position: absolute;
-      top: 1px;
-      transform: rotate(45deg) scaleY(0);
-      width: 3px;
-      transition: transform 0.15s ease-in 0.05s;
-      transform-origin: center;
-    }
+    //&::after {
+    //  box-sizing: content-box;
+    //  content: '';
+    //  border: 1px solid transparent;
+    //  border-left: 0;
+    //  border-top: 0;
+    //  height: 10px;
+    //  left: 5px;
+    //  position: absolute;
+    //  top: 1px;
+    //  transform: rotate(45deg) scaleY(0);
+    //  width: 3px;
+    //  transition: transform 0.15s ease-in 0.05s;
+    //  transform-origin: center;
+    //}
   }
 
   @include e(original) {
