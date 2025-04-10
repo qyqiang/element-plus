@@ -6,6 +6,10 @@ lang: en-US
 # TimePicker
 
 Use Time Picker for time input.
+## Demo
+:::demo
+time-picker/demo
+:::
 
 ## Arbitrary time picker
 
