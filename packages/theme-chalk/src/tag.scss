@@ -92,8 +92,8 @@ $tag-icon-span-gap: map.merge(
     color: #5b7282;
 
     &:hover {
-      color: var(--color-gray-gray-800);
-      background-color: var(--color-gray-gray-300);
+      color: #fff;
+      background-color: var(--color-gray-gray-900);
     }
 
     &:active {
@@ -137,8 +137,8 @@ $tag-icon-span-gap: map.merge(
     color: #5b7282;
 
     &:hover {
-      color: var(--color-gray-gray-800);
-      background-color: var(--color-gray-gray-300);
+      color: #fff;
+      background-color: var(--color-gray-gray-900);
     }
   }
 
