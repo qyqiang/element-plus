@@ -7,7 +7,7 @@ lang: en-US
 
 Use Time Picker for time input.
 ## Demo
-:::demo
+:::demo By default,you need to add class name `time-picker-item`
 time-picker/demo
 :::
 

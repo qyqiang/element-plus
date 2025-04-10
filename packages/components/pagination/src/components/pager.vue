@@ -23,8 +23,7 @@
       @focus="onFocus(true)"
       @blur="quickPrevFocus = false"
     >
-      <d-arrow-left v-if="(quickPrevHover || quickPrevFocus) && !disabled" />
-      <more-filled v-else />
+      <more-filled />
     </li>
     <li
       v-for="pager in pagers"
@@ -50,8 +49,7 @@
       @focus="onFocus()"
       @blur="quickNextFocus = false"
     >
-      <d-arrow-right v-if="(quickNextHover || quickNextFocus) && !disabled" />
-      <more-filled v-else />
+      <more-filled />
     </li>
     <li
       v-if="pageCount > 1"
@@ -70,9 +68,10 @@
 </template>
 <script lang="ts" setup>
 import { computed, ref, watchEffect } from 'vue'
-import { DArrowLeft, DArrowRight, MoreFilled } from '@element-plus/icons-vue'
+import { MoreFilled } from '@element-plus/icons-vue'
 import { useLocale, useNamespace } from '@element-plus/hooks'
 import { paginationPagerProps } from './pager'
+
 defineOptions({
   name: 'ElPaginationPager',
 })
@@ -153,6 +152,7 @@ watchEffect(() => {
     }
   }
 })
+
 function onMouseEnter(forward = false) {
   if (props.disabled) return
   if (forward) {
@@ -161,6 +161,7 @@ function onMouseEnter(forward = false) {
     quickNextHover.value = true
   }
 }
+
 function onFocus(forward = false) {
   if (forward) {
     quickPrevFocus.value = true
@@ -168,6 +169,7 @@ function onFocus(forward = false) {
     quickNextFocus.value = true
   }
 }
+
 function onEnter(e: UIEvent) {
   const target = e.target as HTMLElement
   if (
@@ -185,6 +187,7 @@ function onEnter(e: UIEvent) {
     onPagerClick(e)
   }
 }
+
 function onPagerClick(event: UIEvent) {
   const target = event.target as HTMLElement
   if (target.tagName.toLowerCase() === 'ul' || props.disabled) {
@@ -193,13 +196,14 @@ function onPagerClick(event: UIEvent) {
   let newPage = Number(target.textContent)
   const pageCount = props.pageCount!
   const currentPage = props.currentPage
-  const pagerCountOffset = props.pagerCount - 2
+  // const pagerCountOffset = props.pagerCount - 2
   if (target.className.includes('more')) {
-    if (target.className.includes('quickprev')) {
-      newPage = currentPage - pagerCountOffset
-    } else if (target.className.includes('quicknext')) {
-      newPage = currentPage + pagerCountOffset
-    }
+    // if (target.className.includes('quickprev')) {
+    //   newPage = currentPage - pagerCountOffset
+    // } else if (target.className.includes('quicknext')) {
+    //   newPage = currentPage + pagerCountOffset
+    // }
+    return
   }
   if (!Number.isNaN(+newPage)) {
     if (newPage < 1) {

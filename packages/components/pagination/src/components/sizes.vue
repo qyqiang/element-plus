@@ -4,11 +4,13 @@
       class="pagination-select"
       :model-value="innerPageSize"
       :disabled="disabled"
-      :popper-class="popperClass"
+      :popper-class="popperClassComputed"
       :size="size"
       :teleported="teleported"
       :validate-event="false"
       :append-to="appendSizeTo"
+      :show-arrow="false"
+      :offset="4"
       @change="handleChange"
     >
       <el-option
@@ -40,7 +42,9 @@ const { t } = useLocale()
 const ns = useNamespace('pagination')
 const pagination = usePagination()
 const innerPageSize = ref<number>(props.pageSize!)
-
+const popperClassComputed = computed(
+  () => `${props.popperClass} pagination-select-wrap`
+)
 watch(
   () => props.pageSizes,
   (newVal, oldVal) => {
@@ -62,6 +66,7 @@ watch(
 )
 
 const innerPageSizes = computed(() => props.pageSizes)
+
 function handleChange(val: number) {
   if (val !== innerPageSize.value) {
     innerPageSize.value = val
