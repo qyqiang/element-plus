@@ -13,6 +13,7 @@
   .el-message__labelBtn {
     margin-top: -5px;
     margin-left: var(--space-100);
+    min-width: unset;
     @include button-custom-hover-active;
   }
   &:has(.el-message__labelBtn) {

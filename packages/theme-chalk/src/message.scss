@@ -8,10 +8,10 @@
 
 @include b(message) {
   width: fit-content;
-  //max-width: calc(100% - 32px);
+  box-shadow: none;
   max-width: 1000px;
   box-sizing: border-box;
-  border-radius: getCssVar('border-radius-custom');
+  border-radius: 0;
   border-width: getCssVar('border-width');
   border-style: getCssVar('border-style');
   border-color: getCssVar('message', 'border-color');
@@ -23,7 +23,6 @@
   transition: opacity getCssVar('transition-duration'), transform 0.4s, top 0.4s;
   padding: getCssVar('message', 'padding');
   display: flex;
-  //align-items: center;
   gap: 8px;
 
   @include when(center) {

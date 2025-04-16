@@ -526,7 +526,7 @@ $alert: () !default;
 $alert: map.merge(
     (
       'padding': 8px 16px,
-      'border-radius-base': getCssVar('border-radius-base'),
+      'border-radius-base': 0,
       'title-font-size': 14px,
       'title-with-description-font-size': 16px,
       'description-font-size': 14px,
