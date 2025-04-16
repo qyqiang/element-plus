@@ -128,13 +128,14 @@ tabs/customized-trigger
 
 ### Attributes
 
-| Name     | Description                                                                                                                                                                         | Type                  | Default |
-| -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
-| label    | title of the tab                                                                                                                                                                    | ^[string]             | ''      |
-| disabled | whether Tab is disabled                                                                                                                                                             | ^[boolean]            | false   |
-| name     | identifier corresponding to the name of Tabs, representing the alias of the tab-pane, the default is ordinal number of the tab-pane in the sequence, e.g. the first tab-pane is '0' | ^[string] / ^[number] | —       |
-| closable | whether Tab is closable                                                                                                                                                             | ^[boolean]            | false   |
-| lazy     | whether Tab is lazily rendered                                                                                                                                                      | ^[boolean]            | false   |
+| Name         | Description                                                                                                                                                                         | Type                  | Default |
+|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------| ------- |
+| label        | title of the tab                                                                                                                                                                    | ^[string]             | ''      |
+| disabled     | whether Tab is disabled                                                                                                                                                             | ^[boolean]            | false   |
+| name         | identifier corresponding to the name of Tabs, representing the alias of the tab-pane, the default is ordinal number of the tab-pane in the sequence, e.g. the first tab-pane is '0' | ^[string] / ^[number] | —       |
+| closable     | whether Tab is closable                                                                                                                                                             | ^[boolean]            | false   |
+| tabPaneClass | whether Tab-Panel add class                                                                                                                                                         | ^[string]             | ''   |
+| lazy         | whether Tab is lazily rendered                                                                                                                                                      | ^[boolean]            | false   |
 
 ### Slots
 

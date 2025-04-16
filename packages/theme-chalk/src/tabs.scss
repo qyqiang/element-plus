@@ -127,9 +127,9 @@
     list-style: none;
     font-family: var(--body-font);
     font-size: getCssVar('font-size-small');
-    font-weight: 400;
+    font-weight: 500;
     line-height: 20px;
-    color: getCssVar('text-color', 'tertiary');
+    color: var(--color-gray-gray-700);
     position: relative;
     margin-left: 12px;
     border-radius: 4px;
@@ -183,30 +183,7 @@
     position: relative;
     flex-grow: 1;
   }
-  @include m((top, bottom)) {
-    > .#{$namespace}-tabs__header {
-      .#{$namespace}-tabs__item:nth-child(2) {
-        //padding-left: 0;
-      }
 
-      .#{$namespace}-tabs__item:last-child {
-        //padding-right: 0;
-      }
-    }
-
-    &.#{$namespace}-tabs--border-card,
-    &.#{$namespace}-tabs--card {
-      > .#{$namespace}-tabs__header {
-        .#{$namespace}-tabs__item:nth-child(2) {
-          //padding-left: 20px;
-        }
-
-        .#{$namespace}-tabs__item:last-child {
-          //padding-right: 20px;
-        }
-      }
-    }
-  }
   @include m(card) {
     > .#{$namespace}-tabs__header {
       height: getCssVar('tabs', 'header-height');
@@ -217,7 +194,6 @@
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__nav {
       border: 1px solid getCssVar('border-color-light');
       border-bottom: none;
-      border-radius: 4px 4px 0 0;
       box-sizing: border-box;
     }
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__active-bar {
@@ -235,6 +211,10 @@
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__item {
       border-bottom: 1px solid transparent;
       border-left: 1px solid getCssVar('border-color-light');
+      border-radius: 0;
+      background-color: var(--color-gray-gray-50);
+      margin-left: 0;
+      color: #3e5463;
       transition: color getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier'),
       padding getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
 
@@ -244,22 +224,18 @@
 
       &.is-closable {
         &:hover {
-          padding-left: 13px;
-          padding-right: 13px;
-
           & .is-icon-close {
             width: 14px;
           }
         }
       }
 
-      &.is-active {
+      &.is-active, &:hover {
         border-bottom-color: getCssVar('bg-color');
+        background-color: transparent;
+        color: #0e171f;
 
         &.is-closable {
-          padding-left: 20px;
-          padding-right: 20px;
-
           .is-icon-close {
             width: 14px;
           }
@@ -282,7 +258,6 @@
     }
     > .#{$namespace}-tabs__header .#{$namespace}-tabs__item {
       transition: all getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
-      color: var(--color-gray-gray-500);
 
       &:first-child {
         margin-left: 0;
@@ -295,15 +270,13 @@
       }
 
       &.is-active {
-        color: getCssVar('text-color-primary');
-        background-color: var(--color-gray-gray-200);
-        font-weight: 600;
+        color: var(--color-gray-gray-990);
+        background-color: var(--color-gray-gray-50);
       }
 
       &:not(.is-disabled):hover {
-        color: var(--color-text-text-primary);
-        background-color: var(--color-bg-surface-tab-surface-hover);
-        font-weight: 600;
+        color: var(--color-gray-gray-990);
+        background-color: var(--color-gray-gray-50);
       }
 
       &.is-disabled {
@@ -472,7 +445,6 @@
       }
 
       .#{$namespace}-tabs__nav {
-        border-radius: 4px 0 0 4px;
         border-bottom: 1px solid getCssVar('border-color-light');
         border-right: none;
       }
@@ -549,7 +521,6 @@
       }
 
       .#{$namespace}-tabs__nav {
-        border-radius: 0 4px 4px 0;
         border-bottom: 1px solid getCssVar('border-color-light');
         border-left: none;
       }

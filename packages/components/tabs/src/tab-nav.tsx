@@ -316,7 +316,6 @@ const TabNav = defineComponent({
 
         const tabLabelContent = pane.slots.label?.() || pane.props.label
         const tabindex = !disabled && pane.active ? 0 : -1
-
         return (
           <div
             ref={`tab-${uid}`}
@@ -327,6 +326,7 @@ const TabNav = defineComponent({
               ns.is('disabled', disabled),
               ns.is('closable', closable),
               ns.is('focus', isFocus.value),
+              pane.props.tabPaneClass,
             ]}
             id={`tab-${tabName}`}
             key={`tab-${uid}`}

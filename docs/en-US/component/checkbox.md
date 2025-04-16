@@ -112,8 +112,9 @@ checkbox/with-border
 ### Attributes
 
 | Name                           | Description                                                                                                                                                    | Type                                           | Default |
-| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------- |
+|--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|---------|
 | model-value / v-model          | binding value                                                                                                                                                  | ^[string] / ^[number] / ^[boolean]             | —       |
+| isShow                         | checkbox display model                                                                                                                                         | ^[boolean]                                     | false   |
 | value ^(2.6.0)                 | value of the Checkbox when used inside a `checkbox-group`                                                                                                      | ^[string] / ^[number] / ^[boolean] / ^[object] | —       |
 | label                          | label of the Checkbox when used inside a `checkbox-group`. If there's no value, `label` will act as `value`                                                    | ^[string] / ^[number] / ^[boolean] / ^[object] | —       |
 | true-value ^(2.6.0)            | value of the Checkbox if it's checked                                                                                                                          | ^[string] / ^[number]                          | —       |

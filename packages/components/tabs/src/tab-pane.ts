@@ -3,6 +3,9 @@ import type { ExtractPropTypes } from 'vue'
 import type TabPane from './tab-pane.vue'
 
 export const tabPaneProps = buildProps({
+  tabPaneClass: {
+    type: String,
+  },
   /**
    * @description title of the tab
    */
