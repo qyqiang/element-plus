@@ -36,9 +36,15 @@
       </div>
     </template>
     <template #footer>
-      <div style="flex: auto">
-        <el-button @click="cancelClick">cancel</el-button>
-        <el-button type="primary" @click="confirmClick">confirm</el-button>
+      <div style="display: flex; justify-content: space-between">
+        <div>
+          <el-button plain @click="cancelClick">Delete</el-button>
+          <el-button plain @click="confirmClick">Duplicat</el-button>
+        </div>
+        <div>
+          <el-button plain @click="cancelClick">cancel</el-button>
+          <el-button type="primary" @click="confirmClick">confirm</el-button>
+        </div>
       </div>
     </template>
   </el-drawer>
@@ -62,9 +68,11 @@ const handleClose = (done: () => void) => {
       // catch error
     })
 }
+
 function cancelClick() {
   drawer2.value = false
 }
+
 function confirmClick() {
   ElMessageBox.confirm(`Are you confirm to chose ${radio1.value} ?`)
     .then(() => {

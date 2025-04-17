@@ -69,7 +69,7 @@
                 type="button"
                 @click="handleClose"
               >
-                <el-icon :class="ns.e('close')" size="12px"
+                <el-icon :class="ns.e('close')" size="16px"
                   ><svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="12"
