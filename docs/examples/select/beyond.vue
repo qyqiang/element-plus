@@ -67,6 +67,23 @@
     <el-select
       v-model="value2"
       :float-label="true"
+      placeholder="Search Demo"
+      style="width: 240px"
+      clearable
+    >
+      <template #header>
+        <el-input placeholder="Search" />
+      </template>
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <el-select
+      v-model="value2"
+      :float-label="true"
       placeholder="Select"
       label-suffix="Unit"
       style="width: 240px"

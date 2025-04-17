@@ -12,6 +12,17 @@
   }
 }
 
+.el-pagination__jump {
+  & ~ .el-pagination__sizes {
+    margin-left: 20px;
+  }
+
+  .el-input__wrapper {
+    padding: 0;
+  }
+}
+
 .pagination-select-wrap.el-popper.is-light {
   padding: 0;
+  width: 120px;
 }

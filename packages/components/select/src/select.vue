@@ -22,7 +22,7 @@
       :gpu-acceleration="false"
       :persistent="persistent"
       :append-to="appendTo"
-      :show-arrow="showArrow"
+      :show-arrow="false"
       :offset="offset"
       @before-show="handleMenuEnter"
       @hide="states.isBeforeHide = false"
@@ -197,8 +197,13 @@
                 v-text="states.inputValue"
               />
             </div>
+
             <div
-              v-if="!floatLabel || (shouldShowPlaceholder && hasModelValue)"
+              v-if="
+                multiple
+                  ? !hasModelValue
+                  : !floatLabel || (shouldShowPlaceholder && hasModelValue)
+              "
               :class="[
                 nsSelect.e('selected-item'),
                 nsSelect.e('placeholder'),

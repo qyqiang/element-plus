@@ -1,5 +1,6 @@
 <template>
   <ul v-show="visible" ref="groupRef" :class="ns.be('group', 'wrap')">
+    <el-divider />
     <li :class="ns.be('group', 'title')">{{ label }}</li>
     <li>
       <ul :class="ns.b('group')">
@@ -22,12 +23,14 @@ import {
   toRefs,
 } from 'vue'
 import { useMutationObserver } from '@vueuse/core'
+import ElDivider from '@element-plus/components/divider/src/divider.vue'
 import { ensureArray } from '@element-plus/utils'
 import { useNamespace } from '@element-plus/hooks'
 import { selectGroupKey } from './token'
 
 export default defineComponent({
   name: 'ElOptionGroup',
+  components: { ElDivider },
   componentName: 'ElOptionGroup',
 
   props: {

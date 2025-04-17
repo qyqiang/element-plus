@@ -2,10 +2,10 @@
   <div class="demo-pagination-block">
     <div class="demonstration">Total item count</div>
     <el-pagination
-      :current-page="currentPage"
+      current-page="currentPage"
       :page-size="30"
       :page-sizes="[30, 60, 90]"
-      layout="slot, prev, pager, next,sizes"
+      layout="slot, prev, pager, next, jumper, sizes"
       :total="1000"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
@@ -85,6 +85,7 @@ const handleCurrentChange = (val: number) => {
 .demo-pagination-block .demonstration {
   margin-bottom: 16px;
 }
+
 .noto-14-20 {
   font-family: var(--body-font);
   font-weight: 400;
