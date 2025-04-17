@@ -78,7 +78,7 @@
 
   & .#{$namespace}-message__closeBtn {
     cursor: pointer;
-    color: getCssVar('message', 'close-icon-color');
+    color: var(--color-gray-gray-800);
     font-size: getCssVar('message', 'close-size');
 
     &:focus {

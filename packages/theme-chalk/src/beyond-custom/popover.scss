@@ -16,6 +16,20 @@
 }
 
 .el-popper.is-light[role='tooltip'] {
-  padding: 4px 8px;
-  @include body-md;
+  padding: 8px 10px;
+  box-shadow: var(--shadow-200);
+  color: #0e171f;
+  font-family: var(--body-font);
+  font-size: var(--p-font-size-400);
+  font-weight: var(--p-font-weight-medium);
+  line-height: var(--p-font-line-height-500);
+
+  span {
+    display: block;
+    line-height: 16px;
+  }
+
+  .el-button {
+    margin-left: 16px;
+  }
 }

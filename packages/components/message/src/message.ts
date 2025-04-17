@@ -58,6 +58,13 @@ export const messageProps = buildProps({
     default: messageDefaults.center,
   },
   /**
+   * @description whether alert model
+   */
+  alert: {
+    type: Boolean,
+    default: false,
+  },
+  /**
    * @description whether `message` is treated as HTML string
    */
   dangerouslyUseHTMLString: {

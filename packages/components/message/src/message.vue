@@ -14,6 +14,7 @@
         ns.is('center', center),
         ns.is('closable', showClose),
         ns.is('plain', plain),
+        ns.is('alert', alert),
         customClass,
         `is-${effect}`,
       ]"
@@ -55,7 +56,7 @@
       </slot>
       <el-button
         v-if="label"
-        plain
+        text
         :class="ns.e('labelBtn')"
         @click="onLabelClick"
       >

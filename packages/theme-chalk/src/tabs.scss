@@ -244,9 +244,6 @@
     }
   }
   @include m(border-card) {
-    //background: getCssVar('bg-color', 'overlay');
-    //border: 1px solid getCssVar('border-color-custom');
-
     > .#{$namespace}-tabs__content {
       display: none;
     }
@@ -261,12 +258,6 @@
 
       &:first-child {
         margin-left: 0;
-      }
-
-      & + .#{$namespace}-tabs__item {
-        //margin-left: -1px;
-        //border-right-color: getCssVar('border-color-custom');
-        //border-left-color: getCssVar('border-color-custom');
       }
 
       &.is-active {

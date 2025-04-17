@@ -118,7 +118,7 @@ $border-color: () !default;
 $border-color: map.merge(
     (
       '': #828e91,
-      'custom': #c1ccd6,
+      'custom': #e7ecef,
       'light': #c1ccd6,
       'lighter': #ebeef5,
       'extra-light': #f2f6fc,
@@ -564,7 +564,7 @@ $message: map.merge(
     (
       'bg-color': getCssVar('color', 'info', 'light-9'),
       'border-color': getCssVar('border-color-lighter'),
-      'padding': 13px 20px,
+      'padding': 8px 20px,
       'close-size': 16px,
       'close-icon-color': getCssVar('text-color-placeholder'),
       'close-hover-color': getCssVar('text-color-secondary'),
@@ -578,7 +578,7 @@ $notification: () !default;
 $notification: map.merge(
     (
       'width': 330px,
-      'padding': 14px 26px 14px 13px,
+      'padding': 20px,
       'radius': 8px,
       'shadow': getCssVar('box-shadow-light'),
       'border-color': getCssVar('border-color-lighter'),
@@ -610,7 +610,7 @@ $input: map.merge(
       'hover-border': getCssVar('border-color-hover'),
       'focus-border': getCssVar('color-primary'),
       'transparent-border': 0 0 0 1px transparent inset,
-      'border-color': getCssVar('border-color-custom'),
+      'border-color': getCssVar('border-color-light'),
       'border-radius': getCssVar('border-radius-custom'),
       'bg-color': getCssVar('fill-color', 'blank'),
       'icon-color': getCssVar('text-color-placeholder'),
@@ -842,7 +842,7 @@ $switch: () !default;
 $switch: map.merge(
     (
       'on-color': getCssVar('color-success'),
-      'off-color': getCssVar('border-color', 'custom'),
+      'off-color': getCssVar('border-color', 'light'),
     ),
     $switch
 );

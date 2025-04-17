@@ -24,6 +24,7 @@
   overflow-wrap: break-word;
   overflow: hidden;
   z-index: 9999;
+  box-shadow: var(--shadow-400);
 
   &.right {
     right: 16px;
@@ -41,7 +42,7 @@
   }
 
   @include e(title) {
-    font-weight: bold;
+    font-weight: 600;
     font-size: getCssVar('notification-title-font-size');
     line-height: getCssVar('notification-icon-size');
     color: getCssVar('notification-title-color');
@@ -50,9 +51,10 @@
 
   @include e(content) {
     font-size: getCssVar('notification-content-font-size');
-    line-height: 24px;
-    margin: 6px 0 0;
-    color: getCssVar('notification-content-color');
+    line-height: 20px;
+    margin: 2px 0 0;
+    font-weight: 400;
+    color: getCssVar('notification-title-color');
 
     p {
       margin: 0;

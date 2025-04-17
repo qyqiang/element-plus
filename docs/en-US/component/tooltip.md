@@ -7,6 +7,15 @@ lang: en-US
 
 Display prompt information for mouse hover.
 
+## Demo
+
+
+:::demo
+
+tooltip/demo
+
+:::
+
 ## Basic usage
 
 Tooltip has 9 placements.

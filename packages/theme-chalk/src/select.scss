@@ -34,11 +34,11 @@
     gap: map.get($select-item-gap, 'default');
     min-height: map.get($input-height, 'default');
     line-height: map.get($select-item-height, 'default');
-    border-radius: getCssVar('border-radius-custom');
+    border-radius: getCssVar('border-radius-light');
     background-color: getCssVar('fill-color', 'blank');
     transition: getCssVar('transition', 'duration');
     transform: translate3d(0, 0, 0);
-    border: 1px solid getCssVar('border-color-custom');
+    border: 1px solid getCssVar('border-color-light');
     &.pre-star-item:before {
       position: absolute;
       left: 4px;

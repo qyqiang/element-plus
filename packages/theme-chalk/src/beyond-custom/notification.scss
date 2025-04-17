@@ -2,11 +2,11 @@
 
 .el-notification--success--wrapper {
   background-color: var(--color-lime-lime-50);
-  border-color: var(--color-lime-lime-400);
+  border-color: var(--color-lime-lime-300);
 }
 .el-notification--warning--wrapper {
   background-color: var(--color-yellow-yellow-100);
-  border-color: var(--color-yellow-yellow-400);
+  border-color: var(--color-yellow-yellow-300);
 }
 .el-notification--info--wrapper {
   background-color: var(--color-gray-gray-50);
@@ -14,7 +14,7 @@
 }
 .el-notification--error--wrapper {
   background-color: var(--color-red-red-100);
-  border-color: var(--color-red-red-400);
+  border-color: var(--color-red-red-300);
 }
 .el-notification {
   .el-notification__icon {

@@ -34,10 +34,10 @@
 
   @include when(light) {
     background: getCssVar('bg-color', 'overlay');
-    border: 1px solid getCssVar('border-color', 'light');
+    border: 1px solid getCssVar('border-color', 'custom');
 
     > #{$arrow-selector}::before {
-      border: 1px solid getCssVar('border-color', 'light');
+      border: 1px solid getCssVar('border-color', 'custom');
       background: getCssVar('bg-color', 'overlay');
       right: 0;
     }

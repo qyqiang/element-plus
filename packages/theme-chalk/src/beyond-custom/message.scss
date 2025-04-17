@@ -2,26 +2,30 @@
 
 .el-message {
   --el-message-text-color: var(--color-text-text-secondary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  box-shadow: var(--shadow-400);
+
+  &.is-alert {
+    border-radius: 0;
+  }
 
   .el-message__icon {
     margin-right: 8px;
-    margin-top: 1px;
   }
+
   .el-message__closeBtn {
     margin-top: var(--space-050);
   }
+
   .el-message__labelBtn {
-    margin-top: -5px;
-    margin-left: var(--space-100);
+    margin-left: 40px;
     min-width: unset;
+    color: #0e171f;
     @include button-custom-hover-active;
   }
-  &:has(.el-message__labelBtn) {
-    padding-bottom: 8px;
-    .el-message__content {
-      padding-bottom: 5px;
-    }
-  }
+
   .el-message__title {
     color: var(--color-gray-gray-990);
     font-size: var(--p-font-size-550);
@@ -29,26 +33,31 @@
     white-space: nowrap;
     margin-right: var(--space-150);
   }
+
   &.el-message--error {
     --el-message-bg-color: var(--color-red-red-100);
-    --el-message-border-color: var(--color-red-red-800);
+    --el-message-border-color: var(--color-red-red-300);
+
     .el-message-icon--error {
       svg path {
         fill: var(--color-red-red-600);
       }
     }
   }
+
   &.el-message--info {
     --el-message-bg-color: var(--color-blue-blue-100);
-    --el-message-border-color: var(--color-text-text-placeholder);
+    --el-message-border-color: var(--color-gray-gray-300);
   }
+
   &.el-message--success {
     --el-message-bg-color: var(--color-lime-lime-50);
-    --el-message-border-color: var(--color-green-green-700);
+    --el-message-border-color: var(--color-lime-lime-300);
   }
+
   &.el-message--warning {
     --el-message-bg-color: var(--color-yellow-yellow-100);
-    --el-message-border-color: var(--color-yellow-yellow-400);
+    --el-message-border-color: var(--color-yellow-yellow-300);
   }
 
   &.is-dark {
@@ -57,6 +66,7 @@
     .el-message__content {
       color: var(--white);
     }
+
     .el-icon,
     .el-message__closeBtn {
       svg {
@@ -70,25 +80,31 @@
       --el-message-bg-color: var(--color-red-red-600);
       --el-message-border-color: var(--color-red-red-800);
     }
+
     &.el-message--info {
       --el-message-bg-color: var(--color-cloudy-gray-cloudy-gray-800);
       --el-message-border-color: var(--color-gray-gray-400);
     }
+
     &.el-message--success {
       --el-message-bg-color: var(--color-lime-lime-600);
       --el-message-border-color: var(--color-lime-lime-600);
     }
+
     &.el-message--warning {
       --el-message-bg-color: var(--color-yellow-yellow-300);
       --el-message-border-color: var(--color-yellow-yellow-400);
+
       .el-message__title,
       .el-message__labelBtn,
       .el-message__content {
         color: var(--color-gray-gray-990);
       }
+
       .el-message__labelBtn {
         border-color: var(--color-gray-gray-990);
       }
+
       .el-message__closeBtn,
       .el-message-icon--warning {
         svg path {

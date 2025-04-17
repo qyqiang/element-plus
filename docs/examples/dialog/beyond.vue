@@ -29,7 +29,7 @@
 
     <template #footer>
       <div class="dialog-footer">
-        <el-button @click="centerDialogVisible = false">Cancel</el-button>
+        <el-button plain @click="centerDialogVisible = false">Cancel</el-button>
         <el-button type="primary" @click="centerDialogVisible = false">
           Confirm
         </el-button>

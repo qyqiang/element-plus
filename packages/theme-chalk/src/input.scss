@@ -76,7 +76,7 @@
     background-image: none;
     -webkit-appearance: none;
     background-clip: padding-box;
-    border: 1px solid getCssVar('border-color-custom');
+    border: 1px solid getCssVar('border-color-light');
     border-radius: getCssVarWithDefault(
         'input-border-radius',
         map.get($input, 'border-radius')
@@ -198,7 +198,7 @@
     cursor: text;
     transition: getCssVar('transition-box-shadow');
     transform: translate3d(0, 0, 0);
-    border: 1px solid getCssVar('border-color-custom');
+    border: 1px solid getCssVar('border-color-light');
     &.pre-star-item:before {
       position: absolute;
       left: 6px;

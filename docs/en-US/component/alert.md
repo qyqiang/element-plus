@@ -6,6 +6,16 @@ lang: en-US
 # Alert
 
 Displays important alert messages.
+## Demo
+
+
+:::demo
+
+alert/demo
+
+:::
+
+
 
 ## Basic Usage
 
