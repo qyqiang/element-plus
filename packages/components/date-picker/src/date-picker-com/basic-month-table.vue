@@ -70,6 +70,7 @@ const tableRows = ref<MonthCell[][]>([
   [] as MonthCell[],
   [] as MonthCell[],
   [] as MonthCell[],
+  [] as MonthCell[],
 ])
 const lastRow = ref<number>()
 const lastColumn = ref<number>()
@@ -78,9 +79,9 @@ const rows = computed<MonthCell[][]>(() => {
 
   const now = dayjs().locale(lang.value).startOf('month')
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const row = rows[i]
-    for (let j = 0; j < 4; j++) {
+    for (let j = 0; j < 3; j++) {
       const cell = (row[j] ||= {
         row: i,
         column: j,
@@ -94,7 +95,7 @@ const rows = computed<MonthCell[][]>(() => {
 
       cell.type = 'normal'
 
-      const index = i * 4 + j
+      const index = i * 3 + j
       const calTime = props.date.startOf('year').month(index)
 
       const calEndDate =
@@ -217,7 +218,7 @@ const handleMonthTableClick = (event: MouseEvent | KeyboardEvent) => {
   if (hasClass(target, 'disabled')) return
   const column = target.cellIndex
   const row = (target.parentNode as HTMLTableRowElement).rowIndex
-  const month = row * 4 + column
+  const month = row * 3 + column
   const newDate = props.date.startOf('year').month(month)
   if (props.selectionMode === 'months') {
     if (event.type === 'keydown') {

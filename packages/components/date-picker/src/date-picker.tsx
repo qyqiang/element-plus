@@ -19,7 +19,7 @@ import {
 } from '@element-plus/components/time-picker'
 import { ROOT_PICKER_INJECTION_KEY } from './constants'
 
-import { SelectType, datePickerProps } from './props/date-picker'
+import { SelectTypeKey, datePickerProps } from './props/date-picker'
 import { getPanel } from './panel-utils'
 import type { DatePickerExpose } from './instance'
 
@@ -45,8 +45,9 @@ export default defineComponent({
       slots,
       pickerNs: ns,
     })
-
-    const selectType = ref<SelectType | undefined>(props.typeList?.[0])
+    const selectType = ref<SelectTypeKey | undefined>(
+      props.typeList.length ? props.typeList[0].key : undefined
+    )
 
     const handleRadioChange = (value: any) => {
       selectType.value = value
@@ -105,12 +106,12 @@ export default defineComponent({
                     onChange={handleRadioChange}
                     size="small"
                   >
-                    {props.typeList.map((type) => (
+                    {props.typeList.map((item) => (
                       <ElRadioButton
-                        key={type}
-                        value={type}
-                        label={type}
-                        class={{ 'is-active': selectType.value === type }}
+                        key={item.key}
+                        value={item.key}
+                        label={item.label}
+                        class={{ 'is-active': selectType.value === item.key }}
                       />
                     ))}
                   </ElRadioGroup>

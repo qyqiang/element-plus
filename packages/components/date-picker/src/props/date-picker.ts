@@ -4,7 +4,8 @@ import { buildProps, definePropType } from '@element-plus/utils'
 import type { ExtractPropTypes } from 'vue'
 import type { IDatePickerType } from '../date-picker.type'
 
-export type SelectType = 'date' | 'month' | 'year'
+export type SelectTypeKey = 'date' | 'month' | 'year'
+export type SelectType = { key: SelectTypeKey; label: string }
 
 export const datePickerProps = buildProps({
   ...timePickerDefaultProps,

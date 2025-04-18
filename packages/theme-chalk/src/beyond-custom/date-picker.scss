@@ -2,58 +2,87 @@
   &.el-popper.is-light {
     box-shadow: var(--shadow-300);
   }
-  .el-radio-group {
-    display: flex;
-    .el-radio-button {
-      flex: 1;
-    }
-    .el-radio-button__inner {
-      width: 100%;
+
+  .el-radio-group + .el-picker-panel {
+    border-top: 1px solid #c1ccd6;
+    padding-top: 10px;
+  }
+
+  .el-picker-panel {
+    border-radius: 0;
+    font-family: var(--body-font);
+
+    .el-date-picker__header {
+      height: 48px;
+      margin-bottom: 8px;
     }
   }
+
+  .el-radio-group {
+    display: flex;
+    margin: 12px 0;
+    height: 24px;
+
+    .el-radio-button {
+      flex: 1;
+
+      &.is-active {
+        .el-radio-button__inner {
+          background-color: var(--color-gray-gray-100);
+          color: #0e171f;
+          box-shadow: none;
+          border-color: #c1ccd6;
+        }
+      }
+    }
+
+    .el-radio-button__inner {
+      width: 100%;
+      border-color: #c1ccd6;
+      font-size: 12px;
+      font-weight: 600;
+      font-family: var(--p-font-family-title-SemiBold);
+    }
+  }
+
   &:has(.has-sidebar) {
     .el-radio-group {
-      margin-left: 122px;
+      margin-left: 126px;
     }
+
     .el-date-picker__header {
       padding-left: 8px;
-      .el-date-picker__header-label ~ .el-date-picker__header-label {
-        transform: translateX(-55px);
-      }
     }
   }
 
   .el-date-picker__header {
     display: flex;
     justify-content: space-between;
-    .el-date-picker__header-label {
-      order: 1;
-      margin-right: auto;
-      padding-top: 6px;
-    }
-    .el-date-picker__header-label ~ .el-date-picker__header-label {
-      transform: translateX(-35px);
-    }
-    .el-date-picker__custom-now-btn {
-      order: 2;
-      margin-top: -1px;
-      &:hover {
-        svg {
-          path {
-            fill: var(--color-orange-orange-600);
-          }
-        }
-      }
-    }
-    .el-date-picker__prev-btn {
-      order: 3;
-    }
-    .el-date-picker__next-btn {
-      order: 4;
+    align-items: center;
+
+    & > div {
+      display: flex;
+      align-items: center;
     }
 
-    .el-picker-panel__icon-btn {
-      padding-top: 3px;
+    .el-date-picker__custom-now-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .el-date-picker__prev-btn {
+      display: flex;
+      align-items: center;
+    }
+
+    .el-date-picker__next-btn {
+      display: flex;
+      align-items: center;
+    }
+
+    .el-button {
+      margin-left: 0 !important;
     }
   }
 }

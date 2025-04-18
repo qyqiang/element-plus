@@ -67,17 +67,17 @@ const startYear = computed(() => {
   return Math.floor(props.date.year() / 10) * 10
 })
 
-const tableRows = ref<YearCell[][]>([[], [], []])
+const tableRows = ref<YearCell[][]>([[], [], [], []])
 const lastRow = ref<number>()
 const lastColumn = ref<number>()
 const rows = computed(() => {
   const rows = tableRows.value
   const now = dayjs().locale(lang.value).startOf('year')
 
-  for (let i = 0; i < 3; i++) {
+  for (let i = 0; i < 4; i++) {
     const row = rows[i]
-    for (let j = 0; j < 4; j++) {
-      if (i * 4 + j >= 10) {
+    for (let j = 0; j < 3; j++) {
+      if (i * 3 + j >= 10) {
         break
       }
       let cell = row[j]
@@ -94,7 +94,7 @@ const rows = computed(() => {
         }
       }
       cell.type = 'normal'
-      const index = i * 4 + j + startYear.value
+      const index = i * 3 + j + startYear.value
       const calTime = dayjs().year(index)
 
       const calEndDate =
@@ -183,7 +183,7 @@ const handleYearTableClick = (event: MouseEvent | KeyboardEvent) => {
 
   const column = target.cellIndex
   const row = (target.parentNode as HTMLTableRowElement).rowIndex
-  const selectedYear = row * 4 + column + startYear.value
+  const selectedYear = row * 3 + column + startYear.value
   const newDate = dayjs().year(selectedYear)
   if (props.selectionMode === 'range') {
     if (!props.rangeState.selecting) {

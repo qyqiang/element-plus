@@ -26,7 +26,11 @@ import { ref } from 'vue'
 const dateRef = ref()
 const value1 = ref('')
 const value2 = ref('')
-const typeList = ['date', 'month', 'year']
+const typeList = [
+  { key: 'date', label: 'Day' },
+  { key: 'month', label: 'Month' },
+  { key: 'year', label: 'Year' },
+]
 const shortcuts = [
   {
     text: 'Today',
