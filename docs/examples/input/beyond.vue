@@ -7,18 +7,54 @@
       style="width: 240px"
       placeholder="Please Input"
       :prefix-icon="Search"
+      clearable
     />
     <el-form-item style="width: 240px">
       <el-input
         v-model="input5"
+        clearable
         placeholder="Please input"
         :prefix-icon="Search"
         pre-star
-      />
+      >
+        <template #suffix>
+          <el-icon>
+            <warning-filled />
+          </el-icon>
+        </template>
+      </el-input>
     </el-form-item>
     <el-form-item style="width: 240px" error="Input is required">
-      <el-input placeholder="Please input" autocomplete="off" />
+      <el-input
+        v-model="input5"
+        clearable
+        placeholder="Please input"
+        :prefix-icon="Search"
+        pre-star
+      >
+        <template #suffix>
+          <el-icon>
+            <warning-filled />
+          </el-icon>
+        </template>
+      </el-input>
     </el-form-item>
+    <el-form-item style="width: 240px" error="Input is required">
+      <el-input
+        v-model="input5"
+        placeholder="Please input"
+        autocomplete="off"
+        clearable
+      />
+    </el-form-item>
+    <el-divider />
+    <h2>Input Tag</h2>
+    <el-input-tag
+      v-model="inputTag"
+      placeholder="Please input tag"
+      aria-label="Please click the Enter key after input"
+    />
+    <el-divider />
     <el-input
       v-model="textarea1"
       style="width: 240px"
@@ -50,7 +86,9 @@
       placeholder="Please input"
     >
       <template #textareaPrefix>
-        <el-icon><Search /></el-icon>
+        <el-icon>
+          <Search />
+        </el-icon>
       </template>
       <template #textareaSuffix>
         <el-tooltip
@@ -59,7 +97,9 @@
           placement="top"
           :offset="4"
         >
-          <el-icon><WarningFilled /></el-icon>
+          <el-icon>
+            <WarningFilled />
+          </el-icon>
         </el-tooltip>
       </template>
     </el-input>
@@ -94,21 +134,18 @@ import {
 } from '@element-plus/icons-vue'
 
 const input = ref('')
-const input2 = ref('')
-const input3 = ref('')
-const input4 = ref('')
 const input5 = ref('')
-const input6 = ref('')
-const input7 = ref('')
 const textarea1 = ref('Hello')
 const textarea2 = ref()
 const textarea3 = ref('Hello')
+const inputTag = ref<string[]>(['testValue'])
 </script>
 
 <style scoped lang="scss">
 .el-input {
   margin: 0 20px 20px 0;
 }
+
 .el-form-item__content {
   .el-input {
     margin: auto;

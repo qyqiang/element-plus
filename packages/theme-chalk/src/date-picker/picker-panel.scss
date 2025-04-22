@@ -25,7 +25,7 @@
   @include e(content) {
     position: relative;
     .date-picker-table-header {
-      border-top: 1px solid #c1ccd6;
+      border-top: 1px solid var(--color-gray-gray-100);
 
       th {
         padding: 8px 0;
@@ -57,9 +57,10 @@
     text-align: left;
     outline: none;
     cursor: pointer;
+    padding-left: 16px;
 
     &:hover {
-      color: getCssVar('datepicker-hover-text-color');
+      background-color: var(--color-gray-gray-100);
     }
 
     &.active {
@@ -109,9 +110,10 @@
 .#{$namespace}-picker-panel__sidebar {
   position: absolute;
   top: 0;
+  left: 1px;
   bottom: 0;
   width: 110px;
-  border-right: 1px solid getCssVar('datepicker-inner-border-color');
+  border-right: 1px solid var(--color-gray-gray-100);
   box-sizing: border-box;
   padding-top: 6px;
   background-color: getCssVar('bg-color', 'overlay');

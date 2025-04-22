@@ -1,9 +1,19 @@
 @use '../mixins/mixins' as *;
+
 .el-input {
   --el-border-color-custom: var(--color-gray-gray-300);
+
+  &:not(.el-input--large,.el-input--small) {
+    .el-input__suffix {
+      padding-right: 8px;
+    }
+  }
+
+
   .el-input__inner {
     color: var(--color-gray-gray-990);
   }
+
   .el-input__prefix-inner,
   .el-input__suffix-inner {
     color: var(--color-gray-gray-800);
@@ -11,6 +21,7 @@
 
   &.is-disabled {
     border-color: var(--color-gray-gray-100);
+
     .el-input__wrapper {
       box-shadow: none;
       border-color: var(--color-gray-gray-100);
@@ -20,16 +31,20 @@
 
 .el-textarea {
   --el-border-color-custom: var(--color-gray-gray-300);
+
   &.is-disabled {
     border-color: var(--color-gray-gray-100);
+
     .el-textarea__inner {
       box-shadow: none;
       border-color: var(--color-gray-gray-100);
     }
+
     .float-label {
       background-color: transparent;
     }
   }
+
   .float-label.has-value {
     @include float-label-value
   }
@@ -47,14 +62,17 @@
     .el-textarea__inner {
       padding-left: 32px;
     }
+
     .textarea-prefix {
       position: absolute;
       left: 12px;
       top: 10px;
     }
+
     .float-label {
       left: 26px;
     }
+
     .el-textarea__inner {
       &.is-focus {
         ~ .float-label {
@@ -62,15 +80,24 @@
         }
       }
     }
+
     .float-label.has-value {
       transform: translate(-20px, -16px);
     }
   }
+
+  .error-icon {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+  }
+
   // textarea-suffix
   &:has(.textarea-suffix) {
     .el-textarea__inner {
       padding-right: 23px;
     }
+
     .textarea-suffix {
       position: absolute;
       right: 8px;

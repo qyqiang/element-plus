@@ -59,7 +59,7 @@
 
     @include when(left) {
       padding-right: 16px;
-      border-right: 1px solid getCssVar('datepicker-inner-border-color');
+      border-right: 1px solid var(--color-gray-gray-100)
     }
     @include when(right) {
       padding-left: 16px;

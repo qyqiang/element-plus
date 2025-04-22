@@ -29,10 +29,10 @@
 
 
         &:hover {
-          background-color: var(--color-gray-gray-100) !important;
+          background-color: var(--color-gray-gray-100);
 
           .el-date-table-cell__text {
-            color: var(--el-datepicker-text-color) !important;
+            color: var(--el-datepicker-text-color);
           }
         }
       }
@@ -55,15 +55,15 @@
 
       &.disabled
       .#{$namespace}-date-table-cell {
-        background-color: getCssVar('fill-color', 'light');
+        border-color: var(--color-gray-gray-200);
+
+        &:hover {
+          background-color: transparent;
+        }
 
         .#{$namespace}-date-table-cell__text {
           cursor: not-allowed;
           color: getCssVar('text-color', 'placeholder');
-
-          &:hover {
-            color: getCssVar('text-color', 'placeholder');
-          }
         }
       }
 

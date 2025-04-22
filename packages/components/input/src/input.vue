@@ -60,18 +60,9 @@
           :class="{ 'prefix-label': $slots.prefix || prefixIcon }"
           >{{ placeholder }}</span
         >
-
         <!-- suffix slot -->
         <span v-if="suffixVisible" :class="nsInput.e('suffix')">
           <span :class="nsInput.e('suffix-inner')">
-            <template
-              v-if="!showClear || !showPwdVisible || !isWordLimitVisible"
-            >
-              <slot name="suffix" />
-              <el-icon v-if="suffixIcon" :class="nsInput.e('icon')">
-                <component :is="suffixIcon" />
-              </el-icon>
-            </template>
             <el-icon
               v-if="showClear"
               :class="[nsInput.e('icon'), nsInput.e('clear')]"
@@ -89,6 +80,18 @@
                 />
               </svg>
             </el-icon>
+            <template
+              v-if="
+                (!showClear || !showPwdVisible || !isWordLimitVisible) &&
+                !validateState
+              "
+            >
+              <slot name="suffix" />
+              <el-icon v-if="suffixIcon" :class="nsInput.e('icon')">
+                <component :is="suffixIcon" />
+              </el-icon>
+            </template>
+
             <el-icon
               v-if="showPwdVisible"
               :class="[nsInput.e('icon'), nsInput.e('password')]"
@@ -139,8 +142,31 @@
             />
           </span>
         </span>
+        <el-tooltip
+          v-if="validateState"
+          :content="validateMsg"
+          effect="light"
+          placement="top"
+          :offset="4"
+        >
+          <el-icon class="error-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+              fill="none"
+            >
+              <path
+                fill-rule="evenodd"
+                clip-rule="evenodd"
+                d="M12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6ZM6.5 2.5V7H5.5V2.5H6.5ZM6.5 9V8H5.5V9H6.5Z"
+                fill="#D91F11"
+              />
+            </svg>
+          </el-icon>
+        </el-tooltip>
       </div>
-
       <!-- append slot -->
       <div v-if="$slots.append" :class="nsInput.be('group', 'append')">
         <slot name="append" />
@@ -175,12 +201,37 @@
         @change="handleChange"
         @keydown="handleKeydown"
       />
+
       <span v-if="$slots.textareaPrefix" class="textarea-prefix">
         <slot name="textareaPrefix" />
       </span>
       <span v-if="$slots.textareaSuffix" class="textarea-suffix">
         <slot name="textareaSuffix" />
       </span>
+      <el-tooltip
+        v-if="validateState"
+        :content="validateMsg"
+        effect="light"
+        placement="top"
+        :offset="4"
+      >
+        <el-icon class="error-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+            fill="none"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6ZM6.5 2.5V7H5.5V2.5H6.5ZM6.5 9V8H5.5V9H6.5Z"
+              fill="#D91F11"
+            />
+          </svg>
+        </el-icon>
+      </el-tooltip>
       <span
         v-if="floatLabel"
         class="float-label"
@@ -214,6 +265,7 @@ import {
 } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { isNil } from 'lodash-unified'
+import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
 import { ElIcon } from '@element-plus/components/icon'
 import {
   useFormDisabled,
@@ -284,7 +336,6 @@ const inputSize = useFormSize()
 const inputDisabled = useFormDisabled()
 const nsInput = useNamespace('input')
 const nsTextarea = useNamespace('textarea')
-
 const input = shallowRef<HTMLInputElement>()
 const textarea = shallowRef<HTMLTextAreaElement>()
 
@@ -312,6 +363,7 @@ const { wrapperRef, isFocused, handleFocus, handleBlur } = useFocusController(
 
 const needStatusIcon = computed(() => elForm?.statusIcon ?? false)
 const validateState = computed(() => elFormItem?.validateState || '')
+const validateMsg = computed(() => elFormItem?.error || '')
 const validateIcon = computed(
   () => validateState.value && ValidateComponentsMap[validateState.value]
 )
