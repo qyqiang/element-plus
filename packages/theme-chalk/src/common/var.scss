@@ -1053,7 +1053,7 @@ $pagination: map.merge(
     (
       'font-size': 12px,
       'bg-color': getCssVar('fill-color', 'blank'),
-      'border-radius': 2px,
+      'border-radius': 8px,
       'button-color': var(--color-icon-primary),
       'text-color': var(--color-text-text-primary),
       'button-width': 32px,

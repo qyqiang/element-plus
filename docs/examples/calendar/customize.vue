@@ -9,7 +9,7 @@
   </el-calendar>
 </template>
 
-<style>
+<style scoped>
 .is-selected {
   color: #1989fa;
 }

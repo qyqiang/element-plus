@@ -23,6 +23,9 @@
 }
 
 .pagination-select-wrap.el-popper.is-light {
-  padding: 0;
   width: 120px;
+
+  .el-select-dropdown {
+    width: 100%;
+  }
 }
