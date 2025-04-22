@@ -10,6 +10,11 @@
       width: 38px;
     }
 
+    &.is-closable {
+      display: flex;
+      justify-content: space-between;
+    }
+
     .tab-count {
       margin-left: 6px;
       border-radius: 4px;

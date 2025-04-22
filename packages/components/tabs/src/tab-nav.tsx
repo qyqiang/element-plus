@@ -22,7 +22,7 @@ import {
 } from '@element-plus/utils'
 import { EVENT_CODE } from '@element-plus/constants'
 import { ElIcon } from '@element-plus/components/icon'
-import { ArrowLeft, ArrowRight, Close } from '@element-plus/icons-vue'
+import { ArrowLeft, ArrowRight } from '@element-plus/icons-vue'
 import { useNamespace } from '@element-plus/hooks'
 import TabBar from './tab-bar.vue'
 import { tabsRootContextKey } from './constants'
@@ -310,7 +310,18 @@ const TabNav = defineComponent({
             // @ts-ignore
             onClick={(ev: MouseEvent) => emit('tabRemove', pane, ev)}
           >
-            <Close />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="14"
+              height="14"
+              viewBox="0 0 14 14"
+              fill="none"
+            >
+              <path
+                d="M10.9124 3.91233L10.0875 3.08749L6.99994 6.17508L3.91236 3.08749L3.08752 3.91233L6.17511 6.99991L3.08752 10.0875L3.91236 10.9123L6.99994 7.82474L10.0875 10.9123L10.9124 10.0875L7.82477 6.99991L10.9124 3.91233Z"
+                fill="#2A3F4D"
+              />
+            </svg>
           </ElIcon>
         ) : null
 
