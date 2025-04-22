@@ -97,7 +97,7 @@
   @include e(outer) {
     height: 6px;
     border-radius: 100px;
-    background-color: getCssVar('border-color-lighter');
+    background-color: var(--color-gray-gray-100);
     overflow: hidden;
     position: relative;
     vertical-align: middle;

@@ -6,7 +6,13 @@ lang: en-US
 # Progress
 
 Progress is used to show the progress of current operation, and inform the user the current status.
+## Demo
 
+:::demo
+
+progress/demo
+
+:::
 ## Linear progress bar
 
 :::demo Use `percentage` attribute to set the percentage. It's **required** and must be between `0-100`. You can custom text format by setting `format`.
