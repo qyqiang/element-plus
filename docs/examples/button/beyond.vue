@@ -89,8 +89,8 @@
     <el-button type="filled" disabled>
       <el-checkbox disabled label="Label" />
     </el-button>
-    <el-button type="filled" :icon="Delete" disabled />
-    <el-button type="filled" :icon="Delete" />
+    <el-button type="filled" :icon="Delete" disabled class="icon-button" />
+    <el-button type="filled" :icon="Delete" class="icon-button" />
     <el-divider />
   </div>
 
@@ -120,8 +120,8 @@
     <el-button type="text" disabled>
       <el-checkbox disabled label="Label" />
     </el-button>
-    <el-button type="text" :icon="Delete" disabled />
-    <el-button type="text" :icon="Delete" />
+    <el-button type="text" :icon="Delete" disabled class="icon-button" />
+    <el-button type="text" :icon="Delete" class="icon-button" />
     <el-divider />
   </div>
 
