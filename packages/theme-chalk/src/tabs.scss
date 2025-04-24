@@ -148,7 +148,7 @@
     }
 
     & .is-icon-close {
-      border-radius: 50%;
+      border-radius: 4px;
       text-align: center;
       transition: all getCssVar('transition-duration') getCssVar('transition-function-ease-in-out-bezier');
       margin-left: 5px;
@@ -159,8 +159,7 @@
       }
 
       &:hover {
-        background-color: getCssVar('text-color', 'placeholder');
-        color: $color-white;
+        background-color: var(--color-gray-gray-300);
       }
     }
 

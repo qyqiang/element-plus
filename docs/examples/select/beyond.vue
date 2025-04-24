@@ -51,7 +51,7 @@
       />
       <template #footer>
         <div class="flex justify-between">
-          <el-button type="text">Reset</el-button>
+          <el-button type="text" style="margin-left: 0">Reset</el-button>
           <div>
             <el-button type="primary">Cancel</el-button>
             <el-button>Reset</el-button>
@@ -127,7 +127,9 @@
       />
       <template #info>
         <el-tooltip content="info xx" placement="top" effect="light">
-          <el-icon><InfoFilled /></el-icon>
+          <el-icon>
+            <InfoFilled />
+          </el-icon>
         </el-tooltip>
       </template>
     </el-select>

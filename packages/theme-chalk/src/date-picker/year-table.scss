@@ -29,17 +29,22 @@
         justify-content: center;
         align-items: center;
         &:hover {
-          background-color: var(--color-gray-gray-50);
+          background-color: var(--color-orange-orange-600);
+          border-color: transparent;
 
           .el-date-table-cell__text {
-            color: var(--el-datepicker-text-color);
+            color: #fff !important;
           }
         }
       }
 
       &.today {
         .#{$namespace}-date-table-cell {
-          background-color: var(--color-gray-gray-100);
+          border: 1px solid var(--color-orange-orange-700);
+
+          .#{$namespace}-date-table-cell__text {
+            color: var(--color-orange-orange-700);
+          }
         }
 
         &.start-date .#{$namespace}-date-table-cell__text,
@@ -50,14 +55,12 @@
 
       &.disabled
       .#{$namespace}-date-table-cell {
-        border-color: var(--color-gray-gray-200);
+        border-color: var(--color-gray-gray-100);
+        background-color: var(--color-gray-gray-100);
 
         .#{$namespace}-date-table-cell__text {
           cursor: not-allowed;
-          color: var(--color-gray-gray-300);
-        }
-        &:hover{
-          background-color: transparent;
+          color: #c1ccd6 !important;
         }
       }
 
@@ -98,7 +101,12 @@
       }
 
       &.current:not(.disabled) .#{$namespace}-date-table-cell {
-        background-color: var(--color-gray-gray-100);
+        background-color: var(--color-orange-orange-600);
+        border-color: transparent;
+
+        .el-date-table-cell__text {
+          color: #fff;
+        }
       }
 
       &:focus-visible {
