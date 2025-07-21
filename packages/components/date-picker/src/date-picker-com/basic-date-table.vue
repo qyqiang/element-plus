@@ -12,9 +12,7 @@
   >
     <tbody ref="tbodyRef">
       <tr class="date-picker-table-header">
-        <th v-if="showWeekNumber" scope="col" :class="weekHeaderClass">
-          {{ weekLabel }}
-        </th>
+        <th v-if="showWeekNumber" scope="col" :class="weekHeaderClass" />
         <th
           v-for="(week, key) in WEEKS"
           :key="key"

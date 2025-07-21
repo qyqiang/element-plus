@@ -265,7 +265,8 @@ export default defineComponent({
                       h(
                         'span',
                         {
-                          onClick: ($event) => handleSortClick($event, column),
+                          onClick: ($event: any) =>
+                            handleSortClick($event, column),
                           // class: 'caret-wrapper',
                         },
                         [

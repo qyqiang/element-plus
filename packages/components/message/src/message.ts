@@ -47,6 +47,7 @@ export const messageDefaults = mutable({
   showClose: false,
   type: 'info',
   plain: false,
+  center: false,
   offset: 16,
   zIndex: 0,
   grouping: false,
