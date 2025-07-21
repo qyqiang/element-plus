@@ -163,19 +163,25 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, toRef, unref } from 'vue'
+import { computed, inject, ref, toRef, unref, watch } from 'vue'
 import dayjs from 'dayjs'
 import ElButton from '@element-plus/components/button/src/button.vue'
 import ElIcon from '@element-plus/components/icon'
 import { isArray } from '@element-plus/utils'
 import { useLocale } from '@element-plus/hooks'
-import { getDefaultValue, isValidRange } from '../utils'
+import { PICKER_BASE_INJECTION_KEY } from '@element-plus/components/time-picker'
+import {
+  correctlyParseUserInput,
+  getDefaultValue,
+  isValidRange,
+} from '../utils'
 import {
   panelMonthRangeEmits,
   panelMonthRangeProps,
 } from '../props/panel-month-range'
 import { useMonthRangeHeader } from '../composables/use-month-range-header'
 import { useRangePicker } from '../composables/use-range-picker'
+import { ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY } from '../constants'
 import MonthTable from './basic-month-table.vue'
 
 import type { Dayjs } from 'dayjs'
@@ -189,7 +195,10 @@ const emit = defineEmits(panelMonthRangeEmits)
 const unit = 'year'
 
 const { lang } = useLocale()
-const pickerBase = inject('EP_PICKER_BASE') as any
+const pickerBase = inject(PICKER_BASE_INJECTION_KEY) as any
+const isDefaultFormat = inject(
+  ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY
+) as any
 const { shortcuts, disabledDate } = pickerBase.props
 const format = toRef(pickerBase.props, 'format')
 const defaultValue = toRef(pickerBase.props, 'defaultValue')
@@ -207,6 +216,7 @@ const {
   handleRangeConfirm,
   handleShortcutClick,
   onSelect,
+  onReset,
 } = useRangePicker(props, {
   defaultValue,
   leftDate,
@@ -276,9 +286,12 @@ const formatToString = (value: Dayjs | Dayjs[]) => {
 }
 
 const parseUserInput = (value: Dayjs | Dayjs[]) => {
-  return isArray(value)
-    ? value.map((_) => dayjs(_, format.value).locale(lang.value))
-    : dayjs(value, format.value).locale(lang.value)
+  return correctlyParseUserInput(
+    value,
+    format.value,
+    lang.value,
+    isDefaultFormat
+  )
 }
 
 function onParsedValueChanged(
@@ -294,6 +307,16 @@ function onParsedValueChanged(
     rightDate.value = leftDate.value.add(1, unit)
   }
 }
+
+watch(
+  () => props.visible,
+  (visible) => {
+    if (!visible && rangeState.value.selecting) {
+      onReset(props.parsedValue)
+      onSelect(false)
+    }
+  }
+)
 
 emit('set-picker-option', ['isValidValue', isValidRange])
 emit('set-picker-option', ['formatToString', formatToString])

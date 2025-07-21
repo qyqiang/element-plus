@@ -156,5 +156,6 @@ defineExpose({
   visible,
   dialogContentRef,
   resetPosition,
+  handleClose,
 })
 </script>

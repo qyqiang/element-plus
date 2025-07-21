@@ -43,16 +43,17 @@
           </slot>
         </div>
         <el-icon v-if="showClose" :class="ns.e('closeBtn')" @click.stop="close">
-          <Close />
+          <component :is="closeIcon" />
         </el-icon>
       </div>
     </div>
   </transition>
 </template>
+
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { useEventListener, useTimeoutFn } from '@vueuse/core'
-import { CloseComponents, TypeComponentsMap } from '@element-plus/utils'
+import { TypeComponentsMap } from '@element-plus/utils'
 import { EVENT_CODE } from '@element-plus/constants'
 import ElButton from '@element-plus/components/button'
 import { ElIcon } from '@element-plus/components/icon'
@@ -70,8 +71,6 @@ defineEmits(notificationEmits)
 
 const { ns, zIndex } = useGlobalComponentSettings('notification')
 const { nextZIndex, currentZIndex } = zIndex
-
-const { Close } = CloseComponents
 
 const visible = ref(false)
 let timer: (() => void) | undefined = undefined

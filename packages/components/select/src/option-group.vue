@@ -11,11 +11,11 @@
 </template>
 
 <script lang="ts">
-// @ts-nocheck
 import {
   computed,
   defineComponent,
   getCurrentInstance,
+  isVNode,
   onMounted,
   provide,
   reactive,
@@ -24,9 +24,12 @@ import {
 } from 'vue'
 import { useMutationObserver } from '@vueuse/core'
 import ElDivider from '@element-plus/components/divider/src/divider.vue'
-import { ensureArray } from '@element-plus/utils'
+import { ensureArray, isArray } from '@element-plus/utils'
 import { useNamespace } from '@element-plus/hooks'
 import { selectGroupKey } from './token'
+
+import type { Component, VNode, VNodeArrayChildren } from 'vue'
+import type { OptionInternalInstance, OptionPublicInstance } from './type'
 
 export default defineComponent({
   name: 'ElOptionGroup',
@@ -45,9 +48,9 @@ export default defineComponent({
   },
   setup(props) {
     const ns = useNamespace('select')
-    const groupRef = ref(null)
-    const instance = getCurrentInstance()
-    const children = ref([])
+    const groupRef = ref<HTMLElement>()
+    const instance = getCurrentInstance()!
+    const children = ref<OptionPublicInstance[]>([])
 
     provide(
       selectGroupKey,
@@ -60,18 +63,22 @@ export default defineComponent({
       children.value.some((option) => option.visible === true)
     )
 
-    const isOption = (node) =>
-      node.type?.name === 'ElOption' && !!node.component?.proxy
+    const isOption = (
+      node: VNode
+    ): node is VNode & { component: OptionInternalInstance } =>
+      (node.type as Component).name === 'ElOption' && !!node.component?.proxy
 
     // get all instances of options
-    const flattedChildren = (node) => {
-      const Nodes = ensureArray(node)
-      const children = []
+    const flattedChildren = (node: VNode | VNodeArrayChildren) => {
+      const nodes = ensureArray(node) as VNode[] | VNodeArrayChildren
+      const children: OptionPublicInstance[] = []
 
-      Nodes.forEach((child) => {
+      nodes.forEach((child) => {
+        if (!isVNode(child)) return
+
         if (isOption(child)) {
           children.push(child.component.proxy)
-        } else if (child.children?.length) {
+        } else if (isArray(child.children) && child.children.length) {
           children.push(...flattedChildren(child.children))
         } else if (child.component?.subTree) {
           children.push(...flattedChildren(child.component.subTree))

@@ -56,8 +56,8 @@ import { computed } from 'vue'
 import ElIcon from '@element-plus/components/icon'
 import { useNamespace } from '@element-plus/hooks'
 import { useFormSize } from '@element-plus/components/form'
-
 import { tagEmits, tagProps } from './tag'
+
 import type { VNode } from 'vue'
 
 defineOptions({

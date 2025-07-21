@@ -15,12 +15,17 @@ import {
   DEFAULT_FORMATS_DATE,
   DEFAULT_FORMATS_DATEPICKER,
   type DateModelType,
+  PICKER_POPPER_OPTIONS_INJECTION_KEY,
   type SingleOrRange,
 } from '@element-plus/components/time-picker'
-import { ROOT_PICKER_INJECTION_KEY } from './constants'
-
+import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import {
+  ROOT_PICKER_INJECTION_KEY,
+  ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY,
+} from './constants'
 import { SelectTypeKey, datePickerProps } from './props/date-picker'
 import { getPanel } from './panel-utils'
+
 import type { DatePickerExpose } from './instance'
 
 dayjs.extend(localeData)
@@ -36,11 +41,17 @@ export default defineComponent({
   name: 'ElDatePicker',
   install: null,
   props: datePickerProps,
-  emits: ['update:modelValue'],
+  emits: [UPDATE_MODEL_EVENT],
   setup(props, { expose, emit, slots }) {
     const ns = useNamespace('picker-panel')
-
-    provide('ElPopperOptions', reactive(toRef(props, 'popperOptions')))
+    const isDefaultFormat = computed(() => {
+      return !props.format
+    })
+    provide(ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY, isDefaultFormat)
+    provide(
+      PICKER_POPPER_OPTIONS_INJECTION_KEY,
+      reactive(toRef(props, 'popperOptions'))
+    )
     provide(ROOT_PICKER_INJECTION_KEY, {
       slots,
       pickerNs: ns,
@@ -72,7 +83,7 @@ export default defineComponent({
     expose(refProps)
 
     const onModelValueUpdated = (val: SingleOrRange<DateModelType> | null) => {
-      emit('update:modelValue', val)
+      emit(UPDATE_MODEL_EVENT, val)
     }
 
     const componentType = computed(() => {

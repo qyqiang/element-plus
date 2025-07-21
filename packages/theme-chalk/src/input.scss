@@ -361,7 +361,6 @@
     .#{$namespace}-input__wrapper {
       background-color: map.get($input-disabled, 'fill');
       cursor: not-allowed;
-      pointer-events: none;
       @include mixed-input-border(map.get($input-disabled, 'border'));
     }
     .float-label {

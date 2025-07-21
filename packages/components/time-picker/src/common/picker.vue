@@ -38,7 +38,7 @@
           ref="inputRef"
           container-role="combobox"
           :model-value="(displayValue as string)"
-          :name="name"
+          :name="(name as string | undefined)"
           :size="pickerSize"
           :disabled="pickerDisabled"
           :placeholder="placeholder"
@@ -154,6 +154,7 @@
         :type="type"
         :default-value="defaultValue"
         :show-now="showNow"
+        :show-week-number="showWeekNumber"
         @pick="onPick"
         @select-range="setSelectionRange"
         @set-picker-option="onSetPickerOption"
@@ -164,6 +165,7 @@
     </template>
   </el-tooltip>
 </template>
+
 <script lang="ts" setup>
 import {
   computed,
@@ -189,13 +191,21 @@ import ElInput from '@element-plus/components/input'
 import ElIcon from '@element-plus/components/icon'
 import ElTooltip from '@element-plus/components/tooltip'
 import { NOOP, debugWarn, isArray } from '@element-plus/utils'
-import { EVENT_CODE } from '@element-plus/constants'
+import {
+  CHANGE_EVENT,
+  EVENT_CODE,
+  UPDATE_MODEL_EVENT,
+} from '@element-plus/constants'
 import { Calendar, Clock } from '@element-plus/icons-vue'
 import { dayOrDaysToDate, formatter, parseDate, valueEquals } from '../utils'
+import {
+  PICKER_BASE_INJECTION_KEY,
+  PICKER_POPPER_OPTIONS_INJECTION_KEY,
+} from '../constants'
 import { timePickerDefaultProps } from './props'
 import PickerRangeTrigger from './picker-range-trigger.vue'
-import type { InputInstance } from '@element-plus/components/input'
 
+import type { InputInstance } from '@element-plus/components/input'
 import type { Dayjs } from 'dayjs'
 import type { ComponentPublicInstance, Ref } from 'vue'
 import type { Options } from '@popperjs/core'
@@ -215,8 +225,8 @@ defineOptions({
 
 const props = defineProps(timePickerDefaultProps)
 const emit = defineEmits([
-  'update:modelValue',
-  'change',
+  UPDATE_MODEL_EVENT,
+  CHANGE_EVENT,
   'focus',
   'blur',
   'clear',
@@ -234,7 +244,10 @@ const nsInput = useNamespace('input')
 const nsRange = useNamespace('range')
 
 const { form, formItem } = useFormItem()
-const elPopperOptions = inject('ElPopperOptions', {} as Options)
+const elPopperOptions = inject(
+  PICKER_POPPER_OPTIONS_INJECTION_KEY,
+  {} as Options
+)
 const { valueOnClear } = useEmptyValues(props, null)
 
 const refPopper = ref<TooltipInstance>()
@@ -244,9 +257,14 @@ const pickerActualVisible = ref(false)
 const valueOnOpen = ref<TimePickerDefaultProps['modelValue'] | null>(null)
 let hasJustTabExitedInput = false
 
+const pickerDisabled = computed(() => {
+  return props.disabled || !!form?.disabled
+})
+
 const { isFocused, handleFocus, handleBlur } = useFocusController(inputRef, {
+  disabled: pickerDisabled,
   beforeFocus() {
-    return props.readonly || pickerDisabled.value
+    return props.readonly
   },
   afterFocus() {
     pickerVisible.value = true
@@ -302,7 +320,9 @@ const emitChange = (
 ) => {
   // determine user real change only
   if (isClear || !valueEquals(val, valueOnOpen.value)) {
-    emit('change', val)
+    emit(CHANGE_EVENT, val)
+    // Set the value of valueOnOpen when clearing to avoid triggering change events multiple times.
+    isClear && (valueOnOpen.value = val)
     props.validateEvent &&
       formItem?.validate('change').catch((err) => debugWarn(err))
   }
@@ -317,7 +337,7 @@ const emitInput = (input: SingleOrRange<DateModelType> | null) => {
     } else if (input) {
       formatted = formatter(input, props.valueFormat, lang.value)
     }
-    emit('update:modelValue', input ? formatted : input, lang.value)
+    emit(UPDATE_MODEL_EVENT, input ? formatted : input, lang.value)
   }
 }
 const emitKeydown = (e: KeyboardEvent) => {
@@ -380,10 +400,6 @@ const handleOpen = () => {
 const handleClose = () => {
   pickerVisible.value = false
 }
-
-const pickerDisabled = computed(() => {
-  return props.disabled || form?.disabled
-})
 
 const parsedValue = computed(() => {
   let dayOrDays: DayOrDays
@@ -551,7 +567,7 @@ const handleChange = () => {
   }
   if (userInput.value === '') {
     emitInput(valueOnClear.value)
-    emitChange(valueOnClear.value)
+    emitChange(valueOnClear.value, true)
     userInput.value = null
   }
 }
@@ -718,7 +734,7 @@ const blur = () => {
   inputRef.value?.blur()
 }
 
-provide('EP_PICKER_BASE', {
+provide(PICKER_BASE_INJECTION_KEY, {
   props,
 })
 

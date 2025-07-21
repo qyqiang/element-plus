@@ -6,8 +6,8 @@ lang: en-US
 # Tabs
 
 Divide data collections which are related yet belong to different types.
-## Demo
 
+## Demo
 
 :::demo
 
@@ -93,7 +93,7 @@ tabs/customized-trigger
 
 ## Tabs API
 
-### Attributes
+### Tabs Attributes
 
 | Name                  | Description                                                                                                                             | Type                                                                                             | Default    |
 | --------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ---------- |
@@ -106,7 +106,7 @@ tabs/customized-trigger
 | stretch               | whether width of tab automatically fits its container                                                                                   | ^[boolean]                                                                                       | false      |
 | before-leave          | hook function before switching tab. If `false` is returned or a `Promise` is returned and then is rejected, switching will be prevented | ^[Function]`(activeName: TabPaneName, oldActiveName: TabPaneName) => Awaitable<void \| boolean>` | () => true |
 
-### Events
+### Tabs Events
 
 | Name       | Description                                           | Parameters                                                                           |
 | ---------- | ----------------------------------------------------- | ------------------------------------------------------------------------------------ |
@@ -116,7 +116,7 @@ tabs/customized-trigger
 | tab-add    | triggers when tab-add button is clicked               | ^[Function]`() => void`                                                              |
 | edit       | triggers when tab-add button or tab-remove is clicked | ^[Function]`(paneName: TabPaneName \| undefined, action: 'remove' \| 'add') => void` |
 
-### Slots
+### Tabs Slots
 
 | Name                           | Description               | Subtags  |
 | ------------------------------ | ------------------------- | -------- |
@@ -124,22 +124,56 @@ tabs/customized-trigger
 | add-icon ^(2.5.4)              | customize add button icon | —        |
 | addIcon ^(2.4.0) ^(deprecated) | customize add button icon | —        |
 
+### Tabs Exposes
+
+| Name                | Description                | Type                                        |
+| ------------------- | -------------------------- | ------------------------------------------- |
+| currentName         | current active pane name   | ^[object]`Ref<TabPaneName>`                 |
+| tabNavRef ^(2.9.10) | tab-nav component instance | ^[object]`Ref<TabNavInstance \| undefined>` |
+
+## Tab-nav API
+
+### Tab-nav Exposes
+
+| Name                 | Description                 | Type                                        |
+| -------------------- | --------------------------- | ------------------------------------------- |
+| scrollToActiveTab    | scroll to the active tab    | ^[Function]`() => Promise<void>`            |
+| removeFocus          | remove focus status         | ^[Function]`() => boolean`                  |
+| tabListRef ^(2.9.10) | el_tabs\_\_nav html element | ^[object]`Ref<HTMLDivElement \| undefined>` |
+| tabBarRef ^(2.9.10)  | el_tabs\_\_nav bar instance | ^[object]`Ref<TabBarInstance \| undefined>` |
+
 ## Tab-pane API
 
-### Attributes
+### Tab-pane Attributes
 
 | Name         | Description                                                                                                                                                                         | Type                  | Default |
-|--------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------| ------- |
+| ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | ------- |
 | label        | title of the tab                                                                                                                                                                    | ^[string]             | ''      |
 | disabled     | whether Tab is disabled                                                                                                                                                             | ^[boolean]            | false   |
 | name         | identifier corresponding to the name of Tabs, representing the alias of the tab-pane, the default is ordinal number of the tab-pane in the sequence, e.g. the first tab-pane is '0' | ^[string] / ^[number] | —       |
 | closable     | whether Tab is closable                                                                                                                                                             | ^[boolean]            | false   |
-| tabPaneClass | whether Tab-Panel add class                                                                                                                                                         | ^[string]             | ''   |
+| tabPaneClass | whether Tab-Panel add class                                                                                                                                                         | ^[string]             | ''      |
 | lazy         | whether Tab is lazily rendered                                                                                                                                                      | ^[boolean]            | false   |
 
-### Slots
+### Tab-pane Slots
 
 | Name    | Description        |
 | ------- | ------------------ |
 | default | Tab-pane's content |
 | label   | Tab-pane's label   |
+
+## Type Declarations
+
+<details>
+  <summary>Show declarations</summary>
+
+```ts
+type TabBarInstance = InstanceType<typeof TabBar> & {
+  /** @description tab root html element */
+  ref: barRef
+  /** @description method to manually update tab bar style */
+  update
+}
+```
+
+</details>

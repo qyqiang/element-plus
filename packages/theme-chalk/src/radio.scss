@@ -125,6 +125,7 @@ $radio-font-size: map.merge(
         background: getCssVar('color-white');
 
         &::after {
+          background-color: getCssVar('color-white');
           transform: translate(-50%, -50%) scale(1);
         }
       }

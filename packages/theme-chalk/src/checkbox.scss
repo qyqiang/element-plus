@@ -164,7 +164,7 @@ $checkbox-bordered-input-width: map.merge(
         border-color: getCssVar('checkbox-checked-input-border-color');
 
         &::after {
-          transform: rotate(45deg) scaleY(1);
+          transform: translate(-45%, -60%) rotate(45deg) scaleY(1);
           border-color: getCssVar('checkbox-checked-icon-color');
         }
       }

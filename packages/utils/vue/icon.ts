@@ -6,7 +6,9 @@ import {
   WarningFilled,
 } from '@element-plus/icons-vue'
 import { definePropType } from './props'
+
 import type { Component } from 'vue'
+
 export const warning = `<svg
     xmlns="http://www.w3.org/2000/svg"
     width="12"
@@ -83,6 +85,7 @@ export const TypeComponents = {
 }
 
 export const TypeComponentsMap = {
+  primary: InfoFilled,
   success: check,
   warning,
   error,

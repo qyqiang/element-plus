@@ -169,7 +169,7 @@
               </slot>
             </el-button>
             <el-button
-              v-if="unlinkPanels"
+              v-if="unlinkPanels && leftCurrentView === 'date'"
               text
               :disabled="!enableMonthArrow"
               :class="[
@@ -189,6 +189,8 @@
             <div>{{ leftLabel }}</div>
           </div>
           <date-table
+            v-if="leftCurrentView === 'date'"
+            ref="leftCurrentViewRef"
             selection-mode="range"
             :date="leftDate"
             :min-date="minDate"
@@ -196,9 +198,28 @@
             :range-state="rangeState"
             :disabled-date="disabledDate"
             :cell-class-name="cellClassName"
+            :show-week-number="showWeekNumber"
             @changerange="handleChangeRange"
             @pick="handleRangePick"
             @select="onSelect"
+          />
+          <year-table
+            v-if="leftCurrentView === 'year'"
+            ref="leftCurrentViewRef"
+            selection-mode="year"
+            :date="leftDate"
+            :disabled-date="disabledDate"
+            :parsed-value="parsedValue"
+            @pick="handleLeftYearPick"
+          />
+          <month-table
+            v-if="leftCurrentView === 'month'"
+            ref="leftCurrentViewRef"
+            selection-mode="month"
+            :date="leftDate"
+            :parsed-value="parsedValue"
+            :disabled-date="disabledDate"
+            @pick="handleLeftMonthPick"
           />
         </div>
         <div :class="[ppNs.e('content'), drpNs.e('content')]" class="is-right">
@@ -219,7 +240,7 @@
               </slot>
             </el-button>
             <el-button
-              v-if="unlinkPanels"
+              v-if="unlinkPanels && rightCurrentView === 'date'"
               text
               :disabled="!enableMonthArrow"
               :class="[
@@ -286,6 +307,8 @@
             <div>{{ rightLabel }}</div>
           </div>
           <date-table
+            v-if="rightCurrentView === 'date'"
+            ref="rightCurrentViewRef"
             selection-mode="range"
             :date="rightDate"
             :min-date="minDate"
@@ -293,9 +316,28 @@
             :range-state="rangeState"
             :disabled-date="disabledDate"
             :cell-class-name="cellClassName"
+            :show-week-number="showWeekNumber"
             @changerange="handleChangeRange"
             @pick="handleRangePick"
             @select="onSelect"
+          />
+          <year-table
+            v-if="rightCurrentView === 'year'"
+            ref="rightCurrentViewRef"
+            selection-mode="year"
+            :date="rightDate"
+            :disabled-date="disabledDate"
+            :parsed-value="parsedValue"
+            @pick="handleRightYearPick"
+          />
+          <month-table
+            v-if="rightCurrentView === 'month'"
+            ref="rightCurrentViewRef"
+            selection-mode="month"
+            :date="rightDate"
+            :parsed-value="parsedValue"
+            :disabled-date="disabledDate"
+            @pick="handleRightMonthPick"
           />
         </div>
       </div>
@@ -332,6 +374,7 @@ import { useLocale } from '@element-plus/hooks'
 import ElButton from '@element-plus/components/button'
 import ElInput from '@element-plus/components/input'
 import {
+  PICKER_BASE_INJECTION_KEY,
   TimePickPanel,
   extractDateFormat,
   extractTimeFormat,
@@ -345,7 +388,15 @@ import {
 } from '@element-plus/icons-vue'
 import { panelDateRangeProps } from '../props/panel-date-range'
 import { useRangePicker } from '../composables/use-range-picker'
-import { getDefaultValue, isValidRange } from '../utils'
+import {
+  correctlyParseUserInput,
+  getDefaultValue,
+  isValidRange,
+} from '../utils'
+import { usePanelDateRange } from '../composables/use-panel-date-range'
+import { ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY } from '../constants'
+import YearTable from './basic-year-table.vue'
+import MonthTable from './basic-month-table.vue'
 import DateTable from './basic-date-table.vue'
 
 import type { Dayjs } from 'dayjs'
@@ -366,7 +417,10 @@ const emit = defineEmits([
 
 const unit = 'month'
 // FIXME: fix the type for ep picker
-const pickerBase = inject('EP_PICKER_BASE') as any
+const pickerBase = inject(PICKER_BASE_INJECTION_KEY) as any
+const isDefaultFormat = inject(
+  ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY
+) as any
 const { disabledDate, cellClassName, defaultTime, clearable } = pickerBase.props
 const format = toRef(pickerBase.props, 'format')
 const shortcuts = toRef(pickerBase.props, 'shortcuts')
@@ -381,7 +435,6 @@ const {
   rangeState,
   ppNs,
   drpNs,
-
   handleChangeRange,
   handleRangeConfirm,
   handleShortcutClick,
@@ -390,6 +443,7 @@ const {
   t,
 } = useRangePicker(props, {
   defaultValue,
+  defaultTime,
   leftDate,
   rightDate,
   unit,
@@ -428,21 +482,26 @@ const rightLabel = computed(() => {
   )} ${rightDate.value.year()} ${t('el.datepicker.year')}`
 })
 
-const leftYear = computed(() => {
-  return leftDate.value.year()
-})
-
-const leftMonth = computed(() => {
-  return leftDate.value.month()
-})
-
-const rightYear = computed(() => {
-  return rightDate.value.year()
-})
-
-const rightMonth = computed(() => {
-  return rightDate.value.month()
-})
+const {
+  leftCurrentView,
+  rightCurrentView,
+  leftCurrentViewRef,
+  rightCurrentViewRef,
+  leftYear,
+  rightYear,
+  leftMonth,
+  rightMonth,
+  // leftYearLabel,
+  // rightYearLabel,
+  // showLeftPicker,
+  // showRightPicker,
+  handleLeftYearPick,
+  handleRightYearPick,
+  handleLeftMonthPick,
+  handleRightMonthPick,
+  handlePanelChange,
+  adjustDateByView,
+} = usePanelDateRange(props, emit, leftDate, rightDate)
 
 const hasShortcuts = computed(() => !!shortcuts.value.length)
 
@@ -490,7 +549,12 @@ const isValidValue = (date: [Dayjs, Dayjs]) => {
 }
 
 const leftPrevYear = () => {
-  leftDate.value = leftDate.value.subtract(1, 'year')
+  leftDate.value = adjustDateByView(
+    leftCurrentView.value,
+    leftDate.value,
+    false
+  )
+
   if (!props.unlinkPanels) {
     rightDate.value = leftDate.value.add(1, 'month')
   }
@@ -507,10 +571,19 @@ const leftPrevMonth = () => {
 
 const rightNextYear = () => {
   if (!props.unlinkPanels) {
-    leftDate.value = leftDate.value.add(1, 'year')
+    leftDate.value = adjustDateByView(
+      rightCurrentView.value,
+      leftDate.value,
+      true
+    )
+
     rightDate.value = leftDate.value.add(1, 'month')
   } else {
-    rightDate.value = rightDate.value.add(1, 'year')
+    rightDate.value = adjustDateByView(
+      rightCurrentView.value,
+      rightDate.value,
+      true
+    )
   }
   handlePanelChange('year')
 }
@@ -526,7 +599,8 @@ const rightNextMonth = () => {
 }
 
 const leftNextYear = () => {
-  leftDate.value = leftDate.value.add(1, 'year')
+  leftDate.value = adjustDateByView(leftCurrentView.value, leftDate.value, true)
+
   handlePanelChange('year')
 }
 
@@ -536,21 +610,18 @@ const leftNextMonth = () => {
 }
 
 const rightPrevYear = () => {
-  rightDate.value = rightDate.value.subtract(1, 'year')
+  rightDate.value = adjustDateByView(
+    rightCurrentView.value,
+    rightDate.value,
+    false
+  )
+
   handlePanelChange('year')
 }
 
 const rightPrevMonth = () => {
   rightDate.value = rightDate.value.subtract(1, 'month')
   handlePanelChange('month')
-}
-
-const handlePanelChange = (mode: 'month' | 'year') => {
-  emit(
-    'panel-change',
-    [leftDate.value.toDate(), rightDate.value.toDate()],
-    mode
-  )
 }
 
 const enableMonthArrow = computed(() => {
@@ -697,7 +768,7 @@ const handleTimeInput = (value: string | null, type: ChangeType) => {
   }
 }
 
-const handleTimeChange = (value: string | null, type: ChangeType) => {
+const handleTimeChange = (_value: string | null, type: ChangeType) => {
   timeUserInput.value[type] = null
   if (type === 'min') {
     leftDate.value = minDate.value!
@@ -776,9 +847,12 @@ const formatToString = (value: Dayjs | Dayjs[]) => {
 }
 
 const parseUserInput = (value: Dayjs | Dayjs[]) => {
-  return isArray(value)
-    ? value.map((_) => dayjs(_, format.value).locale(lang.value))
-    : dayjs(value, format.value).locale(lang.value)
+  return correctlyParseUserInput(
+    value,
+    format.value,
+    lang.value,
+    isDefaultFormat
+  )
 }
 
 function onParsedValueChanged(

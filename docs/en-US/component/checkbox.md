@@ -109,10 +109,10 @@ checkbox/with-border
 
 ## Checkbox API
 
-### Attributes
+### Checkbox Attributes
 
 | Name                           | Description                                                                                                                                                    | Type                                           | Default |
-|--------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------|------------------------------------------------|---------|
+| ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------- |
 | model-value / v-model          | binding value                                                                                                                                                  | ^[string] / ^[number] / ^[boolean]             | —       |
 | isShow                         | checkbox display model                                                                                                                                         | ^[boolean]                                     | false   |
 | value ^(2.6.0)                 | value of the Checkbox when used inside a `checkbox-group`                                                                                                      | ^[string] / ^[number] / ^[boolean] / ^[object] | —       |
@@ -133,13 +133,13 @@ checkbox/with-border
 | false-label ^(deprecated)      | value of the Checkbox if it's not checked                                                                                                                      | ^[string] / ^[number]                          | —       |
 | controls ^(a11y) ^(deprecated) | same as [aria-controls](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-controls), takes effect when `indeterminate` is `true` | ^[string]                                      | —       |
 
-### Events
+### Checkbox Events
 
 | Name   | Description                             | Type                                                      |
 | ------ | --------------------------------------- | --------------------------------------------------------- |
 | change | triggers when the binding value changes | ^[Function]`(value: string \| number \| boolean) => void` |
 
-### Slots
+### Checkbox Slots
 
 | Name    | Description               |
 | ------- | ------------------------- |
@@ -147,7 +147,7 @@ checkbox/with-border
 
 ## CheckboxGroup API
 
-### Attributes
+### CheckboxGroup Attributes
 
 | Name                        | Description                                       | Type                                     | Default |
 | --------------------------- | ------------------------------------------------- | ---------------------------------------- | ------- |
@@ -163,13 +163,13 @@ checkbox/with-border
 | validate-event              | whether to trigger form validation                | ^[boolean]                               | true    |
 | label ^(a11y) ^(deprecated) | native `aria-label` attribute                     | ^[string]                                | —       |
 
-### Events
+### CheckboxGroup Events
 
 | Name   | Description                             | Type                                               |
 | ------ | --------------------------------------- | -------------------------------------------------- |
 | change | triggers when the binding value changes | ^[Function]`(value: string[] \| number[]) => void` |
 
-### Slots
+### CheckboxGroup Slots
 
 | Name    | Description               | Subtags                    |
 | ------- | ------------------------- | -------------------------- |
@@ -177,7 +177,7 @@ checkbox/with-border
 
 ## CheckboxButton API
 
-### Attributes
+### CheckboxButton Attributes
 
 | Name                      | Description                                                                                                 | Type                                           | Default |
 | ------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------------------------------- | ------- |
@@ -191,7 +191,7 @@ checkbox/with-border
 | true-label ^(deprecated)  | value of the checkbox if it's checked                                                                       | ^[string] / ^[number]                          | —       |
 | false-label ^(deprecated) | value of the checkbox if it's not checked                                                                   | ^[string] / ^[number]                          | —       |
 
-### Slots
+### CheckboxButton Slots
 
 | Name    | Description               |
 | ------- | ------------------------- |
