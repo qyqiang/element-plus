@@ -1,8 +1,9 @@
 import { buildProps, definePropType, isBoolean } from '@element-plus/utils'
 import { UPDATE_MODEL_EVENT } from '@element-plus/constants'
+import { teleportProps } from '@element-plus/components/teleport'
 import { dialogContentProps } from './dialog-content'
 
-import type { ExtractPropTypes } from 'vue'
+import type { ExtractPropTypes, __ExtractPublicPropTypes } from 'vue'
 import type Dialog from './dialog.vue'
 
 type DoneFn = (cancel?: boolean) => void
@@ -18,7 +19,7 @@ export const dialogProps = buildProps({
    * @description which element the Dialog appends to
    */
   appendTo: {
-    type: definePropType<string | HTMLElement>([String, Object]),
+    type: teleportProps.to.type,
     default: 'body',
   },
   /**
@@ -122,6 +123,7 @@ export const dialogProps = buildProps({
 } as const)
 
 export type DialogProps = ExtractPropTypes<typeof dialogProps>
+export type DialogPropsPublic = __ExtractPublicPropTypes<typeof dialogProps>
 
 export const dialogEmits = {
   open: () => true,
@@ -133,4 +135,4 @@ export const dialogEmits = {
   closeAutoFocus: () => true,
 }
 export type DialogEmits = typeof dialogEmits
-export type DialogInstance = InstanceType<typeof Dialog>
+export type DialogInstance = InstanceType<typeof Dialog> & unknown

@@ -21,6 +21,7 @@ import {
   buildProps,
   iconPropType,
   isString,
+  isUndefined,
   throwError,
 } from '@element-plus/utils'
 import { useNamespace } from '@element-plus/hooks'
@@ -28,10 +29,15 @@ import { ArrowDown, ArrowRight } from '@element-plus/icons-vue'
 import { ElIcon } from '@element-plus/components/icon'
 import useMenu from './use-menu'
 import { useMenuCssVar } from './use-menu-css-var'
+import { MENU_INJECTION_KEY, SUB_MENU_INJECTION_KEY } from './tokens'
 
 import type { Placement } from '@element-plus/components/popper'
 import type { TooltipInstance } from '@element-plus/components/tooltip'
-import type { ExtractPropTypes, VNodeArrayChildren } from 'vue'
+import type {
+  ExtractPropTypes,
+  VNodeArrayChildren,
+  __ExtractPublicPropTypes,
+} from 'vue'
 import type { MenuProvider, SubMenuProvider } from './types'
 
 export const subMenuProps = buildProps({
@@ -95,6 +101,7 @@ export const subMenuProps = buildProps({
   },
 } as const)
 export type SubMenuProps = ExtractPropTypes<typeof subMenuProps>
+export type SubMenuPropsPublic = __ExtractPublicPropTypes<typeof subMenuProps>
 
 const COMPONENT_NAME = 'ElSubMenu'
 export default defineComponent({
@@ -111,10 +118,12 @@ export default defineComponent({
     const nsSubMenu = useNamespace('sub-menu')
 
     // inject
-    const rootMenu = inject<MenuProvider>('rootMenu')
+    const rootMenu = inject<MenuProvider>(MENU_INJECTION_KEY)
     if (!rootMenu) throwError(COMPONENT_NAME, 'can not inject root menu')
 
-    const subMenu = inject<SubMenuProvider>(`subMenu:${parentMenu.value!.uid}`)
+    const subMenu = inject<SubMenuProvider>(
+      `${SUB_MENU_INJECTION_KEY}${parentMenu.value!.uid}`
+    )
     if (!subMenu) throwError(COMPONENT_NAME, 'can not inject sub menu')
 
     const items = ref<MenuProvider['items']>({})
@@ -148,7 +157,7 @@ export default defineComponent({
     const isFirstLevel = computed(() => subMenu.level === 0)
     const appendToBody = computed(() => {
       const value = props.teleported
-      return value === undefined ? isFirstLevel.value : value
+      return isUndefined(value) ? isFirstLevel.value : value
     })
     const menuTransitionName = computed(() =>
       rootMenu.props.collapse
@@ -177,13 +186,14 @@ export default defineComponent({
           ]
     )
     const opened = computed(() => rootMenu.openedMenus.includes(props.index))
-    const active = computed(
-      () =>
-        Object.values(items.value).some(({ active }) => active) ||
-        Object.values(subMenus.value).some(({ active }) => active)
+    const active = computed(() =>
+      [...Object.values(items.value), ...Object.values(subMenus.value)].some(
+        ({ active }) => active
+      )
     )
 
     const mode = computed(() => rootMenu.props.mode)
+    const persistent = computed(() => rootMenu.props.persistent)
     const item = reactive({
       index: props.index,
       indexPath,
@@ -212,7 +222,11 @@ export default defineComponent({
     const doDestroy = () =>
       vPopper.value?.popperRef?.popperInstanceRef?.destroy()
 
-    const handleCollapseToggle = (value: boolean) => !value && doDestroy()
+    const handleCollapseToggle = (value: boolean) => {
+      if (!value) {
+        doDestroy()
+      }
+    }
 
     const handleClick = () => {
       if (
@@ -293,7 +307,7 @@ export default defineComponent({
       const removeSubMenu: SubMenuProvider['removeSubMenu'] = (item) => {
         delete subMenus.value[item.index]
       }
-      provide<SubMenuProvider>(`subMenu:${instance.uid}`, {
+      provide<SubMenuProvider>(`${SUB_MENU_INJECTION_KEY}${instance.uid}`, {
         addSubMenu,
         removeSubMenu,
         handleMouseleave,
@@ -356,7 +370,7 @@ export default defineComponent({
               pure: true,
               offset: subMenuPopperOffset.value,
               showArrow: false,
-              persistent: true,
+              persistent: persistent.value,
               popperClass: subMenuPopperClass.value,
               placement: currentPlacement.value,
               teleported: appendToBody.value,

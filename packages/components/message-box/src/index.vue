@@ -62,7 +62,7 @@
                 "
               >
                 <el-icon :class="ns.e('close')">
-                  <close />
+                  <component :is="closeIcon || 'close'" />
                 </el-icon>
               </button>
             </div>
@@ -148,6 +148,7 @@
     </el-overlay>
   </transition>
 </template>
+
 <script lang="ts">
 import {
   computed,
@@ -237,10 +238,7 @@ export default defineComponent({
     center: Boolean,
     draggable: Boolean,
     overflow: Boolean,
-    roundButton: {
-      default: false,
-      type: Boolean,
-    },
+    roundButton: Boolean,
     container: {
       type: String, // default append to body
       default: 'body',
@@ -282,6 +280,7 @@ export default defineComponent({
       dangerouslyUseHTMLString: false,
       distinguishCancelAndClose: false,
       icon: '',
+      closeIcon: '',
       inputPattern: null,
       inputPlaceholder: '',
       inputType: 'text',
