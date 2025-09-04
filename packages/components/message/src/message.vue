@@ -15,6 +15,8 @@
         ns.is('closable', showClose),
         ns.is('plain', plain),
         ns.is('alert', alert),
+        ns.is('bottom', verticalProperty === 'bottom'),
+        horizontalClass,
         customClass,
         `is-${effect}`,
       ]"
@@ -78,8 +80,12 @@ import { useGlobalComponentSettings } from '@element-plus/components/config-prov
 import { ElIcon } from '@element-plus/components/icon'
 import { EVENT_CODE } from '@element-plus/constants'
 import { TypeComponents, TypeComponentsMap } from '@element-plus/utils'
+import {
+  MESSAGE_DEFAULT_PLACEMENT,
+  messageEmits,
+  messageProps,
+} from './message'
 import { getLastOffset, getOffsetOrSpace } from './instance'
-import { messageEmits, messageProps } from './message'
 
 import type { BadgeProps } from '@element-plus/components/badge'
 import type { CSSProperties } from 'vue'
@@ -115,13 +121,27 @@ const iconComponent = computed(
   () => props.icon || TypeComponentsMap[props.type] || ''
 )
 
-const lastOffset = computed(() => getLastOffset(props.id))
-const offset = computed(
-  () => getOffsetOrSpace(props.id, props.offset) + lastOffset.value
-)
+const placement = computed(() => props.placement || MESSAGE_DEFAULT_PLACEMENT)
+
+const lastOffset = computed(() => getLastOffset(props.id, placement.value))
+const offset = computed(() => {
+  return (
+    getOffsetOrSpace(props.id, props.offset, placement.value) + lastOffset.value
+  )
+})
 const bottom = computed(() => height.value + offset.value)
+const horizontalClass = computed(() => {
+  if (placement.value.includes('left')) return ns.is('left')
+  if (placement.value.includes('right')) return ns.is('right')
+  return ns.is('center')
+})
+
+const verticalProperty = computed(() =>
+  placement.value.startsWith('top') ? 'top' : 'bottom'
+)
+
 const customStyle = computed<CSSProperties>(() => ({
-  top: `${offset.value}px`,
+  [verticalProperty.value]: `${offset.value}px`,
   zIndex: currentZIndex.value,
 }))
 

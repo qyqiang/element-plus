@@ -6,7 +6,9 @@ lang: en-US
 # TimePicker
 
 Use Time Picker for time input.
+
 ## Demo
+
 :::demo By default,you need to add class name `time-picker-item`
 time-picker/demo
 :::
@@ -59,6 +61,7 @@ time-picker/range
 | is-range                    | whether to pick a time range                                                                                   | ^[boolean]                                                                                      | false       |
 | arrow-control               | whether to pick time using arrow buttons                                                                       | ^[boolean]                                                                                      | false       |
 | popper-class                | custom class name for TimePicker's dropdown                                                                    | ^[string]                                                                                       | ''          |
+| popper-style                | custom style for TimePicker's dropdown                                                                         | ^[string] / ^[object]                                                                           | —           |
 | range-separator             | range separator                                                                                                | ^[string]                                                                                       | '-'         |
 | format                      | format of the displayed value in the input box                                                                 | ^[string] see [date formats](/en-US/component/date-picker#date-formats)                         | —           |
 | default-value               | optional, default date of the calendar                                                                         | ^[Date] / ^[object]`[Date, Date]`                                                               | —           |

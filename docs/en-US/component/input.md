@@ -39,6 +39,14 @@ input/clearable
 
 :::
 
+## Custom Clear Icon ^(2.11.0)
+
+:::demo You can customize the clear icon by setting the `clear-icon` attribute.
+
+input/clear-icon
+
+:::
+
 ## Formatter
 
 Display value within it's situation with `formatter`, and we usually use `parser` at the same time.
@@ -127,6 +135,7 @@ input/length-limiting
 | placeholder                 | placeholder of Input                                                                                                                   | ^[string]                                                                                                                                                                                                                    | —       |
 | clearable                   | whether to show clear button, only works when `type` is not 'textarea'                                                                 | ^[boolean]                                                                                                                                                                                                                   | false   |
 | float-label                 | whether to show placeholder                                                                                                            | ^[boolean]                                                                                                                                                                                                                   | true    |
+| clear-icon ^(2.11.0)        | custom clear icon component                                                                                                            | ^[s                                                                                                                                                                                                                          |
 | formatter                   | specifies the format of the value presented input.(only works when `type` is 'text')                                                   | ^[Function]`(value: string \| number) => string`                                                                                                                                                                             | —       |
 | parser                      | specifies the value extracted from formatter input.(only works when `type` is 'text')                                                  | ^[Function]`(value: string) => string`                                                                                                                                                                                       | —       |
 | show-password               | whether to show toggleable password input                                                                                              | ^[boolean]                                                                                                                                                                                                                   | false   |

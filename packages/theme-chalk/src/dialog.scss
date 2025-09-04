@@ -121,6 +121,16 @@
   }
 }
 
+.#{$namespace}-modal-dialog {
+  &.is-penetrable {
+    pointer-events: none;
+
+    .#{$namespace}-dialog {
+      pointer-events: auto;
+    }
+  }
+}
+
 .#{$namespace}-overlay-dialog {
   position: fixed;
   top: 0;

@@ -10,7 +10,8 @@
       ref="tooltipRef"
       :visible="dropdownMenuVisible"
       :teleported="teleported"
-      :popper-class="[nsSelect.e('popper'), popperClass]"
+      :popper-class="[nsSelect.e('popper'), popperClass!]"
+      :popper-style="popperStyle"
       :gpu-acceleration="false"
       :stop-popper-mouse-event="false"
       :popper-options="popperOptions"
@@ -83,6 +84,7 @@
                   <span :class="nsSelect.e('tags-text')">
                     <slot
                       name="label"
+                      :index="getIndex(item)"
                       :label="getLabel(item)"
                       :value="getValue(item)"
                     >
@@ -100,6 +102,7 @@
                 :effect="effect"
                 placement="bottom"
                 :popper-class="popperClass"
+                :popper-style="popperStyle"
                 :teleported="teleported"
               >
                 <template #default>
@@ -140,6 +143,7 @@
                         <span :class="nsSelect.e('tags-text')">
                           <slot
                             name="label"
+                            :index="getIndex(selected)"
                             :label="getLabel(selected)"
                             :value="getValue(selected)"
                           >
@@ -210,6 +214,7 @@
             >
               <slot
                 name="label"
+                :index="allOptionsValueMap.get(modelValue)?.index ?? -1"
                 :label="currentPlaceholder"
                 :value="modelValue"
               >
@@ -270,12 +275,12 @@
         <el-select-menu
           ref="menuRef"
           :data="filteredOptions"
-          :width="popperSize"
+          :width="popperSize - BORDER_HORIZONTAL_WIDTH"
           :hovering-index="states.hoveringIndex"
           :scrollbar-always-on="scrollbarAlwaysOn"
         >
           <template v-if="$slots.header" #header>
-            <div :class="nsSelect.be('dropdown', 'header')">
+            <div :class="nsSelect.be('dropdown', 'header')" @click.stop>
               <slot name="header" />
             </div>
           </template>
@@ -295,7 +300,7 @@
             </div>
           </template>
           <template v-if="$slots.footer" #footer>
-            <div :class="nsSelect.be('dropdown', 'footer')">
+            <div :class="nsSelect.be('dropdown', 'footer')" @click.stop>
               <slot name="footer" />
             </div>
           </template>
@@ -317,6 +322,7 @@ import ElSelectMenu from './select-dropdown'
 import useSelect from './useSelect'
 import { selectV2Emits, selectV2Props } from './defaults'
 import { selectV2InjectionKey } from './token'
+import { BORDER_HORIZONTAL_WIDTH } from '@element-plus/constants'
 
 export default defineComponent({
   name: 'ElSelectV2',
@@ -377,6 +383,7 @@ export default defineComponent({
       selectedLabel,
       calculatorRef,
       inputStyle,
+      BORDER_HORIZONTAL_WIDTH,
     }
   },
 })

@@ -54,6 +54,7 @@ popconfirm/trigger-event
 | Name                | Description                                                                         | Type                                                                         | Default        |
 | ------------------- | ----------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | -------------- |
 | title               | Title                                                                               | ^[string]                                                                    | —              |
+| effect ^(2.11.2)    | Tooltip theme, built-in theme: `dark` / `light`                                     | ^[enum]`'dark' \| 'light'` / ^[string]                                       | light          |
 | confirm-button-text | Confirm button text                                                                 | ^[string]                                                                    | —              |
 | cancel-button-text  | Cancel button text                                                                  | ^[string]                                                                    | —              |
 | confirm-button-type | Confirm button type                                                                 | ^[enum]`'primary' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'text'` | primary        |
@@ -79,3 +80,10 @@ popconfirm/trigger-event
 | ---------------- | ------------------------------------- | -------------------------------------------------------------------------------- |
 | reference        | HTML element that triggers Popconfirm | —                                                                                |
 | actions ^(2.8.1) | content of the Popconfirm footer      | ^[object]`{ confirm: (e: MouseEvent) => void, cancel: (e: MouseEvent) => void }` |
+
+### Exposes
+
+| Name                | Description                  | Type                                        |
+| ------------------- | ---------------------------- | ------------------------------------------- |
+| popperRef ^(2.10.7) | el-popper component instance | ^[object]`Ref<PopperInstance \| undefined>` |
+| hide ^(2.10.7)      | hide popconfirm              | ^[Function]`() => void`                     |
