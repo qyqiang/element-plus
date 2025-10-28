@@ -33,6 +33,7 @@
         :trigger-target-el="triggerTargetEl"
         :visible="shouldShow"
         :z-index="zIndex"
+        :loop="loop"
         @mouseenter="onContentEnter"
         @mouseleave="onContentLeave"
         @blur="onBlur"
@@ -48,12 +49,16 @@
 import { computed, inject, onBeforeUnmount, ref, unref, watch } from 'vue'
 import { computedEager, onClickOutside } from '@vueuse/core'
 import { useNamespace, usePopperContainerId } from '@element-plus/hooks'
-import { castArray, composeEventHandlers } from '@element-plus/utils'
+import {
+  castArray,
+  composeEventHandlers,
+  focusElement,
+} from '@element-plus/utils'
 import { ElPopperContent } from '@element-plus/components/popper'
 import ElTeleport from '@element-plus/components/teleport'
-import { tryFocus } from '@element-plus/components/focus-trap'
 import { TOOLTIP_INJECTION_KEY } from './constants'
 import { useTooltipContentProps } from './content'
+import { isTriggerType } from './utils'
 
 import type { PopperContentInstance } from '@element-plus/components/popper'
 
@@ -118,7 +123,7 @@ const ariaHidden = ref(true)
 
 const onTransitionLeave = () => {
   onHide()
-  isFocusInsideContent() && tryFocus(document.body)
+  isFocusInsideContent() && focusElement(document.body, { preventScroll: true })
   ariaHidden.value = true
 }
 
@@ -127,13 +132,13 @@ const stopWhenControlled = () => {
 }
 
 const onContentEnter = composeEventHandlers(stopWhenControlled, () => {
-  if (props.enterable && unref(trigger) === 'hover') {
+  if (props.enterable && isTriggerType(unref(trigger), 'hover')) {
     onOpen()
   }
 })
 
 const onContentLeave = composeEventHandlers(stopWhenControlled, () => {
-  if (unref(trigger) === 'hover') {
+  if (isTriggerType(unref(trigger), 'hover')) {
     onClose()
   }
 })
@@ -172,15 +177,19 @@ watch(
       stopHandle?.()
     } else {
       ariaHidden.value = false
-      stopHandle = onClickOutside(popperContentRef, () => {
-        if (unref(controlled)) return
-        const needClose = castArray(unref(trigger)).every((item) => {
-          return item !== 'hover' && item !== 'focus'
-        })
-        if (needClose) {
-          onClose()
-        }
-      })
+      stopHandle = onClickOutside(
+        popperContentRef,
+        () => {
+          if (unref(controlled)) return
+          const needClose = castArray(unref(trigger)).every((item) => {
+            return item !== 'hover' && item !== 'focus'
+          })
+          if (needClose) {
+            onClose()
+          }
+        },
+        { detectIframe: true }
+      )
     }
   },
   {
