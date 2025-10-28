@@ -1,6 +1,6 @@
 .el-button {
   font-weight: var(--p-font-weight-semibold);
-  font-family: var(--p-font-family-title-SemiBold);
+  font-family: var(--font-inter-semibold);
   min-width: 48px;
 
   &.icon-button {
@@ -38,7 +38,7 @@
 
   > span {
     > .el-icon {
-      margin-left: var(--space-100);
+      margin-left: 4px;
     }
 
     > .el-checkbox {

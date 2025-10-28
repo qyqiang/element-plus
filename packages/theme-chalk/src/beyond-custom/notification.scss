@@ -22,7 +22,7 @@
   }
 }
 .el-notification__group {
-  margin-left: var(--space-250);
+  margin-left: 10px;
   .el-button {
     @include button-custom-hover-active;
   }

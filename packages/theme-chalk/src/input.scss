@@ -143,7 +143,7 @@
 
 @include b(input) {
   @include css-var-from-global('input-height', 'component-size');
-  font-family: var(--body-font);
+  font-family: var(--font-inter);
   position: relative;
   font-size: getCssVar('font-size', 'small');
   display: inline-flex;

@@ -44,7 +44,7 @@
 
   .el-select__selection {
     .el-tag {
-      border-radius: var(--radius-raidus-300);
+      border-radius: var(--raidus-300);
       background-color: var(--color-gray-gray-100);
     }
   }
@@ -56,7 +56,7 @@
   .el-select-group__title {
     height: 24px;
     color: var(--color-gray-gray-990);
-    font-family: var(--p-font-family-title);
+    font-family: var(--font-inter);
     font-weight: var(--p-font-weight-semibold);
     font-size: var(--p-font-size-500);
     line-height: 24px;
