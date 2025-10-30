@@ -1,5 +1,4 @@
 @use 'mixins/mixins' as *;
-@use 'mixins/utils' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
@@ -50,7 +49,7 @@
 
   &:disabled,
   &.is-disabled {
-    color: var(--color-gray-gray-200);
+    color: var(--color-gray-200);
     background-color: getCssVar('pagination-button-disabled-bg-color');
     cursor: not-allowed;
   }
@@ -88,6 +87,8 @@
 
   .btn-prev,
   .btn-next {
+    @include pagination-button;
+
     .#{$namespace}-icon {
       display: block;
       font-size: 12px;

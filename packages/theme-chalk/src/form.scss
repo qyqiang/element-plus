@@ -1,7 +1,6 @@
 @use 'sass:map';
 
 @use 'mixins/mixins' as *;
-@use 'mixins/utils' as *;
 @use 'mixins/var' as *;
 @use 'common/var' as *;
 
@@ -228,7 +227,7 @@ $form-item-label-top-margin-bottom: map.merge(
       &:hover,
       &:focus,
       &.is-focus {
-        border-color: var(--color-red-red-800);
+        border-color: var(--color-red-800);
       }
     }
     .#{$namespace}-input__wrapper,
@@ -238,7 +237,7 @@ $form-item-label-top-margin-bottom: map.merge(
       &:hover,
       &:focus,
       &.is-focus {
-        background-color: var(--color-red-red-100);
+        background-color: var(--color-red-100);
       }
     }
     .#{$namespace}-input-group__append,

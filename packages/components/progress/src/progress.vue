@@ -48,7 +48,7 @@
         <path
           :class="ns.be('circle', 'track')"
           :d="trackPath"
-          :stroke="`var(--color-gray-gray-100, #e5e9f2)`"
+          :stroke="`var(${ns.cssVarName('fill-color-light')}, #e5e9f2)`"
           :stroke-linecap="strokeLinecap"
           :stroke-width="relativeStrokeWidth"
           fill="none"

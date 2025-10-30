@@ -111,13 +111,22 @@
     line-height: 14px;
     bottom: 5px;
     right: 10px;
+    @include when(outside) {
+      position: absolute;
+      background: transparent;
+      padding-top: 2px;
+      top: 100%;
+      right: 0;
+      bottom: unset;
+      line-height: 1;
+    }
   }
 
   @include when(disabled) {
     .#{$namespace}-textarea__inner {
       @include inset-input-border(#{getCssVar('disabled-border-color')});
       background-color: map.get($input-disabled, 'fill');
-      color: var(--color-gray-gray-990);
+      color: var(--color-gray-990);
       cursor: not-allowed;
 
       &::placeholder {
@@ -178,6 +187,18 @@
       line-height: initial;
       display: inline-block;
       padding-left: 8px;
+    }
+    @include when(outside) {
+      height: unset;
+      position: absolute;
+      padding-top: 2px;
+      top: 100%;
+      right: 0;
+      .#{$namespace}-input__count-inner {
+        background: transparent;
+        padding-left: 0px;
+        line-height: 1;
+      }
     }
   }
 
@@ -367,8 +388,8 @@
       background-color: transparent;
     }
     .#{$namespace}-input__inner {
-      color: var(--color-gray-gray-990);
-      -webkit-text-fill-color: var(--color-gray-gray-990);
+      color: var(--color-gray-990);
+      -webkit-text-fill-color: var(--color-gray-990);
       cursor: not-allowed;
 
       &::placeholder {

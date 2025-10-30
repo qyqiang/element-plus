@@ -89,6 +89,9 @@ export interface ElMessageBoxOptions {
   /** Custom inline style for MessageBox */
   customStyle?: CSSProperties
 
+  /** Whether a mask is displayed */
+  modal?: boolean
+
   /** modal class name for MessageBox */
   modalClass?: string
 

@@ -74,6 +74,9 @@
 <script lang="ts" setup>
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useEventListener, useResizeObserver, useTimeoutFn } from '@vueuse/core'
+import {
+  getEventCode,
+} from '@element-plus/utils'
 import ElBadge from '@element-plus/components/badge'
 import ElButton from '@element-plus/components/button'
 import { useGlobalComponentSettings } from '@element-plus/components/config-provider'
@@ -173,7 +176,8 @@ function onLabelClick() {
   props.onLabelClick()
 }
 
-function keydown({ code }: KeyboardEvent) {
+function keydown(event: KeyboardEvent) {
+  const code = getEventCode(event)
   if (code === EVENT_CODE.esc) {
     // press esc to close the message
     close()

@@ -177,10 +177,8 @@ const getCellStyle = (cell: MonthCell) => {
 const isSelectedCell = (cell: MonthCell) => {
   const year = props.date.year()
   const month = cell.text
-  return (
-    castArray(props.date).findIndex(
-      (date) => date.year() === year && date.month() === month
-    ) >= 0
+  return castArray(props.date).some(
+    (date) => date.year() === year && date.month() === month
   )
 }
 

@@ -19,7 +19,7 @@
         .icon-arrow {
           margin-left: 0;
           path {
-            fill: var(--color-gray-gray-300);
+            fill: var(--color-gray-300);
           }
         }
       }
@@ -30,7 +30,7 @@
         .icon-arrow {
           transform: rotate(180deg);
           path {
-            fill: var(--color-orange-orange-600);
+            fill: var(--color-orange-600);
           }
         }
       }
@@ -40,7 +40,7 @@
         }
         .icon-arrow {
           path {
-            fill: var(--color-orange-orange-600);
+            fill: var(--color-orange-600);
           }
         }
       }
@@ -75,7 +75,7 @@
       border-right: none;
       &:has(.editable-table-cell) {
         &:hover {
-          border: 1px solid var(--color-gray-gray-300);
+          border: 1px solid var(--color-gray-300);
         }
       }
     }
@@ -86,7 +86,7 @@
   .el-icon {
     &.warning {
       path {
-        fill: var(--color-yellow-yellow-400);
+        fill: var(--color-yellow-400);
       }
     }
   }

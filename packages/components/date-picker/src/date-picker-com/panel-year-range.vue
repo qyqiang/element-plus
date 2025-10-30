@@ -247,7 +247,7 @@ const leftPanelKls = computed(() => {
     arrowLeftBtn: [ppNs.e('icon-btn'), 'd-arrow-left'],
     arrowRightBtn: [
       ppNs.e('icon-btn'),
-      { [ppNs.is('disabled')]: !enableYearArrow.value },
+      ppNs.is('disabled', !enableYearArrow.value),
       'd-arrow-right',
     ],
   }
@@ -258,7 +258,7 @@ const rightPanelKls = computed(() => {
     content: [ppNs.e('content'), drpNs.e('content'), 'is-right'],
     arrowLeftBtn: [
       ppNs.e('icon-btn'),
-      { 'is-disabled': !enableYearArrow.value },
+      ppNs.is('disabled', !enableYearArrow.value),
       'd-arrow-left',
     ],
     arrowRightBtn: [ppNs.e('icon-btn'), 'd-arrow-right'],
@@ -296,12 +296,6 @@ const parseUserInput = (value: Dayjs | Dayjs[]) => {
   )
 }
 
-const formatToString = (value: Dayjs[] | Dayjs) => {
-  return isArray(value)
-    ? value.map((day) => day.format(format.value))
-    : value.format(format.value)
-}
-
 const isValidValue = (date: [Dayjs, Dayjs]) => {
   return (
     isValidRange(date) &&
@@ -312,6 +306,10 @@ const isValidValue = (date: [Dayjs, Dayjs]) => {
 }
 
 const handleClear = () => {
+  let valueOnClear = null
+  if (pickerBase?.emptyValues) {
+    valueOnClear = pickerBase.emptyValues.valueOnClear.value
+  }
   const defaultArr = getDefaultValue(unref(defaultValue), {
     lang: unref(lang),
     step,
@@ -320,7 +318,7 @@ const handleClear = () => {
   })
   leftDate.value = defaultArr[0]
   rightDate.value = defaultArr[1]
-  emit('pick', null)
+  emit('pick', valueOnClear)
 }
 
 function onParsedValueChanged(
@@ -350,6 +348,5 @@ watch(
 
 emit('set-picker-option', ['isValidValue', isValidValue])
 emit('set-picker-option', ['parseUserInput', parseUserInput])
-emit('set-picker-option', ['formatToString', formatToString])
 emit('set-picker-option', ['handleClear', handleClear])
 </script>

@@ -64,15 +64,15 @@ $color-filled: map.get($colors, 'filled', 'base') !default;
   $mix-color: $color-white
 ) {
   $colors: map.deep-merge(
-    (
-      $type: (
-        '#{$mode}-#{$number}':
+      (
+        $type: (
+          '#{$mode}-#{$number}':
           roundColor(
-            color.mix(
-              $mix-color,
-              map.get($colors, $type, 'base'),
-              math.percentage(math.div($number, 10))
-            )
+              color.mix(
+                  $mix-color,
+                  map.get($colors, $type, 'base'),
+                  math.percentage(math.div($number, 10))
+              )
           ),
         ),
       ),
@@ -732,12 +732,12 @@ $cascader-search-input-margin-left: map.merge(
 
 $cascader-dropdown: () !default;
 $cascader-dropdown: map.merge(
-  (
-    'header-padding': 10px,
-    'footer-padding': 10px,
-    'border': 1px solid getCssVar('border-color-light'),
-  ),
-  $cascader-dropdown
+    (
+      'header-padding': 10px,
+      'footer-padding': 10px,
+      'border': 1px solid getCssVar('border-color-light'),
+    ),
+    $cascader-dropdown
 );
 
 //statistic
@@ -1222,8 +1222,7 @@ $dropdown: map.merge(
 $drawer: () !default;
 $drawer: map.merge(
     (
-      'bg-color':
-      var(#{getCssVarName('dialog', 'bg-color')}, #{getCssVar('bg-color')}),
+      'bg-color':getCssVar('bg-color'),
       'padding-primary': 24px 32px,
     ),
     $drawer

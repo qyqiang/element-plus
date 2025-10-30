@@ -19,6 +19,7 @@
       placement="right"
       :fallback-placements="['left']"
       :persistent="rootMenu.props.persistent"
+      focus-on-target
       :disabled="true"
     >
       <template #content>

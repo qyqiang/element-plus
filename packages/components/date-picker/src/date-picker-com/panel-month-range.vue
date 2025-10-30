@@ -54,7 +54,7 @@
               :disabled="!enableYearArrow"
               :class="[
                 ppNs.e('icon-btn'),
-                { [ppNs.is('disabled')]: !enableYearArrow },
+                ppNs.is('disabled', !enableYearArrow),
               ]"
               class="d-arrow-right icon-button"
               @click="leftNextYear"
@@ -167,7 +167,6 @@ import { computed, inject, ref, toRef, unref, watch } from 'vue'
 import dayjs from 'dayjs'
 import ElButton from '@element-plus/components/button/src/button.vue'
 import ElIcon from '@element-plus/components/icon'
-import { isArray } from '@element-plus/utils'
 import { useLocale } from '@element-plus/hooks'
 import { PICKER_BASE_INJECTION_KEY } from '@element-plus/components/time-picker'
 import {
@@ -270,19 +269,17 @@ const handleRangePick = (val: RangePickValue, close = true) => {
 }
 
 const handleClear = () => {
+  let valueOnClear = null
+  if (pickerBase?.emptyValues) {
+    valueOnClear = pickerBase.emptyValues.valueOnClear.value
+  }
   leftDate.value = getDefaultValue(unref(defaultValue), {
     lang: unref(lang),
     unit: 'year',
     unlinkPanels: props.unlinkPanels,
   })[0]
   rightDate.value = leftDate.value.add(1, 'year')
-  emit('pick', null)
-}
-
-const formatToString = (value: Dayjs | Dayjs[]) => {
-  return isArray(value)
-    ? value.map((_) => _.format(format.value))
-    : value.format(format.value)
+  emit('pick', valueOnClear)
 }
 
 const parseUserInput = (value: Dayjs | Dayjs[]) => {
@@ -319,7 +316,6 @@ watch(
 )
 
 emit('set-picker-option', ['isValidValue', isValidRange])
-emit('set-picker-option', ['formatToString', formatToString])
 emit('set-picker-option', ['parseUserInput', parseUserInput])
 emit('set-picker-option', ['handleClear', handleClear])
 </script>

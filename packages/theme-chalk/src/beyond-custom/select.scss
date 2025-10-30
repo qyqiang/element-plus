@@ -9,12 +9,12 @@
 
   .el-select__prefix,
   .el-select__suffix {
-    color: var(--color-gray-gray-800);
+    color: var(--color-gray-800);
   }
 
   .el-select__wrapper {
     &.is-disabled {
-      border-color: var(--color-gray-gray-100);
+      border-color: var(--color-gray-100);
       box-shadow: none;
     }
 
@@ -45,7 +45,7 @@
   .el-select__selection {
     .el-tag {
       border-radius: var(--raidus-300);
-      background-color: var(--color-gray-gray-100);
+      background-color: var(--color-gray-100);
     }
   }
 }
@@ -55,7 +55,7 @@
 
   .el-select-group__title {
     height: 24px;
-    color: var(--color-gray-gray-990);
+    color: var(--color-gray-990);
     font-family: var(--font-inter);
     font-weight: var(--p-font-weight-semibold);
     font-size: var(--p-font-size-500);
@@ -64,7 +64,7 @@
 
   .el-select-group__wrap {
     .el-divider {
-      border-color: var(--color-gray-gray-100);
+      border-color: var(--color-gray-100);
       margin: 8px 0;
     }
   }

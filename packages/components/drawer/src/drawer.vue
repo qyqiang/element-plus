@@ -12,7 +12,12 @@
       <el-overlay
         v-show="visible"
         :mask="modal"
-        :overlay-class="modalClass"
+        :overlay-class="[
+          ns.is('drawer'),
+          modalClass ?? '',
+          `${ns.namespace.value}-modal-drawer`,
+          ns.is('penetrable', penetrable),
+        ]"
         :z-index="zIndex"
         @click="onModalClick"
       >
@@ -26,100 +31,82 @@
           @focusout-prevented="onFocusoutPrevented"
           @release-requested="onCloseRequested"
         >
-          <el-splitter
-            :class="ns.b('splitter')"
-            :layout="isHorizontal ? 'horizontal' : 'vertical'"
+          <div
+            ref="drawerRef"
+            aria-modal="true"
+            :aria-label="title || undefined"
+            :aria-labelledby="!title ? titleId : undefined"
+            :aria-describedby="bodyId"
+            v-bind="$attrs"
+            :class="[
+              ns.b(),
+              direction,
+              visible && 'open',
+              ns.is('dragging', isResizing),
+            ]"
+            :style="{ [isHorizontal ? 'width' : 'height']: size }"
+            role="dialog"
+            @click.stop
           >
-            <el-splitter-panel
-              v-if="['rtl', 'btt'].includes(direction)"
-              @click="onModalClick"
-            />
-            <el-splitter-panel :resizable="resizable" :size="drawerSize">
-              <div
-                ref="drawerRef"
-                aria-modal="true"
-                :aria-label="title || undefined"
-                :aria-labelledby="!title ? titleId : undefined"
-                :aria-describedby="bodyId"
-                v-bind="$attrs"
-                :class="[ns.b(), direction, visible && 'open']"
-                role="dialog"
-                :style="
-                  isHorizontal
-                    ? 'width: ' + drawerSize
-                    : 'height: ' + drawerSize
-                "
-                @click.stop
-              >
-                <span
-                  ref="focusStartRef"
-                  :class="ns.e('sr-focus')"
-                  tabindex="-1"
-                />
-                <header
-                  v-if="withHeader"
-                  :class="[ns.e('header'), headerClass]"
+            <span ref="focusStartRef" :class="ns.e('sr-focus')" tabindex="-1" />
+            <header v-if="withHeader" :class="[ns.e('header'), headerClass]">
+              <template v-if="!$slots.title">
+                <slot
+                  name="header"
+                  :close="handleClose"
+                  :title-id="titleId"
+                  :title-class="ns.e('title')"
                 >
-                  <template v-if="!$slots.title">
-                    <slot
-                      name="header"
-                      :close="handleClose"
-                      :title-id="titleId"
-                      :title-class="ns.e('title')"
-                    >
-                      <span
-                        :id="titleId"
-                        role="heading"
-                        :aria-level="headerAriaLevel"
-                        :class="ns.e('title')"
-                      >
-                        {{ title }}
-                      </span>
-                    </slot>
-                  </template>
-                  <template v-else>
-                    <slot name="title">
-                      <!-- DEPRECATED SLOT -->
-                    </slot>
-                  </template>
-                  <button
-                    v-if="showClose"
-                    :aria-label="t('el.drawer.close')"
-                    :class="ns.e('close-btn')"
-                    type="button"
-                    @click="handleClose"
+                  <span
+                    :id="titleId"
+                    role="heading"
+                    :aria-level="headerAriaLevel"
+                    :class="ns.e('title')"
                   >
-                    <el-icon :class="ns.e('close')" size="16px"
-                      ><svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="12"
-                        height="12"
-                        viewBox="0 0 12 12"
-                      >
-                        <path
-                          d="M11 1.87969L10.1203 1L6 5.12072L1.87969 1L1 1.87969L5.12072 6L1 10.1203L1.87969 11L6 6.87928L10.1203 11L11 10.1203L6.87928 6L11 1.87969Z"
-                        /></svg
-                    ></el-icon>
-                  </button>
-                </header>
-                <template v-if="rendered">
-                  <div :id="bodyId" :class="[ns.e('body'), bodyClass]">
-                    <slot />
-                  </div>
-                </template>
-                <div
-                  v-if="$slots.footer"
-                  :class="[ns.e('footer'), footerClass]"
-                >
-                  <slot name="footer" />
-                </div>
+                    {{ title }}
+                  </span>
+                </slot>
+              </template>
+              <template v-else>
+                <slot name="title">
+                  <!-- DEPRECATED SLOT -->
+                </slot>
+              </template>
+              <button
+                v-if="showClose"
+                :aria-label="t('el.drawer.close')"
+                :class="ns.e('close-btn')"
+                type="button"
+                @click="handleClose"
+              >
+                <el-icon :class="ns.e('close')" size="16px"
+                  ><svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                  >
+                    <path
+                      d="M11 1.87969L10.1203 1L6 5.12072L1.87969 1L1 1.87969L5.12072 6L1 10.1203L1.87969 11L6 6.87928L10.1203 11L11 10.1203L6.87928 6L11 1.87969Z"
+                    /></svg
+                ></el-icon>
+              </button>
+            </header>
+            <template v-if="rendered">
+              <div :id="bodyId" :class="[ns.e('body'), bodyClass]">
+                <slot />
               </div>
-            </el-splitter-panel>
-            <el-splitter-panel
-              v-if="['ltr', 'ttb'].includes(direction)"
-              @click="onModalClick"
+            </template>
+            <div v-if="$slots.footer" :class="[ns.e('footer'), footerClass]">
+              <slot name="footer" />
+            </div>
+            <div
+              v-if="resizable"
+              ref="draggerRef"
+              :style="{ zIndex }"
+              :class="ns.e('dragger')"
             />
-          </el-splitter>
+          </div>
         </el-focus-trap>
       </el-overlay>
     </transition>
@@ -127,16 +114,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, ref, useSlots } from 'vue'
-import { ElOverlay } from '@element-plus/components/overlay'
-import ElFocusTrap from '@element-plus/components/focus-trap'
-import ElTeleport from '@element-plus/components/teleport'
-import ElSplitter, { ElSplitterPanel } from '@element-plus/components/splitter'
 import { useDialog } from '@element-plus/components/dialog'
+import ElFocusTrap from '@element-plus/components/focus-trap'
 import ElIcon from '@element-plus/components/icon'
+import { ElOverlay } from '@element-plus/components/overlay'
+import ElTeleport from '@element-plus/components/teleport'
 import { useDeprecated, useLocale, useNamespace } from '@element-plus/hooks'
+import { computed, ref, useSlots } from 'vue'
+import { useResizable } from './composables/useResizable'
 import { drawerEmits, drawerProps } from './drawer'
-import { addUnit } from '@element-plus/utils'
 
 defineOptions({
   name: 'ElDrawer',
@@ -160,8 +146,10 @@ useDeprecated(
 
 const drawerRef = ref<HTMLElement>()
 const focusStartRef = ref<HTMLElement>()
+const draggerRef = ref<HTMLElement>()
 const ns = useNamespace('drawer')
 const { t } = useLocale()
+
 const {
   afterEnter,
   afterLeave,
@@ -179,10 +167,9 @@ const {
   handleClose,
 } = useDialog(props, drawerRef)
 
-const isHorizontal = computed(
-  () => props.direction === 'rtl' || props.direction === 'ltr'
-)
-const drawerSize = computed(() => addUnit(props.size))
+const { isHorizontal, size, isResizing } = useResizable(props, draggerRef)
+
+const penetrable = computed(() => props.modalPenetrable && !props.modal)
 
 defineExpose({
   handleClose,

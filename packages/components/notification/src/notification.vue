@@ -53,7 +53,7 @@
 <script lang="ts" setup>
 import { computed, onMounted, ref } from 'vue'
 import { useEventListener, useTimeoutFn } from '@vueuse/core'
-import { TypeComponentsMap } from '@element-plus/utils'
+import { TypeComponentsMap, getEventCode } from '@element-plus/utils'
 import { EVENT_CODE } from '@element-plus/constants'
 import ElButton from '@element-plus/components/button'
 import { ElIcon } from '@element-plus/components/icon'
@@ -121,16 +121,23 @@ function close() {
   visible.value = false
 }
 
-function onKeydown({ code }: KeyboardEvent) {
-  if (code === EVENT_CODE.delete || code === EVENT_CODE.backspace) {
-    clearTimer() // press delete/backspace clear timer
-  } else if (code === EVENT_CODE.esc) {
-    // press esc to close the notification
-    if (visible.value) {
-      close()
-    }
-  } else {
-    startTimer() // resume timer
+function onKeydown(event: KeyboardEvent) {
+  const code = getEventCode(event)
+
+  switch (code) {
+    case EVENT_CODE.delete:
+    case EVENT_CODE.backspace:
+      clearTimer() // press delete/backspace clear timer
+      break
+    case EVENT_CODE.esc:
+      // press esc to close the notification
+      if (visible.value) {
+        close()
+      }
+      break
+    default: // resume timer
+      startTimer()
+      break
   }
 }
 

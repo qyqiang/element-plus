@@ -23,7 +23,10 @@ export const tabPaneProps = buildProps({
   /**
    * @description whether Tab is closable
    */
-  closable: Boolean,
+  closable: {
+    type: Boolean,
+    default: undefined,
+  },
   /**
    * @description whether Tab is disabled
    */

@@ -75,14 +75,14 @@
   }
 
   @include e(content) {
-    float: left;
+    display: table-cell;
     width: 50%;
     box-sizing: border-box;
     margin: 0;
 
     @include when(left) {
       padding-right: 16px;
-      border-right: 1px solid var(--color-gray-gray-100)
+      border-right: 1px solid var(--color-gray-100)
     }
     @include when(right) {
       padding-left: 16px;

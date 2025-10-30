@@ -4,6 +4,7 @@
       class="pagination-select"
       :model-value="innerPageSize"
       :disabled="disabled"
+      :popper-style="popperStyle"
       :popper-class="popperClassComputed"
       :size="size"
       :teleported="teleported"

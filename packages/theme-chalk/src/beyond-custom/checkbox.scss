@@ -32,16 +32,16 @@
   }
 
   &:not(.is-disabled) {
-    color: var(--color-gray-gray-990);
+    color: var(--color-gray-990);
     border: none;
 
     .el-checkbox__inner {
-      border-color: var(--color-cloudy-gray-cloudy-gray-500);
+      border-color: var(--color-cloudy-gray-500);
     }
 
     &:hover {
       .el-checkbox__inner {
-        border-color: var(--color-cloudy-gray-cloudy-gray-800);
+        border-color: var(--color-cloudy-gray-800);
       }
     }
   }
@@ -59,7 +59,7 @@
     &.is-disabled {
       .el-checkbox__inner {
         &::after {
-          border-color: var(--color-gray-gray-800);
+          border-color: var(--color-gray-800);
         }
       }
     }
@@ -67,13 +67,13 @@
 
   &[error='true'] {
     .el-checkbox__inner {
-      background-color: var(--color-red-red-300);
+      background-color: var(--color-red-300);
       border-color: #75160c;
     }
 
     &.is-checked {
       .el-checkbox__inner {
-        background-color: var(--color-red-red-900);
+        background-color: var(--color-red-900);
       }
     }
   }

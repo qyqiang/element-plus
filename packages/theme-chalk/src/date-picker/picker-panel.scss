@@ -29,7 +29,7 @@
   @include e(content) {
     position: relative;
     .date-picker-table-header {
-      border-top: 1px solid var(--color-gray-gray-100);
+      border-top: 1px solid var(--color-gray-100);
 
       th {
         padding: 8px 0;
@@ -64,7 +64,7 @@
     padding-left: 16px;
 
     &:hover {
-      background-color: var(--color-gray-gray-100);
+      background-color: var(--color-gray-100);
     }
 
     &.active {
@@ -129,7 +129,7 @@
   left: 1px;
   bottom: 0;
   width: 110px;
-  border-right: 1px solid var(--color-gray-gray-100);
+  border-right: 1px solid var(--color-gray-100);
   box-sizing: border-box;
   padding-top: 6px;
   overflow: auto;

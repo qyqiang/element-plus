@@ -1,8 +1,17 @@
 @use './font.scss' as *;
 
-.el-pager li {
-  font-family: var(--font-inter);
-  font-weight: 600;
+.el-pager {
+  gap: 4px;
+
+  li {
+    font-family: var(--font-inter);
+    font-weight: 600;
+    color: var(--color-text-primary);
+
+    &.is-active {
+      background-color: var(--color-gray-50);
+    }
+  }
 }
 
 .pagination-select {

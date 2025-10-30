@@ -2,6 +2,7 @@ import {
   NOOP,
   buildProps,
   definePropType,
+  isNumber,
   isObject,
   isString,
 } from '@element-plus/utils'
@@ -39,6 +40,10 @@ export const autocompleteProps = buildProps({
     default: 'value',
   },
   /**
+   * @description preStar
+   */
+  preStar: Boolean,
+  /**
    * @description binding value
    */
   modelValue: {
@@ -51,13 +56,6 @@ export const autocompleteProps = buildProps({
   debounce: {
     type: Number,
     default: 300,
-  },
-  /**
-   * @description preStar
-   */
-  preStar: {
-    type: Boolean,
-    default: false,
   },
   /**
    * @description placement of the popup menu
@@ -84,10 +82,11 @@ export const autocompleteProps = buildProps({
   /**
    * @description custom class name for autocomplete's dropdown
    */
-  popperClass: {
-    type: String,
-    default: '',
-  },
+  popperClass: useTooltipContentProps.popperClass,
+  /**
+   * @description custom style for autocomplete's dropdown
+   */
+  popperStyle: useTooltipContentProps.popperStyle,
   /**
    * @description whether show suggestions when input focus
    */
@@ -119,6 +118,13 @@ export const autocompleteProps = buildProps({
    * @description whether the width of the dropdown is the same as the input
    */
   fitInputWidth: Boolean,
+  /**
+   * @description whether keyboard navigation loops from end to start
+   */
+  loopNavigation: {
+    type: Boolean,
+    default: true,
+  },
 } as const)
 export type AutocompleteProps = ExtractPropTypes<typeof autocompleteProps>
 export type AutocompletePropsPublic = __ExtractPublicPropTypes<
@@ -126,9 +132,11 @@ export type AutocompletePropsPublic = __ExtractPublicPropTypes<
 >
 
 export const autocompleteEmits = {
-  [UPDATE_MODEL_EVENT]: (value: string) => isString(value),
-  [INPUT_EVENT]: (value: string) => isString(value),
-  [CHANGE_EVENT]: (value: string) => isString(value),
+  [UPDATE_MODEL_EVENT]: (value: string | number) =>
+    isString(value) || isNumber(value),
+  [INPUT_EVENT]: (value: string | number) => isString(value) || isNumber(value),
+  [CHANGE_EVENT]: (value: string | number) =>
+    isString(value) || isNumber(value),
   focus: (evt: FocusEvent) => evt instanceof FocusEvent,
   blur: (evt: FocusEvent) => evt instanceof FocusEvent,
   clear: () => true,

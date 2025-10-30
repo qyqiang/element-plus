@@ -6,6 +6,7 @@
         v-model="state1"
         :fetch-suggestions="querySearch"
         clearable
+        pre-star
         class="w-50"
         placeholder="Please Input"
         @select="handleSelect"

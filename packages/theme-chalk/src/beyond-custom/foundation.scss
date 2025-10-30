@@ -10,7 +10,7 @@
   --animate-repeat: 1;
   --el-border-color: #dfe7f1;
   --el-table-index: 1;
-  
+
   /*font*/
   --font-inter: Inter, sans-serif;
   --font-inter-medium: Inter-Medium, sans-serif;
@@ -52,7 +52,8 @@
 
 
   /*color*/
-  --white: #ffffff;
+  --white: #fff;
+  --black: #000;
   --color-teal-100: #ebf5f4;
   --color-teal-200: #beebe7;
   --color-teal-300: #86d9d4;
@@ -72,10 +73,11 @@
   --color-blue-800: #103a75;
   --color-blue-900: #11294d;
   --color-blue-990: #0d1826;
+  --color-cloudy-gray-50: #f2f7f7;
+  --color-cloudy-gray-100: #e2eaea;
   --color-cloudy-gray-200: #d3ddde;
   --color-cloudy-gray-300: #b7c2c4;
   --color-cloudy-gray-400: #9ca8aa;
-  --color-cloudy-gray-50: #f2f7f7;
   --color-cloudy-gray-500: #828e91;
   --color-cloudy-gray-600: #697579;
   --color-cloudy-gray-700: #505d62;
@@ -83,6 +85,7 @@
   --color-cloudy-gray-900: #243037;
   --color-cloudy-gray-990: #0e171f;
   --color-cloudy-gray-999: #090f14;
+  --color-cyan-50: #f6fffe;
   --color-cyan-100: #ebf5f4;
   --color-cyan-200: #c7e8ed;
   --color-cyan-300: #81d8e5;
@@ -92,11 +95,12 @@
   --color-cyan-700: #09596b;
   --color-cyan-800: #0c424d;
   --color-cyan-900: #102d33;
+  --color-gray-10: #fafafa;
+  --color-gray-50: #f2f5f7;
   --color-gray-100: #e7ecef;
   --color-gray-200: #dce3e8;
   --color-gray-300: #c1ccd6;
   --color-gray-400: #9fb1bd;
-  --color-gray-50: #f2f5f7;
   --color-gray-500: #7a909e;
   --color-gray-600: #5b7282;
   --color-gray-700: #3e5463;
@@ -114,6 +118,7 @@
   --color-green-800: #094536;
   --color-green-900: #092e25;
   --color-green-990: #081a15;
+  --color-lime-50: #f6fdec;
   --color-lime-100: #ebf7da;
   --color-lime-200: #d5f0b1;
   --color-lime-300: #aad971;
@@ -125,11 +130,12 @@
   --color-lime-900: #1c2e10;
   --color-lime-990: #121a0d;
   --color-orange-10: #fff2ea;
+  --color-orange-25: #ffece0;
+  --color-orange-50: #ffdeca;
   --color-orange-100: #ffd3b8;
   --color-orange-200: #ffc5a1;
   --color-orange-300: #ffb181;
   --color-orange-400: #ff9757;
-  --color-orange-50: #ffdeca;
   --color-orange-500: #ff761f;
   --color-orange-600: #ff5b05;
   --color-orange-700: #eb5100;

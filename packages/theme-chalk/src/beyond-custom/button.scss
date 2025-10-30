@@ -24,7 +24,7 @@
         content: '';
         width: 1em;
         height: 1em;
-        border: 0.12rem solid var(--color-gray-gray-300);
+        border: 0.12rem solid var(--color-gray-300);
         border-top-color: transparent;
         border-radius: 100%;
       }
@@ -66,52 +66,52 @@
 
 .el-button--primary {
   --el-border: none;
-  --el-button-hover-bg-color: var(--color-orange-orange-700);
-  --el-button-active-bg-color: var(--color-orange-orange-800);
+  --el-button-hover-bg-color: var(--color-orange-700);
+  --el-button-active-bg-color: var(--color-orange-800);
 
   &.is-disabled,
   &.is-loading,
   &.is-disabled:hover {
-    color: var(--color-gray-gray-300);
-    background-color: var(--color-gray-gray-100);
+    color: var(--color-gray-300);
+    background-color: var(--color-gray-100);
   }
 }
 
 .el-button.is-plain {
-  --el-button-hover-bg-color: var(--color-gray-gray-50);
-  --el-button-active-bg-color: var(--color-gray-gray-100);
+  --el-button-hover-bg-color: var(--color-gray-50);
+  --el-button-active-bg-color: var(--color-gray-100);
 
   &:not(.is-disabled) {
-    border-color: var(--color-cloudy-gray-cloudy-gray-300);
-    color: var(--color-gray-gray-990);
+    border-color: var(--color-cloudy-gray-300);
+    color: var(--color-gray-990);
 
     .el-checkbox__inner {
-      border-color: var(--color-cloudy-gray-cloudy-gray-500);
+      border-color: var(--color-cloudy-gray-500);
     }
   }
 
   &.is-disabled,
   &.is-loading {
-    border-color: var(--color-gray-gray-200);
-    color: var(--color-gray-gray-300);
+    border-color: var(--color-gray-200);
+    color: var(--color-gray-300);
   }
 
   &.active {
-    background-color: var(--color-gray-gray-100);
+    background-color: var(--color-gray-100);
   }
 }
 
 .el-button--filled {
   --el-border: none;
-  --el-button-hover-bg-color: var(--color-blue-blue-600);
-  --el-button-active-bg-color: var(--color-blue-blue-700);
+  --el-button-hover-bg-color: var(--color-blue-600);
+  --el-button-active-bg-color: var(--color-blue-700);
 
   &.is-disabled,
   &.is-disabled:hover,
   &.is-loading {
-    color: var(--color-gray-gray-300);
-    background-color: var(--color-gray-gray-50);
-    border: 1px solid var(--color-gray-gray-200);
+    color: var(--color-gray-300);
+    background-color: var(--color-gray-50);
+    border: 1px solid var(--color-gray-200);
   }
 
   .el-checkbox {
@@ -129,31 +129,31 @@
 }
 
 .el-button--text {
-  color: var(--color-gray-gray-990);
+  color: var(--color-gray-990);
 
   &:not(.is-disabled) {
     &:hover {
-      background-color: var(--color-gray-gray-50);
-      color: var(--color-gray-gray-990);
+      background-color: var(--color-gray-50);
+      color: var(--color-gray-990);
     }
 
     &:active {
-      background-color: var(--color-gray-gray-100);
-      color: var(--color-gray-gray-990);
+      background-color: var(--color-gray-100);
+      color: var(--color-gray-990);
     }
   }
 
   &.is-loading {
-    color: var(--color-gray-gray-300);
+    color: var(--color-gray-300);
   }
 
   &.active {
-    background-color: var(--color-gray-gray-100);
+    background-color: var(--color-gray-100);
   }
 
   &.active:hover {
     border-color: transparent;
-    background-color: var(--color-gray-gray-100);
+    background-color: var(--color-gray-100);
   }
 }
 
@@ -196,7 +196,7 @@
   }
 
   &.is-loading {
-    color: var(--color-gray-gray-300) !important;
-    background-color: var(--color-gray-gray-100) !important;
+    color: var(--color-gray-300) !important;
+    background-color: var(--color-gray-100) !important;
   }
 }
