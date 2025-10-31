@@ -359,7 +359,7 @@ $radio: map.merge(
       'input-width': 16px,
       'input-border-radius': getCssVar('border-radius-circle'),
       'input-bg-color': getCssVar('fill-color', 'blank'),
-      'input-border': 1px solid getCssVar('border-color', 'checked'),
+      'input-border': 1px solid var(--color-cloudy-gray-500),
       'input-border-color': getCssVar('border-color'),
       'input-border-color-hover': getCssVar('text-color-primary'),
     ),

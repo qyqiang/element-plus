@@ -5,6 +5,7 @@
       v-model="value"
       :float-label="false"
       clearable
+      pre-star
       placeholder="Please Select"
       label="label1"
       label-suffix="Unit"

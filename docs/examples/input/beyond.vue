@@ -6,6 +6,7 @@
       v-model="input5"
       style="width: 240px"
       placeholder="Please Input"
+      pre-star
       :prefix-icon="Search"
       clearable
     />
@@ -68,6 +69,7 @@
     <el-divider />
     <el-input
       v-model="textarea1"
+      pre-star
       style="width: 240px"
       :autosize="{ minRows: 2, maxRows: 4 }"
       type="textarea"
@@ -85,6 +87,7 @@
       <el-input
         v-model="textarea2"
         type="textarea"
+        pre-star
         placeholder="Please input"
         autocomplete="off"
       />

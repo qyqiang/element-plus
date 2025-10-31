@@ -90,13 +90,13 @@ $radio-font-size: map.merge(
 
     @include when(disabled) {
       .#{$namespace}-radio__inner {
-        background-color: getCssVar('fill-color', 'disabled');
-        border-color: getCssVar('fill-color', 'disabled');
+        background-color: var(--color-gray-100);
+        border-color: var(--color-gray-200);
         cursor: not-allowed;
 
         &::after {
           cursor: not-allowed;
-          background-color: map.get($radio-disabled, 'icon-color');
+          background-color: var(--color-gray-400);
         }
 
         & + .#{$namespace}-radio__label {
@@ -105,27 +105,27 @@ $radio-font-size: map.merge(
       }
       &.is-checked {
         .#{$namespace}-radio__inner {
-          background-color: getCssVar('fill-color', 'disabled');
-          border-color: getCssVar('fill-color', 'disabled');
+          background-color: var(--color-gray-100);
+          border-color: var(--color-gray-200);
 
           &::after {
-            background-color: map.get($radio-disabled, 'checked-icon-color');
+            background-color: var(--color-gray-400);
           }
         }
       }
       & + span.#{$namespace}-radio__label {
-        color: getCssVar('text-color', 'placeholder');
+        color: var(--color-text-disabled);
         cursor: not-allowed;
       }
     }
 
     @include when(checked) {
       .#{$namespace}-radio__inner {
-        border-color: getCssVar('border-color', 'checked');
+        border-color: var(--color-gray-800);
         background: getCssVar('color-white');
 
         &::after {
-          background-color: getCssVar('color-white');
+          background-color: var(--color-gray-800);
           transform: translate(-50%, -50%) scale(1);
         }
       }

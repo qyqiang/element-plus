@@ -32,10 +32,7 @@
     height: 0;
     cursor: pointer;
     border-radius: inherit;
-    background-color: var(
-      #{getCssVarName('scrollbar-bg-color')},
-      map.get($scrollbar, 'bg-color')
-    );
+    background-color: var(--color-gray-200);
     transition: getCssVar('transition-duration') background-color;
     opacity: var(
       #{getCssVarName('scrollbar-opacity')},

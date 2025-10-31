@@ -41,10 +41,7 @@ export const tourStepProps = buildProps({
   /**
    * @description whether to show the arrow
    */
-  showArrow: {
-    type: Boolean,
-    default: undefined,
-  },
+  showArrow: Boolean,
   /**
    * @description position of the guide card relative to the target element
    */

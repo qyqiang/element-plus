@@ -32,10 +32,7 @@ export const tourProps = buildProps({
   /**
    * @description whether to show the arrow
    */
-  showArrow: {
-    type: Boolean,
-    default: false,
-  },
+  showArrow: Boolean,
   /**
    * @description whether to show a close button
    */

@@ -22,10 +22,7 @@ export const useTooltipProps = buildProps({
   /**
    * @description whether the tooltip content has an arrow
    */
-  showArrow: {
-    type: Boolean,
-    default: false,
-  },
+  showArrow: Boolean,
 })
 
 export const tooltipEmits = [

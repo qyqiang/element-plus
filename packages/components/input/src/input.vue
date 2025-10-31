@@ -211,6 +211,7 @@
         @change="handleChange"
         @keydown="handleKeydown"
       />
+      <span v-if="teatareaStar" class="pre-star-item">*</span>
 
       <span v-if="$slots.textareaPrefix" class="textarea-prefix">
         <slot name="textareaPrefix" />
@@ -276,23 +277,19 @@ import {
   useSlots,
   watch,
 } from 'vue'
-import { useResizeObserver } from '@vueuse/core'
-import { isNil } from 'lodash-unified'
-import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
-import { ElIcon } from '@element-plus/components/icon'
 import {
   useFormDisabled,
   useFormItem,
   useFormItemInputId,
   useFormSize,
 } from '@element-plus/components/form'
+import { ElIcon } from '@element-plus/components/icon'
+import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
 import {
-  NOOP,
-  ValidateComponentsMap,
-  debugWarn,
-  isClient,
-  isObject,
-} from '@element-plus/utils'
+  CHANGE_EVENT,
+  INPUT_EVENT,
+  UPDATE_MODEL_EVENT,
+} from '@element-plus/constants'
 import {
   useAttrs,
   useComposition,
@@ -301,12 +298,16 @@ import {
   useNamespace,
 } from '@element-plus/hooks'
 import {
-  CHANGE_EVENT,
-  INPUT_EVENT,
-  UPDATE_MODEL_EVENT,
-} from '@element-plus/constants'
-import { calcTextareaHeight, looseToNumber } from './utils'
+  NOOP,
+  ValidateComponentsMap,
+  debugWarn,
+  isClient,
+  isObject,
+} from '@element-plus/utils'
+import { useResizeObserver } from '@vueuse/core'
+import { isNil } from 'lodash-unified'
 import { inputEmits, inputProps } from './input'
+import { calcTextareaHeight, looseToNumber } from './utils'
 
 import type { StyleValue } from 'vue'
 
@@ -346,6 +347,14 @@ const wrapperKls = computed(() => [
   nsInput.is('focus', isFocused.value),
   props.preStar && !isFocused.value && !textLength.value ? 'pre-star-item' : '',
 ])
+
+const teatareaStar = computed(
+  () =>
+    props.preStar &&
+    !isFocused.value &&
+    !textLength.value &&
+    !validateState.value
+)
 
 const { form: elForm, formItem: elFormItem } = useFormItem()
 const { inputId } = useFormItemInputId(props, {

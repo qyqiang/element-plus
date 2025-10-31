@@ -10,20 +10,19 @@ import {
   ref,
   watch,
 } from 'vue'
-import ElCheckbox from '@element-plus/components/checkbox'
-import ElButton from '@element-plus/components/button'
-import ElIcon from '@element-plus/components/icon'
-import { Bottom } from '@element-plus/icons-vue'
 import { useNamespace } from '@element-plus/hooks'
+import ElIcon from '@element-plus/components/icon'
+import ElCheckbox from '@element-plus/components/checkbox'
 import FilterPanel from '../filter-panel.vue'
 import useLayoutObserver from '../layout-observer'
 import { TABLE_INJECTION_KEY } from '../tokens'
 import useEvent from './event-helper'
+import FilterIcon from './filter-icon.vue'
 import useStyle from './style.helper'
 import useUtils from './utils-helper'
 
-import type TableLayout from '../table-layout'
 import type { ComponentInternalInstance, PropType, Ref } from 'vue'
+import type TableLayout from '../table-layout'
 import type { DefaultRow, Sort } from '../table/defaults'
 import type { Store } from '../store'
 
@@ -273,6 +272,7 @@ export default defineComponent({
                       h(
                         'span',
                         {
+                          class: 'icon-wrap',
                           onClick: ($event: any) =>
                             handleSortClick($event, column),
                           // class: 'caret-wrapper',
@@ -292,21 +292,15 @@ export default defineComponent({
 
                           // beyond v3
                           h(
-                            ElButton,
+                            ElIcon,
+                            { class: 'icon-arrow' },
                             {
-                              class: 'sort-caret-custom',
-                              type: 'text',
-                              size: 'small',
-                            },
-                            {
-                              default: () =>
-                                h(
-                                  ElIcon,
-                                  { class: 'icon-arrow' },
-                                  {
-                                    default: () => h(Bottom),
-                                  }
-                                ),
+                              default: () => h(FilterIcon),
+                              // h(
+                              //   '<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" >\n' +
+                              //     '<path d="M8.14648 6.3535L6.49998 8V3H5.49998V8L3.85348 6.3535L3.14648 7.0605L5.29298 9.207C5.48051 9.39447 5.73482 9.49979 5.99998 9.49979C6.26515 9.49979 6.51946 9.39447 6.70698 9.207L8.85349 7.0605L8.14648 6.3535Z" />\n' +
+                              //     '</svg>'
+                              // ),
                             }
                           ),
                         ]

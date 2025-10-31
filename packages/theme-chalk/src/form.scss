@@ -161,7 +161,7 @@ $form-item-label-top-margin-bottom: map.merge(
     flex-wrap: wrap;
     align-items: center;
     flex: 1;
-    line-height: #{map.get($form-item-line-height, 'default')};
+    line-height: 1;
     position: relative;
     font-size: var(--font-size);
     min-width: 0;

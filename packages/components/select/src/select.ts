@@ -266,10 +266,7 @@ export const selectProps = buildProps({
   /**
    * @description determines whether the arrow is displayed
    */
-  showArrow: {
-    type: Boolean,
-    default: true,
-  },
+  showArrow: Boolean,
   /**
    * @description offset of the dropdown
    */
