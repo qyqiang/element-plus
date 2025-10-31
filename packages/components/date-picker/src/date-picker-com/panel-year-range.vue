@@ -295,6 +295,11 @@ const parseUserInput = (value: Dayjs | Dayjs[]) => {
     isDefaultFormat
   )
 }
+const formatToString = (value: Dayjs[] | Dayjs) => {
+  return isArray(value)
+    ? value.map((day) => day.format(format.value))
+    : value.format(format.value)
+}
 
 const isValidValue = (date: [Dayjs, Dayjs]) => {
   return (
@@ -348,5 +353,6 @@ watch(
 
 emit('set-picker-option', ['isValidValue', isValidValue])
 emit('set-picker-option', ['parseUserInput', parseUserInput])
+emit('set-picker-option', ['formatToString', formatToString])
 emit('set-picker-option', ['handleClear', handleClear])
 </script>

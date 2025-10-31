@@ -163,6 +163,7 @@
 </template>
 
 <script lang="ts" setup>
+import { isArray } from '@element-plus/utils'
 import { computed, inject, ref, toRef, unref, watch } from 'vue'
 import dayjs from 'dayjs'
 import ElButton from '@element-plus/components/button/src/button.vue'
@@ -282,6 +283,12 @@ const handleClear = () => {
   emit('pick', valueOnClear)
 }
 
+const formatToString = (value: Dayjs | Dayjs[]) => {
+  return isArray(value)
+    ? value.map((_) => _.format(format.value))
+    : value.format(format.value)
+}
+
 const parseUserInput = (value: Dayjs | Dayjs[]) => {
   return correctlyParseUserInput(
     value,
@@ -316,6 +323,7 @@ watch(
 )
 
 emit('set-picker-option', ['isValidValue', isValidRange])
+emit('set-picker-option', ['formatToString', formatToString])
 emit('set-picker-option', ['parseUserInput', parseUserInput])
 emit('set-picker-option', ['handleClear', handleClear])
 </script>
