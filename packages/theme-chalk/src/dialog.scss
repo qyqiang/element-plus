@@ -87,7 +87,7 @@
   }
 
   @include e(title) {
-    font-family: var(--header-font-semibold);
+    font-family: var(--font-inter-semibold);
     line-height: getCssVar('dialog-font-line-height');
     font-size: getCssVar('dialog-title-font-size');
     font-weight: 600;

@@ -17,7 +17,7 @@
   overflow-wrap: break-word;
   word-break: normal;
   visibility: visible;
-  box-shadow: var(--shadow-400);
+  box-shadow: var(--shadow-300);
 
   $arrow-selector: #{& + '__arrow'};
 

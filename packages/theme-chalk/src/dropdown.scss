@@ -56,7 +56,6 @@ $dropdown-divider-width: 1px !default;
 
   @include e(popper) {
     @include set-component-css-var('dropdown', $dropdown);
-
     // using attributes selector to override
 
     .#{$namespace}-dropdown-menu {
@@ -147,7 +146,7 @@ $dropdown-menu-padding-vertical: map.merge(
   margin: 0;
   background-color: getCssVar('bg-color', 'overlay');
   border: none;
-  border-radius: getCssVar('border-radius-base');
+  border-radius: getCssVar('border-radius-custom');
   box-shadow: none;
   list-style: none;
 

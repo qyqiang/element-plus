@@ -8,7 +8,7 @@
     display: block;
     height: 1px;
     width: 100%;
-    margin: 24px 0;
+    margin: var(--el-margin);
     border-top: 1px getCssVar('border-color') getCssVar('border-style');
   }
 

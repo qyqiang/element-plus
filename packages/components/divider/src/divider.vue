@@ -28,6 +28,7 @@ const ns = useNamespace('divider')
 const dividerStyle = computed(() => {
   return ns.cssVar({
     'border-style': props.borderStyle,
+    margin: props.margin,
   }) as CSSProperties
 })
 </script>

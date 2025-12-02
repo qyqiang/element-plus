@@ -4,6 +4,7 @@ import type { ExtractPropTypes, __ExtractPublicPropTypes } from 'vue'
 import type Divider from './divider.vue'
 
 export type BorderStyle = CSSStyleDeclaration['borderStyle']
+export type Margin = CSSStyleDeclaration['margin']
 
 export const dividerProps = buildProps({
   /**
@@ -28,6 +29,13 @@ export const dividerProps = buildProps({
   borderStyle: {
     type: definePropType<BorderStyle>(String),
     default: 'solid',
+  },
+  /**
+   * @description the margin of the customized content on the divider line
+   */
+  margin: {
+    type: definePropType<Margin>(String),
+    default: '8px 0',
   },
 } as const)
 export type DividerProps = ExtractPropTypes<typeof dividerProps>
