@@ -209,7 +209,6 @@
   }
 
   @include e(placeholder) {
-    font-family: var(--font-inter);
     font-weight: 500;
     position: absolute;
     z-index: -1;

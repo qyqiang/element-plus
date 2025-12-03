@@ -10,7 +10,7 @@
 
   .el-picker-panel {
     border-radius: 0;
-    font-family: var(--font-inter);
+    font-weight: 400;
 
     .el-date-picker__header {
       height: 48px;
@@ -41,7 +41,6 @@
       border-color: #c1ccd6;
       font-size: 12px;
       font-weight: 600;
-      font-family: var(--font-inter-semibold);
     }
   }
 

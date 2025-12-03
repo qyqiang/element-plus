@@ -135,7 +135,7 @@
 
   thead {
     color: getCssVar('table-header-text-color');
-    font-family: var(--font-inter-semibold);
+   font-weight: 600;
 
     th {
       font-weight: 600;
