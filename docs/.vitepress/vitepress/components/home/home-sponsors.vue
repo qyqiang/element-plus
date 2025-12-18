@@ -1,16 +1,7 @@
-<script lang="ts" setup>
-import { goldSponsors, platinumSponsors } from '../../../config/sponsors'
-import SponsorsButton from '../sponsors/sponsors-button.vue'
-import SponsorList from './sponsor-list.vue'
-</script>
+<script lang="ts" setup></script>
 
 <template>
-  <div class="sponsors-container" m="auto">
-    <SponsorList :sponsors="platinumSponsors" sponsor-type="platinumSponsor" />
-    <SponsorList :sponsors="goldSponsors" sponsor-type="goldSponsor" />
-
-    <sponsors-button round />
-  </div>
+  <div class="sponsors-container" m="auto"></div>
 </template>
 
 <style lang="scss">

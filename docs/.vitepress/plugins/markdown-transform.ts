@@ -2,10 +2,8 @@ import fs from 'fs'
 import path from 'path'
 import { camelize } from '@vue/shared'
 import glob from 'fast-glob'
-import { docRoot, docsDirName, projRoot } from '@element-plus/build-utils'
-import { REPO_BRANCH, REPO_PATH } from '@element-plus/build-constants'
-import { getLang, languages } from '../utils/lang'
-import footerLocale from '../i18n/component/footer.json'
+import { docRoot } from '@element-plus/build-utils'
+import { languages } from '../utils/lang'
 
 import type { Plugin } from 'vite'
 
@@ -92,55 +90,11 @@ const transformVpScriptSetup = (code: string, append: Append) => {
   return code
 }
 
-const GITHUB_BLOB_URL = `https://github.com/${REPO_PATH}/blob/${REPO_BRANCH}`
-const GITHUB_TREE_URL = `https://github.com/${REPO_PATH}/tree/${REPO_BRANCH}`
 const transformComponentMarkdown = (
   id: string,
   componentId: string,
-  code: string,
-  append: Append
+  code: string
 ) => {
-  const lang = getLang(id)
-  const docUrl = `${GITHUB_BLOB_URL}/${docsDirName}/en-US/component/${componentId}.md`
-  const componentUrl = `${GITHUB_TREE_URL}/packages/components/${componentId}`
-  const styleUrl = `${GITHUB_TREE_URL}/packages/theme-chalk/src/${componentId}.scss`
-
-  const componentPath = path.resolve(
-    projRoot,
-    `packages/components/${componentId}`
-  )
-  const stylePath = path.resolve(
-    projRoot,
-    `packages/theme-chalk/src/${componentId}.scss`
-  )
-
-  const isComponent = fs.existsSync(componentPath)
-  const isHaveComponentStyle = fs.existsSync(stylePath)
-
-  const links = [[footerLocale[lang].docs, docUrl]]
-
-  if (isComponent && isHaveComponentStyle)
-    links.unshift([footerLocale[lang].style, styleUrl])
-
-  if (isComponent) links.unshift([footerLocale[lang].component, componentUrl])
-
-  const linksText = links
-    .filter((i) => i)
-    .map(([text, link]) => `[${text}](${link})`)
-    .join(' • ')
-
-  const sourceSection = `
-## ${footerLocale[lang].source}
-
-${linksText}`
-
-  const contributorsSection = `
-## ${footerLocale[lang].contributors}
-
-<Contributors id="${componentId}" />`
-
-  append.footers.push(sourceSection, isComponent ? contributorsSection : '')
-
   return code
 }
 

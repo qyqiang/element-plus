@@ -54,26 +54,6 @@
         v-if="!filteredSidebars.length"
         :description="locale['empty-description']"
       />
-
-      <p class="designed-by">
-        Icons designed by
-        <el-link
-          type="primary"
-          underline="never"
-          href="https://github.com/daodaozz08"
-          target="_blank"
-        >
-          @叨叨
-        </el-link>
-        <el-link
-          type="primary"
-          underline="never"
-          href="https://github.com/zhiwendesign"
-          target="_blank"
-        >
-          @卡卡
-        </el-link>
-      </p>
     </div>
   </div>
 </template>

@@ -1,10 +1,9 @@
 <script setup lang="ts">
-import { computed, getCurrentInstance, ref, toRef } from 'vue'
+import { computed, getCurrentInstance, ref } from 'vue'
 import { isClient, useClipboard, useToggle } from '@vueuse/core'
 import { EVENT_CODE } from 'element-plus'
 import { CaretTop } from '@element-plus/icons-vue'
 import { useLang } from '../composables/lang'
-import { useSourceCode } from '../composables/source-code'
 import { usePlayground } from '../composables/use-playground'
 import demoBlockLocale from '../../i18n/component/demo-block.json'
 import SourceCode from './demo/vp-source-code.vue'
@@ -25,7 +24,6 @@ const { copy, isSupported } = useClipboard({
 
 const [sourceVisible, toggleSourceVisible] = useToggle()
 const lang = useLang()
-const demoSourceUrl = useSourceCode(toRef(props, 'path'))
 
 const sourceCodeRef = ref<HTMLButtonElement>()
 
@@ -93,27 +91,6 @@ const copyCode = async () => {
           @keydown.prevent.space="onPlaygroundClick"
         >
           <i-ri-flask-line />
-        </ElIcon>
-      </ElTooltip>
-      <ElTooltip
-        :content="locale['edit-on-github']"
-        :show-arrow="false"
-        :trigger="['hover', 'focus']"
-        :trigger-keys="[]"
-      >
-        <ElIcon
-          :size="16"
-          class="op-btn github"
-          style="color: var(--text-color-light)"
-        >
-          <a
-            :href="demoSourceUrl"
-            :aria-label="locale['edit-on-github']"
-            rel="noreferrer noopener"
-            target="_blank"
-          >
-            <i-ri-github-line />
-          </a>
         </ElIcon>
       </ElTooltip>
       <ElTooltip
