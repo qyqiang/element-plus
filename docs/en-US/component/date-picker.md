@@ -162,7 +162,7 @@ interface DateCell {
 
 ## Localization
 
-The default locale of is English, if you need to use other languages, please check [Internationalization](/en-US/guide/i18n)
+The default locale of is English, if you need to use other languages
 
 Note, date time locale (month name, first day of the week ...) are also configured in localization.
 

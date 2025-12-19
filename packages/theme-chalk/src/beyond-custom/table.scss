@@ -78,12 +78,6 @@
 }
 
 .el-table--border {
-  th.el-table__cell {
-    &:nth-child(1) {
-      border-right: none;
-    }
-  }
-
   .el-table__cell {
     &:has(.el-input) {
       padding: 0;

@@ -35,7 +35,6 @@
 
   @include when(light) {
     background: getCssVar('bg-color', 'overlay');
-    border: 1px solid getCssVar('border-color', 'custom');
 
     > #{$arrow-selector}::before {
       border: 1px solid getCssVar('border-color', 'custom');
@@ -45,7 +44,7 @@
   }
 
   @include when(pure) {
-    padding: 0;
+    padding: 1px;
   }
 
   @include e(arrow) {
