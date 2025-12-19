@@ -118,3 +118,7 @@
     }
   }
 }
+
+.el-input__prefix ~ .float-label {
+  left: 28px;
+}
