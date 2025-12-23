@@ -75,6 +75,7 @@
               <button
                 v-if="showClose"
                 :aria-label="t('el.drawer.close')"
+                class="icon-button"
                 :class="ns.e('close-btn')"
                 type="button"
                 @click="handleClose"
@@ -114,13 +115,13 @@
 </template>
 
 <script lang="ts" setup>
+import { computed, ref, useSlots } from 'vue'
 import { useDialog } from '@element-plus/components/dialog'
 import ElFocusTrap from '@element-plus/components/focus-trap'
 import ElIcon from '@element-plus/components/icon'
 import { ElOverlay } from '@element-plus/components/overlay'
 import ElTeleport from '@element-plus/components/teleport'
 import { useDeprecated, useLocale, useNamespace } from '@element-plus/hooks'
-import { computed, ref, useSlots } from 'vue'
 import { useResizable } from './composables/useResizable'
 import { drawerEmits, drawerProps } from './drawer'
 
