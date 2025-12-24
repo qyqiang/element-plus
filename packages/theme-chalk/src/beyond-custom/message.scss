@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   box-shadow: var(--shadow-400);
+  min-height: 48px;
 
   &.is-alert {
     border-radius: 0;

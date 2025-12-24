@@ -21,6 +21,7 @@ const openVn = () => {
       h('span', null, 'Message can be '),
       h('i', { style: 'color: teal' }, 'VNode'),
     ]),
+    duration: 9999999,
   })
 }
 </script>

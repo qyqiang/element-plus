@@ -1,7 +1,7 @@
 <template>
   <transition :name="ns.b('fade')">
     <div
-      v-show="always || visible"
+      v-show="always || visible || bar.key === 'horizontal'"
       ref="instance"
       :class="[ns.e('bar'), ns.is(bar.key)]"
       @mousedown="clickTrackHandler"

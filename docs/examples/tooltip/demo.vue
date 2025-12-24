@@ -13,7 +13,7 @@
   <el-tooltip placement="bottom" effect="light" trigger="click">
     <template #content>
       test button
-      <el-button plain size="small">Ctrl</el-button>
+      <el-button plain size="small" class="ctrl">Ctrl</el-button>
       <el-button plain size="small">A</el-button>
     </template>
     <el-button>Button</el-button>
@@ -24,13 +24,16 @@
 </template>
 
 <script setup lang="ts"></script>
+
 <style>
 .el-popper.is-customized {
   /* Set padding to ensure the height is 32px */
   padding: 6px 12px;
   background: linear-gradient(90deg, rgb(159, 229, 151), rgb(204, 229, 129));
 }
-
+.ctrl {
+  margin-left: 16px;
+}
 .el-popper.is-customized .el-popper__arrow::before {
   background: linear-gradient(45deg, #b2e68d, #bce689);
   right: 0;

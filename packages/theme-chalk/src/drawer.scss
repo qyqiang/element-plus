@@ -55,6 +55,9 @@ $directions: rtl, ltr, ttb, btt;
     text-align: right;
     border-top: 1px solid var(--color-gray-100);
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
   }
 
   &__close-btn {

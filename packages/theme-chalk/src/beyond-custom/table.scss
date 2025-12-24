@@ -1,12 +1,11 @@
 @use './font.scss' as *;
 
 .el-table {
+  border-bottom: 1px solid #e7ecef;
+
   .el-table__header-wrapper {
     border-bottom: none;
-  }
-
-  .el-table__cell {
-    padding: 9px 0;
+    border-top: 1px solid #c1ccd6;
   }
 
   thead {

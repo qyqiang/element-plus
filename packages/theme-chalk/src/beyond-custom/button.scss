@@ -1,6 +1,5 @@
 .el-button {
   font-weight: var(--p-font-weight-semibold);
-  min-width: 48px;
 
   &.icon-button {
     padding: 0;
@@ -30,19 +29,12 @@
     }
   }
 
-  &:has(.el-checkbox) {
-    padding-left: 0;
-    padding-right: 0;
-  }
-
   > span {
     > .el-icon {
       margin-left: 4px;
     }
 
     > .el-checkbox {
-      padding-left: 12px;
-      padding-right: 12px;
       font-size: inherit;
 
       &.is-checked {

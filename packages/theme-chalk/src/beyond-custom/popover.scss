@@ -26,15 +26,6 @@
   display: flex;
   align-items: center;
 
-  span {
-    display: block;
-    line-height: 16px;
-  }
-
-  .el-button:first-child {
-    margin-left: 16px;
-  }
-
   .el-button + .el-button {
     margin-left: 4px;
   }
