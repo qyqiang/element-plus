@@ -1,5 +1,10 @@
 <template>
-  <el-input v-model="input" style="width: 240px" placeholder="Please input" />
+  <el-input
+    v-model="input"
+    style="width: 240px"
+    placeholder="Please input"
+    :float-label="false"
+  />
 </template>
 
 <script lang="ts" setup>

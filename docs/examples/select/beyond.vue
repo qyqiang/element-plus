@@ -3,7 +3,37 @@
   <div class="flex flex-wrap gap-4 items-center">
     <el-select
       v-model="value"
-      :float-label="false"
+      clearable
+      pre-star
+      placeholder="Please Select"
+      label="label1"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <el-select
+      v-model="value"
+      clearable
+      pre-star
+      filterable
+      placeholder="Please Select"
+      label="label1"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <el-select
+      v-model="value"
       clearable
       pre-star
       placeholder="Please Select"

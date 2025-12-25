@@ -45,7 +45,10 @@
           <span
             v-if="floatLabel"
             class="float-label"
-            :class="{ 'prefix-label': $slots.prefix }"
+            :class="{
+              'prefix-label': $slots.prefix,
+              'select-visible': dropdownMenuVisible,
+            }"
           >
             {{ placeholder }}
           </span>

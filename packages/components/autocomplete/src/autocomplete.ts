@@ -94,6 +94,14 @@ export const autocompleteProps = buildProps({
     type: Boolean,
     default: true,
   },
+  isHoverSuffix: {
+    type: Boolean,
+    default: false,
+  },
+  isClear: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description whether to emit a `select` event on enter when there is no autocomplete match
    */
@@ -124,6 +132,20 @@ export const autocompleteProps = buildProps({
   loopNavigation: {
     type: Boolean,
     default: true,
+  },
+  /**
+   * @description min-value
+   */
+  minValue: {
+    type: Number,
+    default: 0,
+  },
+  /**
+   * @description min-value
+   */
+  needNoDataTip: {
+    type: Boolean,
+    default: false,
   },
 } as const)
 export type AutocompleteProps = ExtractPropTypes<typeof autocompleteProps>

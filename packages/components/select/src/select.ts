@@ -272,7 +272,7 @@ export const selectProps = buildProps({
    */
   offset: {
     type: Number,
-    default: 12,
+    default: 4,
   },
   /**
    * @description position of dropdown

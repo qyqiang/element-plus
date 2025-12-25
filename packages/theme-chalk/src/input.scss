@@ -188,6 +188,7 @@
       display: inline-block;
       padding-left: 8px;
     }
+
     @include when(outside) {
       height: unset;
       position: absolute;
@@ -386,6 +387,12 @@
     }
     .float-label {
       background-color: transparent;
+
+      &.has-value {
+        background-color: #fff;
+
+        @include float-label-value
+      }
     }
     .#{$namespace}-input__inner {
       color: var(--color-gray-990);

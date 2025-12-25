@@ -144,6 +144,7 @@ const tableColumns = ref<any[]>([
     prop: 'age',
     label: 'Age',
     width: '120',
+    resizable: false,
     sortable: true,
   },
   {

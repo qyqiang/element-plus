@@ -7,7 +7,7 @@
     label-width="auto"
   >
     <el-form-item label="Activity name" prop="name" pre-star>
-      <el-input v-model="ruleForm.name" pre-star />
+      <el-input v-model="ruleForm.name" pre-star placeholder="sss" />
     </el-form-item>
     <el-form-item label="Activity zone" prop="region">
       <el-select v-model="ruleForm.region" placeholder="Activity zone" pre-star>
@@ -77,7 +77,7 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="Activity form" prop="desc">
-      <el-input v-model="ruleForm.desc" type="textarea" />
+      <el-input v-model="ruleForm.desc" type="textarea" placeholder="test" />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">
@@ -108,7 +108,7 @@ interface RuleForm {
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
-  name: '',
+  name: 'ssssds',
   region: '',
   count: '',
   date1: '',

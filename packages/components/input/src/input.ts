@@ -24,6 +24,7 @@ export type InputModelModifiers = {
 export type InputAutoSize = { minRows?: number; maxRows?: number } | boolean
 
 export const inputProps = buildProps({
+  isHoverSuffix: Boolean,
   /**
    * @description native input id
    */

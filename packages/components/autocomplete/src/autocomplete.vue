@@ -10,6 +10,16 @@
     :append-to="appendTo"
     :gpu-acceleration="false"
     pure
+    :popper-options="{
+      modifiers: [
+        {
+          name: 'offset',
+          options: {
+            offset: [0, 4],
+          },
+        },
+      ],
+    }"
     manual-mode
     effect="light"
     trigger="click"
@@ -30,6 +40,7 @@
     >
       <el-input
         ref="inputRef"
+        :is-hover-suffix="isHoverSuffix"
         v-bind="mergeProps(passInputProps, $attrs)"
         :model-value="modelValue"
         :pre-star="preStar"
@@ -88,16 +99,21 @@
             </slot>
           </li>
           <template v-else>
-            <li
-              v-for="(item, index) in suggestions"
-              :id="`${listboxId}-item-${index}`"
-              :key="index"
-              :class="{ highlighted: highlightedIndex === index }"
-              role="option"
-              :aria-selected="highlightedIndex === index"
-              @click="handleSelect(item)"
-            >
-              <slot :item="item">{{ item[valueKey] }}</slot>
+            <template v-if="suggestions.length > 0">
+              <li
+                v-for="(item, index) in suggestions"
+                :id="`${listboxId}-item-${index}`"
+                :key="index"
+                :class="{ highlighted: highlightedIndex === index }"
+                role="option"
+                :aria-selected="highlightedIndex === index"
+                @click="handleSelect(item)"
+              >
+                <slot :item="item">{{ item[valueKey] }}</slot>
+              </li>
+            </template>
+            <li v-else class="no-data">
+              {{ emptyTip }}
             </li>
           </template>
         </el-scrollbar>
@@ -164,7 +180,7 @@ const inputRef = ref<InputInstance>()
 const regionRef = ref<HTMLElement>()
 const popperRef = ref<TooltipInstance>()
 const listboxRef = ref<HTMLElement>()
-
+const isSelect = ref(false)
 let readonly = false
 let ignoreFocusEvent = false
 const suggestions = ref<AutocompleteData>([])
@@ -173,12 +189,16 @@ const dropdownWidth = ref('')
 const activated = ref(false)
 const suggestionDisabled = ref(false)
 const loading = ref(false)
+const emptyTip = ref('No result match')
 
 const listboxId = useId()
 const styles = computed(() => rawAttrs.style as StyleValue)
 
 const suggestionVisible = computed(() => {
-  const isValidData = suggestions.value.length > 0
+  const isValidData =
+    props.minValue > 0 || props.needNoDataTip
+      ? isArray(suggestions.value)
+      : suggestions.value.length > 0
   return (isValidData || loading.value) && activated.value
 })
 
@@ -206,6 +226,7 @@ const onHide = () => {
 const getData = async (queryString: string) => {
   if (suggestionDisabled.value) return
 
+  loading.value = true
   const cb = (suggestionList: AutocompleteData) => {
     loading.value = false
     if (suggestionDisabled.value) return
@@ -213,12 +234,14 @@ const getData = async (queryString: string) => {
     if (isArray(suggestionList)) {
       suggestions.value = suggestionList
       highlightedIndex.value = props.highlightFirstItem ? 0 : -1
+      if (suggestionList.length === 0) {
+        emptyTip.value = `No result match`
+      }
     } else {
       throwError(COMPONENT_NAME, 'autocomplete suggestions must be an array')
     }
   }
 
-  loading.value = true
   if (isArray(props.fetchSuggestions)) {
     cb(props.fetchSuggestions)
   } else {
@@ -235,8 +258,15 @@ const handleInput = (value: string) => {
 
   emit(INPUT_EVENT, value)
   emit(UPDATE_MODEL_EVENT, value)
-
+  emptyTip.value = ''
+  if (value.length < props.minValue) {
+    emptyTip.value = `Type ${props.minValue} characters to start search.`
+    suggestionDisabled.value = true
+    suggestions.value = []
+    return
+  }
   suggestionDisabled.value = false
+  isSelect.value = false
   activated.value ||= valuePresented
 
   if (!props.triggerOnFocus && !value) {
@@ -263,12 +293,12 @@ const handleChange = (value: string | number) => {
 }
 
 const handleFocus = (evt: FocusEvent) => {
+  const str = String(props.modelValue) ? String(props.modelValue) : ''
   if (!ignoreFocusEvent) {
     activated.value = true
     emit('focus', evt)
-    const queryString = props.modelValue ?? ''
-    if (props.triggerOnFocus && !readonly) {
-      debouncedGetData(String(queryString))
+    if (props.triggerOnFocus && !readonly && str.length >= props.minValue) {
+      debouncedGetData(str)
     }
   } else {
     ignoreFocusEvent = false
@@ -282,6 +312,9 @@ const handleBlur = (evt: FocusEvent) => {
     if (popperRef.value?.isFocusInsideContent()) {
       ignoreFocusEvent = true
       return
+    }
+    if (!isSelect.value && props.isClear) {
+      emit(UPDATE_MODEL_EVENT, '')
     }
     activated.value && close()
     emit('blur', evt)
@@ -304,7 +337,7 @@ const handleKeyEnter = async () => {
     highlightedIndex.value >= 0 &&
     highlightedIndex.value < suggestions.value.length
   ) {
-    handleSelect(suggestions.value[highlightedIndex.value])
+    await handleSelect(suggestions.value[highlightedIndex.value])
   } else {
     if (props.selectWhenUnmatched) {
       emit('select', { value: props.modelValue })
@@ -341,6 +374,7 @@ const handleSelect = async (item: any) => {
   emit(UPDATE_MODEL_EVENT, item[props.valueKey])
   emit('select', item)
   suggestions.value = []
+  isSelect.value = true
   highlightedIndex.value = -1
 }
 
@@ -440,7 +474,7 @@ onBeforeUnmount(() => {
 onMounted(() => {
   const inputElement = inputRef.value?.ref
   if (!inputElement) return
-    ;[
+  ;[
     { key: 'role', value: 'textbox' },
     { key: 'aria-autocomplete', value: 'list' },
     { key: 'aria-controls', value: 'id' },
@@ -467,6 +501,8 @@ defineExpose({
   /** @description fetch suggestions result */
   suggestions,
   /** @description triggers when a suggestion is clicked */
+  /** @description empty-tip */
+  emptyTip,
   handleSelect,
   /** @description handle keyboard enter event */
   handleKeyEnter,

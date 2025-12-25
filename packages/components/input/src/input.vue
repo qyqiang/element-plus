@@ -57,9 +57,12 @@
           @keydown="handleKeydown"
         />
         <span
-          v-if="floatLabel"
+          v-if="floatLabel && placeholder"
           class="float-label"
-          :class="{ 'prefix-label': $slots.prefix || prefixIcon }"
+          :class="{
+            'prefix-label': $slots.prefix || prefixIcon,
+            'has-value': !!modelValue,
+          }"
           >{{ placeholder }}</span
         >
         <!-- suffix slot -->
@@ -88,7 +91,10 @@
                 !validateState
               "
             >
-              <slot name="suffix" />
+              <slot
+                v-if="(isHoverSuffix && hovering) || !isHoverSuffix"
+                name="suffix"
+              />
               <el-icon v-if="suffixIcon" :class="nsInput.e('icon')">
                 <component :is="suffixIcon" />
               </el-icon>
@@ -153,7 +159,7 @@
           </span>
         </span>
         <el-tooltip
-          v-if="validateState"
+          v-if="validateError"
           :content="validateMsg"
           effect="light"
           placement="top"
@@ -220,7 +226,7 @@
         <slot name="textareaSuffix" />
       </span>
       <el-tooltip
-        v-if="validateState"
+        v-if="validateError"
         :content="validateMsg"
         effect="light"
         placement="top"
@@ -244,7 +250,7 @@
         </el-icon>
       </el-tooltip>
       <span
-        v-if="floatLabel"
+        v-if="floatLabel && placeholder"
         class="float-label"
         :class="{ 'has-value': !!modelValue }"
         @click="handleTextareaFocus"
@@ -389,10 +395,11 @@ const { wrapperRef, isFocused, handleFocus, handleBlur } = useFocusController(
 
 const needStatusIcon = computed(() => elForm?.statusIcon ?? false)
 const validateState = computed(() => elFormItem?.validateState || '')
-const validateMsg = computed(() => elFormItem?.error || '')
+const validateMsg = computed(() => elFormItem?.validateMessage || '')
 const validateIcon = computed(
   () => validateState.value && ValidateComponentsMap[validateState.value]
 )
+const validateError = computed(() => validateState.value === 'error')
 const containerStyle = computed<StyleValue>(() => [
   rawAttrs.style as StyleValue,
 ])

@@ -47,7 +47,7 @@ function useEvent<T extends DefaultRow>(
     tableLeft: number
   }>()
   const handleMouseDown = (event: MouseEvent, column: TableColumnCtx<T>) => {
-    if (!isClient) return
+    if (!isClient || !column.resizable) return
     if (column.children && column.children.length > 0) return
     /* istanbul ignore if */
     if (draggingColumn.value && props.border) {
