@@ -94,10 +94,10 @@ const iconColor = computed(() => {
   return props.isShow
     ? '#2a3f4d'
     : isChecked.value
-    ? isDisabled.value
-      ? '#2a3f4d'
-      : '#fff'
-    : '#2a3f4d'
+      ? isDisabled.value
+        ? '#2a3f4d'
+        : '#fff'
+      : '#2a3f4d'
 })
 const compKls = computed(() => {
   return [

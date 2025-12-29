@@ -18,7 +18,7 @@ export const linkProps = buildProps({
   underline: {
     type: [Boolean, String],
     values: [true, false, 'always', 'never', 'hover'],
-    default: undefined,
+    default: 'always',
   },
   /**
    * @description whether the component is disabled

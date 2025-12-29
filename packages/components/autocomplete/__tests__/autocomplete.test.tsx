@@ -39,8 +39,8 @@ const _mount = (
         function filterList(queryString: string) {
           return queryString
             ? state.list.filter(
-              (i) => i.value.indexOf(queryString.toLowerCase()) === 0
-            )
+                (i) => i.value.indexOf(queryString.toLowerCase()) === 0
+              )
             : state.list
         }
 
@@ -438,8 +438,8 @@ describe('Autocomplete.vue', () => {
           function filterList(queryString: string) {
             return queryString
               ? state.list.filter(
-                (i) => i.value.indexOf(queryString.toLowerCase()) === 0
-              )
+                  (i) => i.value.indexOf(queryString.toLowerCase()) === 0
+                )
               : state.list
           }
 

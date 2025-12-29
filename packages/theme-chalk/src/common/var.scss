@@ -107,7 +107,7 @@ $text-color: map.merge(
     (
       'primary': #0e171f,
       'brand': #eb5100,
-      'regular': #606266,
+      'regular': #0e171f,
       'secondary': #3e5463,
       'tertiary': #5b7282,
       'placeholder': #9fb1bd,
@@ -639,6 +639,7 @@ $input-font-size: map.merge(
     (
       'large': 14px,
       'default': 14px,
+      'custom': 13px,
       'small': 12px,
     ),
     $input-font-size
@@ -759,7 +760,7 @@ $statistic: map.merge(
 $button: () !default;
 $button: map.merge(
     (
-      'font-weight': getCssVar('font-weight-primary'),
+      'font-weight': 600,
       'border-color': getCssVar('border-color'),
       'bg-color': getCssVar('fill-color', 'blank'),
       'text-color': getCssVar('text-color', 'regular'),

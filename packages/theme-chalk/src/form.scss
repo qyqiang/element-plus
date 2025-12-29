@@ -214,7 +214,7 @@ $form-item-label-top-margin-bottom: map.merge(
   }
 
   @include when(error) {
-    .el-input, .el-textarea {
+    .el-input, .el-textarea,.el-autocomplete {
       & + .el-form-item__error {
         display: none
       }
@@ -246,10 +246,10 @@ $form-item-label-top-margin-bottom: map.merge(
         box-shadow: 0 0 0 1px transparent inset;
       }
 
-        .#{$namespace}-input__validateIcon {
-          display: none;
-        }
+      .#{$namespace}-input__validateIcon {
+        display: none;
       }
+    }
 
     .#{$namespace}-checkbox__inner {
       background-color: #fabbb4;

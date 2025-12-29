@@ -40,8 +40,8 @@
               ? '#2a3f4d'
               : '#fff'
             : badgeType === 'warning'
-            ? '#d9a514'
-            : '#2a3f4d'
+              ? '#d9a514'
+              : '#2a3f4d'
         "
         size="16px"
         v-html="iconComponent"
@@ -75,6 +75,8 @@
 import { computed, nextTick, onMounted, ref, watch } from 'vue'
 import { useEventListener, useResizeObserver, useTimeoutFn } from '@vueuse/core'
 import {
+  TypeComponents,
+  TypeComponentsMap,
   getEventCode,
 } from '@element-plus/utils'
 import ElBadge from '@element-plus/components/badge'
@@ -82,7 +84,6 @@ import ElButton from '@element-plus/components/button'
 import { useGlobalComponentSettings } from '@element-plus/components/config-provider'
 import { ElIcon } from '@element-plus/components/icon'
 import { EVENT_CODE } from '@element-plus/constants'
-import { TypeComponents, TypeComponentsMap } from '@element-plus/utils'
 import {
   MESSAGE_DEFAULT_PLACEMENT,
   messageEmits,

@@ -35,7 +35,16 @@
 
 <script lang="ts">
 // @ts-nocheck
-import { computed, defineComponent, getCurrentInstance, nextTick, onBeforeUnmount, reactive, toRefs, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  getCurrentInstance,
+  nextTick,
+  onBeforeUnmount,
+  reactive,
+  toRefs,
+  unref,
+} from 'vue'
 import { useId, useNamespace } from '@element-plus/hooks'
 import { useOption } from './useOption'
 import { COMPONENT_NAME, optionProps } from './option'
@@ -60,14 +69,14 @@ export default defineComponent({
       ns.be('dropdown', 'item'),
       ns.is('disabled', unref(isDisabled)),
       ns.is('selected', unref(itemSelected)),
-      ns.is('hovering', unref(hover))
+      ns.is('hovering', unref(hover)),
     ])
 
     const states = reactive<OptionStates>({
       index: -1,
       groupDisabled: false,
       visible: true,
-      hover: false
+      hover: false,
     })
 
     const {
@@ -76,7 +85,7 @@ export default defineComponent({
       isDisabled,
       select,
       hoverItem,
-      updateOption
+      updateOption,
     } = useOption(props, states)
 
     const { visible, hover } = toRefs(states)
@@ -121,8 +130,8 @@ export default defineComponent({
 
       hoverItem,
       updateOption,
-      selectOptionClick
+      selectOptionClick,
     } satisfies OptionExposed
-  }
+  },
 })
 </script>

@@ -1,6 +1,7 @@
 <template>
   <div>
     <h5>Primary</h5>
+    <el-button>Default</el-button>
     <el-button type="primary">ok</el-button>
     <el-button type="primary">Primary</el-button>
     <el-button type="primary" disabled>Disabled</el-button>

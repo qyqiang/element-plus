@@ -29,7 +29,7 @@
     box-sizing: border-box;
     cursor: pointer;
     text-align: left;
-    font-size: map.get($input-font-size, 'default');
+    font-size: map.get($input-font-size, 'custom');
     padding: map.get($select-wrapper-padding, 'default');
     gap: map.get($select-item-gap, 'default');
     min-height: map.get($input-height, 'default');
@@ -73,15 +73,15 @@
     @include when(focused) {
       border-color: getCssVar('color-primary');
       .select-visible.float-label {
-        color: getCssVar('text-color-tertiary');
-        transform: translateY(-17px);
+        color: var(--color-gray-700);
+        transform: translateY(-16px);
         transition: transform 100ms ease;
       }
     }
     @include when(value) {
       .float-label {
-        color: getCssVar('text-color-tertiary');
-        transform: translateY(-17px);
+        color: var(--color-gray-700);
+        transform: translateY(-16px);
         transition: transform 100ms ease;
       }
     }

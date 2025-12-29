@@ -211,31 +211,6 @@
                 v-text="states.inputValue"
               />
             </div>
-
-            <div
-              v-if="
-                multiple
-                  ? !hasModelValue
-                  : !floatLabel || (shouldShowPlaceholder && hasModelValue)
-              "
-              :class="[
-                nsSelect.e('selected-item'),
-                nsSelect.e('placeholder'),
-                nsSelect.is(
-                  'transparent',
-                  !hasModelValue || (expanded && !states.inputValue)
-                ),
-              ]"
-            >
-              <slot
-                name="label"
-                :index="getOption(modelValue!).index"
-                :label="currentPlaceholder"
-                :value="modelValue"
-              >
-                <span>{{ currentPlaceholder }}</span>
-              </slot>
-            </div>
           </div>
           <div ref="suffixRef" :class="nsSelect.e('suffix')">
             {{ labelSuffix }}

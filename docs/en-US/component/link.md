@@ -105,7 +105,7 @@ link/with-icon
 | Name      | Description                         | Type                                                                            | Default |
 | --------- | ----------------------------------- | ------------------------------------------------------------------------------- | ------- |
 | type      | type                                | ^[enum]`'primary' \| 'success' \| 'warning' \| 'danger' \| 'info' \| 'default'` | default |
-| underline | when underlines should appear       | ^[enum]`'always' \| 'hover' \| 'never' \| boolean`                              | hover   |
+| underline | when underlines should appear       | ^[enum]`'always' \| 'hover' \| 'never' \| boolean`                              | always  |
 | disabled  | whether the component is disabled   | ^[boolean]                                                                      | false   |
 | href      | same as native hyperlink's `href`   | ^[string]                                                                       | —       |
 | target    | same as native hyperlink's `target` | ^[enum]`'_blank' \| '_parent' \| '_self' \| '_top'`                             | \_self  |

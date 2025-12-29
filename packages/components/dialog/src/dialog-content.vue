@@ -83,8 +83,7 @@ const composedDialogRef = composeRefs(focusTrapRef, dialogRef)
 const headerBgColor = computed(() => {
   if (props.headerBackgroundColor) return props.headerBackgroundColor
   if (props.headerType === HeaderType.Error) return 'var(--color-red-100)'
-  if (props.headerType === HeaderType.Warning)
-    return 'var(--color-yellow-100)'
+  if (props.headerType === HeaderType.Warning) return 'var(--color-yellow-100)'
   return undefined
 })
 const draggable = computed(() => !!props.draggable)

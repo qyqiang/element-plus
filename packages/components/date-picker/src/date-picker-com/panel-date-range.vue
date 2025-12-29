@@ -366,8 +366,8 @@
 </template>
 
 <script lang="ts" setup>
-import { isArray } from '@element-plus/utils'
 import { computed, inject, ref, toRef, unref, watch } from 'vue'
+import { isArray } from '@element-plus/utils'
 import dayjs from 'dayjs'
 import { ClickOutside as vClickoutside } from '@element-plus/directives'
 import { useLocale } from '@element-plus/hooks'
