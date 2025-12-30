@@ -15,11 +15,23 @@
     <el-form-item label="Activity name" prop="name" pre-star>
       <el-input v-model="ruleForm.name" pre-star placeholder="sss" />
     </el-form-item>
+    <el-select
+      v-model="ruleForm.region"
+      placeholder="Activity zone"
+      multiple
+      disabled
+      fit-input-width
+    >
+      <el-option label="Zone one" value="shanghai" />
+      <el-option
+        label="Zone twoasdddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+        value="beijing"
+      />
+    </el-select>
     <el-form-item label="Activity zone" prop="region">
       <el-select
         v-model="ruleForm.region"
-        placeholder="Activity zone"
-        multiple
+        placeholder="Activity zone1"
         fit-input-width
       >
         <el-option label="Zone one" value="shanghai" />

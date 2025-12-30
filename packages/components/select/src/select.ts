@@ -184,10 +184,8 @@ export const selectProps = buildProps({
   /**
    * @description preStar
    */
-  preStar: {
-    type: Boolean,
-    default: false,
-  },
+  preStar: Boolean,
+  addShowTip: String,
   /**
    * @description unique identity key name for value, required when value is an object
    */

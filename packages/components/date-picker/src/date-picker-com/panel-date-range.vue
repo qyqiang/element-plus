@@ -196,6 +196,9 @@
             :min-date="minDate"
             :max-date="maxDate"
             :range-state="rangeState"
+            :cycle="cycle"
+            :sett-default-date="settDefaultDate"
+            :cycle-type="cycleType"
             :disabled-date="disabledDate"
             :cell-class-name="cellClassName"
             :show-week-number="showWeekNumber"
@@ -314,6 +317,9 @@
             :min-date="minDate"
             :max-date="maxDate"
             :range-state="rangeState"
+            :cycle="cycle"
+            :sett-default-date="settDefaultDate"
+            :cycle-type="cycleType"
             :disabled-date="disabledDate"
             :cell-class-name="cellClassName"
             :show-week-number="showWeekNumber"
@@ -342,7 +348,10 @@
         </div>
       </div>
     </div>
-    <div v-if="showTime" :class="ppNs.e('footer')">
+    <div
+      v-if="showTime || ['week', 'custom'].includes(cycleType) || isFooter"
+      :class="ppNs.e('footer')"
+    >
       <el-button
         v-if="clearable"
         text
@@ -353,6 +362,7 @@
         {{ t('el.datepicker.clear') }}
       </el-button>
       <el-button
+        v-if="isOk"
         plain
         size="small"
         :class="ppNs.e('link-btn')"
@@ -421,10 +431,14 @@ const pickerBase = inject(PICKER_BASE_INJECTION_KEY) as any
 const isDefaultFormat = inject(
   ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY
 ) as any
-const { disabledDate, cellClassName, defaultTime, clearable } = pickerBase.props
+const { disabledDate, cellClassName, defaultTime, clearable, isFooter, isOk } =
+  pickerBase.props
 const format = toRef(pickerBase.props, 'format')
 const shortcuts = toRef(pickerBase.props, 'shortcuts')
 const defaultValue = toRef(pickerBase.props, 'defaultValue')
+const cycle = toRef(pickerBase.props, 'cycle')
+const settDefaultDate = toRef(pickerBase.props, 'settDefaultDate')
+const cycleType = toRef(pickerBase.props, 'cycleType')
 const { lang } = useLocale()
 const leftDate = ref<Dayjs>(dayjs().locale(lang.value))
 const rightDate = ref<Dayjs>(dayjs().locale(lang.value).add(1, unit))
@@ -670,7 +684,9 @@ const formatEmit = (emitDayjs: Dayjs | null, index?: number) => {
   }
   return emitDayjs
 }
-
+const getSelectingDate: any = inject('getSelectingDate', {
+  getSelectingDate: undefined,
+})
 const handleRangePick = (
   val: {
     minDate: Dayjs
@@ -682,7 +698,9 @@ const handleRangePick = (
   const max_ = val.maxDate
   const minDate_ = formatEmit(min_, 0)
   const maxDate_ = formatEmit(max_, 1)
-
+  if (typeof getSelectingDate.getSelectingDate === 'function') {
+    getSelectingDate.getSelectingDate(val)
+  }
   if (maxDate.value === maxDate_ && minDate.value === minDate_) {
     return
   }

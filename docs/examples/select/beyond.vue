@@ -7,6 +7,8 @@
       pre-star
       placeholder="Please Select"
       label="label1"
+      filterable
+      add-show-tip="test"
       style="width: 240px"
     >
       <el-option

@@ -17,6 +17,13 @@
       :shortcuts="shortcuts"
       type="date"
     />
+    <div class="demonstration mt-2">Custom Open Component</div>
+    <el-divider />
+    <el-date-picker ref="datePicker" v-model="value2" type="date">
+      <template #open>
+        <div>custom open</div>
+      </template>
+    </el-date-picker>
   </div>
 </template>
 

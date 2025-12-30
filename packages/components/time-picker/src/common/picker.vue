@@ -28,9 +28,9 @@
     @hide="onHide"
   >
     <template #default>
-      <span v-if="$slots.open" @click="handleFocus">
+      <div v-if="$slots.open" ref="inputRef" @click="handleOpen">
         <slot name="open" />
-      </span>
+      </div>
       <template v-else>
         <el-input
           v-if="!isRangeInput"
@@ -152,6 +152,9 @@
         :time-format="timeFormat"
         :unlink-panels="unlinkPanels"
         :type="type"
+        :cycle="cycle"
+        :sett-default-date="settDefaultDate"
+        :cycle-type="cycleType"
         :default-value="defaultValue"
         :show-now="showNow"
         :show-week-number="showWeekNumber"

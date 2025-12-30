@@ -1,5 +1,12 @@
 @use './font.scss' as *;
 
+.select-add-tip {
+  font-size: 13px;
+  color: #9FB1BD;
+  padding: 8px 16px;
+  border-bottom: 1px solid #E7ECEF;
+}
+
 .el-select {
   border: none;
 

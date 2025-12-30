@@ -24,6 +24,12 @@ export type RangeState = {
 export type DisabledDateType = (date: Date) => boolean
 
 export const datePickerSharedProps = buildProps({
+  cycle: {
+    type: Number,
+    default: 0,
+  },
+  settDefaultDate: String,
+  cycleType: String,
   disabledDate: {
     type: definePropType<DisabledDateType>(Function),
   },

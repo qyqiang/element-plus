@@ -284,8 +284,31 @@ export const useBasicDateTable = (
 
   const handleRangePick = (newDate: Dayjs) => {
     if (!props.rangeState.selecting || !props.minDate) {
-      emit('pick', { minDate: newDate, maxDate: null })
-      emit('select', true)
+      if (props.cycleType === 'week') {
+        const offsetWeek = newDate.day()
+        newDate = newDate.subtract(offsetWeek, 'days')
+        const maxDate = newDate.add(props.cycle - 1, 'days')
+        emit('pick', { minDate: newDate, maxDate }, false)
+        emit('select', false)
+      } else if (props.cycleType === 'custom' && props.settDefaultDate) {
+        const defaultDate = dayjs(props.settDefaultDate)
+        const defaultDay = defaultDate.unix()
+        const newDay = newDate.unix()
+        const limitDay = (newDay - defaultDay) / (60 * 60 * 24)
+        const flag = limitDay > 0
+        const v1 = limitDay % (props.cycle * 7)
+        const date = newDate.add(
+          flag ? props.cycle * 7 - Math.abs(v1) : Math.abs(v1),
+          'days'
+        )
+        const v3 = v1 !== 0 ? date.subtract(props.cycle * 7, 'days') : newDate
+        const maxDate = v3.add(props.cycle * 7 - 1, 'days')
+        emit('pick', { minDate: v3, maxDate }, false)
+        emit('select', false)
+      } else {
+        emit('pick', { minDate: newDate, maxDate: null })
+        emit('select', true)
+      }
     } else {
       if (newDate >= props.minDate) {
         emit('pick', { minDate: props.minDate, maxDate: newDate })

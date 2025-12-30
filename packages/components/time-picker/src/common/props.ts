@@ -52,6 +52,20 @@ export const timePickerDefaultProps = buildProps({
   name: {
     type: definePropType<SingleOrRange<string>>([Array, String]),
   },
+  cycle: {
+    type: Number,
+    default: 0,
+  },
+  settDefaultDate: String,
+  cycleType: String,
+  isOk: {
+    type: Boolean,
+    default: true,
+  },
+  isFooter: {
+    type: Boolean,
+    default: false,
+  },
   /**
    * @description custom class name for TimePicker's dropdown
    */

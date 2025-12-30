@@ -26,6 +26,7 @@ import {
 import { SelectTypeKey, datePickerProps } from './props/date-picker'
 import { getPanel } from './panel-utils'
 
+import type { Dayjs } from 'dayjs'
 import type { DatePickerExpose } from './instance'
 
 dayjs.extend(localeData)
@@ -64,6 +65,7 @@ export default defineComponent({
       selectType.value = value
     }
     const commonPicker = ref<InstanceType<typeof CommonPicker>>()
+    const selectingDate = ref()
     const refProps: DatePickerExpose = {
       selectType,
       focus: () => {
@@ -78,8 +80,18 @@ export default defineComponent({
       handleClose: () => {
         commonPicker.value?.handleClose()
       },
+      selectingDate,
+    }
+    const getSelectingDate = (val: {
+      minDate: Dayjs
+      maxDate: Dayjs | null
+    }) => {
+      selectingDate.value = val
     }
 
+    provide('getSelectingDate', {
+      getSelectingDate,
+    })
     expose(refProps)
 
     const onModelValueUpdated = (val: SingleOrRange<DateModelType> | null) => {

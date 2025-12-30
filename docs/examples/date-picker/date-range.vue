@@ -10,6 +10,8 @@
       <el-date-picker
         v-model="value1"
         type="daterange"
+        :cycle="7"
+        cycle-type="week"
         range-separator="To"
         start-placeholder="Start date"
         end-placeholder="End date"

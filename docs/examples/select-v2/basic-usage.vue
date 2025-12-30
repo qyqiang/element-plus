@@ -2,6 +2,8 @@
   <el-select-v2
     v-model="value"
     :options="options"
+    filterable
+    add-show-tip="test"
     placeholder="Please select"
     style="width: 240px"
   />
