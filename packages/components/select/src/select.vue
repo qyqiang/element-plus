@@ -47,7 +47,8 @@
             class="float-label"
             :class="{
               'prefix-label': $slots.prefix,
-              'select-visible': dropdownMenuVisible,
+              'select-visible':
+                dropdownMenuVisible || !isEmpty(states.inputValue),
             }"
           >
             {{ placeholder }}
@@ -381,7 +382,12 @@ import ElScrollbar from '@element-plus/components/scrollbar'
 import ElTag from '@element-plus/components/tag'
 import ElIcon from '@element-plus/components/icon'
 import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
-import { flattedChildren, isArray, isObject } from '@element-plus/utils'
+import {
+  flattedChildren,
+  isArray,
+  isEmpty,
+  isObject,
+} from '@element-plus/utils'
 import { useCalcInputWidth } from '@element-plus/hooks'
 import { useProps } from '@element-plus/components/select-v2/src/useProps'
 import ElOption from './option.vue'
@@ -556,6 +562,7 @@ export default defineComponent({
       calculatorRef,
       inputStyle,
       getLabel,
+      isEmpty,
       getValue,
       getOptions,
       getDisabled,
