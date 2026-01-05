@@ -349,7 +349,33 @@
             :class="nsSelect.be('dropdown', 'empty')"
           >
             <slot name="empty">
-              <span>{{ emptyText }}</span>
+              <span v-if="!addItem">{{ emptyText }}</span>
+              <div
+                v-else
+                class="el-select-dropdown__item add-item"
+                @click="handleAddSelect"
+              >
+                <el-icon color="#4f566">
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <g clip-path="url(#clip0_743_39597)">
+                      <path
+                        d="M12 5.25H6.75V0H5.25V5.25H0V6.75H5.25V12H6.75V6.75H12V5.25Z"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_743_39597">
+                        <rect width="12" height="12" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </el-icon>
+                <span class="tip">{{ states.inputValue }}</span>
+              </div>
             </slot>
           </div>
           <div
@@ -421,6 +447,7 @@ export default defineComponent({
     UPDATE_MODEL_EVENT,
     CHANGE_EVENT,
     'remove-tag',
+    'add-item',
     'clear',
     'visible-change',
     'focus',
@@ -481,7 +508,9 @@ export default defineComponent({
         return acc
       }, [])
     }
-
+    const handleAddSelect = () => {
+      emit('add-item', API.states.inputValue)
+    }
     const manuallyRenderSlots = (vnodes: VNode[] | undefined) => {
       // After option rendering is completed, the useSelect internal state can collect the value of each option.
       // If the persistent value is false, option will not be rendered by default, so in this case,
@@ -561,6 +590,7 @@ export default defineComponent({
       selectedLabel,
       calculatorRef,
       inputStyle,
+      handleAddSelect,
       getLabel,
       isEmpty,
       getValue,

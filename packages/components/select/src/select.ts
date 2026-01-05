@@ -76,6 +76,10 @@ export const selectProps = buildProps({
    */
   disabled: Boolean,
   /**
+   * @description whether Select can add item
+   */
+  addItem: Boolean,
+  /**
    * @description whether select can be cleared
    */
   clearable: Boolean,

@@ -104,7 +104,13 @@
       </el-radio-group>
     </el-form-item>
     <el-form-item label="Activity form" prop="desc">
-      <el-input v-model="ruleForm.desc" type="textarea" placeholder="test" />
+      <el-input
+        v-model="ruleForm.desc"
+        type="textarea"
+        placeholder="test"
+        pre-star
+        :rows="8"
+      />
     </el-form-item>
     <el-form-item>
       <el-button type="primary" @click="submitForm(ruleFormRef)">

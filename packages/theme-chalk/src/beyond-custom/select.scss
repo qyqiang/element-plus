@@ -10,6 +10,7 @@
 .el-select {
   border: none;
 
+
   .el-select__placeholder {
     font-size: var(--p-font-size-500);
   }
@@ -83,6 +84,15 @@
   box-shadow: var(--shadow-300);
   font-size: var(--p-font-size-500);
   font-weight: var(--p-font-weight-regular);
+
+  .el-select-dropdown__item {
+    &:hover{
+      background-color: var(--color-gray-50);
+    }
+    .tip {
+      margin-left: 8px;
+    }
+  }
 
   .option-wrap {
     width: 100%;

@@ -3,6 +3,15 @@
   <el-divider />
   <div class="flex flex-wrap gap-4 items-center">
     <el-input
+      v-model="input6"
+      disabled
+      style="width: 240px"
+      placeholder="Please Input"
+      pre-star
+      :prefix-icon="Search"
+      clearable
+    />
+    <el-input
       v-model="input5"
       style="width: 240px"
       placeholder="Please Input"
@@ -149,6 +158,7 @@ import {
 
 const input = ref('')
 const input5 = ref('')
+const input6 = ref(0)
 const textarea1 = ref('Hello')
 const textarea2 = ref()
 const textarea3 = ref('Hello')

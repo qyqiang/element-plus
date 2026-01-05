@@ -61,7 +61,7 @@
           class="float-label"
           :class="{
             'prefix-label': $slots.prefix || prefixIcon,
-            'has-value': !!modelValue,
+            'has-value': !isEmpty(modelValue),
           }"
           >{{ placeholder }}</span
         >
@@ -252,7 +252,7 @@
       <span
         v-if="floatLabel && placeholder"
         class="float-label"
-        :class="{ 'has-value': !!modelValue }"
+        :class="{ 'has-value': !isEmpty(modelValue) }"
         @click="handleTextareaFocus"
       >
         {{ placeholder }}
@@ -308,6 +308,7 @@ import {
   ValidateComponentsMap,
   debugWarn,
   isClient,
+  isEmpty,
   isObject,
 } from '@element-plus/utils'
 import { useResizeObserver } from '@vueuse/core'

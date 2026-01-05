@@ -100,10 +100,6 @@ $form-item-label-top-margin-bottom: map.merge(
         line-height: #{map.get($form-item-line-height, $size)};
       }
 
-      @include e(content) {
-        line-height: #{map.get($form-item-line-height, $size)};
-      }
-
       @include e(error) {
         padding-top: #{map.get($form-item-error-padding-top, $size)};
       }

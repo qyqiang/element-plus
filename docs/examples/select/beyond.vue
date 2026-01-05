@@ -8,8 +8,10 @@
       placeholder="Please Select"
       label="label1"
       filterable
+      add-item
       add-show-tip="test"
       style="width: 240px"
+      @add-item="handleAdd"
     >
       <el-option
         v-for="item in options"
@@ -231,7 +233,7 @@ const toggleOption = (value) => {
     selectedOptions.value.push(value)
   }
 }
-const options = [
+const options = ref([
   {
     value: 'Option1',
     label: 'Option1',
@@ -252,7 +254,7 @@ const options = [
     value: 'Option5',
     label: 'Option5',
   },
-]
+])
 const options2 = [
   {
     label: 'Popular cities',
@@ -289,6 +291,12 @@ const options2 = [
     ],
   },
 ]
+const handleAdd = (val: string) => {
+  options.value.push({
+    value: val,
+    label: val,
+  })
+}
 </script>
 
 <style scoped>
