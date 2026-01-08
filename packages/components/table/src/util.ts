@@ -468,6 +468,7 @@ export function createTablePopper<T extends DefaultRow>(
     row,
     column
   )
+  debugger
   const mergedProps = {
     ...tableOverflowTooltipProps,
     slotContent: undefined,

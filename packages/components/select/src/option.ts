@@ -1,4 +1,7 @@
-import { buildProps } from '@element-plus/utils'
+import { buildProps, definePropType } from '@element-plus/utils'
+import { placements } from '@popperjs/core'
+
+import type { Placement } from '@element-plus/components/popper'
 
 export const COMPONENT_NAME = 'ElOption'
 export const optionProps = buildProps({
@@ -16,6 +19,15 @@ export const optionProps = buildProps({
     type: [String, Number],
   },
   created: Boolean,
+  showTip: {
+    type: Boolean,
+    default: true,
+  },
+  placement: {
+    type: definePropType<Placement>(String),
+    values: placements,
+    default: 'left',
+  },
   /**
    * @description whether option is disabled
    */

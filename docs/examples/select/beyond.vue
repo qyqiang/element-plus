@@ -236,7 +236,8 @@ const toggleOption = (value) => {
 const options = ref([
   {
     value: 'Option1',
-    label: 'Option1',
+    label:
+      'Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1',
   },
   {
     value: 'Option2',

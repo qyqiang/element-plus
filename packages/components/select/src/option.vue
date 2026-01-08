@@ -8,10 +8,20 @@
     :aria-selected="itemSelected"
     @mousemove="hoverItem"
     @click.stop="selectOptionClick"
+    @mouseenter="handleCellMouseEnter"
   >
     <slot>
       <div class="option-wrap">
-        <div class="option-wrap-content">{{ currentLabel }}</div>
+        <el-tooltip
+          ref="tooltipRef"
+          effect="light"
+          :disabled="!showTip || disabled"
+          :content="currentLabel"
+          :placement="placement"
+          popper-class="optionPopperClass"
+        >
+          <div class="option-wrap-content">{{ currentLabel }}</div>
+        </el-tooltip>
         <div v-show="itemSelected" class="option-wrap-icon">
           <el-icon size="16px">
             <svg
@@ -42,12 +52,15 @@ import {
   nextTick,
   onBeforeUnmount,
   reactive,
+  ref,
   toRefs,
   unref,
 } from 'vue'
 import { useId, useNamespace } from '@element-plus/hooks'
 import { useOption } from './useOption'
 import { COMPONENT_NAME, optionProps } from './option'
+import ElIcon from '@element-plus/components/icon'
+import ElTooltip from '@element-plus/components/tooltip'
 
 import type {
   OptionExposed,
@@ -58,13 +71,16 @@ import type {
 export default defineComponent({
   name: COMPONENT_NAME,
   componentName: COMPONENT_NAME,
-
+  components: {
+    ElIcon,
+    ElTooltip,
+  },
   props: optionProps,
 
   setup(props) {
     const ns = useNamespace('select')
     const id = useId()
-
+    const disabled = ref(false)
     const containerKls = computed(() => [
       ns.be('dropdown', 'item'),
       ns.is('disabled', unref(isDisabled)),
@@ -115,6 +131,47 @@ export default defineComponent({
         select.handleOptionSelect(vm)
       }
     }
+    function isGreaterThan(a: number, b: number, epsilon = 0.03) {
+      return a - b > epsilon
+    }
+    const getPadding = (el: HTMLElement) => {
+      const style = window.getComputedStyle(el, null)
+      const paddingLeft = Number.parseInt(style.paddingLeft, 10) || 0
+      const paddingRight = Number.parseInt(style.paddingRight, 10) || 0
+      const paddingTop = Number.parseInt(style.paddingTop, 10) || 0
+      const paddingBottom = Number.parseInt(style.paddingBottom, 10) || 0
+      return {
+        left: paddingLeft,
+        right: paddingRight,
+        top: paddingTop,
+        bottom: paddingBottom,
+      }
+    }
+    const handleCellMouseEnter = (event: MouseEvent) => {
+      const cellChild = (event.target as HTMLElement).querySelector(
+        '.option-wrap-content'
+      ) as HTMLElement
+      if (cellChild && !cellChild?.childNodes.length) {
+        disabled.value = false
+        return
+      }
+      const range = document.createRange()
+      range.setStart(cellChild, 0)
+      range.setEnd(cellChild, cellChild.childNodes.length)
+      const { width: rangeWidth, height: rangeHeight } =
+        range.getBoundingClientRect()
+      const { width: cellChildWidth, height: cellChildHeight } =
+        cellChild.getBoundingClientRect()
+
+      const { top, left, right, bottom } = getPadding(cellChild)
+      const horizontalPadding = left + right
+      const verticalPadding = top + bottom
+      disabled.value = !(
+        isGreaterThan(rangeWidth + horizontalPadding, cellChildWidth) ||
+        isGreaterThan(rangeHeight + verticalPadding, cellChildHeight) ||
+        isGreaterThan(cellChild.scrollWidth, cellChildWidth)
+      )
+    }
 
     return {
       ns,
@@ -127,7 +184,10 @@ export default defineComponent({
       visible,
       hover,
       states,
-
+      disabled,
+      showTip: props.showTip,
+      placement: props.placement,
+      handleCellMouseEnter,
       hoverItem,
       updateOption,
       selectOptionClick,
