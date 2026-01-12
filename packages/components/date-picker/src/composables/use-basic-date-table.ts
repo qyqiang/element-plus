@@ -228,6 +228,58 @@ export const useBasicDateTable = (
   }
 
   const handleMouseMove = (event: MouseEvent) => {
+    // let target = event.target as HTMLElement
+    // if (target.tagName === 'SPAN') {
+    //   target = target.parentNode?.parentNode as HTMLElement
+    // }
+    // if (target.tagName === 'DIV') {
+    //   target = target.parentNode as HTMLElement
+    // }
+    // if (target.tagName !== 'TD') return
+    //
+    // const row = (target.parentNode as HTMLTableRowElement).rowIndex - 1
+    // const column = (target as HTMLTableCellElement).cellIndex
+    //
+    // // can not select disabled date
+    // const cell = unref(rows)[row][column]
+    //
+    // if (cell.disabled) return
+    // if (!props.rangeState.selecting) {
+    //   let newDate = getDateOfCell(row, column)
+    //   if (props.cycleType === 'week') {
+    //     const offsetWeek = newDate.day()
+    //     newDate = newDate.subtract(offsetWeek, 'days')
+    //     const maxDate = newDate.add(props.cycle - 1, 'days')
+    //     emit('pick', { minDate: newDate, maxDate }, false)
+    //     emit('select', false)
+    //   } else if (props.cycleType === 'custom' && props.settDefaultDate) {
+    //     const defaultDate = dayjs(props.settDefaultDate)
+    //     const defaultDay = defaultDate.unix()
+    //     const newDay = newDate.unix()
+    //     const limitDay = (newDay - defaultDay) / (60 * 60 * 24)
+    //     const flag = limitDay > 0
+    //     const v1 = limitDay % (props.cycle * 7)
+    //     const date = newDate.add(
+    //       flag ? props.cycle * 7 - Math.abs(v1) : Math.abs(v1),
+    //       'days'
+    //     )
+    //     const v3 = v1 !== 0 ? date.subtract(props.cycle * 7, 'days') : newDate
+    //     const maxDate = v3.add(props.cycle * 7 - 1, 'days')
+    //     emit('pick', { minDate: v3, maxDate }, false)
+    //     emit('select', false)
+    //   }
+    // } else {
+    //   // only update rangeState when mouse moves to a new cell
+    //   // this avoids frequent Date object creation and improves performance
+    //   if (row !== unref(lastRow) || column !== unref(lastColumn)) {
+    //     lastRow.value = row
+    //     lastColumn.value = column
+    //     emit('changerange', {
+    //       selecting: true,
+    //       endDate: getDateOfCell(row, column),
+    //     })
+    //   }
+    // }
     if (!props.rangeState.selecting) return
 
     let target = event.target as HTMLElement

@@ -66,7 +66,7 @@
 
     &.is-focus {
       ~ .float-label {
-        transform: translateY(-16px);
+        transform: translateY(-15px);
       }
     }
   }
@@ -90,13 +90,13 @@
     .el-textarea__inner {
       &.is-focus {
         ~ .float-label {
-          transform: translate(-20px, -16px);
+          transform: translate(-20px, -15px);
         }
       }
     }
 
     .float-label.has-value {
-      transform: translate(-20px, -16px);
+      transform: translate(-20px, -15px);
     }
   }
 

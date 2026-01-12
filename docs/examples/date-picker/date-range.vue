@@ -10,8 +10,9 @@
       <el-date-picker
         v-model="value1"
         type="daterange"
-        :cycle="7"
-        cycle-type="week"
+        :cycle="2"
+        cycle-type="custom"
+        sett-default-date="2026-01-08"
         range-separator="To"
         start-placeholder="Start date"
         end-placeholder="End date"

@@ -63,7 +63,7 @@
       height: 14px;
       line-height: 1;
       max-width: calc(100% - 34px);
-      top: 8px;
+      top: 9px;
       left: 12px;
     }
     @include when(filterable) {
@@ -73,16 +73,12 @@
     @include when(focused) {
       border-color: getCssVar('color-primary');
       .select-visible.float-label {
-        color: var(--color-gray-700);
-        transform: translateY(-16px);
-        transition: transform 100ms ease;
+        @include select-float-label
       }
     }
     @include when(value) {
       .float-label {
-        color: var(--color-gray-700);
-        transform: translateY(-16px);
-        transition: transform 100ms ease;
+        @include select-float-label
       }
     }
 

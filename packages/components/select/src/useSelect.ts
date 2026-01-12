@@ -161,6 +161,9 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
   )
 
   const validateState = computed(() => formItem?.validateState || '')
+  const validateMessage = computed<string>(
+    () => formItem?.validateMessage || ''
+  )
   const validateIcon = computed(
     () =>
       validateState.value &&
@@ -857,6 +860,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     iconComponent,
     iconReverse,
     validateState,
+    validateMessage,
     validateIcon,
     showNewOption,
     updateOptions,
