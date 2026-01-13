@@ -398,6 +398,7 @@ const onHide = () => {
 }
 
 const handleOpen = () => {
+  if (props.readonly || pickerDisabled.value) return
   pickerVisible.value = true
 }
 
