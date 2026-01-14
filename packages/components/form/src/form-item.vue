@@ -23,7 +23,7 @@
       </component>
     </form-label-wrap>
 
-    <div :class="ns.e('content')" :style="contentStyle">
+    <div ref="formItemContent" :class="ns.e('content')" :style="contentStyle">
       <slot />
       <transition-group
         v-if="isShowError"
@@ -100,6 +100,7 @@ const validateStateDebounced = refDebounced(validateState, 100)
 const validateMessage = ref('')
 const isShowError = ref(true)
 const formItemRef = ref<HTMLDivElement>()
+const formItemContent = ref<HTMLDivElement>()
 // special inline value.
 let initialValue: any = undefined
 let isResettingField = false
@@ -367,21 +368,6 @@ const removeInputId: FormItemContext['removeInputId'] = (id: string) => {
   inputIds.value = inputIds.value.filter((listId) => listId !== id)
 }
 
-onMounted(() => {
-  const defaultSlot = slots.default?.()
-  if (isArray(defaultSlot) && defaultSlot.length) {
-    defaultSlot.forEach((slot: any) => {
-      isShowError.value = ![
-        'ElAutocomplete',
-        'ElInput',
-        'ElSelectV2',
-        'ElDatePicker',
-        'ElTimePicker',
-        'ElSelect',
-      ].includes(slot?.type?.name)
-    })
-  }
-})
 watch(
   () => props.error,
   (val) => {
@@ -421,6 +407,18 @@ onMounted(() => {
   if (props.prop) {
     formContext?.addField(context)
     initialValue = clone(fieldValue.value)
+  }
+  if (!formItemContent.value) return
+  const childEle = Array.from(formItemContent.value?.children)
+  if (childEle && childEle.length) {
+    childEle.forEach((ele) => {
+      isShowError.value = !(
+        ele.className?.indexOf('el-input') > -1 ||
+        ele.className?.indexOf('el-autocomplete') > -1 ||
+        ele.className?.indexOf('el-textarea') > -1 ||
+        ele.className?.indexOf('el-select') > -1
+      )
+    })
   }
 })
 
