@@ -25,7 +25,10 @@
 
     <div :class="ns.e('content')" :style="contentStyle">
       <slot />
-      <transition-group :name="`${ns.namespace.value}-zoom-in-top`">
+      <transition-group
+        v-if="isShowError"
+        :name="`${ns.namespace.value}-zoom-in-top`"
+      >
         <slot v-if="shouldShowError" name="error" :error="validateMessage">
           <div :class="validateClasses">
             {{ validateMessage }}
@@ -95,6 +98,7 @@ const inputIds = ref<string[]>([])
 const validateState = ref<FormItemValidateState>('')
 const validateStateDebounced = refDebounced(validateState, 100)
 const validateMessage = ref('')
+const isShowError = ref(true)
 const formItemRef = ref<HTMLDivElement>()
 // special inline value.
 let initialValue: any = undefined
@@ -363,6 +367,21 @@ const removeInputId: FormItemContext['removeInputId'] = (id: string) => {
   inputIds.value = inputIds.value.filter((listId) => listId !== id)
 }
 
+onMounted(() => {
+  const defaultSlot = slots.default?.()
+  if (isArray(defaultSlot) && defaultSlot.length) {
+    defaultSlot.forEach((slot: any) => {
+      isShowError.value = ![
+        'ElAutocomplete',
+        'ElInput',
+        'ElSelectV2',
+        'ElDatePicker',
+        'ElTimePicker',
+        'ElSelect',
+      ].includes(slot?.type?.name)
+    })
+  }
+})
 watch(
   () => props.error,
   (val) => {

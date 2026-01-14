@@ -210,11 +210,6 @@ $form-item-label-top-margin-bottom: map.merge(
   }
 
   @include when(error) {
-    .el-input, .el-textarea, .el-autocomplete, .el-select {
-      & + .el-form-item__error {
-        display: none
-      }
-    }
     .#{$namespace}-input__wrapper,
     .#{$namespace}-textarea__inner,
     .#{$namespace}-select__wrapper,

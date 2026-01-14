@@ -143,6 +143,11 @@
         #{getCssVarName('input-icon-color')},
         map.get($input, 'icon-color')
     );
+    .tip-wrap {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
   }
 
   @include e(caret) {

@@ -33,6 +33,7 @@
         v-model="ruleForm.region"
         placeholder="Activity zone1"
         fit-input-width
+        clearable
       >
         <el-option label="Zone one" value="shanghai" />
         <el-option
@@ -43,10 +44,26 @@
     </el-form-item>
     <el-form-item label="Activity count" prop="count">
       <el-select-v2
-        v-model="ruleForm.count"
-        disabled
-        placeholder="Activity count"
+        v-model="ruleForm.region"
         :options="options"
+        filterable
+        clearable
+        add-show-tip="test"
+        placeholder="Please selectv2"
+        style="width: 240px"
+      >
+        <template #suffix>
+          <span>3453</span>
+        </template>
+      </el-select-v2>
+    </el-form-item>
+    <el-form-item prop="date1">
+      <el-date-picker
+        v-model="ruleForm.date1"
+        type="daterange"
+        aria-label="Pick a date"
+        placeholder="Pick a date"
+        style="width: 100%"
       />
     </el-form-item>
     <el-form-item label="Activity time" required>

@@ -229,22 +229,32 @@
             </div>
           </div>
           <div ref="suffixRef" :class="nsSelect.e('suffix')">
-            <el-icon
-              v-if="iconComponent"
-              v-show="!showClearBtn"
-              :class="[nsSelect.e('caret'), nsInput.e('icon'), iconReverse]"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
+            <template v-if="iconComponent && !validateError">
+              <div
+                v-if="$slots?.suffix"
+                v-show="!showClearBtn"
+                class="tip-wrap"
               >
-                <path
-                  d="M5.99992 7.75002C5.86862 7.75024 5.73856 7.72452 5.61723 7.67432C5.4959 7.62413 5.38569 7.55045 5.29292 7.45752L2.64642 4.81052L3.35342 4.10352L5.99992 6.75002L8.64642 4.10352L9.35342 4.81052L6.70692 7.45702C6.6142 7.55004 6.50401 7.62381 6.38267 7.67409C6.26134 7.72438 6.13126 7.75018 5.99992 7.75002Z"
-                />
-              </svg>
-            </el-icon>
+                <slot name="suffix"></slot>
+              </div>
+              <el-icon
+                v-else
+                v-show="!showClearBtn"
+                :class="[nsSelect.e('caret'), nsInput.e('icon'), iconReverse]"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                >
+                  <path
+                    d="M5.99992 7.75002C5.86862 7.75024 5.73856 7.72452 5.61723 7.67432C5.4959 7.62413 5.38569 7.55045 5.29292 7.45752L2.64642 4.81052L3.35342 4.10352L5.99992 6.75002L8.64642 4.10352L9.35342 4.81052L6.70692 7.45702C6.6142 7.55004 6.50401 7.62381 6.38267 7.67409C6.26134 7.72438 6.13126 7.75018 5.99992 7.75002Z"
+                  />
+                </svg>
+              </el-icon>
+            </template>
+
             <el-icon
               v-if="showClearBtn && clearIcon"
               :class="[
@@ -265,6 +275,30 @@
                 />
               </svg>
             </el-icon>
+            <el-tooltip
+              v-if="validateError"
+              :content="validateMsg"
+              effect="light"
+              placement="top"
+              :offset="4"
+            >
+              <el-icon class="error-icon">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    clip-rule="evenodd"
+                    d="M12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6ZM6.5 2.5V7H5.5V2.5H6.5ZM6.5 9V8H5.5V9H6.5Z"
+                    fill="#D91F11"
+                  />
+                </svg>
+              </el-icon>
+            </el-tooltip>
             <el-icon
               v-if="validateState && validateIcon && needStatusIcon"
               :class="[
@@ -364,7 +398,8 @@ export default defineComponent({
     )
     const { calculatorRef, inputStyle } = useCalcInputWidth()
     const contentId = useId()
-
+    const validateError = computed(() => API?.validateState.value === 'error')
+    const validateMsg = computed(() => API?.validateMessage.value || '')
     provide(selectV2InjectionKey, {
       props: reactive({
         ...toRefs(props),
@@ -393,6 +428,8 @@ export default defineComponent({
       selectedLabel,
       calculatorRef,
       inputStyle,
+      validateError,
+      validateMsg,
       contentId,
       BORDER_HORIZONTAL_WIDTH,
     }

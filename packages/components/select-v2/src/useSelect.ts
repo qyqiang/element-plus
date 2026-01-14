@@ -175,7 +175,9 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     if (!validateState.value) return
     return ValidateComponentsMap[validateState.value]
   })
-
+  const validateMessage = computed<string>(
+    () => elFormItem?.validateMessage || ''
+  )
   const debounce = computed(() => (props.remote ? props.debounce : 0))
 
   const isRemoteSearchEmpty = computed(
@@ -1020,7 +1022,7 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     collapseItemRef,
 
     popperRef,
-
+    validateMessage,
     validateState,
     validateIcon,
     showTagList,
