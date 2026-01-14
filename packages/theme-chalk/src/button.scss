@@ -25,6 +25,7 @@ $button-icon-span-gap: map.merge(
   align-items: center;
   line-height: 1;
   white-space: nowrap;
+  min-width: 77px;
   // min-height will expand when in flex
   height: map.get($input-height, 'default');
   cursor: pointer;
