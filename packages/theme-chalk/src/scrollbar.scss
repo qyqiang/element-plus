@@ -40,14 +40,7 @@
     );
 
     &:hover {
-      background-color: var(
-        #{getCssVarName('scrollbar-hover-bg-color')},
-        map.get($scrollbar, 'hover-bg-color')
-      );
-      opacity: var(
-        #{getCssVarName('scrollbar-hover-opacity')},
-        map.get($scrollbar, 'hover-opacity')
-      );
+      background-color: #dce3e8;
     }
   }
 
