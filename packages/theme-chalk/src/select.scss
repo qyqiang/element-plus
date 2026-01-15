@@ -82,6 +82,12 @@
       }
     }
 
+    @include when(all) {
+      .float-label {
+        @include select-float-label
+      }
+    }
+
     @include when(disabled) {
       cursor: not-allowed;
 

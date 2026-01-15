@@ -34,6 +34,7 @@
           :class="[
             nsSelect.e('wrapper'),
             nsSelect.is('focused', isFocused),
+            nsSelect.is('all', !!haveAll),
             nsSelect.is('hovering', states.inputHovering),
             nsSelect.is('filterable', filterable),
             nsSelect.is('disabled', selectDisabled),
@@ -77,6 +78,11 @@
               :delete-tag="deleteTag"
               :select-disabled="selectDisabled"
             >
+              <span
+                v-if="haveAll && !states.selected.length"
+                class="select-all-tag"
+                >{{ haveAll }}</span
+              >
               <div
                 v-for="item in showTagList"
                 :key="getValueKey(item)"
@@ -332,6 +338,12 @@
             aria-orientation="vertical"
             @scroll="popupScroll"
           >
+            <div
+              v-if="states.selected.length && haveAll"
+              class="select-all-item"
+            >
+              {{ haveAll }}
+            </div>
             <div
               v-if="addShowTip && filterable && !emptyText"
               class="select-add-tip"

@@ -190,6 +190,9 @@ export const selectProps = buildProps({
    */
   preStar: Boolean,
   addShowTip: String,
+  haveAll: {
+    type: String,
+  },
   /**
    * @description unique identity key name for value, required when value is an object
    */

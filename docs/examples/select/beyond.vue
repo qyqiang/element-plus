@@ -18,14 +18,18 @@
         :key="item.value"
         :label="item.label"
         :value="item.value"
-      />
+      >
+        <template #optionIcon>
+          <el-icon><info-filled></info-filled></el-icon>
+        </template>
+      </el-option>
     </el-select>
     <el-select
       v-model="value"
       clearable
       pre-star
       filterable
-      placeholder="Please Select"
+      placeholder="Please Select2"
       label="label1"
       style="width: 240px"
     >
@@ -86,11 +90,28 @@
       />
       <template #footer>
         <div class="flex justify-between">
-          <el-button type="text" style="margin-left: 0">Reset</el-button>
-          <div>
-            <el-button type="primary">Cancel</el-button>
-            <el-button>Reset</el-button>
-          </div>
+          <el-button type="primary">Cancel</el-button>
+          <el-button>Reset</el-button>
+        </div>
+      </template>
+    </el-select>
+    <el-select
+      v-model="value1"
+      multiple
+      placeholder="Width Have All"
+      style="width: 240px"
+      have-all="(All)"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+      <template #footer>
+        <div class="flex justify-between">
+          <el-button type="primary">Cancel</el-button>
+          <el-button>Reset</el-button>
         </div>
       </template>
     </el-select>

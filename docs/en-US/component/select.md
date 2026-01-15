@@ -216,6 +216,7 @@ select/custom-label
 | pre-star                        | whether select is required                                                                                                               | ^[boolean]                                                                                                                                                                  | false                                          |
 | add-item                        | whether select can add new item                                                                                                          | ^[boolean]                                                                                                                                                                  | false                                          |
 | add-show-tip                    | whether select add tip                                                                                                                   | ^[string]                                                                                                                                                                   | —                                              |
+| have-all                        | whether select empty set all                                                                                                             | ^[string]                                                                                                                                                                   | —                                              |
 | options ^(2.10.5)               | data of the options, the key of `value` and `label` and `disabled` can be customize by `props`                                           | ^[array]`Array<{[key: string]: any}>`                                                                                                                                       | —                                              |
 | [props](#props) ^(2.10.5)       | configuration options                                                                                                                    | ^[object]                                                                                                                                                                   | —                                              |
 | disabled                        | whether Select is disabled                                                                                                               | ^[boolean]                                                                                                                                                                  | false                                          |
@@ -327,9 +328,10 @@ select/custom-label
 
 ### Option Group Slots
 
-| Name    | Description               | Subtags |
-| ------- | ------------------------- | ------- |
-| default | customize default content | Option  |
+| Name       | Description               | Subtags |
+| ---------- | ------------------------- | ------- |
+| default    | customize default content | Option  |
+| optionIcon | customize icon for item   | Option  |
 
 ## Option API
 

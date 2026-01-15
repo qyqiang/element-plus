@@ -20,7 +20,14 @@
           :placement="placement"
           popper-class="optionPopperClass"
         >
-          <div class="option-wrap-content">{{ currentLabel }}</div>
+          <div class="option-wrap-content">
+            <slot name="optionIcon"></slot>
+            <span
+              class="select-label"
+              :class="{ 'select-margin': $slots?.optionIcon }"
+              >{{ currentLabel }}</span
+            >
+          </div>
         </el-tooltip>
         <div v-show="itemSelected" class="option-wrap-icon">
           <el-icon size="16px">
@@ -151,10 +158,12 @@ export default defineComponent({
       const cellChild = (event.target as HTMLElement).querySelector(
         '.option-wrap-content'
       ) as HTMLElement
+      if (!cellChild) return
       if (cellChild && !cellChild?.childNodes.length) {
         disabled.value = false
         return
       }
+
       const range = document.createRange()
       range.setStart(cellChild, 0)
       range.setEnd(cellChild, cellChild.childNodes.length)
