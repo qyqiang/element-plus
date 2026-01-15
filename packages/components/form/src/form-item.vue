@@ -25,10 +25,7 @@
 
     <div ref="formItemContent" :class="ns.e('content')" :style="contentStyle">
       <slot />
-      <transition-group
-        v-if="isShowError"
-        :name="`${ns.namespace.value}-zoom-in-top`"
-      >
+      <transition-group :name="`${ns.namespace.value}-zoom-in-top`">
         <slot v-if="shouldShowError" name="error" :error="validateMessage">
           <div :class="validateClasses">
             {{ validateMessage }}
@@ -98,7 +95,6 @@ const inputIds = ref<string[]>([])
 const validateState = ref<FormItemValidateState>('')
 const validateStateDebounced = refDebounced(validateState, 100)
 const validateMessage = ref('')
-const isShowError = ref(true)
 const formItemRef = ref<HTMLDivElement>()
 const formItemContent = ref<HTMLDivElement>()
 // special inline value.
@@ -407,18 +403,6 @@ onMounted(() => {
   if (props.prop) {
     formContext?.addField(context)
     initialValue = clone(fieldValue.value)
-  }
-  if (!formItemContent.value) return
-  const childEle = Array.from(formItemContent.value?.children)
-  if (childEle && childEle.length) {
-    childEle.forEach((ele) => {
-      isShowError.value = !(
-        ele.className?.indexOf('el-input') > -1 ||
-        ele.className?.indexOf('el-autocomplete') > -1 ||
-        ele.className?.indexOf('el-textarea') > -1 ||
-        ele.className?.indexOf('el-select') > -1
-      )
-    })
   }
 })
 

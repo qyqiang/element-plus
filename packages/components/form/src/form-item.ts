@@ -79,10 +79,7 @@ export const formItemProps = buildProps({
   /**
    * @description Whether to show the error message.
    */
-  showMessage: {
-    type: Boolean,
-    default: true,
-  },
+  showMessage: Boolean,
   /**
    * @description Control the size of components in this form-item.
    */
