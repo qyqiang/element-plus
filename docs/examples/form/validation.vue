@@ -6,11 +6,12 @@
     :rules="rules"
     label-width="auto"
   >
-    <el-form-item label="Activity name" prop="name" pre-star>
-      <el-autocomplete
-        v-model="ruleForm.name"
-        placeholder="text"
-      ></el-autocomplete>
+    <el-form-item label="Activity name" prop="name">
+      <el-autocomplete v-model="ruleForm.name" placeholder="text" pre-star>
+        <template #suffix>
+          <span>dsdsd</span>
+        </template></el-autocomplete
+      >
     </el-form-item>
     <el-form-item label="Activity name" prop="name" pre-star>
       <el-input v-model="ruleForm.name" pre-star placeholder="sss" />
@@ -158,7 +159,7 @@ interface RuleForm {
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
-  name: 'ssssds',
+  name: '',
   region: '',
   count: '',
   date1: '',

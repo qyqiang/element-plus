@@ -40,10 +40,6 @@ export const autocompleteProps = buildProps({
     default: 'value',
   },
   /**
-   * @description preStar
-   */
-  preStar: Boolean,
-  /**
    * @description binding value
    */
   modelValue: {

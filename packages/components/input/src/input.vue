@@ -88,7 +88,7 @@
             <template
               v-if="
                 (!showClear || !showPwdVisible || !isWordLimitVisible) &&
-                !validateState
+                (alwaysShowSuffix ?? !validateState)
               "
             >
               <slot

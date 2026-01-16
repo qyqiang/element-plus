@@ -25,6 +25,10 @@ export type InputAutoSize = { minRows?: number; maxRows?: number } | boolean
 
 export const inputProps = buildProps({
   isHoverSuffix: Boolean,
+  alwaysShowSuffix: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description native input id
    */
@@ -136,10 +140,7 @@ export const inputProps = buildProps({
   /**
    * @description native preStar
    */
-  preStar: {
-    type: Boolean,
-    default: false,
-  },
+  preStar: Boolean,
   /**
    * @description native input readonly
    */

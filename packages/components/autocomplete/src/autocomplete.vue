@@ -43,6 +43,7 @@
         :is-hover-suffix="isHoverSuffix"
         v-bind="mergeProps(passInputProps, $attrs)"
         :model-value="modelValue"
+        :always-show-suffix="alwaysShowSuffix"
         :pre-star="preStar"
         :disabled="disabled"
         @input="handleInput"
