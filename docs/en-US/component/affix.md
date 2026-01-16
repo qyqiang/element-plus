@@ -47,6 +47,7 @@ affix/fixed
 | position | position of affix               | ^[enum]`'top' \| 'bottom'` | top     |
 | target   | target container (CSS selector) | ^[string]                  | —       |
 | z-index  | `z-index` of affix              | ^[number]                  | 100     |
+| disabled | disabled of affix               | ^[boolean]                 | false   |
 
 ### Events
 

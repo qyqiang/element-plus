@@ -1,6 +1,6 @@
 <template>
   <div ref="root" :class="ns.b()" :style="rootStyle">
-    <div :class="{ [ns.m('fixed')]: fixed }" :style="affixStyle">
+    <div :class="{ [ns.m('fixed')]: fixed && !disabled }" :style="affixStyle">
       <slot />
     </div>
   </div>

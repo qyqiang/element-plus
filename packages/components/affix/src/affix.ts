@@ -12,6 +12,10 @@ import type Affix from './affix.vue'
 
 export const affixProps = buildProps({
   /**
+   * @description whether the component is disabled
+   */
+  disabled: Boolean,
+  /**
    * @description affix element zIndex value
    * */
   zIndex: {
