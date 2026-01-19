@@ -8,6 +8,7 @@
       placeholder="Please Select"
       label="label1"
       filterable
+      disabled
       add-item
       add-show-tip="test"
       style="width: 240px"
@@ -239,7 +240,7 @@
 import { ref } from 'vue'
 import { InfoFilled, Search } from '@element-plus/icons-vue'
 
-const value = ref('')
+const value = ref('Option1')
 const value1 = ref([])
 const value2 = ref('')
 const value3 = ref('')
