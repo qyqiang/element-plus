@@ -33,6 +33,7 @@
         >
           <div
             ref="drawerRef"
+            v-loading="loading"
             aria-modal="true"
             :aria-label="title || undefined"
             :aria-labelledby="!title ? titleId : undefined"

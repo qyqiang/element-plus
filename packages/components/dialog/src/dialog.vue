@@ -40,6 +40,7 @@
               v-if="rendered"
               ref="dialogContentRef"
               v-bind="$attrs"
+              v-loading="loading"
               :center="center"
               :align-center="_alignCenter"
               :close-icon="closeIcon"

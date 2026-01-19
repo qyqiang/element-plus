@@ -19,6 +19,7 @@ export type DialogTransition = string | TransitionProps
 
 export const dialogProps = buildProps({
   ...dialogContentProps,
+  loading: Boolean,
   /**
    * @description whether to append Dialog itself to body. A nested Dialog should have this attribute set to `true`
    */

@@ -196,6 +196,7 @@ dialog/events
 | close-on-click-modal       | whether the Dialog can be closed by clicking the mask                                                                          | ^[boolean]                             | true        |
 | close-on-press-escape      | whether the Dialog can be closed by pressing ESC                                                                               | ^[boolean]                             | true        |
 | show-close                 | whether to show a close button                                                                                                 | ^[boolean]                             | true        |
+| loading                    | whether to loading                                                                                                             | ^[boolean]                             | false       |
 | before-close               | callback before Dialog closes, and it will prevent Dialog from closing, use done to close the dialog                           | ^[Function]`(done: DoneFn) => void`    | —           |
 | draggable                  | enable dragging feature for Dialog                                                                                             | ^[boolean]                             | false       |
 | overflow ^(2.5.4)          | draggable Dialog can overflow the viewport                                                                                     | ^[boolean]                             | false       |

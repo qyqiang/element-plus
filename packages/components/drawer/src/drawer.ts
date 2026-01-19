@@ -11,6 +11,7 @@ export const drawerProps = buildProps({
     values: ['ltr', 'rtl', 'ttb', 'btt'],
   },
   resizable: Boolean,
+  loading: Boolean,
   size: {
     type: [String, Number],
     default: '30%',
