@@ -9,9 +9,9 @@
   @include e(popper) {
     @include set-css-var-type('datepicker', 'border-color', $datepicker);
     @include picker-popper(
-      getCssVar('bg-color', 'overlay'),
-      1px solid getCssVar('datepicker', 'border-color'),
-      getCssVar('box-shadow', 'light')
+        getCssVar('bg-color', 'overlay'),
+        1px solid getCssVar('datepicker', 'border-color'),
+        getCssVar('box-shadow', 'light')
     );
   }
 }
@@ -23,22 +23,9 @@
   text-align: left;
   vertical-align: middle;
 
-  &.#{$namespace}-input__wrapper {
-    @include inset-input-border(
-      var(
-        #{getCssVarName('input-border-color')},
-        map.get($input, 'border-color')
-      )
-    );
-
-    &:hover {
-      @include inset-input-border(#{getCssVar('input', 'hover-border-color')});
-    }
-  }
-
   @include when(focus) {
     .#{$namespace}-input__wrapper {
-      @include inset-input-border(#{getCssVar('input', 'focus-border-color')});
+      border-color: var(--el-color-primary);
     }
   }
 
@@ -50,22 +37,22 @@
 
   @include m((monthrange)) {
     @include css-var-from-global(
-      'date-editor-width',
-      'date-editor-monthrange-width'
+        'date-editor-width',
+        'date-editor-monthrange-width'
     );
   }
 
   @include m((daterange, timerange)) {
     @include css-var-from-global(
-      'date-editor-width',
-      'date-editor-daterange-width'
+        'date-editor-width',
+        'date-editor-daterange-width'
     );
   }
 
   @include m(datetimerange) {
     @include css-var-from-global(
-      'date-editor-width',
-      'date-editor-datetimerange-width'
+        'date-editor-width',
+        'date-editor-datetimerange-width'
     );
   }
 
@@ -161,11 +148,34 @@
     padding: 0 10px;
     vertical-align: middle;
   }
+  .dateRangeLabel {
+    position: absolute;
+    font-size: 13px;
+    color: var(--el-input-placeholder-color);
+    background: linear-gradient(to bottom, #fff 58%, transparent 42%);
+    vertical-align: middle;
+    position: absolute;
+    display: block;
+    left: 26px;
+    padding: 0 4px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: calc(100% - 36px);
 
+    &.range-label-float {
+      left: 8px;
+      padding: 0 4px;
+      color: var(--color-gray-700);
+      transform: translateY(-15px);
+      transition: transform .1s ease;
+      background: linear-gradient(to bottom, #fff 51%, transparent 49%);
+    }
+  }
   @include when(active) {
-    @include inset-input-border(#{getCssVar('input', 'focus-border-color')});
+    border-color: var(--el-color-primary);
     &:hover {
-      @include inset-input-border(#{getCssVar('input', 'focus-border-color')});
+      border-color: var(--el-color-primary);
     }
   }
 
@@ -205,6 +215,7 @@
       background-color: map.get($input-disabled, 'fill');
       color: map.get($input-disabled, 'text-color');
       cursor: not-allowed;
+
       &::placeholder {
         color: map.get($input-disabled, 'placeholder-color');
       }

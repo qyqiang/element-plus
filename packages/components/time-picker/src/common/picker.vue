@@ -91,6 +91,8 @@
           v-else
           :id="id as string[]"
           ref="inputRef"
+          :float-label="floatLabel"
+          :picker-visible="pickerVisible"
           :model-value="displayValue"
           :name="name as string[]"
           :disabled="pickerDisabled"

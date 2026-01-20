@@ -11,11 +11,11 @@
         v-model="value1"
         type="daterange"
         :cycle="2"
+        float-label="Start date"
         cycle-type="custom"
         sett-default-date="2026-01-08"
-        range-separator="To"
+        range-separator=""
         start-placeholder="Start date"
-        end-placeholder="End date"
         :size="size"
       />
     </div>

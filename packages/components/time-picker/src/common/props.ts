@@ -57,6 +57,7 @@ export const timePickerDefaultProps = buildProps({
     default: 0,
   },
   settDefaultDate: String,
+  floatLabel: String,
   cycleType: String,
   isOk: {
     type: Boolean,
@@ -288,9 +289,11 @@ export const timePickerRangeTriggerProps = buildProps({
   modelValue: {
     type: definePropType<UserInput>([Array, String]),
   },
+  floatLabel: String,
   startPlaceholder: String,
   endPlaceholder: String,
   disabled: Boolean,
+  pickerVisible: Boolean,
 } as const)
 
 /**

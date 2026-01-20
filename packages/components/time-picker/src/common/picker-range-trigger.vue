@@ -12,12 +12,20 @@
     @touchstart.passive="handleTouchStart"
   >
     <slot name="prefix" />
+    <span
+      v-if="floatLabel"
+      class="dateRangeLabel"
+      :class="{
+        'range-label-float':
+          pickerVisible || (modelValue && modelValue.length > 1) || isError,
+      }"
+      >{{ floatLabel }}</span
+    >
     <input
       v-bind="attrs"
       :id="inputId"
       ref="inputRef"
       :name="name && name[0]"
-      :placeholder="startPlaceholder"
       :value="modelValue && modelValue[0]"
       :class="nsRange.b('input')"
       :disabled="disabled"
@@ -30,7 +38,6 @@
       :id="id && id[1]"
       ref="endInputRef"
       :name="name && name[1]"
-      :placeholder="endPlaceholder"
       :value="modelValue && modelValue[1]"
       :class="nsRange.b('input')"
       :disabled="disabled"
@@ -86,7 +93,7 @@ const endInputRef = ref<HTMLInputElement>()
 const { wrapperRef, isFocused } = useFocusController(inputRef, {
   disabled: computed(() => props.disabled),
 })
-
+const isError = computed(() => formItem?.validateState === 'error')
 const handleClick = (evt: MouseEvent) => {
   emit('click', evt)
 }
