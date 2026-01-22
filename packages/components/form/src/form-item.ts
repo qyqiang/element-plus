@@ -16,6 +16,10 @@ export type FormItemValidateState = (typeof formItemValidateStates)[number]
 export type FormItemProp = Arrayable<string>
 
 export const formItemProps = buildProps({
+  alwaysShowError: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description Label text.
    */

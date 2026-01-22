@@ -403,6 +403,21 @@ onMounted(() => {
   if (props.prop) {
     formContext?.addField(context)
     initialValue = clone(fieldValue.value)
+    if (
+      isRequired.value &&
+      props.alwaysShowError &&
+      (formItemContent.value?.querySelector('.el-input') ||
+        formItemContent.value?.querySelector('.el-textarea') ||
+        formItemContent.value?.querySelector('.el-date-editor'))
+    ) {
+      const currentRule: any = normalizedRules.value.find(
+        (rule) => rule.required
+      )
+      setValidationState('error')
+      validateMessage.value = currentRule?.message
+        ? currentRule?.message
+        : 'Required'
+    }
   }
 })
 
