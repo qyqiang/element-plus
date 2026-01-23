@@ -1,8 +1,13 @@
 <script setup lang="ts">
-import { useNav } from '../../composables/nav'
 import VPMenuLink from './vp-menu-link.vue'
 
-const navs = useNav()
+const navs = [
+  {
+    text: 'Component',
+    link: '/en-US/component/overview',
+    activeMatch: '/component/',
+  },
+]
 </script>
 
 <template>
