@@ -96,6 +96,9 @@
             />
             <table-body
               :context="context"
+              :row-draggable="rowDraggable"
+              :on-dragend="onDragend"
+              :on-dragstart="onDragstart"
               :highlight="highlightCurrentRow"
               :row-class-name="rowClassName"
               :tooltip-effect="tooltipEffect"

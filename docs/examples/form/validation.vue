@@ -159,7 +159,7 @@ interface RuleForm {
 
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
-  name: '',
+  name: '1',
   region: '',
   count: '',
   date1: '',

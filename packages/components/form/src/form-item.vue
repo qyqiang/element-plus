@@ -59,6 +59,7 @@ import {
   getProp,
   isArray,
   isBoolean,
+  isEmpty,
   isFunction,
 } from '@element-plus/utils'
 import { useId, useNamespace } from '@element-plus/hooks'
@@ -406,6 +407,7 @@ onMounted(() => {
     if (
       isRequired.value &&
       props.alwaysShowError &&
+      isEmpty(initialValue) &&
       (formItemContent.value?.querySelector('.el-input') ||
         formItemContent.value?.querySelector('.el-textarea') ||
         formItemContent.value?.querySelector('.el-date-editor'))

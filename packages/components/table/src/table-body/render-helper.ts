@@ -63,7 +63,14 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
     treeRowData?: TreeNode,
     expanded = false
   ) => {
-    const { tooltipEffect, tooltipOptions, store } = props
+    const {
+      tooltipEffect,
+      tooltipOptions,
+      store,
+      rowDraggable,
+      onDragstart,
+      onDragend,
+    } = props
     const { indent, columns } = store!.states
     const rowClasses = []
     let display = true
@@ -85,6 +92,10 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
         style: [displayStyle, getRowStyle(row, $index)],
         class: rowClasses,
         key: getKeyOfRow(row, $index),
+        draggable:
+          typeof rowDraggable === 'function' ? rowDraggable(row) : rowDraggable,
+        onDragstart: ($event: Event) => onDragstart($event, row),
+        onDragend: ($event: Event) => onDragend($event, row),
         onDblclick: ($event: Event) => handleDoubleClick($event, row),
         onClick: ($event: Event) => handleClick($event, row),
         onContextmenu: ($event: Event) => handleContextMenu($event, row),

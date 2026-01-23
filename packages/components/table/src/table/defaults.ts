@@ -134,6 +134,9 @@ interface TableProps<T extends DefaultRow> {
   defaultSort?: Sort
   tooltipEffect?: string
   tooltipOptions?: TableOverflowTooltipOptions
+  rowDraggable: ((val: any) => boolean) | boolean
+  onDragend: (e: Event, val: any) => void
+  onDragstart: (e: Event, val: any) => void
   spanMethod?: (data: {
     row: T
     rowIndex: number
@@ -402,6 +405,18 @@ export default {
   showOverflowTooltip: [Boolean, Object] as PropType<
     TableProps<any>['showOverflowTooltip']
   >,
+  rowDraggable: {
+    type: [Function, Boolean],
+    default: false,
+  },
+  onDragend: {
+    type: Function,
+    default: undefined,
+  },
+  onDragstart: {
+    type: Function,
+    default: undefined,
+  },
   /**
    * @description function that formats cell tooltip content, works when `show-overflow-tooltip` is `true`
    */

@@ -18,7 +18,7 @@ export type FormItemProp = Arrayable<string>
 export const formItemProps = buildProps({
   alwaysShowError: {
     type: Boolean,
-    default: true,
+    default: false,
   },
   /**
    * @description Label text.
