@@ -51,7 +51,7 @@ $button-icon-span-gap: map.merge(
 
   &:active {
     color: getCssVar('button', 'active', 'text-color');
-    border-color: getCssVar('button', 'active', 'border-color');
+    border-color: getCssVar('button', 'hover', 'border-color');
     background-color: getCssVar('button', 'active', 'bg-color');
     outline: none;
   }

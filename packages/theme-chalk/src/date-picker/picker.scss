@@ -78,7 +78,6 @@
   .#{$namespace}-range__icon {
     height: inherit;
     font-size: 14px;
-    color: getCssVar('text-color', 'placeholder');
     float: left;
 
     svg {

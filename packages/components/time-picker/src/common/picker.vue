@@ -66,16 +66,6 @@
           @touchstart.passive="onTouchStartInput"
           @click.stop
         >
-          <template #prefix>
-            <el-icon
-              v-if="triggerIcon"
-              :class="nsInput.e('icon')"
-              @mousedown.prevent="onMouseDownInput"
-              @touchstart.passive="onTouchStartInput"
-            >
-              <component :is="triggerIcon" />
-            </el-icon>
-          </template>
           <template #suffix>
             <el-icon
               v-if="showClose && clearIcon"
@@ -84,6 +74,31 @@
               @click="onClearIconClick"
             >
               <component :is="clearIcon" />
+            </el-icon>
+            <el-icon
+              v-if="triggerIcon"
+              color="#2A3F4D"
+              :class="nsInput.e('icon')"
+              @mousedown.prevent="onMouseDownInput"
+              @touchstart.passive="onTouchStartInput"
+            >
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_1022_276)">
+                  <path
+                    d="M24 10V24H0V10H24ZM24 8V5C24 4.20435 23.6839 3.44129 23.1213 2.87868C22.5587 2.31607 21.7956 2 21 2H18V0H16V2H8V0H6V2H3C2.20435 2 1.44129 2.31607 0.87868 2.87868C0.31607 3.44129 0 4.20435 0 5L0 8H24ZM18 14H16V16H18V14ZM13 14H11V16H13V14ZM8 14H6V16H8V14ZM18 18H16V20H18V18ZM13 18H11V20H13V18ZM8 18H6V20H8V18Z"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_1022_276">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
             </el-icon>
           </template>
         </el-input>
@@ -121,9 +136,27 @@
           <template #prefix>
             <el-icon
               v-if="triggerIcon"
+              color="#2A3F4D"
+              size="14px"
               :class="[nsInput.e('icon'), nsRange.e('icon')]"
             >
-              <component :is="triggerIcon" />
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <g clip-path="url(#clip0_1022_276)">
+                  <path
+                    d="M24 10V24H0V10H24ZM24 8V5C24 4.20435 23.6839 3.44129 23.1213 2.87868C22.5587 2.31607 21.7956 2 21 2H18V0H16V2H8V0H6V2H3C2.20435 2 1.44129 2.31607 0.87868 2.87868C0.31607 3.44129 0 4.20435 0 5L0 8H24ZM18 14H16V16H18V14ZM13 14H11V16H13V14ZM8 14H6V16H8V14ZM18 18H16V20H18V18ZM13 18H11V20H13V18ZM8 18H6V20H8V18Z"
+                  />
+                </g>
+                <defs>
+                  <clipPath id="clip0_1022_276">
+                    <rect width="24" height="24" fill="white" />
+                  </clipPath>
+                </defs>
+              </svg>
             </el-icon>
           </template>
           <template #range-separator>
