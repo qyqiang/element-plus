@@ -406,15 +406,15 @@ export default {
     TableProps<any>['showOverflowTooltip']
   >,
   rowDraggable: {
-    type: [Function, Boolean],
+    type: [Function, Boolean] as PropType<any>,
     default: false,
   },
   onDragend: {
-    type: Function,
+    type: Function as PropType<any>,
     default: undefined,
   },
   onDragstart: {
-    type: Function,
+    type: Function as PropType<any>,
     default: undefined,
   },
   /**

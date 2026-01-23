@@ -18,9 +18,9 @@ interface TableBodyProps<T extends DefaultRow> {
   highlight: boolean
   tooltipEffect?: string
   tooltipOptions?: TableOverflowTooltipOptions
-  rowDraggable?: any
-  onDragstart?: any
-  onDragend?: any
+  rowDraggable: any
+  onDragstart: any
+  onDragend: any
 }
 
 const defaultProps = {
