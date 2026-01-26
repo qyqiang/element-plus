@@ -122,7 +122,16 @@ function useRender<T extends DefaultRow>(
       column.renderHeader = (scope) => {
         // help render
         instance.columnConfig.value['label']
-        return renderSlot(slots, 'header', scope, () => [column.label])
+        const fallbackContent = [
+          h(
+            'span',
+            {
+              class: ['cell-span'],
+            },
+            [column.label]
+          ),
+        ]
+        return renderSlot(slots, 'header', scope, () => fallbackContent)
       }
     }
 

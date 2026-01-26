@@ -181,10 +181,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: normal;
-    overflow-wrap: break-word;
+    overflow-wrap: normal;
     line-height: 20px;
     padding: 0 8px;
     max-width: 480px;
+
+    .cell-span {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      max-width: 88px;
+    }
 
     &.#{$namespace}-tooltip {
       white-space: nowrap;

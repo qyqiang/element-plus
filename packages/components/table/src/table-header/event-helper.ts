@@ -59,7 +59,7 @@ function useEvent<T extends DefaultRow>(
       const tableLeft = tableEl?.getBoundingClientRect().left
       const columnEl = instance?.vnode?.el?.querySelector(`th.${column.id}`)
       const columnRect = columnEl.getBoundingClientRect()
-      const minLeft = columnRect.left - tableLeft + 30
+      const minLeft = columnRect.left - tableLeft + (column.sortable ? 108 : 88)
 
       addClass(columnEl, 'noclick')
 
