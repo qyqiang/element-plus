@@ -9,6 +9,13 @@
   }
 
   thead {
+    th {
+      .cell {
+        display: flex;
+        align-items: center;
+      }
+    }
+
     th.is-sortable {
       cursor: unset !important;
 
