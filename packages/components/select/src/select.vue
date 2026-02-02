@@ -324,7 +324,7 @@
             <slot name="header" />
           </div>
           <el-scrollbar
-            v-show="states.options.size > 0 && !loading"
+            v-show="(states.options.size > 0 || addItem) && !loading"
             :id="contentId"
             ref="scrollbarRef"
             tag="ul"
@@ -342,10 +342,7 @@
             >
               {{ haveAll }}
             </div>
-            <div
-              v-if="addShowTip && filterable && !emptyText"
-              class="select-add-tip"
-            >
+            <div v-if="addShowTip && filterable" class="select-add-tip">
               {{ addShowTip }}
             </div>
             <el-option

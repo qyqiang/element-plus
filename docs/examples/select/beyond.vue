@@ -8,14 +8,13 @@
       placeholder="Please Select"
       label="label1"
       filterable
-      disabled
       add-item
       add-show-tip="test"
       style="width: 240px"
       @add-item="handleAdd"
     >
       <el-option
-        v-for="item in options"
+        v-for="item in options1"
         :key="item.value"
         :label="item.label"
         :value="item.value"
@@ -255,6 +254,7 @@ const toggleOption = (value) => {
     selectedOptions.value.push(value)
   }
 }
+const options1 = ref([])
 const options = ref([
   {
     value: 'Option1',
