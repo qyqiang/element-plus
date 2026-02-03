@@ -58,7 +58,11 @@ export interface UploadHooks {
     uploadFiles: UploadFiles
   ) => Awaitable<boolean>
   onRemove: (uploadFile: UploadFile, uploadFiles: UploadFiles) => void
-  onChange: (uploadFile: UploadFile, uploadFiles: UploadFiles) => void
+  onChange: (
+    uploadFile: UploadFile,
+    uploadFiles: UploadFiles,
+    isEnd?: boolean
+  ) => void
   onPreview: (uploadFile: UploadFile) => void
   onSuccess: (
     response: any,

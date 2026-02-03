@@ -91,7 +91,7 @@ export const useHandlers = (
     props.onChange(file, uploadFiles.value)
   }
 
-  const handleStart: UploadContentProps['onStart'] = (file) => {
+  const handleStart: UploadContentProps['onStart'] = (file, isEnd: boolean) => {
     if (isNil(file.uid)) file.uid = genFileId()
     const uploadFile: UploadFile = {
       name: file.name,
@@ -110,7 +110,7 @@ export const useHandlers = (
       }
     }
     uploadFiles.value = [...uploadFiles.value, uploadFile]
-    props.onChange(uploadFile, uploadFiles.value)
+    props.onChange(uploadFile, uploadFiles.value, isEnd)
   }
 
   const handleRemove: UploadContentProps['onRemove'] = async (

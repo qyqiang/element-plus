@@ -6,6 +6,7 @@
     :limit="1"
     :on-exceed="handleExceed"
     :auto-upload="false"
+    :on-change="handleChange"
   >
     <template #trigger>
       <el-button type="primary">select file</el-button>
@@ -28,7 +29,9 @@ import { genFileId } from 'element-plus'
 import type { UploadInstance, UploadProps, UploadRawFile } from 'element-plus'
 
 const upload = ref<UploadInstance>()
-
+const handleChange = (file, files, isEnd = false) => {
+  console.log(isEnd)
+}
 const handleExceed: UploadProps['onExceed'] = (files) => {
   upload.value!.clearFiles()
   const file = files[0] as UploadRawFile

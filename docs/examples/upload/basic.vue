@@ -7,7 +7,8 @@
     :on-preview="handlePreview"
     :on-remove="handleRemove"
     :before-remove="beforeRemove"
-    :limit="3"
+    :limit="30"
+    :on-change="handleChange"
     :on-exceed="handleExceed"
   >
     <el-button type="primary">Click to upload</el-button>
@@ -35,7 +36,9 @@ const fileList = ref<UploadUserFile[]>([
     url: 'https://element-plus.org/images/element-plus-logo.svg',
   },
 ])
-
+const handleChange = (file, files, isEnd = false) => {
+  console.log(isEnd)
+}
 const handleRemove: UploadProps['onRemove'] = (file, uploadFiles) => {
   console.log(file, uploadFiles)
 }

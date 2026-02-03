@@ -23,7 +23,9 @@ export const uploadContentProps = buildProps({
     default: NOOP,
   },
   onStart: {
-    type: definePropType<(rawFile: UploadRawFile) => void>(Function),
+    type: definePropType<(rawFile: UploadRawFile, isEnd: boolean) => void>(
+      Function
+    ),
     default: NOOP,
   },
   onSuccess: {

@@ -77,11 +77,10 @@ const uploadFiles = (files: File[]) => {
   if (!multiple) {
     files = files.slice(0, 1)
   }
-
-  for (const file of files) {
+  for (const [i, file] of files.entries()) {
     const rawFile = file as UploadRawFile
     rawFile.uid = genFileId()
-    onStart(rawFile)
+    onStart(rawFile, i === files.length - 1)
     if (autoUpload) upload(rawFile)
   }
 }
