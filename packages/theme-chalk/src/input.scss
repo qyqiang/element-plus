@@ -54,6 +54,7 @@
     height: 14px;
     line-height: 1;
     max-width: calc(100% - 36px);
+    font-size: 14px;
   }
 
   @include e(inner) {
@@ -240,6 +241,7 @@
       background-color: #fff;
       display: inline-block;
       overflow: hidden;
+      font-size: 14px;
       text-overflow: ellipsis;
       white-space: nowrap;
       line-height: 1;

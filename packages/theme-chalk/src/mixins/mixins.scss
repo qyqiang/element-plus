@@ -244,9 +244,11 @@ $E: null;
   transform: translateY(-15px);
   transition: transform .1s ease;
   background: linear-gradient(to bottom, #fff 51%, transparent 49%);
+  font-size: 13px;
 }
 
 @mixin select-float-label {
+  font-size: 13px;
   color: var(--color-gray-700);
   transform: translateY(-15px);
   transition: transform .1s ease;

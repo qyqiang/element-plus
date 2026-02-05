@@ -29,7 +29,7 @@
     box-sizing: border-box;
     cursor: pointer;
     text-align: left;
-    font-size: map.get($input-font-size, 'custom');
+    font-size: 14px;
     padding: map.get($select-wrapper-padding, 'default');
     gap: map.get($select-item-gap, 'default');
     min-height: map.get($input-height, 'default');
