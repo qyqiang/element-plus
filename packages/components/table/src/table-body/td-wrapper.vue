@@ -1,5 +1,7 @@
 <template>
-  <td :colspan="colspan" :rowspan="rowspan"><slot /></td>
+  <td :colspan="colspan" :rowspan="rowspan">
+    <div class="cell-height"><slot /></div>
+  </td>
 </template>
 
 <script setup lang="ts">

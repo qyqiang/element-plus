@@ -58,7 +58,39 @@ type CompareValue<T> = {
 export const getCell = function (event: Event) {
   return (event.target as HTMLElement)?.closest('td')
 }
-
+export const getThCell = function (event: Event) {
+  return (event.target as HTMLElement)?.closest('th')
+}
+export const isGreaterThan = (a: number, b: number, epsilon = 0.03) => {
+  return a - b > epsilon
+}
+export const getPadding = (el: HTMLElement) => {
+  const style = window.getComputedStyle(el, null)
+  const paddingLeft = Number.parseInt(style.paddingLeft, 10) || 0
+  const paddingRight = Number.parseInt(style.paddingRight, 10) || 0
+  const paddingTop = Number.parseInt(style.paddingTop, 10) || 0
+  const paddingBottom = Number.parseInt(style.paddingBottom, 10) || 0
+  return {
+    left: paddingLeft,
+    right: paddingRight,
+    top: paddingTop,
+    bottom: paddingBottom,
+  }
+}
+export const toggleRowClassByCell = (
+  rowSpan: number,
+  event: MouseEvent,
+  toggle: (el: Element, cls: string) => void
+) => {
+  let node: Node | null | undefined = (event?.target as Element | null)
+    ?.parentNode
+  while (rowSpan > 1) {
+    node = node?.nextSibling
+    if (!node || node.nodeName !== 'TR') break
+    toggle(node as Element, 'hover-row hover-fixed-row')
+    rowSpan--
+  }
+}
 export const orderBy = function <T extends DefaultRow>(
   array: T[],
   sortKey: string | null,

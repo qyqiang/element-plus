@@ -120,6 +120,7 @@ export default defineComponent({
     })
 
     const {
+      handleCellMouseEnter,
       handleHeaderClick,
       handleHeaderContextMenu,
       handleMouseDown,
@@ -155,6 +156,7 @@ export default defineComponent({
       getHeaderCellClass,
       getHeaderCellStyle,
       handleHeaderClick,
+      handleCellMouseEnter,
       handleHeaderContextMenu,
       handleMouseDown,
       handleMouseMove,
@@ -179,6 +181,7 @@ export default defineComponent({
       getHeaderRowClass,
       getHeaderRowStyle,
       handleHeaderClick,
+      handleCellMouseEnter,
       handleHeaderContextMenu,
       handleMouseDown,
       handleMouseMove,
@@ -230,6 +233,8 @@ export default defineComponent({
                   subColumns,
                   column
                 ),
+                onMouseenter: ($event: MouseEvent) =>
+                  handleCellMouseEnter($event, column),
                 onClick: ($event: Event) => {
                   if (
                     ($event.currentTarget as Element)?.classList.contains(

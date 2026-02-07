@@ -5,7 +5,10 @@ import {
   createTablePopper,
   getCell,
   getColumnByCell,
+  getPadding,
+  isGreaterThan,
   removePopper,
+  toggleRowClassByCell,
 } from '../util'
 import { TABLE_INJECTION_KEY } from '../tokens'
 
@@ -13,10 +16,6 @@ import type { TableColumnCtx } from '../table-column/defaults'
 import type { TableBodyProps } from './defaults'
 import type { TableOverflowTooltipOptions } from '../util'
 import type { DefaultRow } from '../table/defaults'
-
-function isGreaterThan(a: number, b: number, epsilon = 0.03) {
-  return a - b > epsilon
-}
 
 function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
   const parent = inject(TABLE_INJECTION_KEY)
@@ -57,34 +56,6 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
   const handleMouseLeave = debounce(() => {
     props.store?.commit('setHoverRow', null)
   }, 30)
-  const getPadding = (el: HTMLElement) => {
-    const style = window.getComputedStyle(el, null)
-    const paddingLeft = Number.parseInt(style.paddingLeft, 10) || 0
-    const paddingRight = Number.parseInt(style.paddingRight, 10) || 0
-    const paddingTop = Number.parseInt(style.paddingTop, 10) || 0
-    const paddingBottom = Number.parseInt(style.paddingBottom, 10) || 0
-    return {
-      left: paddingLeft,
-      right: paddingRight,
-      top: paddingTop,
-      bottom: paddingBottom,
-    }
-  }
-
-  const toggleRowClassByCell = (
-    rowSpan: number,
-    event: MouseEvent,
-    toggle: (el: Element, cls: string) => void
-  ) => {
-    let node: Node | null | undefined = (event?.target as Element | null)
-      ?.parentNode
-    while (rowSpan > 1) {
-      node = node?.nextSibling
-      if (!node || node.nodeName !== 'TR') break
-      toggle(node as Element, 'hover-row hover-fixed-row')
-      rowSpan--
-    }
-  }
 
   const handleCellMouseEnter = (
     event: MouseEvent,
