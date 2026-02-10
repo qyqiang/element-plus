@@ -142,21 +142,17 @@ const tableColumns = ref<any[]>([
   },
   {
     prop: 'age',
-    label: 'Age',
-    width: '120',
-    resizable: false,
+    label: 'AgeAgey',
     sortable: true,
   },
   {
     prop: 'date',
-    label: 'Date',
-    width: '120',
+    label: 'Customer',
     sortable: true,
   },
   {
     prop: 'state',
-    label: 'State',
-    width: '120',
+    label: 'StateStateStateStateStateState',
   },
   {
     prop: 'city',

@@ -25,11 +25,12 @@
           {{ title }}
         </span>
       </slot>
-      <button
+      <el-button
         v-if="showClose"
         :aria-label="t('el.dialog.close')"
         :class="ns.e('headerbtn')"
-        type="button"
+        type="text"
+        class="icon-button"
         @click="$emit('close')"
       >
         <el-icon :class="ns.e('close')" size="24px">
@@ -44,7 +45,7 @@
             />
           </svg>
         </el-icon>
-      </button>
+      </el-button>
     </header>
     <div :id="bodyId" :class="[ns.e('body'), bodyClass]">
       <slot />
@@ -57,6 +58,7 @@
 
 <script lang="ts" setup>
 import { computed, inject } from 'vue'
+import ElButton from '@element-plus/components/button/src/button.vue'
 import { ElIcon } from '@element-plus/components/icon'
 import { FOCUS_TRAP_INJECTION_KEY } from '@element-plus/components/focus-trap'
 import { useDraggable, useLocale } from '@element-plus/hooks'

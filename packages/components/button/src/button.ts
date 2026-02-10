@@ -32,6 +32,10 @@ export const buttonProps = buildProps({
    */
   disabled: Boolean,
   /**
+   * @description isActive the button
+   */
+  isActive: Boolean,
+  /**
    * @description button type
    */
   type: {

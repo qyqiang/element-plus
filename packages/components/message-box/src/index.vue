@@ -49,9 +49,10 @@
                 />
                 <span>{{ title }}</span>
               </div>
-              <button
+              <el-button
                 v-if="showClose"
-                type="button"
+                type="text"
+                class="icon-button"
                 :class="ns.e('headerbtn')"
                 :aria-label="t('el.messagebox.close')"
                 @click="
@@ -73,7 +74,7 @@
                     />
                   </svg>
                 </el-icon>
-              </button>
+              </el-button>
             </div>
             <div :id="contentId" :class="ns.e('content')">
               <div :class="ns.e('container')">

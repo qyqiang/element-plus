@@ -49,10 +49,9 @@ function useEvent<T extends DefaultRow>(
         toggleRowClassByCell(cell.rowSpan, event, addClass)
       }
     }
-
     // 判断是否text-overflow, 如果是就显示tooltip
     const cellChild = (event.target as HTMLElement).querySelector(
-      '.cell'
+      column?.sortable ? '.cell-span' : '.cell'
     ) as HTMLElement
     if (!cellChild.childNodes.length) return
     // use range width instead of scrollWidth to determine whether the text is overflowing
@@ -74,8 +73,9 @@ function useEvent<T extends DefaultRow>(
     const { top, left, right, bottom } = getPadding(cellChild)
     const horizontalPadding = left + right
     const verticalPadding = top + bottom
+    const limitWidth = rangeWidth + horizontalPadding
     if (
-      isGreaterThan(rangeWidth + horizontalPadding, cellChildWidth) ||
+      isGreaterThan(limitWidth, cellChildWidth) ||
       isGreaterThan(rangeHeight + verticalPadding, cellChildHeight) ||
       // When using a high-resolution screen, it is possible that a returns cellChild.scrollWidth value of 1921 and
       // cellChildWidth returns a value of 1920.994140625. #16856 #16673
@@ -133,7 +133,7 @@ function useEvent<T extends DefaultRow>(
       const tableLeft = tableEl?.getBoundingClientRect().left
       const columnEl = instance?.vnode?.el?.querySelector(`th.${column.id}`)
       const columnRect = columnEl.getBoundingClientRect()
-      const minLeft = columnRect.left - tableLeft + 90
+      const minLeft = columnRect.left - tableLeft + 88
 
       addClass(columnEl, 'noclick')
 

@@ -161,6 +161,10 @@ export const selectProps = buildProps({
     type: Number,
     default: 0,
   },
+  filterMaxLength: {
+    type: Number,
+    default: 99,
+  },
   /**
    * @description placeholder, default is 'Select'
    */

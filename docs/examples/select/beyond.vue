@@ -5,9 +5,10 @@
       v-model="value"
       clearable
       pre-star
-      placeholder="Please Select"
+      placeholder="Please Selectgg"
       label="label1"
       filterable
+      :filter-max-length="24"
       add-item
       add-show-tip="test"
       style="width: 240px"
