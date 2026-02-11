@@ -3,7 +3,12 @@
     <el-alert title="Primary alert" type="primary" show-icon />
     <el-alert title="Success alert" type="success" show-icon />
     <el-alert title="Info alert" type="info" show-icon />
-    <el-alert title="Warning alert" type="warning" show-icon />
+    <el-alert
+      title="Warning alert"
+      type="warning"
+      show-icon
+      description="dsdaadsa"
+    />
     <el-alert title="Error alert" type="error" show-icon />
     <el-alert title="Error alert with custom icon" type="error" show-icon>
       <template #icon>

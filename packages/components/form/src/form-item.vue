@@ -410,7 +410,8 @@ onMounted(() => {
       isEmpty(initialValue) &&
       (formItemContent.value?.querySelector('.el-input') ||
         formItemContent.value?.querySelector('.el-textarea') ||
-        formItemContent.value?.querySelector('.el-date-editor'))
+        formItemContent.value?.querySelector('.el-date-editor') ||
+        formItemContent.value?.querySelector('.el-select'))
     ) {
       const currentRule: any = normalizedRules.value.find(
         (rule) => rule.required

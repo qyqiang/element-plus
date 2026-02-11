@@ -95,6 +95,7 @@
                   :effect="tagEffect"
                   disable-transitions
                   :style="tagStyle"
+                  round
                   @close="deleteTag($event, item)"
                 >
                   <span :class="nsSelect.e('tags-text')">
@@ -133,6 +134,7 @@
                       :effect="tagEffect"
                       disable-transitions
                       :style="collapseTagStyle"
+                      round
                     >
                       <span :class="nsSelect.e('tags-text')">
                         + {{ states.selected.length - maxCollapseTags }}
@@ -154,6 +156,7 @@
                         :type="tagType"
                         :effect="tagEffect"
                         disable-transitions
+                        round
                         @close="deleteTag($event, item)"
                       >
                         <span :class="nsSelect.e('tags-text')">
