@@ -189,10 +189,6 @@ export const selectProps = buildProps({
     type: Boolean,
     default: true,
   },
-  /**
-   * @description preStar
-   */
-  preStar: Boolean,
   addShowTip: String,
   haveAll: {
     type: String,

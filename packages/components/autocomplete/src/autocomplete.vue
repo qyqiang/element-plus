@@ -44,7 +44,6 @@
         v-bind="mergeProps(passInputProps, $attrs)"
         :model-value="modelValue"
         :always-show-suffix="alwaysShowSuffix"
-        :pre-star="preStar"
         :disabled="disabled"
         @input="handleInput"
         @change="handleChange"

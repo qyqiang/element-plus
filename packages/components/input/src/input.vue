@@ -213,8 +213,6 @@
         @change="handleChange"
         @keydown="handleKeydown"
       />
-      <span v-if="teatareaStar" class="pre-star-item">*</span>
-
       <span v-if="$slots.textareaPrefix" class="textarea-prefix">
         <slot name="textareaPrefix" />
       </span>
@@ -344,16 +342,7 @@ const containerKls = computed(() => [
 const wrapperKls = computed(() => [
   nsInput.e('wrapper'),
   nsInput.is('focus', isFocused.value),
-  props.preStar && !isFocused.value && !textLength.value ? 'pre-star-item' : '',
 ])
-
-const teatareaStar = computed(
-  () =>
-    props.preStar &&
-    !isFocused.value &&
-    !textLength.value &&
-    !validateState.value
-)
 
 const { form: elForm, formItem: elFormItem } = useFormItem()
 const { inputId } = useFormItemInputId(props, {
