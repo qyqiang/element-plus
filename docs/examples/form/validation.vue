@@ -14,7 +14,12 @@
       >
     </el-form-item>
     <el-form-item label="Activity name" prop="name" pre-star>
-      <el-input v-model="ruleForm.name" pre-star placeholder="sss" />
+      <el-input
+        v-model="ruleForm.name"
+        pre-star
+        placeholder="sss"
+        size="small"
+      />
     </el-form-item>
     <el-form-item label="Activity autocomplete name" prop="name" pre-star>
       <el-autocomplete v-model="ruleForm.name" pre-star placeholder="sss" />
