@@ -259,8 +259,7 @@ const options1 = ref([])
 const options = ref([
   {
     value: 'Option1',
-    label:
-      'Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1Option1',
+    label: 'yyyygggghhhh',
   },
   {
     value: 'Option2',

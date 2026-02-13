@@ -30,20 +30,17 @@
           </div>
         </el-tooltip>
         <div v-show="itemSelected" class="option-wrap-icon">
-          <el-icon size="16px">
-            <svg
+          <el-icon size="16px" color="#2A3F4D"
+            ><svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
               height="16"
               viewBox="0 0 16 16"
-              fill="none"
             >
               <path
                 d="M5.20006 14.2833C4.97716 14.2834 4.75643 14.2395 4.55052 14.1542C4.3446 14.0688 4.15754 13.9437 4.00006 13.786L0.292725 10.0807L1.70739 8.66665L5.20006 12.1593L14.2927 3.06665L15.7074 4.48065L6.40006 13.786C6.24257 13.9437 6.05552 14.0688 5.8496 14.1542C5.64369 14.2395 5.42296 14.2834 5.20006 14.2833Z"
-                fill="#2A3F4D"
-              />
-            </svg>
-          </el-icon>
+              /></svg
+          ></el-icon>
         </div>
       </div>
     </slot>

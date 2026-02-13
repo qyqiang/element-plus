@@ -14,37 +14,105 @@
     ]"
     @mousemove="hoverItem"
     @click.stop="selectOptionClick"
+    @mouseenter="handleCellMouseEnter"
   >
     <slot :item="item" :index="index" :disabled="disabled">
-      <span>{{ getLabel(item) }}</span>
+      <div class="option-wrap">
+        <el-tooltip
+          ref="tooltipRef"
+          effect="light"
+          :disabled="disabled || showTip"
+          :content="getLabel(item)"
+          placement="right"
+          popper-class="optionPopperClass"
+        >
+          <div class="option-wrap-content">
+            <slot name="optionIcon"></slot>
+            <span
+              class="select-label"
+              :class="{ 'select-margin': $slots?.optionIcon }"
+              >{{ getLabel(item) }}</span
+            >
+          </div>
+        </el-tooltip>
+        <div v-show="selected" class="option-wrap-icon">
+          <el-icon size="16px" color="#2A3F4D"
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              viewBox="0 0 16 16"
+            >
+              <path
+                d="M5.20006 14.2833C4.97716 14.2834 4.75643 14.2395 4.55052 14.1542C4.3446 14.0688 4.15754 13.9437 4.00006 13.786L0.292725 10.0807L1.70739 8.66665L5.20006 12.1593L14.2927 3.06665L15.7074 4.48065L6.40006 13.786C6.24257 13.9437 6.05552 14.0688 5.8496 14.1542C5.64369 14.2395 5.42296 14.2834 5.20006 14.2833Z"
+              /></svg
+          ></el-icon>
+        </div>
+      </div>
     </slot>
   </li>
 </template>
 
 <script lang="ts">
-import { defineComponent, inject } from 'vue'
+import { defineComponent, inject, ref } from 'vue'
+import {
+  getPadding,
+  isGreaterThan,
+} from '@element-plus/components/table/src/util'
+import ElTooltip from '@element-plus/components/tooltip'
 import { useNamespace } from '@element-plus/hooks'
 import { useOption } from './useOption'
 import { useProps } from './useProps'
 import { optionV2Emits, optionV2Props } from './defaults'
 import { selectV2InjectionKey } from './token'
+import ElIcon from '@element-plus/components/icon'
 
 export default defineComponent({
+  components: { ElIcon, ElTooltip },
   props: optionV2Props,
   emits: optionV2Emits,
   setup(props, { emit }) {
     const select = inject(selectV2InjectionKey)!
+    const showTip = ref(true)
     const ns = useNamespace('select')
     const { hoverItem, selectOptionClick } = useOption(props, { emit })
     const { getLabel } = useProps(select.props)
     const contentId = select.contentId
+    const handleCellMouseEnter = (event: MouseEvent) => {
+      const cellChild = (event.target as HTMLElement).querySelector(
+        '.option-wrap-content'
+      ) as HTMLElement
+      if (!cellChild) return
+      if (cellChild && !cellChild?.childNodes.length) {
+        showTip.value = false
+        return
+      }
 
+      const range = document.createRange()
+      range.setStart(cellChild, 0)
+      range.setEnd(cellChild, cellChild.childNodes.length)
+      const { width: rangeWidth, height: rangeHeight } =
+        range.getBoundingClientRect()
+      const { width: cellChildWidth, height: cellChildHeight } =
+        cellChild.getBoundingClientRect()
+
+      const { top, left, right, bottom } = getPadding(cellChild)
+      const horizontalPadding = left + right
+      const verticalPadding = top + bottom
+      showTip.value = !(
+        isGreaterThan(rangeWidth + horizontalPadding, cellChildWidth) ||
+        isGreaterThan(rangeHeight + verticalPadding, cellChildHeight) ||
+        isGreaterThan(cellChild.scrollWidth, cellChildWidth)
+      )
+    }
     return {
       ns,
       contentId,
+      showTip,
       hoverItem,
       selectOptionClick,
       getLabel,
+      handleCellMouseEnter,
     }
   },
 })
