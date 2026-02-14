@@ -249,7 +249,9 @@
               <slot name="info" />
             </template>
             <el-icon
-              v-if="iconComponent && !showClearBtn && !validateError"
+              v-if="
+                iconComponent && !showClearBtn && !validateError && !$slots.info
+              "
               :class="[nsSelect.e('caret'), nsSelect.e('icon'), iconReverse]"
             >
               <svg

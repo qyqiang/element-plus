@@ -16,7 +16,7 @@
     <el-form-item label="Activity name" prop="name" pre-star>
       <el-input
         v-model="ruleForm.name"
-        pre-star
+        disabled
         placeholder="sss"
         size="small"
       />

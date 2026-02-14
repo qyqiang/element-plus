@@ -177,6 +177,11 @@ const isGroup = computed<boolean>(() => {
   return !labelFor.value && hasLabel.value
 })
 
+const isDisabled = computed(() => {
+  const ele = formItemContent.value?.querySelector('.is-disabled')
+  return !!ele
+})
+
 const isNested = !!parentFormItemContext
 
 const fieldValue = computed(() => {
@@ -405,6 +410,7 @@ onMounted(() => {
     formContext?.addField(context)
     initialValue = clone(fieldValue.value)
     if (
+      !isDisabled.value &&
       isRequired.value &&
       props.alwaysShowError &&
       isEmpty(initialValue) &&
