@@ -12,6 +12,7 @@
   >
     <slot>
       <div class="option-wrap">
+        <el-checkbox v-if="multiple" v-model="itemSelected"></el-checkbox>
         <el-tooltip
           ref="tooltipRef"
           effect="light"
@@ -29,7 +30,7 @@
             >
           </div>
         </el-tooltip>
-        <div v-show="itemSelected" class="option-wrap-icon">
+        <div v-if="itemSelected && !multiple" class="option-wrap-icon">
           <el-icon size="16px" color="#2A3F4D"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -65,6 +66,7 @@ import { useOption } from './useOption'
 import { COMPONENT_NAME, optionProps } from './option'
 import ElIcon from '@element-plus/components/icon'
 import ElTooltip from '@element-plus/components/tooltip'
+import ElCheckbox from '@element-plus/components/checkbox'
 
 import type {
   OptionExposed,
@@ -76,6 +78,7 @@ export default defineComponent({
   name: COMPONENT_NAME,
   componentName: COMPONENT_NAME,
   components: {
+    ElCheckbox,
     ElIcon,
     ElTooltip,
   },
@@ -111,9 +114,8 @@ export default defineComponent({
     const { visible, hover } = toRefs(states)
 
     const vm = (getCurrentInstance()! as OptionInternalInstance).proxy
-
     select.onOptionCreate(vm)
-
+    const multiple = computed(() => select.props.multiple)
     onBeforeUnmount(() => {
       const key = vm.value
 
@@ -180,6 +182,7 @@ export default defineComponent({
     }
 
     return {
+      multiple,
       ns,
       id,
       containerKls,

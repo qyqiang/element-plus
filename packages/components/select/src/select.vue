@@ -2,7 +2,11 @@
   <div
     ref="selectRef"
     v-click-outside:[popperRef]="handleClickOutside"
-    :class="[nsSelect.b(), nsSelect.m(selectSize)]"
+    :class="[
+      nsSelect.b(),
+      nsSelect.m(selectSize),
+      multiple && isFocused ? 'multi-select' : '',
+    ]"
     @[mouseEnterEventName]="states.inputHovering = true"
     @mouseleave="states.inputHovering = false"
   >

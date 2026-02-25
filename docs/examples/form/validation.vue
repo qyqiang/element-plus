@@ -27,13 +27,32 @@
     <el-form-item label="Activity zone" prop="region">
       <el-select
         v-model="ruleForm.region"
-        placeholder="Activity zone1"
+        placeholder="Activity zone-test"
         fit-input-width
         multiple
         clearable
       >
-        <el-option label="Zone one" value="shanghai" />
-        <el-option label="Zone two" value="beijing" />
+        <el-option label="Zone one" :value="1" />
+        <el-option label="Zone two" :value="2" />
+        <el-option label="Zone 1" :value="3" />
+        <el-option label="Zone 2" :value="4" />
+        <el-option label="Zone 3" :value="5" />
+        <el-option label="Zone 4" :value="6" />
+      </el-select>
+    </el-form-item>
+    <el-form-item label="Activity zone" prop="region">
+      <el-select
+        v-model="ruleForm.region1"
+        placeholder="Activity zone-singht"
+        fit-input-width
+        clearable
+      >
+        <el-option label="Zone one" :value="1" />
+        <el-option label="Zone two" :value="2" />
+        <el-option label="Zone 1" :value="3" />
+        <el-option label="Zone 2" :value="4" />
+        <el-option label="Zone 3" :value="5" />
+        <el-option label="Zone 4" :value="6" />
       </el-select>
     </el-form-item>
     <el-form-item label="Activity count" prop="count">
@@ -153,7 +172,8 @@ interface RuleForm {
 const ruleFormRef = ref<FormInstance>()
 const ruleForm = reactive<RuleForm>({
   name: '',
-  region: '',
+  region1: 1,
+  region: [1, 2, 3, 4, 5, 6],
   count: '',
   date1: '',
   date2: '',
