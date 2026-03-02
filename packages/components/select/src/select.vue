@@ -227,7 +227,10 @@
             </div>
 
             <div
-              v-if="!floatLabel || (shouldShowPlaceholder && hasModelValue)"
+              v-if="
+                (!floatLabel && !states.inputValue) ||
+                (shouldShowPlaceholder && hasModelValue)
+              "
               :class="[
                 nsSelect.e('selected-item'),
                 nsSelect.e('placeholder'),

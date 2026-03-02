@@ -5,6 +5,28 @@
       v-model="value"
       clearable
       pre-star
+      placeholder="float -value"
+      label="label1"
+      filterable
+      :float-label="false"
+      :filter-max-length="24"
+      style="width: 240px"
+    >
+      <el-option
+        v-for="item in options"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+        <template #optionIcon>
+          <el-icon><info-filled></info-filled></el-icon>
+        </template>
+      </el-option>
+    </el-select>
+    <el-select
+      v-model="value"
+      clearable
+      pre-star
       placeholder="Please Selectgg"
       label="label1"
       filterable
