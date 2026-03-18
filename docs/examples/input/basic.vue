@@ -4,6 +4,8 @@
     style="width: 240px"
     placeholder="Please input"
     :float-label="false"
+    type="textarea"
+    :rows="3"
   />
 </template>
 

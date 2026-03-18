@@ -1,5 +1,7 @@
 <template>
+  <el-button @click="test">Test</el-button>
   <el-table
+    ref="table"
     :data="tableData"
     border
     tooltip-effect="light"
@@ -68,9 +70,14 @@ interface User {
   name: string
   address: string
 }
-
+const table = ref(null)
 const multipleSelection = ref<User[]>([])
-
+const defaultProp = ref({ prop: '', order: '' })
+const test = () => {
+  defaultProp.value = { prop: 'age', order: 'descending' }
+  table.value?.updateSort(defaultProp.value)
+  console.log(table.value)
+}
 const handleSelectionChange = (val: User[]) => {
   multipleSelection.value = val
 }
@@ -146,9 +153,9 @@ const tableColumns = ref<any[]>([
     sortable: true,
   },
   {
-    prop: 'date',
+    prop: 'customer',
     label: 'Customer',
-    sortable: true,
+    sortable: 'custom',
   },
   {
     prop: 'state',

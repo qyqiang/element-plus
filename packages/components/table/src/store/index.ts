@@ -146,7 +146,18 @@ function useStore<T extends DefaultRow>() {
         instance.store.scheduleLayout()
       }
     },
-
+    sortUpdate(states: StoreStates, options: Sort) {
+      const { prop, order } = options
+      if (prop) {
+        const column = unref(states.columns).find(
+          (column) => column.property === prop
+        )
+        if (column) {
+          column.order = order
+          instance.store.updateSort(column, prop, order)
+        }
+      }
+    },
     sort(states: StoreStates, options: Sort) {
       const { prop, order, init } = options
       if (prop) {

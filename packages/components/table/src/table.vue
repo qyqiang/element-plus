@@ -265,6 +265,7 @@ export default defineComponent({
       toggleAllSelection,
       toggleRowExpansion,
       clearSort,
+      updateSort,
       sort,
       updateKeyChildren,
     } = useUtils<Row>(store)
@@ -365,6 +366,10 @@ export default defineComponent({
        * @description used in expandable Table or tree Table, toggle if a certain row is expanded. With the second parameter, you can directly set if this row is expanded or collapsed
        */
       toggleRowExpansion,
+      /**
+       * @description update sorting, restore data to the original order
+       */
+      updateSort,
       /**
        * @description clear sorting, restore data to the original order
        */

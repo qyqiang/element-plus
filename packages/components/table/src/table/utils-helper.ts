@@ -1,5 +1,5 @@
 import type { Store } from '../store'
-import type { DefaultRow } from './defaults'
+import type { DefaultRow, Sort } from './defaults'
 
 function useUtils<T extends DefaultRow>(store: Store<T>) {
   const setCurrentRow = (row: T) => {
@@ -31,6 +31,10 @@ function useUtils<T extends DefaultRow>(store: Store<T>) {
   const clearSort = () => {
     store.clearSort()
   }
+  const updateSort = (options: Sort) => {
+    store.commit('sortUpdate', options)
+  }
+
   const sort = (prop: string, order: string) => {
     store.commit('sort', { prop, order })
   }
@@ -49,6 +53,7 @@ function useUtils<T extends DefaultRow>(store: Store<T>) {
     clearSort,
     sort,
     updateKeyChildren,
+    updateSort,
   }
 }
 
