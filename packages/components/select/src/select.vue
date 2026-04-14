@@ -255,6 +255,9 @@
             <template v-if="$slots.info">
               <slot name="info" />
             </template>
+            <template v-if="$slots.suffixBeforeIcon">
+              <slot name="suffixBeforeIcon" />
+            </template>
             <el-icon
               v-if="
                 iconComponent && !showClearBtn && !validateError && !$slots.info
@@ -292,6 +295,9 @@
                 />
               </svg>
             </el-icon>
+            <template v-if="$slots.suffixAfterIcon">
+              <slot name="suffixAfterIcon" />
+            </template>
             <el-tooltip
               v-if="validateError"
               :content="validateMsg"
