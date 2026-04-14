@@ -81,6 +81,7 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
       if (cell.rowSpan > 1) {
         toggleRowClassByCell(cell.rowSpan, event, addClass)
       }
+      addClass(event.target as Element, 'cell-hover')
       const hoverState = (table.hoverState = {
         cell,
         column: column as any,
@@ -158,6 +159,7 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
     if (cell.rowSpan > 1) {
       toggleRowClassByCell(cell.rowSpan, event, removeClass)
     }
+    removeClass(event.target as Element, 'cell-hover')
     const oldHoverState = parent?.hoverState
     parent?.emit(
       'cell-mouse-leave',

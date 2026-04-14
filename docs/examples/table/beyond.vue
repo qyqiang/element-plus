@@ -4,6 +4,7 @@
     ref="table"
     :data="tableData"
     border
+    class="quick-table"
     tooltip-effect="light"
     style="width: 100%"
     max-height="250"
