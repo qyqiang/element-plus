@@ -1,186 +1,148 @@
 <template>
-  <el-button @click="test">Test</el-button>
-  <el-table
-    ref="table"
-    :data="tableData"
-    border
-    class="quick-table"
-    tooltip-effect="light"
-    style="width: 100%"
-    max-height="250"
-    @selection-change="handleSelectionChange"
-    @sort-change="handleSortChange"
-  >
-    <el-table-column fixed :resizable="false" width="35">
-      <template #default="scope">
-        <el-tooltip :content="scope.row.name" effect="light">
-          <el-icon class="warning"><WarningFilled /></el-icon>
-        </el-tooltip>
-      </template>
-    </el-table-column>
-    <el-table-column fixed type="selection" :resizable="false" width="35" />
+  <div class="editable-row-demo">
+    <div class="editable-row-demo__title">Current Contained</div>
+    <div class="editable-row-demo__subtitle">
+      Current Contained Specification
+    </div>
 
-    <el-table-column
-      v-for="item in tableColumns"
-      :key="item?.prop"
-      :column-key="item?.id"
-      :resizable="item?.resizable"
-      :align="item?.align"
-      :class-name="item?.className"
-      :fixed="item?.fixed"
-      :formatter="item?.formatter"
-      :label="item?.label"
-      :prop="item?.prop"
-      :show-overflow-tooltip="item?.tooltip ?? true"
-      :sortable="item?.sortable"
-      :width="item?.width"
+    <el-table
+      ref="table"
+      :data="tableData"
+      border
+      editable
+      row-key="id"
+      max-height="800px"
+      class="quick-table"
+      style="width: 100%"
     >
-      <!--      <template #default="{ row }">-->
-      <!--        <ElTableEditableCell-->
-      <!--          v-if="item?.editable"-->
-      <!--          :row="row"-->
-      <!--          :property="item?.prop"-->
-      <!--          @on-submit="(val: string) => handleSubmit(val, row)"-->
-      <!--        />-->
-      <!--      </template>-->
-    </el-table-column>
+      <el-table-column label="Product">
+        <template #default="{ row, $index, cellIndex }">
+          <ElTableEditableCell
+            :cell-data="{ row, rowIndex: $index, cellIndex }"
+            property="product"
+          />
+        </template>
+      </el-table-column>
 
-    <el-table-column fixed="right" label="Operations" min-width="130">
-      <template #default="scope">
-        <el-button
-          link
-          type="primary"
-          size="small"
-          @click.prevent="deleteRow(scope.$index)"
-        >
-          Remove
-        </el-button>
-      </template>
-    </el-table-column>
-  </el-table>
+      <el-table-column label="Qty" width="160">
+        <template #default="{ row, $index, cellIndex }">
+          <ElTableEditableCell
+            :cell-data="{ row, rowIndex: $index, cellIndex }"
+            property="qty"
+            :is-number="{ place: 2 }"
+          />
+        </template>
+      </el-table-column>
+
+      <el-table-column label="Unit" :show-overflow-tooltip="true">
+        <template #default="{ row, $index, cellIndex }">
+          <ElTableEditableCell
+            :cell-data="{ row, rowIndex: $index, cellIndex }"
+            property="unitValue"
+            display-key="unit"
+            editor="select"
+            :options="unitOptions"
+          />
+        </template>
+      </el-table-column>
+      <el-table-column>
+        <template #default="{ row, $index }">
+          <ElTableEditableRowActions :row="row" :before-save="beforeSave">
+            <el-dropdown
+              class="mr-2 ml-14"
+              placement="bottom-end"
+              trigger="click"
+              @command="handleCommand($event, row, $index)"
+            >
+              <el-button class="icon-button" type="text" @click.stop
+                >sdsdsd</el-button
+              >
+              <template #dropdown>
+                <el-dropdown-menu>
+                  <el-dropdown-item command="delete">
+                    <span class="flex-center text-gray-990">
+                      <svg-icon class="mr-2" name="fi-ss-trash" />
+                      Delete
+                    </span></el-dropdown-item
+                  >
+                </el-dropdown-menu>
+              </template>
+            </el-dropdown>
+          </ElTableEditableRowActions>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import { WarningFilled } from '@element-plus/icons-vue'
-// import { ElTableEditableCell } from '@element-plus/components/table'
+import { ElTableEditableCell, ElTableEditableRowActions } from 'element-plus'
 
-interface User {
+interface CurrentContainedRow {
   id: number
-  date: string
-  name: string
-  address: string
+  product: string
+  qty: string
+  unit: string
+  unitValue: string
 }
-const table = ref(null)
-const multipleSelection = ref<User[]>([])
-const defaultProp = ref({ prop: '', order: '' })
-const test = () => {
-  defaultProp.value = { prop: 'age', order: 'descending' }
-  table.value?.updateSort(defaultProp.value)
-  console.log(table.value)
-}
-const handleSelectionChange = (val: User[]) => {
-  multipleSelection.value = val
-}
-const handleSubmit = (value: string, row: any) => {
-  console.log('submit', value, row)
-}
-const handleSortChange = ({ prop, order }) => {
-  console.log(prop, order)
-}
-const tableData = ref([
+
+const tableData = ref<CurrentContainedRow[]>([
   {
     id: 1,
-    date: '2016-06-01',
-    name: 'Tom1',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    age: 25,
+    product: 'Sand',
+    qty: '1000',
+    unit: 'lbs',
+    unitValue: '232',
   },
   {
     id: 2,
-    date: '2016-05-02',
-    name: 'Tom2',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    age: 24,
-  },
-  {
-    id: 3,
-    date: '2016-05-03',
-    name: 'Tom3',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    age: 26,
-  },
-  {
-    id: 4,
-    date: '2016-05-04',
-    name: 'Tom4',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    age: 27,
-  },
-  {
-    id: 5,
-    date: '2016-05-05',
-    name: 'Tom5',
-    state: 'California',
-    city: 'Los Angeles',
-    address: 'No. 189, Grove St, Los Angeles',
-    zip: 'CA 90036',
-    age: 28,
+    product: 'Sand',
+    qty: '1000',
+    unitValue: '1000',
+    unit: 'lbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbslbs',
   },
 ])
 
-const tableColumns = ref<any[]>([
+const unitOptions = [
   {
-    prop: 'name',
-    label: 'Name',
-    width: '120',
-    fixed: true,
+    label: 'lbs',
+    value: 'lbs',
   },
   {
-    prop: 'age',
-    label: 'AgeAgey',
-    sortable: true,
+    label: 'kg',
+    value: 'kg',
   },
   {
-    prop: 'customer',
-    label: 'Customer',
-    sortable: 'custom',
+    label: 'ton',
+    value: 'ton',
   },
-  {
-    prop: 'state',
-    label: 'StateStateStateStateStateState',
-  },
-  {
-    prop: 'city',
-    label: 'City',
-    width: '120',
-  },
-  {
-    prop: 'address',
-    label: 'Address',
-    width: '220',
-    editable: true,
-  },
-  {
-    prop: 'zip',
-    label: 'Zip',
-    width: '120',
-    editable: true,
-  },
-])
-const deleteRow = (index: number) => {
-  tableData.value.splice(index, 1)
+]
+
+const beforeSave = async (row) => {
+  console.log(row)
+  await new Promise((resolve) => setTimeout(resolve, 1200))
+}
+const handleCommand = () => {
+  //
 }
 </script>
+
+<style scoped>
+.editable-row-demo {
+  padding: 8px 0;
+}
+
+.editable-row-demo__title {
+  margin-bottom: 8px;
+  font-size: 16px;
+  font-weight: 700;
+  color: #1a1f36;
+}
+
+.editable-row-demo__subtitle {
+  margin-bottom: 12px;
+  font-size: 12px;
+  color: #748aa1;
+}
+</style>

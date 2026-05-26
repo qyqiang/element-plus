@@ -1297,6 +1297,38 @@ describe('table column', () => {
         'Hello World'
       )
     })
+
+    it('passes cellData to the default slot scope', async () => {
+      const wrapper = mount({
+        components: {
+          ElTable,
+          ElTableColumn,
+        },
+        template: `
+          <el-table :data="testData">
+            <el-table-column prop="name">
+              <template #default="{ row, cellData }">
+                <span class="cell-meta">
+                  {{ row.name }}-{{ cellData.rowIndex }}-{{ cellData.cellIndex }}
+                </span>
+              </template>
+            </el-table-column>
+            <el-table-column prop="release" />
+          </el-table>
+        `,
+        data() {
+          return {
+            testData: getTestData(),
+          }
+        },
+      })
+
+      await doubleWait()
+
+      const firstCell = wrapper.find('.el-table__body .cell-meta')
+      expect(firstCell.exists()).toBe(true)
+      expect(firstCell.text()).toContain(`${getTestData()[0].name}-0-0`)
+    })
   })
 
   describe('dynamic column attributes', () => {

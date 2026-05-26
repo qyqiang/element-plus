@@ -7,6 +7,8 @@ import { rAF } from '@element-plus/test-utils/tick'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
 import ElTable from '../src/table.vue'
 import ElTableColumn from '../src/table-column'
+import ElTableEditableCell from '../src/editable-cell.vue'
+import ElTableEditableRowActions from '../src/editable-row-actions.vue'
 import {
   doubleWait,
   getMultiRowTestData,
@@ -136,6 +138,901 @@ describe('Table.vue', () => {
       '.el-table__body-wrapper label.is-checked'
     )
     expect(checkSelect.length).toBe(3)
+  })
+
+  it('activates editable input cells on click', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable>
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .find('.el-table__body-wrapper .editable-table-cell')
+      .trigger('mousedown')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    expect(input.exists()).toBe(true)
+    expect(document.activeElement).toBe(input.element)
+    wrapper.unmount()
+  })
+
+  it('opens editable select cells on click', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable>
+          <el-table-column prop="release" label="Release">
+            <template #default="{ row }">
+              <el-table-editable-cell
+                :row="row"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ filterable: true, teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+            {
+              label: '1998-11-25',
+              value: '1998-11-25',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .find('.el-table__body-wrapper .editable-table-cell')
+      .trigger('mousedown')
+    await doubleWait()
+
+    const selectInput = wrapper.find('.el-select__input')
+    expect(selectInput.exists()).toBe(true)
+    expect(document.activeElement).toBe(selectInput.element)
+    expect(wrapper.find('.el-select__popper').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('opens editable row mode for the whole row', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="release" label="Release">
+            <template #default="{ row }">
+              <el-table-editable-cell
+                :row="row"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+            {
+              label: '1998-11-25',
+              value: '1998-11-25',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper.find('.el-table__body-wrapper td').trigger('click')
+    await doubleWait()
+
+    expect(wrapper.findAll('.el-input__inner').length).toBe(1)
+    expect(wrapper.find('.el-select').exists()).toBe(true)
+    expect(wrapper.find('.el-table').classes()).toContain('is-row-editing')
+    wrapper.unmount()
+  })
+
+  it('exposes the active editable cell when clicking an editable row cell', async () => {
+    const onActiveChange = vi.fn()
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table
+          ref="table"
+          :data="tableData"
+          editable
+          editable-mode="row"
+          @editable-cell-active-change="onActiveChange"
+        >
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="release" label="Release">
+            <template #default="{ row }">
+              <el-table-editable-cell
+                :row="row"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+          ],
+          onActiveChange,
+        }
+      },
+    })
+
+    await doubleWait()
+    const cells = wrapper.findAll(
+      '.el-table__body-wrapper .editable-table-cell'
+    )
+    await cells[1].trigger('mousedown')
+    await doubleWait()
+
+    const tableVm = wrapper.findComponent(ElTable).vm as any
+    expect(wrapper.findAll('.editable-table-cell.is-click').length).toBe(1)
+    expect(cells[0].classes()).not.toContain('is-click')
+    expect(cells[1].classes()).toContain('is-click')
+    expect(tableVm.activeEditableCell).toMatchObject({
+      row: {
+        name: 'Toy Story',
+        release: '1995-11-22',
+      },
+      prop: 'release',
+      mode: 'row',
+    })
+    expect(tableVm.activeEditableCell.columnId).toBeTruthy()
+    expect(onActiveChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        row: expect.objectContaining({
+          name: 'Toy Story',
+          release: '1995-11-22',
+        }),
+        prop: 'release',
+        mode: 'row',
+      })
+    )
+    wrapper.unmount()
+  })
+
+  it('moves the clicked cell border to the latest cell in row editing mode', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="release" label="Release">
+            <template #default="{ row }">
+              <el-table-editable-cell
+                :row="row"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    const cells = wrapper.findAll(
+      '.el-table__body-wrapper .editable-table-cell'
+    )
+    await cells[0].trigger('mousedown')
+    await doubleWait()
+    expect(cells[0].classes()).toContain('is-click')
+    expect(cells[1].classes()).not.toContain('is-click')
+
+    await cells[1].trigger('mousedown')
+    await doubleWait()
+
+    expect(cells[0].classes()).not.toContain('is-click')
+    expect(cells[1].classes()).toContain('is-click')
+    expect(wrapper.findAll('.editable-table-cell.is-click').length).toBe(1)
+    wrapper.unmount()
+  })
+
+  it('focuses only the clicked input cell in editable row mode', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="release" label="Release">
+            <template #default="{ row }">
+              <el-table-editable-cell
+                :row="row"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+            {
+              label: '1998-11-25',
+              value: '1998-11-25',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .findAll('.el-table__body-wrapper .editable-table-cell')[0]
+      .trigger('mousedown')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    const selectInput = wrapper.find('.el-select__input')
+    expect(document.activeElement).toBe(input.element)
+    expect(document.activeElement).not.toBe(selectInput.element)
+    wrapper.unmount()
+  })
+
+  it('focuses and opens only the clicked select cell in editable row mode', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="release" label="Release">
+            <template #default="{ row }">
+              <el-table-editable-cell
+                :row="row"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+            {
+              label: '1998-11-25',
+              value: '1998-11-25',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .findAll('.el-table__body-wrapper .editable-table-cell')[1]
+      .trigger('mousedown')
+    await doubleWait()
+
+    const selectInput = wrapper.find('.el-select__input')
+    expect(document.activeElement).toBe(selectInput.element)
+    expect(wrapper.find('.el-select__popper').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('focuses input when clicking the table cell in editable row mode', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column label="Name">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="name"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="Release">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .findAll('.el-table__body-wrapper tbody td')[0]
+      .trigger('click')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    expect(document.activeElement).toBe(input.element)
+    wrapper.unmount()
+  })
+
+  it('focuses and opens select when clicking the table cell in editable row mode', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column label="Name">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="name"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="Release">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+            {
+              label: '1998-11-25',
+              value: '1998-11-25',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .findAll('.el-table__body-wrapper tbody td')[1]
+      .trigger('click')
+    await doubleWait()
+
+    const selectInput = wrapper.find('.el-select__input')
+    expect(document.activeElement).toBe(selectInput.element)
+    expect(wrapper.find('.el-select__popper').exists()).toBe(true)
+    wrapper.unmount()
+  })
+
+  it('restricts editable input to numeric values with decimal precision', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column label="Qty">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="qty"
+                :is-number="2"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              qty: '',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper.find('.el-table__body-wrapper tbody td').trigger('click')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    await input.setValue('12a.3456')
+
+    expect((input.element as HTMLInputElement).value).toBe('12.34')
+    wrapper.unmount()
+  })
+
+  it('restricts editable input to integers when decimal precision is zero', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column label="Qty">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="qty"
+                :is-number="0"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              qty: '',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper.find('.el-table__body-wrapper tbody td').trigger('click')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    await input.setValue('12.3456')
+
+    expect((input.element as HTMLInputElement).value).toBe('12')
+    wrapper.unmount()
+  })
+
+  it('does not run handleCellClick again for an already editing row', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column label="Name">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="name"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column label="Release">
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="release"
+                editor="select"
+                :options="releaseOptions"
+                :select-props="{ teleported: false }"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+              release: '1995-11-22',
+            },
+          ],
+          releaseOptions: [
+            {
+              label: '1995-11-22',
+              value: '1995-11-22',
+            },
+            {
+              label: '1998-11-25',
+              value: '1998-11-25',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper
+      .findAll('.el-table__body-wrapper .editable-table-cell')[0]
+      .trigger('mousedown')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    expect(document.activeElement).toBe(input.element)
+
+    await wrapper
+      .findAll('.el-table__body-wrapper tbody td')[1]
+      .trigger('click')
+    await doubleWait()
+
+    expect(document.activeElement).toBe(input.element)
+    expect(wrapper.find('.el-select__popper').exists()).toBe(false)
+    wrapper.unmount()
+  })
+
+  it('saves editable row mode changes with row actions', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+        ElTableEditableRowActions,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+          <el-table-column label="Actions" width="88">
+            <template #default="{ row }">
+              <el-table-editable-row-actions :row="row" />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper.find('.el-table__body-wrapper td').trigger('click')
+    await doubleWait()
+
+    const input = wrapper.find('.el-input__inner')
+    await input.setValue('Cars')
+    await wrapper
+      .findAll('.editable-row-actions .el-button')
+      .at(0)!
+      .trigger('click')
+    await doubleWait()
+
+    expect(wrapper.find('.el-table__body .cell').text()).toContain('Cars')
+    wrapper.unmount()
+  })
+
+  it('supports custom editor slot content', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+        ElTableEditableRowActions,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name">
+                <template #editor="{ modelValue, updateModelValue }">
+                  <textarea
+                    class="custom-editor"
+                    :value="modelValue"
+                    @input="updateModelValue($event.target.value)"
+                  />
+                </template>
+              </el-table-editable-cell>
+            </template>
+          </el-table-column>
+          <el-table-column label="Actions" width="88">
+            <template #default="{ row }">
+              <el-table-editable-row-actions :row="row" />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper.find('.el-table__body-wrapper td').trigger('click')
+    await doubleWait()
+
+    const editor = wrapper.find('.custom-editor')
+    expect(editor.exists()).toBe(true)
+    await editor.setValue('Cars')
+    await wrapper
+      .findAll('.editable-row-actions .el-button')
+      .at(0)!
+      .trigger('click')
+    await doubleWait()
+
+    expect(wrapper.find('.el-table__body .cell').text()).toContain('Cars')
+    wrapper.unmount()
+  })
+
+  it('locks other rows while editable row mode is active', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+            },
+            {
+              name: 'Cars',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    const cells = wrapper.findAll('.el-table__body-wrapper tbody td')
+    await cells[0].trigger('click')
+    await doubleWait()
+    await cells[1].trigger('click')
+    await doubleWait()
+
+    const tableVm = wrapper.findComponent(ElTable).vm as any
+    expect(tableVm.editingRow.row.name).toBe('Toy Story')
+    expect(wrapper.findAll('.el-input__inner').length).toBe(1)
+    wrapper.unmount()
+  })
+
+  it('disables hover on other rows while editable row mode is active', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+      },
+      template: `
+        <el-table :data="tableData" editable editable-mode="row">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <el-table-editable-cell :row="row" property="name" />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: 'Toy Story',
+            },
+            {
+              name: 'Cars',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    const rows = wrapper.findAll('.el-table__body-wrapper tbody tr')
+    const cells = wrapper.findAll('.el-table__body-wrapper tbody td')
+    await cells[0].trigger('click')
+    await doubleWait()
+    triggerEvent(rows[1].element, 'mouseenter')
+    await rAF()
+    await doubleWait()
+
+    expect(rows[1].classes()).not.toContain('hover-row')
+    wrapper.unmount()
   })
   describe('attributes', () => {
     const createTable = function (props, opts?) {

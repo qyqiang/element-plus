@@ -175,7 +175,6 @@ function useRender<T extends DefaultRow>(
         } else {
           children = originRenderCell(data)
         }
-
         const { columns } = owner.value.store.states
         const firstUserColumnIndex = columns.value.findIndex(
           (item) => item.type === 'default'
@@ -186,6 +185,8 @@ function useRender<T extends DefaultRow>(
         const props = {
           class: 'cell',
           style: {},
+          rowIndex: data.$index,
+          cellIndex: data.cellIndex,
         }
         if (column.showOverflowTooltip) {
           props.class = `${props.class} ${unref(ns.namespace)}-tooltip`

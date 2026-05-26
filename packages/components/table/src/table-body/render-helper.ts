@@ -26,6 +26,7 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
   const {
     handleDoubleClick,
     handleClick,
+    handleCellClick,
     handleContextMenu,
     handleMouseEnter,
     handleMouseLeave,
@@ -156,7 +157,11 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
             class: getCellClass($index, cellIndex, row, column, colspan - 1),
             key: `${patchKey}${baseKey}`,
             rowspan,
+            cellIndex,
+            columnIndex: $index,
             colspan,
+            onClick: ($event: Event) =>
+              handleCellClick($event, row, column, $index, cellIndex),
             onMouseenter: ($event: MouseEvent) =>
               handleCellMouseEnter(
                 $event,

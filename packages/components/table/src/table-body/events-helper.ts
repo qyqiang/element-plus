@@ -1,4 +1,4 @@
-import { h, inject, ref } from 'vue'
+import { h, inject, nextTick, ref } from 'vue'
 import { debounce } from 'lodash-unified'
 import { addClass, hasClass, removeClass } from '@element-plus/utils'
 import {
@@ -21,6 +21,10 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
   const parent = inject(TABLE_INJECTION_KEY)
   const tooltipContent = ref('')
   const tooltipTrigger = ref(h('div'))
+  const isRowEditLocked = (row?: T) => {
+    const editingRow = parent?.editingRow?.value
+    return parent?.props.editable && !!editingRow && editingRow.row !== row
+  }
   const handleEvent = (event: Event, row: T, name: string) => {
     const table = parent
     const cell = getCell(event)
@@ -41,16 +45,48 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
     table?.emit(`row-${name}`, row, column, event)
   }
   const handleDoubleClick = (event: Event, row: T) => {
+    if (isRowEditLocked(row)) return
     handleEvent(event, row, 'dblclick')
   }
+  const handleCellClick = (
+    event: Event,
+    row: T,
+    column: TableColumnCtx<T>,
+    rowIndex: number,
+    cellIndex: number
+  ) => {
+    if (isRowEditLocked(row) || !parent?.props.editable) return
+    if (parent?.editingRow?.value?.row === row) return
+    const cell = getCell(event)
+    const editableCell = cell?.querySelector<HTMLElement>(
+      '.editable-table-cell'
+    )
+    if (cell && column && editableCell) {
+      parent.startRowEdit?.(row, column.property, rowIndex, cellIndex)
+      nextTick(() => {
+        editableCell.dispatchEvent(
+          new CustomEvent('editable-cell-focus', {
+            bubbles: false,
+          })
+        )
+      })
+    }
+  }
   const handleClick = (event: Event, row: T) => {
+    if (isRowEditLocked(row)) return
     props.store?.commit('setCurrentRow', row)
     handleEvent(event, row, 'click')
   }
   const handleContextMenu = (event: Event, row: T) => {
+    if (isRowEditLocked(row)) return
     handleEvent(event, row, 'contextmenu')
   }
   const handleMouseEnter = debounce((index: number) => {
+    const row = props.store?.states.data.value?.[index]
+    if (row && isRowEditLocked(row)) {
+      props.store?.commit('setHoverRow', null)
+      return
+    }
     props.store?.commit('setHoverRow', index)
   }, 30)
   const handleMouseLeave = debounce(() => {
@@ -63,6 +99,7 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
     tooltipOptions: TableOverflowTooltipOptions
   ) => {
     if (!parent) return
+    if (isRowEditLocked(row)) return
     const table = parent
     const cell = getCell(event)
     const namespace = table?.vnode.el?.dataset.prefix
@@ -173,6 +210,7 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
   return {
     handleDoubleClick,
     handleClick,
+    handleCellClick,
     handleContextMenu,
     handleMouseEnter,
     handleMouseLeave,

@@ -186,6 +186,7 @@ export default defineComponent({
         row: {},
         column: {},
         $index: -1,
+        cellIndex: -1,
       })
       const children = []
       if (isArray(renderDefault)) {

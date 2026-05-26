@@ -7,6 +7,7 @@
         [ns.m('striped')]: stripe,
         [ns.m('border')]: border || isGroup,
         [ns.m('hidden')]: isHidden,
+        [ns.is('row-editing')]: hasEditingRow,
         [ns.m('group')]: isGroup,
         [ns.m('fluid-height')]: maxHeight,
         [ns.m('scrollable-x')]: layout.scrollX.value,
@@ -179,8 +180,10 @@ import {
   getCurrentInstance,
   onBeforeUnmount,
   provide,
+  ref,
+  toRaw,
 } from 'vue'
-import { debounce } from 'lodash-unified'
+import { cloneDeep, debounce } from 'lodash-unified'
 import { Mousewheel } from '@element-plus/directives'
 import { useLocale, useNamespace } from '@element-plus/hooks'
 import ElScrollbar from '@element-plus/components/scrollbar'
@@ -198,7 +201,7 @@ import { TABLE_INJECTION_KEY } from './tokens'
 import { hColgroup } from './h-helper'
 import { useScrollbar } from './composables/use-scrollbar'
 
-import type { Table } from './table/defaults'
+import type { DefaultRow, Table } from './table/defaults'
 
 let tableIdSeed = 1
 export default defineComponent({
@@ -233,6 +236,7 @@ export default defineComponent({
     'current-change',
     'header-dragend',
     'expand-change',
+    'editable-cell-active-change',
     'scroll',
   ],
   setup(props) {
@@ -243,6 +247,56 @@ export default defineComponent({
     provide(TABLE_INJECTION_KEY, table)
     const store = createStore<Row>(table, props)
     table.store = store
+    const editingRow = ref<any>(null)
+    const activeEditableCell = ref<any>(null)
+
+    const startRowEdit = (
+      row: DefaultRow,
+      prop: string,
+      rowIndex?: number,
+      cellIndex?: number
+    ) => {
+      const current = editingRow.value
+      if (current?.row === row) {
+        editingRow.value = {
+          ...current,
+          prop,
+          rowIndex,
+          cellIndex,
+        }
+        return
+      }
+      editingRow.value = {
+        row,
+        prop,
+        rowIndex,
+        cellIndex,
+        draft: cloneDeep(toRaw(row)),
+      }
+      activeEditableCell.value = editingRow.value
+        ? {
+            row: editingRow.value?.row,
+            prop: editingRow.value?.prop,
+            rowIndex: editingRow.value.rowIndex,
+            cellIndex: editingRow.value.cellIndex,
+          }
+        : null
+    }
+    const clearEditingRow = () => {
+      editingRow.value = null
+      activeEditableCell.value = null
+    }
+    const applyEditingRow = () => {
+      if (!editingRow.value) return null
+      Object.assign(editingRow.value.row, editingRow.value.draft)
+      return editingRow.value
+    }
+
+    table.editingRow = editingRow
+    table.activeEditableCell = activeEditableCell
+    table.startRowEdit = startRowEdit
+    table.clearEditingRow = clearEditingRow
+    table.applyEditingRow = applyEditingRow
     const layout = new TableLayout<Row>({
       store: table.store,
       table,
@@ -301,6 +355,7 @@ export default defineComponent({
       doLayout,
       debouncedUpdateLayout,
     }
+    const hasEditingRow = computed(() => !!editingRow.value)
     const computedSumText = computed(
       () => props.sumText ?? t('el.table.sumText')
     )
@@ -389,6 +444,12 @@ export default defineComponent({
       t,
       setDragVisible,
       context: table,
+      editingRow,
+      activeEditableCell,
+      startRowEdit,
+      clearEditingRow,
+      applyEditingRow,
+      hasEditingRow,
       computedSumText,
       computedEmptyText,
       tableLayout,
