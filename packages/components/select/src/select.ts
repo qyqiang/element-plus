@@ -16,7 +16,7 @@ import type { EmitFn } from '@element-plus/utils'
 import type {
   CSSProperties,
   ExtractPropTypes,
-  __ExtractPublicPropTypes,
+  ExtractPublicPropTypes,
 } from 'vue'
 import type Select from './select.vue'
 import type {
@@ -26,6 +26,25 @@ import type {
 } from '@element-plus/components/popper'
 import type { OptionValue } from './type'
 import type { Props } from '@element-plus/components/select-v2/src/useProps'
+
+/**
+ * @description Tag tooltip configuration interface
+ */
+export interface TagTooltipProps {
+  appendTo?: string | HTMLElement
+  placement?: Placement
+  fallbackPlacements?: Placement[]
+  effect?: PopperEffect
+  popperClass?: string
+  popperStyle?: string | CSSProperties
+  transition?: string
+  teleported?: boolean
+  popperOptions?: Partial<Options>
+  showAfter?: number
+  hideAfter?: number
+  autoClose?: number
+  offset?: number
+}
 
 export const selectProps = buildProps({
   /**
@@ -74,7 +93,10 @@ export const selectProps = buildProps({
   /**
    * @description whether Select is disabled
    */
-  disabled: Boolean,
+  disabled: {
+    type: Boolean,
+    default: undefined,
+  },
   /**
    * @description whether select can be cleared
    */
@@ -190,6 +212,13 @@ export const selectProps = buildProps({
    */
   collapseTagsTooltip: Boolean,
   /**
+   * @description configuration object for the collapse-tags tooltip. To use this, `collapse-tags` and `collapse-tags-tooltip` must be true
+   */
+  tagTooltip: {
+    type: definePropType<TagTooltipProps>(Object),
+    default: () => ({}),
+  },
+  /**
    * @description the max tags number to be shown. To use this, `collapse-tags` must be true
    */
   maxCollapseTags: {
@@ -297,9 +326,11 @@ export const selectProps = buildProps({
 })
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const selectEmits = {
-  [UPDATE_MODEL_EVENT]: (val: SelectProps['modelValue']) => true,
-  [CHANGE_EVENT]: (val: SelectProps['modelValue']) => true,
+  // todo: use generics to eliminate any
+  [UPDATE_MODEL_EVENT]: (val: SelectProps['modelValue'] | any) => true,
+  [CHANGE_EVENT]: (val: SelectProps['modelValue'] | any) => true,
   'popup-scroll': scrollbarEmits.scroll,
+  'end-reached': scrollbarEmits['end-reached'],
   'remove-tag': (val: unknown) => true,
   'visible-change': (visible: boolean) => true,
   focus: (evt: FocusEvent) => evt instanceof FocusEvent,
@@ -309,7 +340,7 @@ export const selectEmits = {
 /* eslint-enable @typescript-eslint/no-unused-vars */
 
 export type SelectProps = ExtractPropTypes<typeof selectProps>
-export type SelectPropsPublic = __ExtractPublicPropTypes<typeof selectProps>
+export type SelectPropsPublic = ExtractPublicPropTypes<typeof selectProps>
 export type SelectEmits = EmitFn<typeof selectEmits>
 export type SelectInstance = InstanceType<typeof Select> & unknown
 export type SelectOptionProps = Props

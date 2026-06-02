@@ -1,7 +1,7 @@
+import type { BACKWARD, FORWARD } from './defaults'
 import type { CSSProperties, ComponentInternalInstance, Ref } from 'vue'
 
 export type Instance = ComponentInternalInstance
-
 export type Alignment = 'auto' | 'smart' | 'center' | 'start' | 'end'
 export type ItemSize = (idx: number) => number
 export type Direction = 'ltr' | 'rtl'
@@ -108,11 +108,13 @@ export type SharedExposes = {
   getItemStyleCache: (_: any, __: any, ___: any) => CSSProperties
 }
 
+export type ScrollDirection = typeof FORWARD | typeof BACKWARD
+
 export type ListExposes = {
   scrollTo: (offset: number) => void
   scrollToItem: (idx: number, alignment?: Alignment) => void
   states: {
-    scrollDir: Direction
+    scrollDir: ScrollDirection
     scrollOffset: number
   } & ExposesStates
 } & SharedExposes
@@ -121,9 +123,13 @@ export type GridExposes = {
   states: {
     scrollLeft: number
     scrollTop: number
-    xAxisScrollDir: Direction
-    yAxisScrollDir: Direction
+    xAxisScrollDir: ScrollDirection
+    yAxisScrollDir: ScrollDirection
   } & ExposesStates
+  touchStartX: Ref<number>
+  touchStartY: Ref<number>
+  handleTouchStart: (e: TouchEvent) => void
+  handleTouchMove: (e: TouchEvent) => void
   scrollTo: (props: { scrollLeft: number; scrollTop: number }) => void
   scrollToItem: (
     columnIndex?: number,
@@ -211,3 +217,12 @@ export type GridItemKeyGetter = <
   data: T
   rowIndex: number
 }) => string | number
+
+export interface GridStates {
+  isScrolling: boolean
+  scrollLeft: number
+  scrollTop: number
+  updateRequested: boolean
+  xAxisScrollDir: ScrollDirection
+  yAxisScrollDir: ScrollDirection
+}
