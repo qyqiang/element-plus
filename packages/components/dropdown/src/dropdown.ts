@@ -158,6 +158,11 @@ export const dropdownProps = buildProps({
    */
   teleported: useTooltipContentProps.teleported,
   /**
+   * @description which element the dropdown CONTENT appends to
+   */
+  appendTo: useTooltipContentProps.appendTo,
+
+  /**
    * @description when dropdown inactive and `persistent` is `false` , dropdown menu will be destroyed
    */
   persistent: {
