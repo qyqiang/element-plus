@@ -63,10 +63,6 @@ export const timePickerDefaultProps = buildProps({
     type: Boolean,
     default: true,
   },
-  isFooter: {
-    type: Boolean,
-    default: false,
-  },
   /**
    * @description custom class name for TimePicker's dropdown
    */
@@ -256,6 +252,13 @@ export const timePickerDefaultProps = buildProps({
     default: true,
   },
   /**
+   * @description whether to show footer
+   */
+  showFooter: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description whether to show the number of the calendar week
    */
   showWeekNumber: Boolean,
@@ -276,6 +279,7 @@ export interface PickerOptions {
   getDefaultValue: () => DayOrDays
   panelReady: boolean
   handleClear: () => void
+  handleClosePick?: () => void
   handleFocusPicker?: () => void
 }
 

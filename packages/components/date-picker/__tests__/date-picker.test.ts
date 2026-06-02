@@ -916,6 +916,79 @@ describe('DatePicker', () => {
     ).toHaveLength(1)
   })
 
+  it('renders option slot for range picker', async () => {
+    const wrapper = _mount(
+      `<el-date-picker type="daterange">
+        <template #option>
+          <div class="option-slot-content">custom option</div>
+        </template>
+      </el-date-picker>`
+    )
+    const input = wrapper.find('input')
+    await input.trigger('blur')
+    await input.trigger('focus')
+
+    expect(document.querySelector('.option-slot-content')?.textContent).toBe(
+      'custom option'
+    )
+  })
+
+  it('updates range panel view when option slot changes model value', async () => {
+    const wrapper = _mount(
+      `<el-date-picker v-model="value" type="daterange">
+        <template #option>
+          <button class="jump-range" @click="value = [new Date(1970, 0, 1), new Date(1970, 1, 1)]">
+            jump
+          </button>
+        </template>
+      </el-date-picker>`,
+      () => ({ value: '' })
+    )
+
+    const input = wrapper.find('input')
+    await input.trigger('blur')
+    await input.trigger('focus')
+    await nextTick()
+
+    const leftHeader = document.querySelector(
+      '.el-date-range-picker__content .el-date-range-picker__header'
+    ) as HTMLElement
+    expect(leftHeader.textContent).not.toContain('1970')
+    ;(document.querySelector('.jump-range') as HTMLButtonElement).click()
+    await nextTick()
+
+    expect(leftHeader.textContent).toContain('1970')
+  })
+
+  it('keeps range panel on current month when updated range includes today', async () => {
+    const wrapper = _mount(
+      `<el-date-picker v-model="value" type="daterange">
+        <template #option>
+          <button class="jump-today-range" @click="value = [new Date(1970, 0, 1), new Date()]">
+            jump
+          </button>
+        </template>
+      </el-date-picker>`,
+      () => ({ value: '' })
+    )
+
+    const input = wrapper.find('input')
+    await input.trigger('blur')
+    await input.trigger('focus')
+    await nextTick()
+
+    const leftHeader = document.querySelector(
+      '.el-date-range-picker__content .el-date-range-picker__header'
+    ) as HTMLElement
+    const currentYear = String(new Date().getFullYear())
+
+    ;(document.querySelector('.jump-today-range') as HTMLButtonElement).click()
+    await nextTick()
+
+    expect(leftHeader.textContent).toContain(currentYear)
+    expect(leftHeader.textContent).not.toContain('1970')
+  })
+
   it('custom content comment for type is year', async () => {
     _mount(
       `<el-date-picker
@@ -1953,6 +2026,36 @@ describe('DateRangePicker', () => {
     await input.trigger('blur')
     await input.trigger('focus')
     expect(rangePanelWrapper.vm.visible).toBe(true)
+  })
+
+  it('commits daterange value when picker closes after dates are selected', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type='daterange'
+      />`,
+      () => ({ value: '' })
+    )
+
+    const input = wrapper.find('input')
+    await input.trigger('blur')
+    await input.trigger('focus')
+
+    const cells = document.querySelectorAll('.available .el-date-table-cell')
+    ;(cells[0] as HTMLElement).click()
+    await nextTick()
+    ;(cells[1] as HTMLElement).click()
+    await nextTick()
+
+    expect(wrapper.vm.value).not.toBe('')
+
+    await input.trigger('focus')
+    triggerEvent(input.element, 'keydown', EVENT_CODE.esc)
+    await nextTick()
+
+    const [startInput, endInput] = wrapper.findAll('input')
+    expect(startInput.element.value).not.toBe('')
+    expect(endInput.element.value).not.toBe('')
   })
 
   it('daterange should be reopen successfully with value-format', async () => {

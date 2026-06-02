@@ -24,6 +24,24 @@
         <div>custom open</div>
       </template>
     </el-date-picker>
+    <div class="demonstration mt-2">Date Range</div>
+    <el-divider />
+    <el-date-picker
+      v-model="rangeValue"
+      type="daterange"
+      :is-ok="false"
+      :clearable="true"
+      float-label="Start date"
+      range-separator=""
+      start-placeholder="Start date"
+    >
+      <template #option>
+        <div>
+          <el-button @click="selectBeforeToday">Before</el-button>
+          <el-button @click="selectAfterToday">After</el-button>
+        </div>
+      </template>
+    </el-date-picker>
   </div>
 </template>
 
@@ -33,6 +51,7 @@ import { ref } from 'vue'
 const dateRef = ref()
 const value1 = ref('')
 const value2 = ref('')
+const rangeValue = ref<[Date, Date] | ''>('')
 const typeList = [
   { key: 'date', label: 'Day' },
   { key: 'month', label: 'Month' },
@@ -63,5 +82,27 @@ const shortcuts = [
 
 const disabledDate = (time: Date) => {
   return time.getTime() > Date.now()
+}
+
+const selectBeforeToday = () => {
+  const today = new Date()
+  const currentDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  )
+
+  rangeValue.value = [new Date(1970, 0, 1), currentDay]
+}
+
+const selectAfterToday = () => {
+  const today = new Date()
+  const currentDay = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  )
+
+  rangeValue.value = [currentDay, new Date(2099, 11, 31)]
 }
 </script>

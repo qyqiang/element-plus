@@ -22,6 +22,7 @@
           {{ shortcut.text }}
         </button>
       </div>
+      <slot name="option"></slot>
       <div :class="ppNs.e('body')">
         <div v-if="showTime" :class="drpNs.e('time-header')">
           <span :class="drpNs.e('editors-wrap')">
@@ -349,13 +350,17 @@
       </div>
     </div>
     <div
-      v-if="showTime || ['week', 'custom'].includes(cycleType) || isFooter"
+      v-if="
+        showFooter &&
+        (showTime ||
+          ['week', 'custom'].includes(cycleType) ||
+          clearable ||
+          isOk)
+      "
       :class="ppNs.e('footer')"
     >
       <el-button
         v-if="clearable"
-        text
-        size="small"
         :class="ppNs.e('link-btn')"
         @click="handleClear"
       >
@@ -376,7 +381,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, toRef, unref, watch } from 'vue'
+import { computed, inject, ref, toRef, unref, useSlots, watch } from 'vue'
 import { isArray } from '@element-plus/utils'
 import dayjs from 'dayjs'
 import { ClickOutside as vClickoutside } from '@element-plus/directives'
@@ -431,7 +436,7 @@ const pickerBase = inject(PICKER_BASE_INJECTION_KEY) as any
 const isDefaultFormat = inject(
   ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY
 ) as any
-const { disabledDate, cellClassName, defaultTime, clearable, isFooter, isOk } =
+const { disabledDate, cellClassName, defaultTime, clearable, isOk } =
   pickerBase.props
 const format = toRef(pickerBase.props, 'format')
 const shortcuts = toRef(pickerBase.props, 'shortcuts')
@@ -439,6 +444,8 @@ const defaultValue = toRef(pickerBase.props, 'defaultValue')
 const cycle = toRef(pickerBase.props, 'cycle')
 const settDefaultDate = toRef(pickerBase.props, 'settDefaultDate')
 const cycleType = toRef(pickerBase.props, 'cycleType')
+const showFooter = toRef(pickerBase.props, 'showFooter')
+const slots = useSlots()
 const { lang } = useLocale()
 const leftDate = ref<Dayjs>(dayjs().locale(lang.value))
 const rightDate = ref<Dayjs>(dayjs().locale(lang.value).add(1, unit))
@@ -707,8 +714,7 @@ const handleRangePick = (
   emit('calendar-change', [min_.toDate(), max_ && max_.toDate()])
   maxDate.value = maxDate_
   minDate.value = minDate_
-
-  if (!close || showTime.value) return
+  if (!close || showTime.value || slots.option?.()) return
   handleRangeConfirm()
 }
 
@@ -887,6 +893,34 @@ function onParsedValueChanged(
   minDate: Dayjs | undefined,
   maxDate: Dayjs | undefined
 ) {
+  const today = dayjs().locale(lang.value)
+  const includesToday =
+    minDate &&
+    maxDate &&
+    !today.isBefore(minDate, 'day') &&
+    !today.isAfter(maxDate, 'day')
+
+  if (includesToday) {
+    leftDate.value = today
+    if (props.unlinkPanels && maxDate) {
+      const currentYear = today.year()
+      const currentMonth = today.month()
+      rightDate.value =
+        currentYear === maxDate.year() && currentMonth === maxDate.month()
+          ? maxDate.add(1, unit)
+          : maxDate
+    } else {
+      rightDate.value = leftDate.value.add(1, unit)
+      if (maxDate) {
+        rightDate.value = rightDate.value
+          .hour(maxDate.hour())
+          .minute(maxDate.minute())
+          .second(maxDate.second())
+      }
+    }
+    return
+  }
+
   if (props.unlinkPanels && maxDate) {
     const minDateYear = minDate?.year() || 0
     const minDateMonth = minDate?.month() || 0
@@ -910,5 +944,13 @@ function onParsedValueChanged(
 emit('set-picker-option', ['isValidValue', isValidValue])
 emit('set-picker-option', ['parseUserInput', parseUserInput])
 emit('set-picker-option', ['handleClear', handleClear])
+emit('set-picker-option', [
+  'handleClosePick',
+  () => {
+    if (isValidRange([minDate.value, maxDate.value])) {
+      handleRangeConfirm(false)
+    }
+  },
+])
 emit('set-picker-option', ['formatToString', formatToString])
 </script>

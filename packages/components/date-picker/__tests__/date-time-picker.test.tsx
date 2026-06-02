@@ -890,6 +890,43 @@ describe('Datetimerange', () => {
     ])
   })
 
+  it('closes datetimerange when end time is confirmed and isOk is false', async () => {
+    const value = ref<string[]>([])
+    const wrapper = _mount(() => (
+      <DatePicker v-model={value.value} type="datetimerange" isOk={false} />
+    ))
+
+    const input = wrapper.find('input')
+    input.trigger('blur')
+    input.trigger('focus')
+    await nextTick()
+
+    const cells = document.querySelectorAll(
+      '.available .el-date-table-cell'
+    ) as NodeListOf<HTMLElement>
+    cells[0].click()
+    await nextTick()
+    cells[1].click()
+    await nextTick()
+
+    expect(input.attributes('aria-expanded')).toBe('true')
+
+    const rightTimeInput = document.querySelectorAll(
+      '.el-date-range-picker__editors-wrap input'
+    )[3] as HTMLInputElement
+    rightTimeInput.blur()
+    rightTimeInput.focus()
+    await nextTick()
+    ;(
+      document.querySelector(
+        '.is-right .el-time-panel__btn.confirm'
+      ) as HTMLElement
+    ).click()
+    await nextTick()
+
+    expect(input.attributes('aria-expanded')).toBe('false')
+  })
+
   describe('form item accessibility integration', () => {
     it('automatic id attachment', async () => {
       const wrapper = _mount(() => (

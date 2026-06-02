@@ -598,6 +598,11 @@ const pickerSize = useFormSize()
 
 const popperEl = computed(() => unref(refPopper)?.popperRef?.contentRef)
 
+const closePicker = () => {
+  pickerOptions.value.handleClosePick?.()
+  pickerVisible.value = false
+}
+
 const stophandle = onClickOutside(
   inputRef as Ref<ComponentPublicInstance>,
   (e: PointerEvent) => {
@@ -611,7 +616,7 @@ const stophandle = onClickOutside(
       (inputEl && e.composedPath().includes(inputEl))
     )
       return
-    pickerVisible.value = false
+    closePicker()
   }
 )
 
@@ -662,7 +667,7 @@ const handleKeydownInput = async (event: Event | KeyboardEvent) => {
   emitKeydown(event as KeyboardEvent)
   if (code === EVENT_CODE.esc) {
     if (pickerVisible.value === true) {
-      pickerVisible.value = false
+      closePicker()
       event.preventDefault()
       event.stopPropagation()
     }
@@ -698,7 +703,7 @@ const handleKeydownInput = async (event: Event | KeyboardEvent) => {
       isValidValue(parseUserInputToDayjs(displayValue.value) as DayOrDays)
     ) {
       handleChange()
-      pickerVisible.value = false
+      closePicker()
     }
     event.preventDefault()
     event.stopPropagation()

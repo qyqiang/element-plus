@@ -237,6 +237,7 @@ Note, date time locale (month name, first day of the week ...) are also configur
 | next-month ^(2.8.0) | next month icon                |
 | prev-year ^(2.8.0)  | prev year icon                 |
 | next-year ^(2.8.0)  | next year icon                 |
+| option ^(2.8.0)     | datepicker range add option    |
 
 ### Exposes
 
