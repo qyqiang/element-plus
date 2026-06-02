@@ -35,10 +35,57 @@
       range-separator=""
       start-placeholder="Start date"
     >
+      <template #open> sasasa </template>
       <template #option>
         <div>
           <el-button @click="selectBeforeToday">Before</el-button>
           <el-button @click="selectAfterToday">After</el-button>
+          <el-dropdown
+            :popper-options="{
+              modifiers: [
+                {
+                  name: 'offset',
+                  options: {
+                    offset: [0, 4],
+                  },
+                },
+              ],
+            }"
+            placement="bottom-start"
+            trigger="click"
+            @command="handleCommand"
+          >
+            <div
+              class="flex-center rounded-20 style-span h-8 min-w-[77px] cursor-pointer px-3 py-2.5 text-xs font-semibold"
+            >
+              {{ activeTitle?.label }}
+              <svg-icon class="ml-1" color="#2A3F4D" name="fi-ss-angle-down" />
+            </div>
+
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item
+                  v-for="item in dropList"
+                  :key="item.key"
+                  :command="item.key"
+                >
+                  <div class="flex-center w-full justify-between">
+                    <span
+                      class="flex-center rounded-10 h-5 px-2 py-0.5 text-xs font-medium"
+                    >
+                      {{ item.label }}
+                    </span>
+                    <svg-icon
+                      v-if="item.label === activeTitle.label"
+                      color="#2A3F4D"
+                      name="fi-ss-check"
+                      size="16px"
+                    />
+                  </div>
+                </el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
         </div>
       </template>
     </el-date-picker>
@@ -46,12 +93,21 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 
 const dateRef = ref()
 const value1 = ref('')
 const value2 = ref('')
 const rangeValue = ref<[Date, Date] | ''>('')
+const dropList = [
+  { key: 'before', label: 'Before' },
+  { key: 'after', label: 'After' },
+  { key: 'between', label: 'Between' },
+]
+const activeTitle = computed(() => {
+  return dropList[0]
+})
+const handleCommand = () => {}
 const typeList = [
   { key: 'date', label: 'Day' },
   { key: 'month', label: 'Month' },
