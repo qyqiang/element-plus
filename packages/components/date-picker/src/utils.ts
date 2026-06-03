@@ -8,7 +8,6 @@ import type { DateCell } from './date-picker.type'
 import type { DisabledDateType } from './props/shared'
 
 type DayRange = [Dayjs | undefined, Dayjs | undefined]
-type PartialDayRange = [Dayjs | null | undefined, Dayjs | null | undefined]
 type PartialDateRange = [Date | null, Date | null]
 
 export const isValidRange = (range: DayRange): boolean => {
@@ -26,7 +25,7 @@ export const isValidRange = (range: DayRange): boolean => {
 }
 
 export const normalizePartialRange = (
-  range: PartialDayRange
+  range: Array<Dayjs | null>
 ): [Dayjs | undefined, Dayjs | undefined] => {
   const [startDate, endDate] = range
   const normalizedStartDate = startDate ?? undefined
@@ -44,7 +43,7 @@ export const normalizePartialRange = (
 }
 
 export const isValidPartialRange = (
-  range: PartialDayRange,
+  range: Array<Dayjs | null>,
   disabledDate?: DisabledDateType
 ): boolean => {
   const [startDate, endDate] = normalizePartialRange(range)
@@ -58,7 +57,7 @@ export const isValidPartialRange = (
   return true
 }
 
-export const getPartialRangePayload = (range: PartialDayRange) => {
+export const getPartialRangePayload = (range: any) => {
   const [startDate, endDate] = normalizePartialRange(range)
 
   return {
