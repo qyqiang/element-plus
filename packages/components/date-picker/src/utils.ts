@@ -8,6 +8,8 @@ import type { DateCell } from './date-picker.type'
 import type { DisabledDateType } from './props/shared'
 
 type DayRange = [Dayjs | undefined, Dayjs | undefined]
+type PartialDayRange = [Dayjs | null | undefined, Dayjs | null | undefined]
+type PartialDateRange = [Date | null, Date | null]
 
 export const isValidRange = (range: DayRange): boolean => {
   if (!isArray(range)) return false
@@ -21,6 +23,55 @@ export const isValidRange = (range: DayRange): boolean => {
     dayjs(right).isValid() &&
     left.isSameOrBefore(right)
   )
+}
+
+export const normalizePartialRange = (
+  range: PartialDayRange
+): [Dayjs | undefined, Dayjs | undefined] => {
+  const [startDate, endDate] = range
+  const normalizedStartDate = startDate ?? undefined
+  const normalizedEndDate = endDate ?? undefined
+
+  if (
+    normalizedStartDate &&
+    normalizedEndDate &&
+    normalizedStartDate.isAfter(normalizedEndDate)
+  ) {
+    return [normalizedEndDate, normalizedStartDate]
+  }
+
+  return [normalizedStartDate, normalizedEndDate]
+}
+
+export const isValidPartialRange = (
+  range: PartialDayRange,
+  disabledDate?: DisabledDateType
+): boolean => {
+  const [startDate, endDate] = normalizePartialRange(range)
+
+  if (!startDate && !endDate) return false
+  if (startDate && !startDate.isValid()) return false
+  if (endDate && !endDate.isValid()) return false
+  if (startDate && disabledDate?.(startDate.toDate())) return false
+  if (endDate && disabledDate?.(endDate.toDate())) return false
+
+  return true
+}
+
+export const getPartialRangePayload = (range: PartialDayRange) => {
+  const [startDate, endDate] = normalizePartialRange(range)
+
+  return {
+    dayRange: [startDate, endDate] as [Dayjs | undefined, Dayjs | undefined],
+    pickRange: [startDate ?? null, endDate ?? null] as [
+      Dayjs | null,
+      Dayjs | null,
+    ],
+    dateRange: [
+      startDate ? startDate.toDate() : null,
+      endDate ? endDate.toDate() : null,
+    ] as PartialDateRange,
+  }
 }
 
 type GetDefaultValueParams = {

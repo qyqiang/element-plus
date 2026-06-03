@@ -63,6 +63,10 @@ export const timePickerDefaultProps = buildProps({
     type: Boolean,
     default: true,
   },
+  teleported: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description custom class name for TimePicker's dropdown
    */

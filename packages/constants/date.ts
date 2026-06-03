@@ -9,6 +9,8 @@ export const datePickTypes = [
   'datetime',
   'datetimerange',
   'daterange',
+  'datestartrange',
+  'dateendrange',
   'monthrange',
   'yearrange',
 ] as const

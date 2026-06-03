@@ -11,6 +11,8 @@ export declare type IDatePickerType =
   | 'datetime'
   | 'datetimerange'
   | 'daterange'
+  | 'datestartrange'
+  | 'dateendrange'
   | 'monthrange'
   | 'yearrange'
 

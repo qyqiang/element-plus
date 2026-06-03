@@ -101,7 +101,6 @@ export default defineComponent({
     const componentType = computed(() => {
       return selectType.value || props.type
     })
-
     return () => {
       // since props always have all defined keys on it, {format, ...props} will always overwrite format
       // pick props.format or provide default value here before spreading
@@ -111,7 +110,6 @@ export default defineComponent({
           DEFAULT_FORMATS_DATE)
 
       const Component = getPanel(componentType.value)
-
       return (
         <CommonPicker
           {...props}

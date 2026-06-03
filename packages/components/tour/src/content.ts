@@ -49,7 +49,7 @@ export const tourContentProps = buildProps({
    */
   offset: {
     type: Number,
-    default: 10,
+    default: 4,
   },
   /**
    * @description whether to show the arrow

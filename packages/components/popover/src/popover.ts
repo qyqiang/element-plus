@@ -88,7 +88,7 @@ export const popoverProps = buildProps({
    */
   offset: {
     type: Number,
-    default: undefined,
+    default: 4,
   },
   /**
    * @description delay of appearance, in millisecond, not valid in controlled mode

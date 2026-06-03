@@ -264,7 +264,7 @@ export const selectV2Props = buildProps({
    */
   offset: {
     type: Number,
-    default: 12,
+    default: 4,
   },
   /**
    * @description Determines whether the arrow is displayed

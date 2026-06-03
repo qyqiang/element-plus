@@ -94,6 +94,6 @@ export const makeList = (total: number, method?: () => number[]) => {
 
 export const dayOrDaysToDate = (dayOrDays: DayOrDays): DateOrDates => {
   return isArray(dayOrDays)
-    ? (dayOrDays.map((d) => d.toDate()) as [Date, Date])
+    ? (dayOrDays.map((d) => (d ? d.toDate() : d)) as unknown as [Date, Date])
     : dayOrDays.toDate()
 }

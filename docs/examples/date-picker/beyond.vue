@@ -26,69 +26,50 @@
     </el-date-picker>
     <div class="demonstration mt-2">Date Range</div>
     <el-divider />
-    <el-date-picker
-      v-model="rangeValue"
-      type="daterange"
-      :is-ok="false"
-      :clearable="true"
-      float-label="Start date"
-      range-separator=""
-      start-placeholder="Start date"
+    <!--    <el-date-picker-->
+    <!--      v-model="rangeValue"-->
+    <!--      type="daterange"-->
+    <!--      :is-ok="false"-->
+    <!--      :clearable="true"-->
+    <!--      float-label="Start date"-->
+    <!--      range-separator=""-->
+    <!--      start-placeholder="Start date"-->
+    <!--    >-->
+    <!--      <template #open>-->
+    <!--       -->
+    <!--      </template>-->
+    <!--    </el-date-picker>-->
+    <el-popover
+      :width="400"
+      placement="bottom-start"
+      popper-class="p-4!"
+      trigger="click"
     >
-      <template #open> sasasa </template>
-      <template #option>
-        <div>
-          <el-button @click="selectBeforeToday">Before</el-button>
-          <el-button @click="selectAfterToday">After</el-button>
-          <el-dropdown
-            :popper-options="{
-              modifiers: [
-                {
-                  name: 'offset',
-                  options: {
-                    offset: [0, 4],
-                  },
-                },
-              ],
-            }"
-            placement="bottom-start"
-            trigger="click"
-            @command="handleCommand"
-          >
-            <div
-              class="flex-center rounded-20 style-span h-8 min-w-[77px] cursor-pointer px-3 py-2.5 text-xs font-semibold"
-            >
-              {{ activeTitle?.label }}
-              <svg-icon class="ml-1" color="#2A3F4D" name="fi-ss-angle-down" />
-            </div>
-
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item
-                  v-for="item in dropList"
-                  :key="item.key"
-                  :command="item.key"
-                >
-                  <div class="flex-center w-full justify-between">
-                    <span
-                      class="flex-center rounded-10 h-5 px-2 py-0.5 text-xs font-medium"
-                    >
-                      {{ item.label }}
-                    </span>
-                    <svg-icon
-                      v-if="item.label === activeTitle.label"
-                      color="#2A3F4D"
-                      name="fi-ss-check"
-                      size="16px"
-                    />
-                  </div>
-                </el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </div>
+      <template #reference>
+        <el-button class="mr-3">
+          <span>ddd</span>
+        </el-button>
       </template>
-    </el-date-picker>
+      <div class="flex w-full flex-col">
+        <div class="dateListRange flex w-full">
+          <el-date-picker
+            v-model="value1"
+            :teleported="false"
+            type="datestartrange"
+            placeholder="Start"
+          />
+          <el-date-picker
+            v-model="value1"
+            :teleported="false"
+            type="dateendrange"
+            placeholder="End"
+          />
+        </div>
+        <div class="flex-center mt-2 justify-end">
+          <el-button @click="handleClear">Clear</el-button>
+        </div>
+      </div>
+    </el-popover>
   </div>
 </template>
 
@@ -96,7 +77,7 @@
 import { computed, ref } from 'vue'
 
 const dateRef = ref()
-const value1 = ref('')
+const value1 = ref(['', ''])
 const value2 = ref('')
 const rangeValue = ref<[Date, Date] | ''>('')
 const dropList = [
@@ -108,6 +89,7 @@ const activeTitle = computed(() => {
   return dropList[0]
 })
 const handleCommand = () => {}
+const handleClear = () => {}
 const typeList = [
   { key: 'date', label: 'Day' },
   { key: 'month', label: 'Month' },

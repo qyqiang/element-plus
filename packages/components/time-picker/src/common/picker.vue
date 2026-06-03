@@ -8,7 +8,7 @@
     trigger="click"
     v-bind="$attrs"
     role="dialog"
-    teleported
+    :teleported="teleported"
     :transition="`${nsDate.namespace.value}-zoom-in-top`"
     :popper-class="[
       `${nsDate.namespace.value}-picker__popper`,
@@ -393,7 +393,7 @@ const emitInput = (input: SingleOrRange<DateModelType> | null) => {
     let formatted
     if (isArray(input)) {
       formatted = input.map((item) =>
-        formatter(item, props.valueFormat, lang.value)
+        item ? formatter(item, props.valueFormat, lang.value) : item
       )
     } else if (input) {
       formatted = formatter(input, props.valueFormat, lang.value)
@@ -431,7 +431,7 @@ const onPick = (date: any = '', visible = false) => {
   pickerVisible.value = visible
   let result
   if (isArray(date)) {
-    result = date.map((_) => _.toDate())
+    result = date.map((_) => (_ ? _.toDate() : _))
   } else {
     // clear btn emit null
     result = date ? date.toDate() : date
@@ -492,7 +492,14 @@ const parsedValue = computed(() => {
       }
     }
   }
-  if (isArray(dayOrDays!) && dayOrDays.some((day) => !day)) {
+  const isPartialRangeType =
+    props.type === 'datestartrange' || props.type === 'dateendrange'
+
+  if (
+    isArray(dayOrDays!) &&
+    (dayOrDays.every((day) => !day) ||
+      (!isPartialRangeType && dayOrDays.some((day) => !day)))
+  ) {
     dayOrDays = [] as unknown as DayOrDays
   }
   return dayOrDays!
@@ -599,8 +606,8 @@ const pickerSize = useFormSize()
 const popperEl = computed(() => unref(refPopper)?.popperRef?.contentRef)
 
 const closePicker = () => {
-  pickerOptions.value.handleClosePick?.()
-  pickerVisible.value = false
+  // pickerOptions.value.handleClosePick?.()
+  // pickerVisible.value = false
 }
 
 const stophandle = onClickOutside(
@@ -651,7 +658,7 @@ const parseUserInputToDayjs = (value: UserInput) => {
 const formatToString = (value: DayOrDays) => {
   if (!value) return null
   const res = isArray(value)
-    ? value.map((_) => _.format(props.format))
+    ? value.map((_) => (_ ? _.format(props.format) : ''))
     : value.format(props.format)
   return res as UserInput
 }
