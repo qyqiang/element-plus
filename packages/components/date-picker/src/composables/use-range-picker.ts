@@ -74,9 +74,16 @@ export const useRangePicker = (
   const onReset = (parsedValue: PanelRangeSharedProps['parsedValue']) => {
     if (isArray(parsedValue) && parsedValue.length === 2) {
       const [start, end] = parsedValue
+      const baseDate = start || end
+
+      if (!baseDate) {
+        restoreDefault()
+        return
+      }
+
       minDate.value = start
-      leftDate.value = start
       maxDate.value = end
+      leftDate.value = baseDate
       onParsedValueChanged(unref(minDate), unref(maxDate))
     } else {
       restoreDefault()

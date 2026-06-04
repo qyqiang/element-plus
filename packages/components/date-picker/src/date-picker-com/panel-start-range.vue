@@ -92,13 +92,14 @@
             ref="leftCurrentViewRef"
             selection-mode="date"
             :date="leftDate"
-            :parsed-value="minDate"
-            :min-date="minDate"
-            :max-date="maxDate"
+            :parsed-value="displayedDate"
+            :min-date="displayMinDate"
+            :max-date="displayMaxDate"
             :range-state="rangeState"
             :disabled-date="disabledDate"
             :cell-class-name="cellClassName"
             :show-week-number="showWeekNumber"
+            @changerange="handleChangeRange"
             @pick="handleDatePick"
           />
           <year-table
@@ -209,13 +210,14 @@
             ref="rightCurrentViewRef"
             selection-mode="date"
             :date="rightDate"
-            :parsed-value="minDate"
-            :min-date="minDate"
-            :max-date="maxDate"
+            :parsed-value="displayedDate"
+            :min-date="displayMinDate"
+            :max-date="displayMaxDate"
             :range-state="rangeState"
             :disabled-date="disabledDate"
             :cell-class-name="cellClassName"
             :show-week-number="showWeekNumber"
+            @changerange="handleChangeRange"
             @pick="handleDatePick"
           />
           <year-table
@@ -252,7 +254,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, ref, toRef, unref } from 'vue'
+import { computed, inject, ref, toRef, unref, watch } from 'vue'
 import { isArray } from '@element-plus/utils'
 import dayjs from 'dayjs'
 import { useLocale } from '@element-plus/hooks'
@@ -295,7 +297,12 @@ const pickerBase = inject(PICKER_BASE_INJECTION_KEY) as any
 const isDefaultFormat = inject(
   ROOT_PICKER_IS_DEFAULT_FORMAT_INJECTION_KEY
 ) as any
-const { disabledDate, cellClassName, defaultTime, clearable } = pickerBase.props
+const {
+  disabledDate: baseDisabledDate,
+  cellClassName,
+  defaultTime,
+  clearable,
+} = pickerBase.props
 const format = toRef(pickerBase.props, 'format')
 const defaultValue = toRef(pickerBase.props, 'defaultValue')
 const showFooter = toRef(pickerBase.props, 'showFooter')
@@ -303,14 +310,15 @@ const { lang } = useLocale()
 const leftDate = ref<Dayjs>(dayjs().locale(lang.value))
 const rightDate = ref<Dayjs>(dayjs().locale(lang.value).add(1, unit))
 
-const { minDate, maxDate, rangeState, ppNs, drpNs, t } = useRangePicker(props, {
-  defaultValue,
-  defaultTime,
-  leftDate,
-  rightDate,
-  unit,
-  onParsedValueChanged,
-})
+const { minDate, maxDate, rangeState, ppNs, drpNs, t, handleChangeRange } =
+  useRangePicker(props, {
+    defaultValue,
+    defaultTime,
+    leftDate,
+    rightDate,
+    unit,
+    onParsedValueChanged,
+  })
 
 const leftLabel = computed(() => {
   return `${t(
@@ -322,6 +330,22 @@ const rightLabel = computed(() => {
   return `${t(
     `el.datepicker.month${rightDate.value.month() + 1}`
   )} ${rightDate.value.year()} ${t('el.datepicker.year')}`
+})
+
+const displayedDate = computed(() => minDate.value ?? maxDate.value)
+const displayMinDate = computed(() => {
+  if (rangeState.value.selecting && maxDate.value && rangeState.value.endDate) {
+    return maxDate.value
+  }
+
+  return minDate.value && maxDate.value ? minDate.value : undefined
+})
+const displayMaxDate = computed(() => {
+  if (rangeState.value.selecting && maxDate.value && rangeState.value.endDate) {
+    return rangeState.value.endDate
+  }
+
+  return minDate.value && maxDate.value ? maxDate.value : undefined
 })
 
 const {
@@ -342,7 +366,13 @@ const {
 } = usePanelDateRange(props, emit, leftDate, rightDate)
 
 const isValidValue = (date: Array<Dayjs | null>) => {
-  return isValidPartialRange(date, disabledDate)
+  return isValidPartialRange(date, baseDisabledDate)
+}
+
+const disabledDate = (date: Date) => {
+  if (baseDisabledDate?.(date)) return true
+
+  return !!maxDate.value && dayjs(date).isAfter(maxDate.value, 'day')
 }
 
 const leftPrevYear = () => {
@@ -537,6 +567,17 @@ const parseUserInput = (value: string | string[]) => {
   )
 }
 
+const syncHoverRangeState = () => {
+  if (!props.visible || !maxDate.value) {
+    rangeState.value.selecting = false
+    rangeState.value.endDate = null
+    return
+  }
+
+  rangeState.value.selecting = true
+  rangeState.value.endDate = minDate.value ?? null
+}
+
 function onParsedValueChanged(
   minDate: Dayjs | undefined,
   maxDate: Dayjs | undefined
@@ -588,6 +629,9 @@ function onParsedValueChanged(
     }
   }
 }
+
+watch(() => props.visible, syncHoverRangeState, { immediate: true })
+watch([minDate, maxDate], syncHoverRangeState)
 
 emit('set-picker-option', ['isValidValue', isValidValue])
 emit('set-picker-option', ['parseUserInput', parseUserInput])
