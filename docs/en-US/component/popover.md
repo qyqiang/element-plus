@@ -61,6 +61,16 @@ popover/nested-operation
 
 :::
 
+## Modal
+
+Popover inherits modal overlay support from Tooltip. Use `modal` to show the mask, `modal-class` to customize it, and `close-on-click-modal` to control whether clicking the overlay closes the popover.
+
+:::demo
+
+popover/modal
+
+:::
+
 ## Directive
 
 You can still using popover in directive way but this is **not recommended** anymore since this makes your application

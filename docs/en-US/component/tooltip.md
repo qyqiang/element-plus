@@ -138,6 +138,16 @@ tooltip/controlled
 
 :::
 
+## Modal
+
+Tooltip can also display a modal overlay. Use `modal` to show the mask, `modal-class` to customize it, and `close-on-click-modal` to control whether clicking the overlay closes the tooltip.
+
+:::demo
+
+tooltip/modal
+
+:::
+
 ## Animations
 
 Tooltip can be customized animated, you can set the desired animation use `transition`.
@@ -178,6 +188,9 @@ tooltip/append-to
 | fallback-placements       | list of possible positions for Tooltip [popper.js](https://popper.js.org/docs/v2/modifiers/flip/#fallbackplacements)                                                                  | ^[array]`Placement[]`                                                                                                                                                       | —                 |
 | visible / v-model:visible | visibility of Tooltip                                                                                                                                                                 | ^[boolean]                                                                                                                                                                  | —                 |
 | disabled                  | whether Tooltip is disabled                                                                                                                                                           | ^[boolean]                                                                                                                                                                  | —                 |
+| modal                     | whether a mask is displayed                                                                                                                                                           | ^[boolean]                                                                                                                                                                  | false             |
+| modal-class               | custom class names for mask                                                                                                                                                           | ^[string]                                                                                                                                                                   | —                 |
+| close-on-click-modal      | whether the Tooltip can be closed by clicking the mask                                                                                                                                | ^[boolean]                                                                                                                                                                  | true              |
 | offset                    | offset of the Tooltip                                                                                                                                                                 | ^[number]                                                                                                                                                                   | 12                |
 | transition                | animation name                                                                                                                                                                        | ^[string]                                                                                                                                                                   | —                 |
 | popper-options            | [popper.js](https://popper.js.org/docs/v2/) parameters                                                                                                                                | ^[object]refer to [popper.js](https://popper.js.org/docs/v2/) doc                                                                                                           | {}                |

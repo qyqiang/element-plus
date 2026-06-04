@@ -53,6 +53,21 @@ export const useTooltipContentProps = buildProps({
     default: true,
   },
   /**
+   * @description whether a mask is displayed
+   */
+  modal: Boolean,
+  /**
+   * @description custom class names for mask
+   */
+  modalClass: String,
+  /**
+   * @description whether the Tooltip can be closed by clicking the mask
+   */
+  closeOnClickModal: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description whether Tooltip is disabled
    */
   disabled: Boolean,

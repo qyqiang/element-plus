@@ -196,6 +196,49 @@ describe('Popover.vue', () => {
     expect(popoverDom.style.display).toBe('none')
   })
 
+  it('should not render overlay by default', async () => {
+    wrapper = _mount({ trigger: 'click' })
+
+    await nextTick()
+    const trigger$ = wrapper.findComponent(ElPopperTrigger)
+    const triggerEl = trigger$.find('.el-tooltip__trigger')
+
+    vi.useFakeTimers()
+    await triggerEl.trigger('click')
+    vi.runAllTimers()
+    vi.useRealTimers()
+    await rAF()
+
+    expect(document.body.querySelector('.el-overlay')).toBeNull()
+  })
+
+  it('should render overlay and close popover when clicking modal', async () => {
+    wrapper = _mount({ trigger: 'click', modal: true })
+
+    await nextTick()
+    const trigger$ = wrapper.findComponent(ElPopperTrigger)
+    const triggerEl = trigger$.find('.el-tooltip__trigger')
+    const popoverDom: HTMLElement = document.querySelector('.el-popper')!
+
+    vi.useFakeTimers()
+    await triggerEl.trigger('click')
+    vi.runAllTimers()
+    vi.useRealTimers()
+    await rAF()
+
+    const overlay = document.body.querySelector('.el-overlay') as HTMLElement
+    expect(overlay).not.toBeNull()
+    expect(popoverDom.style.display).not.toBe('none')
+
+    vi.useFakeTimers()
+    overlay.click()
+    vi.runAllTimers()
+    vi.useRealTimers()
+    await rAF()
+
+    expect(popoverDom.style.display).toBe('none')
+  })
+
   describe('teleported API', () => {
     it('should mount on popper container', async () => {
       expect(document.body.innerHTML).toBe('')

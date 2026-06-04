@@ -25,6 +25,10 @@
     :append-to="appendTo"
     :persistent="persistent"
     :gpu-acceleration="gpuAcceleration"
+    :z-index="zIndex"
+    :modal="modal"
+    :modal-class="modalClass"
+    :close-on-click-modal="closeOnClickModal"
     @update:visible="onUpdateVisible"
     @before-show="beforeEnter"
     @before-hide="beforeLeave"
@@ -48,9 +52,9 @@
 
 <script lang="ts" setup>
 import { computed, ref, unref } from 'vue'
+import { useNamespace } from '@element-plus/hooks'
 import { ElTooltip } from '@element-plus/components/tooltip'
 import { addUnit } from '@element-plus/utils'
-import { useNamespace } from '@element-plus/hooks'
 import { popoverEmits, popoverProps } from './popover'
 
 import type { TooltipInstance } from '@element-plus/components/tooltip'

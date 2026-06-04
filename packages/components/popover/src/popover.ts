@@ -73,6 +73,22 @@ export const popoverProps = buildProps({
    */
   appendTo: useTooltipContentProps.appendTo,
   /**
+   * @description same as z-index in native CSS, z-order of popover
+   */
+  zIndex: useTooltipContentProps.zIndex,
+  /**
+   * @description whether a mask is displayed
+   */
+  modal: useTooltipContentProps.modal,
+  /**
+   * @description custom class names for mask
+   */
+  modalClass: useTooltipContentProps.modalClass,
+  /**
+   * @description whether the popover can be closed by clicking the mask
+   */
+  closeOnClickModal: useTooltipContentProps.closeOnClickModal,
+  /**
    * @description popover title
    */
   title: String,

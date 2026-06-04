@@ -149,6 +149,61 @@ describe('<ElTooltip />', () => {
       expect(wrapper.emitted()).toHaveProperty('hide')
     })
 
+    it('should not render overlay by default', async () => {
+      wrapper = createComponent(
+        {
+          trigger: 'click',
+        },
+        content
+      )
+      await nextTick()
+
+      const trigger$ = findTrigger()
+      const triggerEl = trigger$.find('.el-tooltip__trigger')
+
+      vi.useFakeTimers()
+      await triggerEl.trigger('click')
+      vi.runAllTimers()
+      vi.useRealTimers()
+      await rAF()
+
+      expect(document.body.querySelector('.el-overlay')).toBeNull()
+    })
+
+    it('should render overlay and close when clicking modal', async () => {
+      wrapper = createComponent(
+        {
+          trigger: 'click',
+          modal: true,
+        },
+        content
+      )
+      await nextTick()
+
+      const trigger$ = findTrigger()
+      const triggerEl = trigger$.find('.el-tooltip__trigger')
+      const tooltipDom: HTMLElement = document.querySelector('.el-popper')!
+
+      vi.useFakeTimers()
+      await triggerEl.trigger('click')
+      vi.runAllTimers()
+      vi.useRealTimers()
+      await rAF()
+
+      const overlay = document.body.querySelector('.el-overlay') as HTMLElement
+      expect(overlay).not.toBeNull()
+      expect(overlay.classList.contains('el-tooltip__overlay')).toBe(true)
+      expect(tooltipDom.style.display).not.toBe('none')
+
+      vi.useFakeTimers()
+      overlay.click()
+      vi.runAllTimers()
+      vi.useRealTimers()
+      await rAF()
+
+      expect(tooltipDom.style.display).toBe('none')
+    })
+
     it('should show tooltip when input is focused with trigger="focus"', async () => {
       wrapper = mount(
         <Tooltip

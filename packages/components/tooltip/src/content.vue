@@ -1,5 +1,12 @@
 <template>
   <el-teleport :disabled="!teleported" :to="appendTo">
+    <el-overlay
+      v-if="modal"
+      v-show="shouldShow"
+      :overlay-class="[ns.e('overlay'), modalClass]"
+      :z-index="overlayZIndex"
+      @click="onModalClick"
+    />
     <transition
       v-if="shouldRender || !ariaHidden"
       :name="transitionClass"
@@ -46,7 +53,15 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, inject, onBeforeUnmount, ref, unref, watch } from 'vue'
+import {
+  computed,
+  inject,
+  nextTick,
+  onBeforeUnmount,
+  ref,
+  unref,
+  watch,
+} from 'vue'
 import { computedEager, onClickOutside } from '@vueuse/core'
 import { useNamespace, usePopperContainerId } from '@element-plus/hooks'
 import {
@@ -55,6 +70,7 @@ import {
   focusElement,
 } from '@element-plus/utils'
 import { ElPopperContent } from '@element-plus/components/popper'
+import { ElOverlay } from '@element-plus/components/overlay'
 import ElTeleport from '@element-plus/components/teleport'
 import { TOOLTIP_INJECTION_KEY } from './constants'
 import { useTooltipContentProps } from './content'
@@ -90,6 +106,9 @@ const {
 const transitionClass = computed(() => {
   return props.transition || `${ns.namespace.value}-fade-in-linear`
 })
+const overlayZIndex = ref<number | undefined>(
+  typeof props.zIndex === 'number' ? props.zIndex - 1 : undefined
+)
 const persistentRef = computed(() => {
   // For testing, we would always want the content to be rendered
   // to the DOM, so we need to return true here.
@@ -154,12 +173,31 @@ const onBeforeLeave = () => {
 
 const onAfterShow = () => {
   onShow()
+  syncOverlayZIndex()
 }
 
 const onBlur = () => {
   if (!props.virtualTriggering) {
     onClose()
   }
+}
+
+const syncOverlayZIndex = async () => {
+  await nextTick()
+  const currentZIndex = Number.parseInt(
+    contentRef.value?.contentStyle?.[0]?.zIndex ?? ''
+  )
+
+  overlayZIndex.value = Number.isFinite(currentZIndex)
+    ? currentZIndex - 1
+    : typeof props.zIndex === 'number'
+      ? props.zIndex - 1
+      : undefined
+}
+
+const onModalClick = () => {
+  if (!props.closeOnClickModal) return
+  onClose()
 }
 
 const isFocusInsideContent = (event?: FocusEvent) => {
