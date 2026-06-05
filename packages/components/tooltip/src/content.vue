@@ -3,7 +3,7 @@
     <el-overlay
       v-if="modal"
       v-show="shouldShow"
-      :overlay-class="[ns.e('overlay'), modalClass]"
+      :overlay-class="[ns.e('overlay'), modalClass ?? '']"
       :z-index="overlayZIndex"
       @click="onModalClick"
     />
@@ -63,11 +63,16 @@ import {
   watch,
 } from 'vue'
 import { computedEager, onClickOutside } from '@vueuse/core'
-import { useNamespace, usePopperContainerId } from '@element-plus/hooks'
+import {
+  useNamespace,
+  usePopperContainerId,
+  useZIndex,
+} from '@element-plus/hooks'
 import {
   castArray,
   composeEventHandlers,
   focusElement,
+  isNumber,
 } from '@element-plus/utils'
 import { ElPopperContent } from '@element-plus/components/popper'
 import { ElOverlay } from '@element-plus/components/overlay'
@@ -86,6 +91,7 @@ defineOptions({
 const props = defineProps(useTooltipContentProps)
 
 const { selector } = usePopperContainerId()
+const { nextZIndex } = useZIndex()
 const ns = useNamespace('tooltip')
 
 const contentRef = ref<PopperContentInstance>()
@@ -106,8 +112,9 @@ const {
 const transitionClass = computed(() => {
   return props.transition || `${ns.namespace.value}-fade-in-linear`
 })
-const overlayZIndex = ref<number | undefined>(
-  typeof props.zIndex === 'number' ? props.zIndex - 1 : undefined
+const zIndex = ref<number>(props.zIndex ?? nextZIndex())
+const overlayZIndex = computed<number | undefined>(() =>
+  props.modal ? zIndex.value - 1 : undefined
 )
 const persistentRef = computed(() => {
   // For testing, we would always want the content to be rendered
@@ -173,7 +180,6 @@ const onBeforeLeave = () => {
 
 const onAfterShow = () => {
   onShow()
-  syncOverlayZIndex()
 }
 
 const onBlur = () => {
@@ -182,17 +188,10 @@ const onBlur = () => {
   }
 }
 
-const syncOverlayZIndex = async () => {
+const updateContentZIndex = async () => {
+  zIndex.value = isNumber(props.zIndex) ? props.zIndex : nextZIndex()
   await nextTick()
-  const currentZIndex = Number.parseInt(
-    contentRef.value?.contentStyle?.[0]?.zIndex ?? ''
-  )
-
-  overlayZIndex.value = Number.isFinite(currentZIndex)
-    ? currentZIndex - 1
-    : typeof props.zIndex === 'number'
-      ? props.zIndex - 1
-      : undefined
+  contentRef.value?.updatePopper?.()
 }
 
 const onModalClick = () => {
@@ -215,6 +214,7 @@ watch(
       stopHandle?.()
     } else {
       ariaHidden.value = false
+      updateContentZIndex()
       stopHandle = onClickOutside(
         popperContentRef,
         () => {
@@ -232,6 +232,13 @@ watch(
   },
   {
     flush: 'post',
+  }
+)
+
+watch(
+  () => props.zIndex,
+  () => {
+    updateContentZIndex()
   }
 )
 

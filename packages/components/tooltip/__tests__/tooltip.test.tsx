@@ -204,6 +204,40 @@ describe('<ElTooltip />', () => {
       expect(tooltipDom.style.display).toBe('none')
     })
 
+    it('should update popper and overlay z-index when zIndex changes while open', async () => {
+      wrapper = createComponent(
+        {
+          trigger: 'click',
+          modal: true,
+          zIndex: 3000,
+        },
+        content
+      )
+      await nextTick()
+
+      const trigger$ = findTrigger()
+      const triggerEl = trigger$.find('.el-tooltip__trigger')
+
+      vi.useFakeTimers()
+      await triggerEl.trigger('click')
+      vi.runAllTimers()
+      vi.useRealTimers()
+      await rAF()
+
+      const tooltipDom = document.querySelector('.el-popper') as HTMLElement
+      const overlay = document.body.querySelector('.el-overlay') as HTMLElement
+
+      expect(window.getComputedStyle(tooltipDom).zIndex).toBe('3000')
+      expect(window.getComputedStyle(overlay).zIndex).toBe('2999')
+
+      await wrapper.setProps({ zIndex: 4000 })
+      await nextTick()
+      await rAF()
+
+      expect(window.getComputedStyle(tooltipDom).zIndex).toBe('4000')
+      expect(window.getComputedStyle(overlay).zIndex).toBe('3999')
+    })
+
     it('should show tooltip when input is focused with trigger="focus"', async () => {
       wrapper = mount(
         <Tooltip

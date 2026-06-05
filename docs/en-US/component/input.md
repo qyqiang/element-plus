@@ -135,8 +135,9 @@ input/length-limiting
 | show-word-limit               | whether show word count, only works when `type` is 'text' or 'textarea'                                                                | ^[boolean]                                                                                                                                                                                                                   | false       |
 | word-limit-position ^(2.11.5) | word count position, valid when `show-word-limit` is true                                                                              | ^[enum]`'inside' \| 'outside' `                                                                                                                                                                                              | "inside"    |
 | placeholder                   | placeholder of Input                                                                                                                   | ^[string]                                                                                                                                                                                                                    | —           |
-| float-label
-| pre-star                      | show red star
+| float-label                   | whether to show the floating label                                                                                                     | ^[boolean]                                                                                                                                                                                                                   | true        |
+| is-hover-suffix               | whether the suffix area is displayed only on hover                                                                                     | ^[boolean]                                                                                                                                                                                                                   | false       |
+| always-show-suffix            | whether to always display the suffix area                                                                                              | ^[boolean]                                                                                                                                                                                                                   | true        |
 | clearable                     | whether to show clear button, only works when `type` is not 'textarea'                                                                 | ^[boolean]                                                                                                                                                                                                                   | false       |
 | clear-icon ^(2.11.0)          | custom clear icon component                                                                                                            | ^[string] / ^[object]`Component`                                                                                                                                                                                             | CircleClose |
 | formatter                     | specifies the format of the value presented input.(only works when `type` is 'text')                                                   | ^[Function]`(value: string \| number) => string`                                                                                                                                                                             | —           |
@@ -182,12 +183,14 @@ input/length-limiting
 
 ### Slots
 
-| Name    | Description                                                               |
-| ------- | ------------------------------------------------------------------------- |
-| prefix  | content as Input prefix, only works when `type` is not 'textarea'         |
-| suffix  | content as Input suffix, only works when `type` is not 'textarea'         |
-| prepend | content to prepend before Input, only works when `type` is not 'textarea' |
-| append  | content to append after Input, only works when `type` is not 'textarea'   |
+| Name           | Description                                                               |
+| -------------- | ------------------------------------------------------------------------- |
+| prefix         | content as Input prefix, only works when `type` is not 'textarea'         |
+| suffix         | content as Input suffix, only works when `type` is not 'textarea'         |
+| prepend        | content to prepend before Input, only works when `type` is not 'textarea' |
+| append         | content to append after Input, only works when `type` is not 'textarea'   |
+| textareaPrefix | content as Input textarea prefix, only works when `type` is 'textarea'    |
+| textareaSuffix | content as Input textarea suffix, only works when `type` is 'textarea'    |
 
 ### Exposes
 

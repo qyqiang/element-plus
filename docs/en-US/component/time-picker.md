@@ -93,6 +93,15 @@ time-picker/range
 | clear ^(2.7.7) | triggers when the clear icon is clicked in a clearable TimePicker | ^[Function]`() => void`                                                                                      |
 | visible-change | triggers when the TimePicker's dropdown appears/disappears        | ^[Function]`(visibility: boolean) => void`                                                                   |
 
+### Slots
+
+| Name            | Description                       |
+| --------------- | --------------------------------- |
+| open            | custom trigger content            |
+| prefix          | custom range input prefix content |
+| range-separator | custom range separator content    |
+| suffix          | custom range input suffix content |
+
 ### Exposes
 
 | Name                  | Description                    | Type                    |

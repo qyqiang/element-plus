@@ -87,10 +87,11 @@ Note, date time locale (month name, first day of the week ...) are also configur
 
 ### Slots
 
-| Name       | Description         |
-| ---------- | ------------------- |
-| default    | custom cell content |
-| prev-month | prev month icon     |
-| next-month | next month icon     |
-| prev-year  | prev year icon      |
-| next-year  | next year icon      |
+| Name       | Description            |
+| ---------- | ---------------------- |
+| sidebar    | custom sidebar content |
+| default    | custom cell content    |
+| prev-month | prev month icon        |
+| next-month | next month icon        |
+| prev-year  | prev year icon         |
+| next-year  | next year icon         |

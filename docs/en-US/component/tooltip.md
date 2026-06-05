@@ -218,6 +218,15 @@ tooltip/append-to
 | default | Tooltip triggering & reference element, only a single root element is accepted |
 | content | customize content                                                              |
 
+### Events
+
+| Name        | Description                                 | Type                                 |
+| ----------- | ------------------------------------------- | ------------------------------------ |
+| show        | triggers when the tooltip is shown          | ^[Function]`(event?: Event) => void` |
+| hide        | triggers when the tooltip is hidden         | ^[Function]`(event?: Event) => void` |
+| before-show | triggers before the tooltip show transition | ^[Function]`(event?: Event) => void` |
+| before-hide | triggers before the tooltip hide transition | ^[Function]`(event?: Event) => void` |
+
 ### Exposes
 
 | Name                 | Description                                                       | Type                                                |

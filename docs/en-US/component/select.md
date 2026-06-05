@@ -213,7 +213,6 @@ select/custom-label
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------- |
 | model-value / v-model           | binding value                                                                                                                            | ^[string] / ^[number] / ^[boolean] / ^[object] / ^[array]                                                                                                                   | —                                              |
 | multiple                        | whether multiple-select is activated                                                                                                     | ^[boolean]                                                                                                                                                                  | false                                          |
-| pre-star                        | whether select is required                                                                                                               | ^[boolean]                                                                                                                                                                  | false                                          |
 | add-item                        | whether select can add new item                                                                                                          | ^[boolean]                                                                                                                                                                  | false                                          |
 | add-show-tip                    | whether select add tip                                                                                                                   | ^[string]                                                                                                                                                                   | —                                              |
 | have-all                        | whether select empty set all                                                                                                             | ^[string]                                                                                                                                                                   | —                                              |
@@ -305,6 +304,9 @@ select/custom-label
 | footer ^(2.4.3)  | content at the bottom of the dropdown                                                           | —                                                                                                                     |
 | prefix           | content as Select prefix                                                                        | —                                                                                                                     |
 | empty            | content when there is no options                                                                | —                                                                                                                     |
+| info             | custom content displayed before the suffix icons                                                | —                                                                                                                     |
+| suffixBeforeIcon | custom content displayed before the default suffix icon                                         | —                                                                                                                     |
+| suffixAfterIcon  | custom content displayed after the default suffix icon                                          | —                                                                                                                     |
 | tag ^(2.5.0)     | content as Select tag, subTags `data`, `selectDisabled` and `deleteTag` introduced in ^(2.10.3) | ^[object]`{ data: OptionBasic[], selectDisabled: boolean, deleteTag: (event: MouseEvent, tag: OptionBasic) => void }` |
 | loading ^(2.5.2) | content as Select loading                                                                       | —                                                                                                                     |
 | label ^(2.7.4)   | content as Select label. `index` introduced in ^(2.11.2)                                        | ^[object]`{ index: number, label: string \| any, value: string \| any }`                                              |
@@ -328,10 +330,9 @@ select/custom-label
 
 ### Option Group Slots
 
-| Name       | Description               | Subtags |
-| ---------- | ------------------------- | ------- |
-| default    | customize default content | Option  |
-| optionIcon | customize icon for item   | Option  |
+| Name    | Description               | Subtags |
+| ------- | ------------------------- | ------- |
+| default | customize default content | Option  |
 
 ## Option API
 
@@ -347,6 +348,7 @@ select/custom-label
 
 ### Option Slots
 
-| Name    | Description               |
-| ------- | ------------------------- |
-| default | customize default content |
+| Name       | Description               |
+| ---------- | ------------------------- |
+| default    | customize default content |
+| optionIcon | customize icon for item   |

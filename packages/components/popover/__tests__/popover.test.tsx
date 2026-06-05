@@ -239,6 +239,33 @@ describe('Popover.vue', () => {
     expect(popoverDom.style.display).toBe('none')
   })
 
+  it('should update popper and overlay z-index when zIndex changes while open', async () => {
+    wrapper = _mount({ trigger: 'click', modal: true, zIndex: 3000 })
+
+    await nextTick()
+    const trigger$ = wrapper.findComponent(ElPopperTrigger)
+    const triggerEl = trigger$.find('.el-tooltip__trigger')
+
+    vi.useFakeTimers()
+    await triggerEl.trigger('click')
+    vi.runAllTimers()
+    vi.useRealTimers()
+    await rAF()
+
+    const popoverDom = document.querySelector('.el-popper') as HTMLElement
+    const overlay = document.body.querySelector('.el-overlay') as HTMLElement
+
+    expect(window.getComputedStyle(popoverDom).zIndex).toBe('3000')
+    expect(window.getComputedStyle(overlay).zIndex).toBe('2999')
+
+    await wrapper.setProps({ zIndex: 4000 })
+    await nextTick()
+    await rAF()
+
+    expect(window.getComputedStyle(popoverDom).zIndex).toBe('4000')
+    expect(window.getComputedStyle(overlay).zIndex).toBe('3999')
+  })
+
   describe('teleported API', () => {
     it('should mount on popper container', async () => {
       expect(document.body.innerHTML).toBe('')
