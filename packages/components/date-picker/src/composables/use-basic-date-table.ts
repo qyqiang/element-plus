@@ -334,6 +334,11 @@ export const useBasicDateTable = (
     focusWithClick = false
   }
 
+  const handleMouseLeave = () => {
+    lastRow.value = undefined
+    lastColumn.value = undefined
+  }
+
   const handleRangePick = (newDate: Dayjs) => {
     if (!props.rangeState.selecting || !props.minDate) {
       if (props.cycleType === 'week') {
@@ -469,6 +474,7 @@ export const useBasicDateTable = (
     handleMouseUp,
     handleMouseDown,
     handleMouseMove,
+    handleMouseLeave,
     handleFocus,
   }
 }

@@ -6,6 +6,7 @@
     cellpadding="0"
     role="grid"
     @click="handlePickDate"
+    @mouseleave="handleMouseLeave"
     @mousemove="handleMouseMove"
     @mousedown.prevent="handleMouseDown"
     @mouseup="handleMouseUp"
@@ -79,6 +80,7 @@ const {
   handleMouseUp,
   handleMouseDown,
   handleMouseMove,
+  handleMouseLeave,
   handleFocus,
 } = useBasicDateTable(props, emit)
 const { tableLabel, tableKls, getCellClasses, getRowKls, weekHeaderClass, t } =

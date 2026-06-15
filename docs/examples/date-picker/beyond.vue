@@ -47,7 +47,7 @@
     >
       <template #reference>
         <el-button class="mr-3">
-          <span>ddd</span>
+          <span> {{ value1 }}</span>
         </el-button>
       </template>
       <div class="flex w-full flex-col">

@@ -1,5 +1,9 @@
 <template>
-  <div class="data-end-range" :class="[ppNs.b(), drpNs.b()]">
+  <div
+    class="data-end-range"
+    :class="[ppNs.b(), drpNs.b()]"
+    @mouseleave="syncHoverRangeState"
+  >
     <div :class="ppNs.e('body-wrapper')">
       <slot name="option"></slot>
       <div :class="ppNs.e('body')">
@@ -523,20 +527,22 @@ const handleDatePick = (value: Dayjs, keepOpen = false) => {
 }
 
 const handleClear = () => {
-  let valueOnClear = null
-  if (pickerBase?.emptyValues) {
-    valueOnClear = pickerBase.emptyValues.valueOnClear.value
-  }
-  leftDate.value = getDefaultValue(unref(defaultValue), {
-    lang: unref(lang),
-    unit: 'month',
-    unlinkPanels: props.unlinkPanels,
-  })[0]
-  rightDate.value = leftDate.value.add(1, 'month')
   maxDate.value = undefined
-  minDate.value = undefined
+  const remainingMinDate = minDate.value
 
-  emit('pick', valueOnClear)
+  if (remainingMinDate) {
+    leftDate.value = remainingMinDate
+    onParsedValueChanged(remainingMinDate, undefined)
+  } else {
+    leftDate.value = getDefaultValue(unref(defaultValue), {
+      lang: unref(lang),
+      unit: 'month',
+      unlinkPanels: props.unlinkPanels,
+    })[0]
+    rightDate.value = leftDate.value.add(1, 'month')
+  }
+
+  emit('pick', getPartialRangePayload([remainingMinDate, undefined]).pickRange)
 }
 
 const formatToString = (value: Dayjs | Array<Dayjs | null>) => {

@@ -2309,6 +2309,148 @@ describe('DateRangePicker', () => {
     expect(findDateCell('28').classList.contains('end-date')).toBe(true)
   })
 
+  it('clears datestartrange hover preview when leaving the panel and restores it on re-enter', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="datestartrange"
+        value-format="YYYY-MM-DD"
+      />`,
+      () => ({
+        value: [null, '2026-06-28'],
+      })
+    )
+
+    const [startInput] = wrapper.findAll('input')
+    await startInput.trigger('blur')
+    await startInput.trigger('focus')
+
+    findDateCell('2').dispatchEvent(
+      new MouseEvent('mousemove', { bubbles: true })
+    )
+    await nextTick()
+
+    expect(findDateCell('20').classList.contains('in-range')).toBe(true)
+
+    document
+      .querySelector('.el-date-table')
+      ?.dispatchEvent(new MouseEvent('mouseleave'))
+    document
+      .querySelector('.data-start-range')
+      ?.dispatchEvent(new MouseEvent('mouseleave'))
+    await nextTick()
+
+    expect(findDateCell('20').classList.contains('in-range')).toBe(false)
+
+    findDateCell('2').dispatchEvent(
+      new MouseEvent('mousemove', { bubbles: true })
+    )
+    await nextTick()
+
+    expect(findDateCell('20').classList.contains('in-range')).toBe(true)
+  })
+
+  it('clears dateendrange hover preview when leaving the panel and restores it on re-enter', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="dateendrange"
+        value-format="YYYY-MM-DD"
+      />`,
+      () => ({
+        value: ['2026-06-02', null],
+      })
+    )
+
+    const [, endInput] = wrapper.findAll('input')
+    await endInput.trigger('blur')
+    await endInput.trigger('focus')
+
+    findDateCell('28').dispatchEvent(
+      new MouseEvent('mousemove', { bubbles: true })
+    )
+    await nextTick()
+
+    expect(findDateCell('20').classList.contains('in-range')).toBe(true)
+
+    document
+      .querySelector('.el-date-table')
+      ?.dispatchEvent(new MouseEvent('mouseleave'))
+    document
+      .querySelector('.data-end-range')
+      ?.dispatchEvent(new MouseEvent('mouseleave'))
+    await nextTick()
+
+    expect(findDateCell('20').classList.contains('in-range')).toBe(false)
+
+    findDateCell('28').dispatchEvent(
+      new MouseEvent('mousemove', { bubbles: true })
+    )
+    await nextTick()
+
+    expect(findDateCell('20').classList.contains('in-range')).toBe(true)
+  })
+
+  it('clears only the start value for datestartrange', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="datestartrange"
+        value-format="YYYY-MM-DD"
+        clearable
+        show-footer
+      />`,
+      () => ({
+        value: ['2026-06-02', '2026-06-28'],
+      })
+    )
+
+    const [startInput] = wrapper.findAll('input')
+    await startInput.trigger('blur')
+    await startInput.trigger('focus')
+
+    const clearButton = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('.el-picker-panel__link-btn')
+    ).find((button) => button.textContent?.includes('Clear'))
+
+    expect(clearButton).toBeDefined()
+
+    clearButton!.click()
+    await nextTick()
+
+    expect(wrapper.vm.value).toEqual([null, '2026-06-28'])
+  })
+
+  it('clears only the end value for dateendrange', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="dateendrange"
+        value-format="YYYY-MM-DD"
+        clearable
+        show-footer
+      />`,
+      () => ({
+        value: ['2026-06-02', '2026-06-28'],
+      })
+    )
+
+    const [, endInput] = wrapper.findAll('input')
+    await endInput.trigger('blur')
+    await endInput.trigger('focus')
+
+    const clearButton = Array.from(
+      document.querySelectorAll<HTMLButtonElement>('.el-picker-panel__link-btn')
+    ).find((button) => button.textContent?.includes('Clear'))
+
+    expect(clearButton).toBeDefined()
+
+    clearButton!.click()
+    await nextTick()
+
+    expect(wrapper.vm.value).toEqual(['2026-06-02', null])
+  })
+
   it('daterange should be reopen successfully with value-format', async () => {
     const wrapper = _mount(
       `<el-date-picker

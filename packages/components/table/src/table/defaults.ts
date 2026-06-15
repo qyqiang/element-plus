@@ -357,11 +357,17 @@ export default {
   /**
    * @description the `effect` of the overflow tooltip
    */
-  tooltipEffect: String,
+  tooltipEffect: { type: String, default: 'light' },
   /**
    * @description the options for the overflow tooltip, [see the following tooltip component](tooltip.html#attributes)
    */
-  tooltipOptions: Object as PropType<TableProps<any>['tooltipOptions']>,
+  tooltipOptions: {
+    type: Object as PropType<TableProps<any>['tooltipOptions']>,
+    default: () => ({
+      showArrow: false,
+      popperClass: 'table-tooltip',
+    }),
+  },
   /**
    * @description method that returns rowspan and colspan
    */
