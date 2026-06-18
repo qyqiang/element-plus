@@ -12,8 +12,8 @@
       :filter-max-length="24"
       style="width: 240px"
     >
-      <template #itemIcon>
-        <div>ddd</div>
+      <template #itemIcon="{ item: selectedItem, value: selectedValue }">
+        <div>{{ selectedItem?.icon }} - {{ selectedValue }}</div>
       </template>
       <el-option
         v-for="item in options"
@@ -22,8 +22,8 @@
         :value="item.value"
         :raw-option="item"
       >
-        <template #optionIcon>
-          <el-icon><info-filled></info-filled></el-icon>
+        <template #optionIcon="{ item: optionItem, value: selectedValue }">
+          <div>{{ optionItem?.icon }} - {{ selectedValue }}</div>
         </template>
       </el-option>
     </el-select>

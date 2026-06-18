@@ -22,7 +22,11 @@
           popper-class="optionPopperClass"
         >
           <div class="option-wrap-content">
-            <slot name="optionIcon"></slot>
+            <slot
+              name="optionIcon"
+              :item="rawOption"
+              :value="select.props.modelValue"
+            ></slot>
             <span
               class="select-label"
               :class="{ 'select-margin': $slots?.optionIcon }"

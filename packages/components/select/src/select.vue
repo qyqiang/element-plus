@@ -250,7 +250,13 @@
                 :value="modelValue"
               >
                 <div v-if="$slots.itemIcon" class="iconItemWrap">
-                  <slot name="itemIcon"></slot>
+                  <slot
+                    name="itemIcon"
+                    :item="getLabelSlotItem(getOption(modelValue!))"
+                    :index="getOption(modelValue!).index"
+                    :label="currentPlaceholder"
+                    :value="modelValue"
+                  ></slot>
                   <span class="itemPlaceholder">{{ currentPlaceholder }}</span>
                 </div>
                 <span v-else>{{ currentPlaceholder }}</span>

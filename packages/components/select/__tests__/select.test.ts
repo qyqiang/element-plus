@@ -3109,6 +3109,47 @@ describe('Select', () => {
     expect(placeholder).toBe('Option1|yyyygggghhhh|test')
   })
 
+  it('should expose selected value on optionIcon slot value prop', async () => {
+    const wrapper = _mount(
+      `
+      <el-select v-model="value" :teleported="false">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          :raw-option="item"
+        >
+          <template #optionIcon="{ option, value }">
+            {{ option.value }}|{{ value }}
+          </template>
+        </el-option>
+      </el-select>
+    `,
+      () => ({
+        value: 'Option2',
+        options: [
+          {
+            value: 'Option1',
+            label: 'Label1',
+            icon: 'Icon1',
+          },
+          {
+            value: 'Option2',
+            label: 'Label2',
+            icon: 'Icon2',
+          },
+        ],
+      })
+    )
+    await nextTick()
+    await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+    await nextTick()
+    const options = wrapper.findAll('.el-select-dropdown__item')
+    expect(options[0].text()).toContain('Option1|Option2')
+    expect(options[1].text()).toContain('Option2|Option2')
+  })
+
   it('should label slot render dynamic index', async () => {
     const value = ref(['Option1'])
     const options = ref([

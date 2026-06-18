@@ -305,6 +305,7 @@ select/custom-label
 | prefix           | content as Select prefix                                                                        | —                                                                                                                     |
 | empty            | content when there is no options                                                                | —                                                                                                                     |
 | info             | custom content displayed before the suffix icons                                                | —                                                                                                                     |
+| itemIcon         | custom content displayed before the selected label text                                         | ^[object]`{ item?: Record<string, any>, index: number, label: string \| any, value: string \| any }`                  |
 | suffixBeforeIcon | custom content displayed before the default suffix icon                                         | —                                                                                                                     |
 | suffixAfterIcon  | custom content displayed after the default suffix icon                                          | —                                                                                                                     |
 | tag ^(2.5.0)     | content as Select tag, subTags `data`, `selectDisabled` and `deleteTag` introduced in ^(2.10.3) | ^[object]`{ data: OptionBasic[], selectDisabled: boolean, deleteTag: (event: MouseEvent, tag: OptionBasic) => void }` |
@@ -349,7 +350,7 @@ select/custom-label
 
 ### Option Slots
 
-| Name       | Description               |
-| ---------- | ------------------------- |
-| default    | customize default content |
-| optionIcon | customize icon for item   |
+| Name       | Description               | Subtags                                               |
+| ---------- | ------------------------- | ----------------------------------------------------- |
+| default    | customize default content | —                                                     |
+| optionIcon | customize icon for item   | ^[object]`{ item?: Record<string, any>, value: any }` |
