@@ -140,7 +140,7 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
       return
     }
 
-    // 判断是否text-overflow, 如果是就显示tooltip
+    // show the tooltip only when text overflow is detected
     const cellChild = (event.target as HTMLElement).querySelector(
       '.cell'
     ) as HTMLElement

@@ -49,7 +49,7 @@ function useEvent<T extends DefaultRow>(
         toggleRowClassByCell(cell.rowSpan, event, addClass)
       }
     }
-    // 判断是否text-overflow, 如果是就显示tooltip
+    // show the tooltip only when text overflow is detected
     const cellChild = (event.target as HTMLElement).querySelector(
       column?.sortable ? '.cell-span' : '.cell'
     ) as HTMLElement

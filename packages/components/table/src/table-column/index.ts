@@ -88,7 +88,7 @@ export default defineComponent({
         headerAlign: realHeaderAlign,
         showOverflowTooltip,
         tooltipFormatter,
-        // filter 相关属性
+        // filter-related props
         filterable: props.filters || props.filterMethod,
         filteredValue: [],
         filterPlacement: '',
@@ -96,9 +96,9 @@ export default defineComponent({
         isColumnGroup: false,
         isSubColumn: false,
         filterOpened: false,
-        // sort 相关属性
+        // sort-related props
         sortable,
-        // index 列
+        // index column
         index: props.index,
         // <el-table-column key="xxx" />
         rawColumnKey: instance.vnode.key,
@@ -130,7 +130,7 @@ export default defineComponent({
       let column = getPropsData(basicProps, sortProps, selectProps, filterProps)
 
       column = mergeOptions(defaults, column)
-      // 注意 compose 中函数执行的顺序是从右到左
+      // compose executes functions from right to left
       const chains = compose(
         setColumnRenders,
         setColumnWidth,
@@ -139,7 +139,7 @@ export default defineComponent({
       column = chains(column) as unknown as TableColumnCtx<DefaultRow>
       columnConfig.value = column
 
-      // 注册 watcher
+      // register watchers
       registerNormalWatchers()
       registerComplexWatchers()
     })

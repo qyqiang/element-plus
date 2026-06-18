@@ -20,15 +20,15 @@ const createComponent = ({
   const defaultData = ref([
     {
       value: 1,
-      label: '一级 1',
+      label: 'Level 1 1',
       children: [
         {
           value: 11,
-          label: '二级 1-1',
+          label: 'Level 2 1-1',
           children: [
             {
               value: 111,
-              label: '三级 1-1',
+              label: 'Level 3 1-1',
             },
           ],
         },
@@ -113,8 +113,8 @@ describe('TreeSelect.vue', () => {
     await nextTick()
 
     expect(select.vm.modelValue).toBe(1)
-    expect(select.vm.states.selectedLabel).toBe('一级 1')
-    expect(wrapper.find('.el-select__placeholder').text()).toBe('一级 1')
+    expect(select.vm.states.selectedLabel).toBe('Level 1 1')
+    expect(wrapper.find('.el-select__placeholder').text()).toBe('Level 1 1')
     delete process.env.RUN_TEST_WITH_PERSISTENT
   })
 
@@ -260,7 +260,7 @@ describe('TreeSelect.vue', () => {
       },
     })
 
-    tree.vm.filter('一级 1')
+    tree.vm.filter('Level 1 1')
     await nextTick()
     expect(tree.findAll('.el-tree-node:not(.is-hidden)').length).toBe(1)
     expect(document.querySelector('.el-select-dropdown__empty')).toBeFalsy()
@@ -308,7 +308,7 @@ describe('TreeSelect.vue', () => {
     })
 
     await nextTick()
-    expect(tree.find('.el-select-dropdown__item').text()).toBe('123一级 1')
+    expect(tree.find('.el-select-dropdown__item').text()).toBe('123Level 1 1')
     expect(select.find('.el-select__prefix').text()).toBe('prefix')
   })
 
@@ -325,7 +325,7 @@ describe('TreeSelect.vue', () => {
     })
 
     await nextTick()
-    expect(tree.find('.el-select-dropdown__item').text()).toBe('123一级 1')
+    expect(tree.find('.el-select-dropdown__item').text()).toBe('123Level 1 1')
   })
 
   test('lazy', async () => {
@@ -499,7 +499,7 @@ describe('TreeSelect.vue', () => {
 
     modelValue.value = 111
     await nextTick()
-    expect(select.vm.states.selectedLabel).toBe('三级 1-1')
+    expect(select.vm.states.selectedLabel).toBe('Level 3 1-1')
   })
 
   test('show correct label when lazy load', async () => {

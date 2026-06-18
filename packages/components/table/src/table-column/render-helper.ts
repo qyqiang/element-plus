@@ -79,7 +79,7 @@ function useRender<T extends DefaultRow>(
     return column
   }
   const setColumnForcedProps = (column: TableColumnCtx<T>) => {
-    // 对于特定类型的 column，某些属性不允许设置
+    // some props are locked for specific column types
     const type = column.type
     const source = cellForced[type as keyof typeof cellForced] || {}
     Object.keys(source).forEach((prop) => {
@@ -111,7 +111,7 @@ function useRender<T extends DefaultRow>(
     }
   }
   const setColumnRenders = (column: TableColumnCtx<T>) => {
-    // renderHeader 属性不推荐使用。
+    // renderHeader is not recommended.
     //@ts-expect-error
     if (props.renderHeader) {
       debugWarn(
@@ -148,9 +148,9 @@ function useRender<T extends DefaultRow>(
     }
 
     let originRenderCell = column.renderCell
-    // TODO: 这里的实现调整
+    // TODO: refine this implementation
     if (column.type === 'expand') {
-      // 对于展开行，renderCell 不允许配置的。在上一步中已经设置过，这里需要简单封装一下。
+      // expanded rows do not allow a custom renderCell; wrap the existing one.
       column.renderCell = (data) =>
         h(
           'div',
@@ -164,7 +164,7 @@ function useRender<T extends DefaultRow>(
       }
     } else {
       originRenderCell = originRenderCell || defaultRenderCell
-      // 对 renderCell 进行包装
+      // wrap renderCell
       column.renderCell = (data) => {
         let children: VNode | VNode[] | null = null
         if (slots.default) {

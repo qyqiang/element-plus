@@ -60,7 +60,7 @@ function useTree<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
             level,
           }
         } else if (lazy.value) {
-          // 当 children 不存在且 lazy 为 true，该节点即为懒加载的节点
+          // when children are missing and lazy is true, treat this as a lazy node
           res[parentId] = {
             children: [],
             lazy: true,
@@ -101,7 +101,7 @@ function useTree<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
           return !!(oldValue?.expanded || included)
         }
       }
-      // 合并 expanded 与 display，确保数据刷新后，状态不变
+      // merge expanded and display so refreshes preserve the current state
       keys.forEach((key) => {
         const oldValue = oldTreeData[key]
         const newValue = { ...nested[key] }
@@ -114,14 +114,14 @@ function useTree<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
         }
         newTreeData[key] = newValue
       })
-      // 根据懒加载数据更新 treeData
+      // update treeData from lazy-loaded nodes
       const lazyKeys = Object.keys(normalizedLazyNode_)
       if (lazy.value && lazyKeys.length && rootLazyRowKeys.length) {
         lazyKeys.forEach((key) => {
           const oldValue = oldTreeData[key]
           const lazyNodeChildren = normalizedLazyNode_[key].children
           if (rootLazyRowKeys.includes(key)) {
-            // 懒加载的 root 节点，更新一下原有的数据，原来的 children 一定是空数组
+            // for a lazy root node, reuse existing data; children must stay empty
             if (newTreeData[key].children?.length !== 0) {
               throw new Error('[ElTable]children must be an empty array.')
             }

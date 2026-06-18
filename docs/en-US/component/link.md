@@ -117,3 +117,9 @@ link/with-icon
 | ------- | ------------------------- |
 | default | customize default content |
 | icon    | customize icon component  |
+
+### Events
+
+| Name  | Description                   | Type                                   |
+| ----- | ----------------------------- | -------------------------------------- |
+| click | triggers when link is clicked | ^[Function]`(evt: MouseEvent) => void` |

@@ -226,6 +226,8 @@ tooltip/append-to
 | hide        | triggers when the tooltip is hidden         | ^[Function]`(event?: Event) => void` |
 | before-show | triggers before the tooltip show transition | ^[Function]`(event?: Event) => void` |
 | before-hide | triggers before the tooltip hide transition | ^[Function]`(event?: Event) => void` |
+| open        | triggers when the tooltip opens             | ^[Function]`(event?: Event) => void` |
+| close       | triggers when the tooltip closes            | ^[Function]`(event?: Event) => void` |
 
 ### Exposes
 

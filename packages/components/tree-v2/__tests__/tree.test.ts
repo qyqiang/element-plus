@@ -234,7 +234,7 @@ describe('Virtual Tree', () => {
   })
 
   test('emptyText', async () => {
-    const emptyText = '暂无数据'
+    const emptyText = 'No data'
     const { wrapper } = createTree({
       data() {
         return {

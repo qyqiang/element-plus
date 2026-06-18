@@ -144,21 +144,21 @@ describe('Progress.vue', () => {
     const wrapper = mount(() => (
       <Progress
         percentage={100}
-        format={(percent: number) => `占比${percent}%`}
+        format={(percent: number) => `Progress ${percent}%`}
       />
     ))
-    expect(wrapper.find('.el-progress__text').text()).toBe('占比100%')
+    expect(wrapper.find('.el-progress__text').text()).toBe('Progress 100%')
   })
 
   test('slot', () => {
     const wrapper = mount(() => (
       <Progress
         v-slots={{
-          default: () => '自定义内容',
+          default: () => 'Custom Content',
         }}
       />
     ))
 
-    expect(wrapper.find('.el-progress__text').text()).toBe('自定义内容')
+    expect(wrapper.find('.el-progress__text').text()).toBe('Custom Content')
   })
 })

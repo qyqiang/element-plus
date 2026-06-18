@@ -61,6 +61,13 @@ Note, date time locale (month name, first day of the week ...) are also configur
 | date-cell | `type` indicates which month the date belongs, optional values are prev-month, current-month, next-month; `isSelected` indicates whether the date is selected; `day` is the formatted date in the format `YYYY-MM-DD`; `date` is date the cell represents | ^[object]`{ data: { type: 'prev-month' \| 'current-month' \| 'next-month', isSelected: boolean, day: string, date: Date } }` |
 | header    | content of the Calendar header                                                                                                                                                                                                                            | ^[object]`{ date: string }`                                                                                                  |
 
+### Events
+
+| Name              | Description                             | Type                               |
+| ----------------- | --------------------------------------- | ---------------------------------- |
+| update:modelValue | triggers when the selected date changes | ^[Function]`(value: Date) => void` |
+| input             | triggers when the selected date changes | ^[Function]`(value: Date) => void` |
+
 ### Exposes
 
 | Name                        | Description                                                            | Type                                                                                          |

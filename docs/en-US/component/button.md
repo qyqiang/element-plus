@@ -175,6 +175,12 @@ button/custom
 | loading | customize loading component |
 | icon    | customize icon component    |
 
+### Button Events
+
+| Name  | Description                     | Type                                   |
+| ----- | ------------------------------- | -------------------------------------- |
+| click | triggers when button is clicked | ^[Function]`(evt: MouseEvent) => void` |
+
 ### Button Exposes
 
 | Name           | Description          | Type                                                                                                           |

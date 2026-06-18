@@ -97,6 +97,12 @@ steps/simple
 | ------- | ------------------------- | ------- |
 | default | customize default content | Step    |
 
+### Steps Events
+
+| Name   | Description                           | Type                                                  |
+| ------ | ------------------------------------- | ----------------------------------------------------- |
+| change | triggers when the active step changes | ^[Function]`(newVal: number, oldVal: number) => void` |
+
 ## Step API
 
 ### Step Attributes

@@ -47,8 +47,8 @@ function useStore<T extends DefaultRow>() {
       states.data.value = data
       states._data.value = data
       instance.store.execQuery()
-      // 数据变化，更新部分数据。
-      // 没有使用 computed，而是手动更新部分数据 https://github.com/vuejs/vue/issues/6660#issuecomment-331417140
+      // data changed, so update the affected state explicitly.
+      // computed is avoided here; see https://github.com/vuejs/vue/issues/6660#issuecomment-331417140
       instance.store.updateCurrentRowData()
       instance.store.updateExpandRows()
       instance.store.updateTreeData(
@@ -173,7 +173,7 @@ function useStore<T extends DefaultRow>() {
     },
 
     changeSortCondition(states: StoreStates, options: Sort) {
-      // 修复 pr https://github.com/ElemeFE/element/pull/15012 导致的 bug
+      // fixes the bug introduced by https://github.com/ElemeFE/element/pull/15012
       // https://github.com/element-plus/element-plus/pull/4640
       const { sortingColumn, sortProp, sortOrder } = states
       const columnValue = unref(sortingColumn),

@@ -15,7 +15,7 @@ function useExpand<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
     if (defaultExpandAll.value) {
       expandRows.value = data.slice()
     } else if (rowKey) {
-      // TODO：这里的代码可以优化
+      // TODO: this can be optimized
       const expandRowsMap = getKeysMap(expandRows.value, rowKey)
       expandRows.value = data.reduce((prev: T[], row: T) => {
         const rowId = getRowIdentity(row, rowKey)
@@ -47,7 +47,7 @@ function useExpand<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
 
   const setExpandRowKeys = (rowKeys: (string | number)[]) => {
     instance.store.assertRowKey()
-    // TODO：这里的代码可以优化
+    // TODO: this can be optimized
     const data = watcherData.data.value || []
     const rowKey = watcherData.rowKey.value
     const keysMap = getKeysMap(data, rowKey)

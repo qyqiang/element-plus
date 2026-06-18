@@ -2055,26 +2055,27 @@ describe('Select', () => {
         return {
           options: [
             {
-              value: '选项1',
+              value: 'Option 1',
               label:
-                '黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕',
+                'Golden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden Cake',
             },
             {
-              value: '选项2',
+              value: 'Option 2',
               label:
-                '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶',
+                'Double Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin Milk',
             },
             {
-              value: '选项3',
-              label: '蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎',
+              value: 'Option 3',
+              label:
+                'Oyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster Omelet',
             },
             {
-              value: '选项4',
-              label: '龙须面',
+              value: 'Option 4',
+              label: 'Dragon Beard Noodles',
             },
             {
-              value: '选项5',
-              label: '北京烤鸭',
+              value: 'Option 5',
+              label: 'Peking Duck',
             },
           ],
         }
@@ -2149,26 +2150,27 @@ describe('Select', () => {
           return {
             options: [
               {
-                value: '选项1',
+                value: 'Option 1',
                 label:
-                  '黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕',
+                  'Golden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden Cake',
               },
               {
-                value: '选项2',
+                value: 'Option 2',
                 label:
-                  '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶',
+                  'Double Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin Milk',
               },
               {
-                value: '选项3',
-                label: '蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎',
+                value: 'Option 3',
+                label:
+                  'Oyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster Omelet',
               },
               {
-                value: '选项4',
-                label: '龙须面',
+                value: 'Option 4',
+                label: 'Dragon Beard Noodles',
               },
               {
-                value: '选项5',
-                label: '北京烤鸭',
+                value: 'Option 5',
+                label: 'Peking Duck',
               },
             ],
           }
@@ -2190,26 +2192,27 @@ describe('Select', () => {
             teleported: false,
             options: [
               {
-                value: '选项1',
+                value: 'Option 1',
                 label:
-                  '黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕',
+                  'Golden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden Cake',
               },
               {
-                value: '选项2',
+                value: 'Option 2',
                 label:
-                  '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶',
+                  'Double Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin Milk',
               },
               {
-                value: '选项3',
-                label: '蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎',
+                value: 'Option 3',
+                label:
+                  'Oyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster Omelet',
               },
               {
-                value: '选项4',
-                label: '龙须面',
+                value: 'Option 4',
+                label: 'Dragon Beard Noodles',
               },
               {
-                value: '选项5',
-                label: '北京烤鸭',
+                value: 'Option 5',
+                label: 'Peking Duck',
               },
             ],
           }

@@ -424,8 +424,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     states.selected = result
   }
 
-  const getOption = (value: OptionValue) => {
-    let option
+  const findCachedOption = (value: OptionValue) => {
     const isObjectValue = isPlainObject(value)
 
     for (let i = states.cachedOptions.size - 1; i >= 0; i--) {
@@ -433,28 +432,62 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
       const isEqualValue = isObjectValue
         ? get(cachedOption.value, props.valueKey) === get(value, props.valueKey)
         : cachedOption.value === value
+
       if (isEqualValue) {
-        option = {
-          index: optionsArray.value
-            .filter((opt) => !opt.created)
-            .indexOf(cachedOption),
-          value,
-          currentLabel: cachedOption.currentLabel,
-          get isDisabled() {
-            return cachedOption.isDisabled
-          },
-        }
-        break
+        return cachedOption
       }
     }
-    if (option) return option
+  }
+
+  const getOption = (value: OptionValue) => {
+    const isObjectValue = isPlainObject(value)
+    const cachedOption = findCachedOption(value)
+    if (cachedOption) {
+      return {
+        index: optionsArray.value
+          .filter((opt) => !opt.created)
+          .indexOf(cachedOption),
+        value,
+        currentLabel: cachedOption.currentLabel,
+        get isDisabled() {
+          return cachedOption.isDisabled
+        },
+      }
+    }
+
     const label = isObjectValue ? value.label : (value ?? '')
-    const newOption = {
+    return {
       index: -1,
       value,
       currentLabel: label,
     }
-    return newOption
+  }
+
+  const getLabelSlotItem = (item: SelectStates['selected'][0]) => {
+    const cachedOption = findCachedOption(item.value)
+    if (cachedOption) {
+      const optionSource = cachedOption as OptionPublicInstance & {
+        $attrs?: Record<string, unknown>
+        $props?: Record<string, unknown>
+        rawOption?: Record<string, unknown>
+      }
+
+      if (isPlainObject(optionSource.rawOption)) {
+        return optionSource.rawOption
+      }
+
+      if (isPlainObject(optionSource.value)) {
+        return optionSource.value
+      }
+
+      const slotItem = {
+        ...(optionSource.$attrs ?? {}),
+        ...(optionSource.$props ?? cachedOption),
+      } as Record<string, unknown>
+      return Object.keys(slotItem).length ? slotItem : item
+    }
+
+    return isPlainObject(item.value) ? item.value : item
   }
 
   const updateHoveringIndex = () => {
@@ -882,6 +915,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     toggleMenu,
     selectOption,
     getValueKey,
+    getLabelSlotItem,
     navigateOptions,
     dropdownMenuVisible,
     showTagList,

@@ -34,15 +34,15 @@ const getTreeVm = (props = '', options = {}) => {
             data: [
               {
                 id: 1,
-                label: '一级 1',
+                label: 'Level 1 1',
                 children: [
                   {
                     id: 11,
-                    label: '二级 1-1',
+                    label: 'Level 2 1-1',
                     children: [
                       {
                         id: 111,
-                        label: '三级 1-1',
+                        label: 'Level 3 1-1',
                       },
                     ],
                   },
@@ -50,29 +50,29 @@ const getTreeVm = (props = '', options = {}) => {
               },
               {
                 id: 2,
-                label: '一级 2',
+                label: 'Level 1 2',
                 children: [
                   {
                     id: 21,
-                    label: '二级 2-1',
+                    label: 'Level 2 2-1',
                   },
                   {
                     id: 22,
-                    label: '二级 2-2',
+                    label: 'Level 2 2-2',
                   },
                 ],
               },
               {
                 id: 3,
-                label: '一级 3',
+                label: 'Level 1 3',
                 children: [
                   {
                     id: 31,
-                    label: '二级 3-1',
+                    label: 'Level 2 3-1',
                   },
                   {
                     id: 32,
-                    label: '二级 3-2',
+                    label: 'Level 2 3-2',
                   },
                 ],
               },
@@ -109,15 +109,15 @@ const getDisableTreeVm = (props = '', options = {}) => {
             data: [
               {
                 id: 1,
-                label: '一级 1',
+                label: 'Level 1 1',
                 children: [
                   {
                     id: 11,
-                    label: '二级 1-1',
+                    label: 'Level 2 1-1',
                     children: [
                       {
                         id: 111,
-                        label: '三级 1-1',
+                        label: 'Level 3 1-1',
                         disabled: true,
                       },
                     ],
@@ -126,29 +126,29 @@ const getDisableTreeVm = (props = '', options = {}) => {
               },
               {
                 id: 2,
-                label: '一级 2',
+                label: 'Level 1 2',
                 children: [
                   {
                     id: 21,
-                    label: '二级 2-1',
+                    label: 'Level 2 2-1',
                   },
                   {
                     id: 22,
-                    label: '二级 2-2',
+                    label: 'Level 2 2-2',
                   },
                 ],
               },
               {
                 id: 3,
-                label: '一级 3',
+                label: 'Level 1 3',
                 children: [
                   {
                     id: 31,
-                    label: '二级 3-1',
+                    label: 'Level 2 3-1',
                   },
                   {
                     id: 32,
-                    label: '二级 3-2',
+                    label: 'Level 2 3-2',
                   },
                 ],
               },
@@ -178,7 +178,7 @@ describe('Tree.vue', () => {
     expect(wrapper.findAll('.el-tree .el-tree-node').length).toEqual(
       ALL_NODE_COUNT
     )
-    vm.data[1].children = [{ label: '二级 2-1' }] as any
+    vm.data[1].children = [{ label: 'Level 2 2-1' }] as any
     await nextTick()
     expect(wrapper.findAll('.el-tree .el-tree-node').length).toEqual(
       ALL_NODE_COUNT - 1
@@ -203,7 +203,7 @@ describe('Tree.vue', () => {
     await firstNodeContentWrapper.trigger('click')
     await nextTick() // because node click method to expaned is async
 
-    expect(vm.clickedNode.label).toEqual('一级 1')
+    expect(vm.clickedNode.label).toEqual('Level 1 1')
     expect(firstNodeWrapper.classes('is-expanded')).toBe(true)
     expect(firstNodeWrapper.classes('is-current')).toBe(true)
 
@@ -258,7 +258,7 @@ describe('Tree.vue', () => {
       '.is-current .el-tree-node__label'
     )
 
-    expect(currentNodeLabelWrapper.text()).toEqual('二级 1-1')
+    expect(currentNodeLabelWrapper.text()).toEqual('Level 2 1-1')
     expect(wrapper.find('.el-tree--highlight-current').exists()).toBe(true)
   })
 
@@ -273,7 +273,7 @@ describe('Tree.vue', () => {
       '.is-current .el-tree-node__label'
     )
     expect(wrapper.find('.el-tree--highlight-current').exists()).toBe(true)
-    expect(currentNodeLabelWrapper.text()).toEqual('二级 2-2')
+    expect(currentNodeLabelWrapper.text()).toEqual('Level 2 2-2')
     const _data = [...vm.data]
     await nextTick()
     vm.data = [..._data]
@@ -282,7 +282,7 @@ describe('Tree.vue', () => {
       '.is-current .el-tree-node__label'
     )
     expect(currentNodeLabelWrapper2.exists()).toBe(true)
-    expect(currentNodeLabelWrapper2.text()).toEqual('二级 2-2')
+    expect(currentNodeLabelWrapper2.text()).toEqual('Level 2 2-2')
     expect(wrapper.find('.el-tree--highlight-current').exists()).toBe(true)
   })
 
@@ -847,21 +847,23 @@ describe('Tree.vue', () => {
     await nextTick()
     await nextTick()
     await nextTick()
-    expect(wrapper.text()).toBe('一级 1一级 2一级 3')
+    expect(wrapper.text()).toBe('Level 1 1Level 1 2Level 1 3')
     expect(wrapper.findAll('.is-expanded')).toHaveLength(0)
 
     tree.setCurrentKey(11)
     await nextTick()
     await nextTick()
     await nextTick()
-    expect(wrapper.text()).toBe('一级 1二级 1-1一级 2一级 3')
+    expect(wrapper.text()).toBe('Level 1 1Level 2 1-1Level 1 2Level 1 3')
     expect(wrapper.findAll('.is-expanded')).toHaveLength(1)
 
     tree.setCurrentKey(111)
     await nextTick()
     await nextTick()
     await nextTick()
-    expect(wrapper.text()).toBe('一级 1二级 1-1三级 1-1一级 2一级 3')
+    expect(wrapper.text()).toBe(
+      'Level 1 1Level 2 1-1Level 3 1-1Level 1 2Level 1 3'
+    )
     expect(wrapper.findAll('.is-expanded')).toHaveLength(2)
   })
 
@@ -874,7 +876,7 @@ describe('Tree.vue', () => {
 
     tree.setCurrentNode({
       id: 111,
-      label: '三级 1-1',
+      label: 'Level 3 1-1',
     } as Node)
     expect(tree.store.currentNode.data.id).toEqual(111)
 
@@ -891,7 +893,7 @@ describe('Tree.vue', () => {
 
     tree.setCurrentNode({
       id: 111,
-      label: '三级 1-1',
+      label: 'Level 3 1-1',
     } as Node)
     await nextTick()
     expect(wrapper.find('.is-current').exists()).toBeTruthy()
@@ -911,32 +913,34 @@ describe('Tree.vue', () => {
 
     tree.setCurrentNode({
       id: 1,
-      label: '一级 1-1',
+      label: 'Level 1 1-1',
     } as Node)
     await nextTick()
     await nextTick()
     await nextTick()
-    expect(wrapper.text()).toBe('一级 1一级 2一级 3')
+    expect(wrapper.text()).toBe('Level 1 1Level 1 2Level 1 3')
     expect(wrapper.findAll('.is-expanded')).toHaveLength(0)
 
     tree.setCurrentNode({
       id: 11,
-      label: '二级 1-1',
+      label: 'Level 2 1-1',
     } as Node)
     await nextTick()
     await nextTick()
     await nextTick()
-    expect(wrapper.text()).toBe('一级 1二级 1-1一级 2一级 3')
+    expect(wrapper.text()).toBe('Level 1 1Level 2 1-1Level 1 2Level 1 3')
     expect(wrapper.findAll('.is-expanded')).toHaveLength(1)
 
     tree.setCurrentNode({
       id: 111,
-      label: '三级 1-1',
+      label: 'Level 3 1-1',
     } as Node)
     await nextTick()
     await nextTick()
     await nextTick()
-    expect(wrapper.text()).toBe('一级 1二级 1-1三级 1-1一级 2一级 3')
+    expect(wrapper.text()).toBe(
+      'Level 1 1Level 2 1-1Level 3 1-1Level 1 2Level 1 3'
+    )
     expect(wrapper.findAll('.is-expanded')).toHaveLength(2)
   })
 
@@ -1080,7 +1084,7 @@ describe('Tree.vue', () => {
 
     const buttonWrapper = firstNodeWrapper.find('.custom-content button')
     expect(buttonWrapper.exists()).toBe(true)
-    expect(buttonWrapper.text()).toEqual('一级 1')
+    expect(buttonWrapper.text()).toEqual('Level 1 1')
   })
 
   test('custom-node-class', async () => {
@@ -1092,7 +1096,7 @@ describe('Tree.vue', () => {
       '.is-test .el-tree-node__label'
     )
 
-    expect(currentNodeLabelWrapper.text()).toEqual('二级 1-1')
+    expect(currentNodeLabelWrapper.text()).toEqual('Level 2 1-1')
   })
 
   test('scoped slot', async () => {
@@ -1120,7 +1124,7 @@ describe('Tree.vue', () => {
     const spanWrapper = firstNodeWrapper.find('span')
     const buttonWrapper = firstNodeWrapper.find('button')
     expect(spanWrapper.exists()).toBe(true)
-    expect(spanWrapper.text()).toEqual('一级 1')
+    expect(spanWrapper.text()).toEqual('Level 1 1')
     expect(buttonWrapper.exists()).toBe(true)
   })
 
@@ -1372,7 +1376,7 @@ describe('Tree.vue', () => {
     tree.updateKeyChildren(1, [
       {
         id: 111,
-        label: '三级 1-1',
+        label: 'Level 3 1-1',
       },
     ])
 
@@ -1383,7 +1387,7 @@ describe('Tree.vue', () => {
 
     expect(tree.store.nodesMap['11']).toEqual(undefined)
     expect(tree.store.nodesMap['1'].childNodes[0].data.id).toEqual(111)
-    expect(nodeLabelWrapper.text()).toEqual('三级 1-1')
+    expect(nodeLabelWrapper.text()).toEqual('Level 3 1-1')
   })
 
   test('update multi tree data', async () => {
@@ -1396,7 +1400,7 @@ describe('Tree.vue', () => {
       `,
     })
 
-    const nodeData = { label: '新增 1', id: 4, children: [] }
+    const nodeData = { label: 'Added 1', id: 4, children: [] }
     vm.data.push(nodeData)
     vm.data = [...vm.data]
 
@@ -1499,12 +1503,12 @@ describe('Tree.vue', () => {
     const fromElement = wrapper.find('div[data-key="1"]')
     await fromElement.trigger('click')
 
-    expect(fromElement.classes('is-expanded')).toBe(false) // 判断是否已折叠
+    expect(fromElement.classes('is-expanded')).toBe(false) // check whether it is collapsed
 
     await nextTick()
     defineGetter(targetElement, 'focus', handleFocus)
     ;(tree.vm as InstanceType<typeof Tree>).setCurrentKey(1)
-    // 模拟按下下箭头键
+    // simulate pressing the ArrowDown key
     fromElement.element.dispatchEvent(
       new KeyboardEvent('keydown', {
         code: 'ArrowDown',
@@ -1518,7 +1522,7 @@ describe('Tree.vue', () => {
 
     flag = false
     defineGetter(fromElement.element, 'focus', handleFocus)
-    // 模拟按下上箭头键
+    // simulate pressing the ArrowUp key
     targetElement.dispatchEvent(
       new KeyboardEvent('keydown', {
         code: 'ArrowUp',
@@ -1563,7 +1567,7 @@ describe('Tree.vue', () => {
     for (let i = 0; i < len; i++) {
       if (visibleNodes[i + 1]) {
         defineGetter(visibleNodes[i + 1].element, 'focus', handleFocus)
-        // 模拟按下下箭头键
+        // simulate pressing the ArrowDown key
         visibleNodes[i].element.dispatchEvent(
           new KeyboardEvent('keydown', {
             code: 'ArrowDown',
@@ -1589,15 +1593,15 @@ describe('Tree.vue', () => {
           data: [
             {
               id: 1,
-              label: '一级 1',
+              label: 'Level 1 1',
               children: [
                 {
                   id: 11,
-                  label: '二级 1-1',
+                  label: 'Level 2 1-1',
                   children: [
                     {
                       id: 111,
-                      label: '三级 1-1',
+                      label: 'Level 3 1-1',
                     },
                   ],
                 },
@@ -1605,35 +1609,35 @@ describe('Tree.vue', () => {
             },
             {
               id: 2,
-              label: '一级 2',
+              label: 'Level 1 2',
               children: [
                 {
                   id: 21,
-                  label: '二级 2-1',
+                  label: 'Level 2 2-1',
                   children: [
                     {
                       id: 211,
-                      label: '三级 2-1-1',
+                      label: 'Level 3 2-1-1',
                     },
                   ],
                 },
                 {
                   id: 22,
-                  label: '二级 2-2',
+                  label: 'Level 2 2-2',
                 },
               ],
             },
             {
               id: 3,
-              label: '一级 3',
+              label: 'Level 1 3',
               children: [
                 {
                   id: 31,
-                  label: '二级 3-1',
+                  label: 'Level 2 3-1',
                 },
                 {
                   id: 32,
-                  label: '二级 3-2',
+                  label: 'Level 2 3-2',
                 },
               ],
             },
@@ -1650,7 +1654,7 @@ describe('Tree.vue', () => {
     const fromElement = wrapper.find('div[data-key="2"]')
     await fromElement.trigger('click')
 
-    expect(fromElement.classes('is-expanded')).toBe(true) // 判断是否已展开
+    expect(fromElement.classes('is-expanded')).toBe(true) // check whether it is expanded
 
     const treeWrapper = wrapper.findComponent(Tree)
 
@@ -1667,7 +1671,7 @@ describe('Tree.vue', () => {
     for (let i = 0; i < len; i++) {
       if (visibleNodes[i + 1]) {
         defineGetter(visibleNodes[i + 1].element, 'focus', handleFocus)
-        // 模拟按下下箭头键
+        // simulate pressing the ArrowDown key
         visibleNodes[i].element.dispatchEvent(
           new KeyboardEvent('keydown', {
             code: 'ArrowDown',
@@ -1697,15 +1701,15 @@ describe('Tree.vue', () => {
           data: [
             {
               id: 1,
-              label: '一级 1',
+              label: 'Level 1 1',
               children: [
                 {
                   id: 11,
-                  label: '二级 1-1',
+                  label: 'Level 2 1-1',
                   children: [
                     {
                       id: 111,
-                      label: '三级 1-1',
+                      label: 'Level 3 1-1',
                       disabled: true,
                     },
                   ],
@@ -1714,30 +1718,30 @@ describe('Tree.vue', () => {
             },
             {
               id: 2,
-              label: '一级 2',
+              label: 'Level 1 2',
               disabled: true,
               children: [
                 {
                   id: 21,
-                  label: '二级 2-1',
+                  label: 'Level 2 2-1',
                 },
                 {
                   id: 22,
-                  label: '二级 2-2',
+                  label: 'Level 2 2-2',
                 },
               ],
             },
             {
               id: 3,
-              label: '一级 3',
+              label: 'Level 1 3',
               children: [
                 {
                   id: 31,
-                  label: '二级 3-1',
+                  label: 'Level 2 3-1',
                 },
                 {
                   id: 32,
-                  label: '二级 3-2',
+                  label: 'Level 2 3-2',
                 },
               ],
             },
@@ -1788,15 +1792,15 @@ describe('Tree.vue', () => {
           data: [
             {
               id: 1,
-              l: '一级 1',
+              l: 'Level 1 1',
               c: [
                 {
                   id: 11,
-                  l: '二级 1-1',
+                  l: 'Level 2 1-1',
                   c: [
                     {
                       id: 111,
-                      l: '三级 1-1',
+                      l: 'Level 3 1-1',
                     },
                   ],
                 },
@@ -1804,29 +1808,29 @@ describe('Tree.vue', () => {
             },
             {
               id: 2,
-              l: '一级 2',
+              l: 'Level 1 2',
               c: [
                 {
                   id: 21,
-                  l: '二级 2-1',
+                  l: 'Level 2 2-1',
                 },
                 {
                   id: 22,
-                  l: '二级 2-2',
+                  l: 'Level 2 2-2',
                 },
               ],
             },
             {
               id: 3,
-              l: '一级 3',
+              l: 'Level 1 3',
               c: [
                 {
                   id: 31,
-                  l: '二级 3-1',
+                  l: 'Level 2 3-1',
                 },
                 {
                   id: 32,
-                  l: '二级 3-2',
+                  l: 'Level 2 3-2',
                 },
               ],
             },
@@ -1850,8 +1854,8 @@ describe('Tree.vue', () => {
     const button = wrapper.findComponent({ name: 'ElButton' })
     const firstNode = wrapper.find('.el-tree-node')
 
-    expect(tree.vm.getNode(1).data.l).toEqual('一级 1')
-    expect(tree.vm.getNode(1).data.c[0].l).toEqual('二级 1-1')
+    expect(tree.vm.getNode(1).data.l).toEqual('Level 1 1')
+    expect(tree.vm.getNode(1).data.c[0].l).toEqual('Level 2 1-1')
 
     firstNode.trigger('click')
     await nextTick()

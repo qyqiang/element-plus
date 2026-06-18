@@ -851,7 +851,7 @@ describe('DatePicker', () => {
         ref="input">
         <template #default="{ text }">
           <div class="el-date-table-cell">
-            <div class="el-date-table-cell__text">{{ text }}期</div>
+            <div class="el-date-table-cell__text">{{ text }} period</div>
           </div>
         </template>
       </el-date-picker>`,
@@ -873,7 +873,7 @@ describe('DatePicker', () => {
     input.trigger('focus')
     await nextTick()
     const el = document.querySelector('td.current .el-date-table-cell')
-    expect(el.textContent.includes('期')).toBeTruthy()
+    expect(el.textContent.includes(' period')).toBeTruthy()
   })
 
   it('custom content comment for type is month', async () => {

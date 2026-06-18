@@ -186,6 +186,7 @@ export default defineComponent({
       ns,
       id,
       containerKls,
+      rawOption: props.rawOption,
       currentLabel,
       itemSelected,
       isDisabled,

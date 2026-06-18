@@ -21,7 +21,7 @@ describe('Input.vue', () => {
       <Input
         minlength={3}
         maxlength={5}
-        placeholder="请输入内容"
+        placeholder="Please input"
         onFocus={handleFocus}
         modelValue={input.value}
       />
@@ -85,9 +85,9 @@ describe('Input.vue', () => {
       expect(nativeInput.value).toMatchInlineSnapshot(`"1👌3😄"`)
       expect(elCount.text()).toMatchInlineSnapshot(`"6 / 4"`)
 
-      inputVal.value = '哈哈1👌3😄'
+      inputVal.value = 'haha1👌3😄'
       await nextTick()
-      expect(nativeInput.value).toMatchInlineSnapshot(`"哈哈1👌3😄"`)
+      expect(nativeInput.value).toMatchInlineSnapshot(`"haha1👌3😄"`)
       expect(elCount.text()).toMatchInlineSnapshot(`"8 / 4"`)
       expect(Array.from(vm.$el.classList)).toMatchInlineSnapshot(`
         [
@@ -99,7 +99,7 @@ describe('Input.vue', () => {
     })
 
     test('textarea should minimize value between emoji length and maxLength', async () => {
-      const inputVal = ref('啊好😄')
+      const inputVal = ref('hello😄')
       const wrapper = mount(() => (
         <Input
           type="textarea"
@@ -111,15 +111,15 @@ describe('Input.vue', () => {
       const vm = wrapper.vm
       const inputElm = wrapper.find('textarea')
       const nativeInput = inputElm.element
-      expect(nativeInput.value).toMatchInlineSnapshot(`"啊好😄"`)
+      expect(nativeInput.value).toMatchInlineSnapshot(`"hello😄"`)
 
       const elCount = wrapper.find('.el-input__count')
       expect(elCount.exists()).toBe(true)
       expect(elCount.text()).toMatchInlineSnapshot(`"4 / 4"`)
 
-      inputVal.value = '哈哈1👌3😄'
+      inputVal.value = 'haha1👌3😄'
       await nextTick()
-      expect(nativeInput.value).toMatchInlineSnapshot(`"哈哈1👌3😄"`)
+      expect(nativeInput.value).toMatchInlineSnapshot(`"haha1👌3😄"`)
       expect(elCount.text()).toMatchInlineSnapshot(`"8 / 4"`)
       expect(Array.from(vm.$el.classList)).toMatchInlineSnapshot(`
         [
@@ -358,7 +358,7 @@ describe('Input.vue', () => {
       const content = ref('')
       const wrapper = mount(() => (
         <Input
-          placeholder="请输入内容"
+          placeholder="Please input"
           modelValue={content.value}
           onFocus={handleFocus}
         />
@@ -374,7 +374,7 @@ describe('Input.vue', () => {
       const content = ref('')
       const wrapper = mount(() => (
         <Input
-          placeholder="请输入内容"
+          placeholder="Please input"
           modelValue={content.value}
           onBlur={handleBlur}
         />
@@ -391,7 +391,7 @@ describe('Input.vue', () => {
       const wrapper = mount(() => (
         <Input
           type="textarea"
-          placeholder="请输入内容"
+          placeholder="Please input"
           modelValue={content.value}
           onFocus={handleFocus}
         />
@@ -408,7 +408,7 @@ describe('Input.vue', () => {
       const wrapper = mount(() => (
         <Input
           type="textarea"
-          placeholder="请输入内容"
+          placeholder="Please input"
           modelValue={content.value}
           onBlur={handleBlur}
         />
@@ -431,7 +431,7 @@ describe('Input.vue', () => {
       // NOTE: should be same as native's change behavior
       const wrapper = mount(() => (
         <Input
-          placeholder="请输入内容"
+          placeholder="Please input"
           modelValue={content.value}
           onChange={handleChange}
         />
@@ -460,7 +460,7 @@ describe('Input.vue', () => {
 
       const wrapper = mount(() => (
         <Input
-          placeholder="请输入内容"
+          placeholder="Please input"
           clearable
           v-model={content.value}
           onClear={handleClear}
@@ -485,7 +485,7 @@ describe('Input.vue', () => {
       const content = ref('a')
       const wrapper = mount(() => (
         <Input
-          placeholder="请输入内容"
+          placeholder="Please input"
           clearable
           modelValue={content.value}
           onInput={handleInput}
@@ -522,9 +522,9 @@ describe('Input.vue', () => {
   test('input-style', async () => {
     const wrapper = mount(() => (
       <>
-        <Input placeholder="请输入内容" input-style={{ color: 'red' }} />
+        <Input placeholder="Please input" input-style={{ color: 'red' }} />
         <Input
-          placeholder="请输入内容"
+          placeholder="Please input"
           input-style={{ color: 'red' }}
           type="textarea"
         />
@@ -763,7 +763,7 @@ describe('Input.vue', () => {
   test('textarea-show-word-limit-outside-position', async () => {
     const wrapper = mount(() => (
       <Input
-        placeholder="请输入内容"
+        placeholder="Please input"
         showWordLimit
         wordLimitPosition="outside"
         maxlength={30}
@@ -780,7 +780,7 @@ describe('Input.vue', () => {
   test('input-show-word-limit-outside-position', async () => {
     const wrapper = mount(() => (
       <Input
-        placeholder="请输入内容"
+        placeholder="Please input"
         showWordLimit
         wordLimitPosition="outside"
         maxlength={30}

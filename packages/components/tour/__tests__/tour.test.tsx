@@ -176,11 +176,11 @@ describe('Tour.vue', () => {
               title="second"
               description="cover description."
               prevButtonProps={{
-                children: '上一步',
+                children: 'Previous',
                 class: 'prev-btn',
               }}
               nextButtonProps={{
-                children: '下一步',
+                children: 'Next',
                 class: 'next-btn',
               }}
             />
@@ -189,8 +189,8 @@ describe('Tour.vue', () => {
       },
     })
 
-    expect(document.querySelector('.prev-btn span')?.innerHTML).toBe('上一步')
-    expect(document.querySelector('.next-btn span')?.innerHTML).toBe('下一步')
+    expect(document.querySelector('.prev-btn span')?.innerHTML).toBe('Previous')
+    expect(document.querySelector('.next-btn span')?.innerHTML).toBe('Next')
   })
 
   test('close-on-press-escape', async () => {

@@ -39,8 +39,8 @@ describe('MessageBox', () => {
   test('create and close', async () => {
     MessageBox({
       type: 'success',
-      title: '消息',
-      message: '这是一段内容',
+      title: 'Message',
+      message: 'This is a message',
       customStyle: {
         width: '100px',
       },
@@ -51,11 +51,11 @@ describe('MessageBox', () => {
     await rAF()
     expect(
       msgbox.querySelector('.el-message-box__title span').textContent
-    ).toEqual('消息')
+    ).toEqual('Message')
     expect(
       msgbox.querySelector('.el-message-box__message').querySelector('p')
         .textContent
-    ).toEqual('这是一段内容')
+    ).toEqual('This is a message')
     /** custom inline style */
     expect(
       (msgbox.querySelector('.el-message-box') as HTMLElement).style.width
@@ -66,7 +66,7 @@ describe('MessageBox', () => {
   })
 
   test('invoke with strings', () => {
-    MessageBox({ title: '消息', message: '这是一段内容' })
+    MessageBox({ title: 'Message', message: 'This is a message' })
     const msgbox = document.querySelector(selector)
     expect(msgbox).toBeDefined()
   })
@@ -75,7 +75,7 @@ describe('MessageBox', () => {
     MessageBox({
       type: 'warning',
       icon: QuestionFilled,
-      message: '这是一段内容',
+      message: 'This is a message',
     })
     await rAF()
     const icon = document.querySelector('.el-message-box__status')
@@ -101,8 +101,8 @@ describe('MessageBox', () => {
     let msgAction = ''
     const invoker = () => {
       MessageBox({
-        title: '消息',
-        message: '这是一段内容',
+        title: 'Message',
+        message: 'This is a message',
         distinguishCancelAndClose: true,
         callback: (action) => {
           msgAction = action
@@ -122,8 +122,8 @@ describe('MessageBox', () => {
   })
 
   test('alert', async () => {
-    MessageBox.alert('这是一段内容', {
-      title: '标题名称',
+    MessageBox.alert('This is a message', {
+      title: 'Title',
       type: 'warning',
     })
     await rAF()
@@ -135,8 +135,8 @@ describe('MessageBox', () => {
   })
 
   test('confirm', async () => {
-    MessageBox.confirm('这是一段内容', {
-      title: '标题名称',
+    MessageBox.confirm('This is a message', {
+      title: 'Title',
       type: 'warning',
     })
     await rAF()
@@ -150,9 +150,9 @@ describe('MessageBox', () => {
   })
 
   test('autofocus', async () => {
-    MessageBox.alert('这是一段内容', {
+    MessageBox.alert('This is a message', {
       autofocus: false,
-      title: '标题名称',
+      title: 'Title',
     })
     await rAF()
     const btnElm = document.querySelector(
@@ -163,8 +163,8 @@ describe('MessageBox', () => {
   })
 
   test('prompt', async () => {
-    MessageBox.prompt('这是一段内容', {
-      title: '标题名称',
+    MessageBox.prompt('This is a message', {
+      title: 'Title',
       inputPattern: /test/,
       inputErrorMessage: 'validation failed',
     })
@@ -180,9 +180,9 @@ describe('MessageBox', () => {
   })
 
   test('prompt: focus on textarea', async () => {
-    MessageBox.prompt('这是一段内容', {
+    MessageBox.prompt('This is a message', {
       inputType: 'textarea',
-      title: '标题名称',
+      title: 'Title',
     })
     await rAF()
     const textareaElm = document
@@ -195,8 +195,8 @@ describe('MessageBox', () => {
   test('callback', async () => {
     let msgAction = ''
     MessageBox({
-      title: '消息',
-      message: '这是一段内容',
+      title: 'Message',
+      message: 'This is a message',
       callback: (action) => {
         msgAction = action
       },
@@ -216,8 +216,8 @@ describe('MessageBox', () => {
       callback: (action) => {
         msgAction = action
       },
-      title: '消息',
-      message: '这是一段内容',
+      title: 'Message',
+      message: 'This is a message',
       beforeClose: (_, __, done) => {
         done()
       },
@@ -235,11 +235,12 @@ describe('MessageBox', () => {
   describe('promise', () => {
     test('resolve', async () => {
       let msgAction = ''
-      MessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示').then(
-        (action) => {
-          msgAction = action
-        }
-      )
+      MessageBox.confirm(
+        'This operation will permanently delete the file. Continue?',
+        'Notice'
+      ).then((action) => {
+        msgAction = action
+      })
       await rAF()
       const btn = document.querySelector(
         '.el-message-box__btns .el-button--primary'
@@ -251,11 +252,12 @@ describe('MessageBox', () => {
 
     test('reject', async () => {
       let msgAction = ''
-      MessageBox.confirm('此操作将永久删除该文件, 是否继续?', '提示').catch(
-        (action) => {
-          msgAction = action
-        }
-      )
+      MessageBox.confirm(
+        'This operation will permanently delete the file. Continue?',
+        'Notice'
+      ).catch((action) => {
+        msgAction = action
+      })
       await rAF()
       const btn = document.querySelector('.el-message-box__btns .el-button')
       ;(btn as HTMLButtonElement).click()
@@ -332,7 +334,7 @@ describe('MessageBox', () => {
       MessageBox({
         type: 'success',
         title,
-        message: '这是一段内容',
+        message: 'This is a message',
       })
       await rAF()
       const msgbox: HTMLElement = document.querySelector(selector)!
@@ -344,7 +346,7 @@ describe('MessageBox', () => {
     test('aria-describedby should point to modal body when not prompt', async () => {
       MessageBox({
         type: 'success',
-        message: '这是一段内容',
+        message: 'This is a message',
       })
       await rAF()
       const msgbox: HTMLElement = document.querySelector(selector)!
@@ -358,7 +360,7 @@ describe('MessageBox', () => {
     })
 
     test('aria-describedby should not be used when prompt; label attached to input', async () => {
-      const message = '这是一段内容'
+      const message = 'This is a message'
       MessageBox.prompt(message, {
         type: 'success',
       })
@@ -374,7 +376,7 @@ describe('MessageBox', () => {
     })
 
     test('prompt inputValidator error message', async () => {
-      const message = '这是一段内容'
+      const message = 'This is a message'
 
       const inputValidator = vi.fn(() => {
         return 'error message'

@@ -49,10 +49,10 @@ function useCurrent<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
 
   const updateCurrentRowData = () => {
     const rowKey = watcherData.rowKey.value
-    // data 为 null 时，解构时的默认值会被忽略
+    // when data is null, destructuring defaults are ignored
     const data = watcherData.data.value || []
     const oldCurrentRow = currentRow.value
-    // 当 currentRow 不在 data 中时尝试更新数据
+    // try to refresh state when currentRow no longer exists in data
     if (oldCurrentRow && !data.includes(oldCurrentRow)) {
       if (rowKey) {
         const currentRowKey = getRowIdentity(oldCurrentRow, rowKey)
@@ -64,7 +64,7 @@ function useCurrent<T extends DefaultRow>(watcherData: WatcherPropsData<T>) {
         instance.emit('current-change', null, oldCurrentRow)
       }
     } else if (_currentRowKey.value) {
-      // 把初始时下设置的 rowKey 转化成 rowData
+      // convert the initially assigned rowKey into rowData
       setCurrentRowByKey(_currentRowKey.value)
       restoreCurrentRowKey()
     }

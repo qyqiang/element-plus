@@ -42,7 +42,7 @@ export const getDefaultClassName = (type: string) => {
   return defaultClassNames[type as keyof typeof defaultClassNames] || ''
 }
 
-// 这些选项不应该被覆盖
+// these options should not be overridden
 export const cellForced = {
   selection: {
     renderHeader<T extends DefaultRow>({

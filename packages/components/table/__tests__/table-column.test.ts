@@ -57,14 +57,14 @@ describe('table column', () => {
     }
 
     it('label', async () => {
-      const wrapper = createTable('label="啊哈哈哈"', 'label="啊啦啦啦"')
+      const wrapper = createTable('label="Ahahaha"', 'label="Alalala"')
       await doubleWait()
       const ths = wrapper
         .findAll('thead th')
         .map((node) => node.text())
         .filter((o) => o)
 
-      expect(ths).toEqual(['啊哈哈哈', '啊啦啦啦'])
+      expect(ths).toEqual(['Ahahaha', 'Alalala'])
       wrapper.unmount()
     })
 
@@ -1184,13 +1184,13 @@ describe('table column', () => {
         },
         setup() {
           const column = [
-            { label: '日期', prop: 'date' },
+            { label: 'Date', prop: 'date' },
             {
-              label: '用户',
+              label: 'User',
               prop: 'user',
               children: [
-                { label: '姓名', prop: 'name' },
-                { label: '地址', prop: 'address' },
+                { label: 'Name', prop: 'name' },
+                { label: 'Address', prop: 'address' },
               ],
             },
           ]
@@ -1224,8 +1224,10 @@ describe('table column', () => {
       }
       const wrapper = mount(App)
       await doubleWait()
-      expect(wrapper.find('.el-table__header-wrapper').text()).toMatch('姓名')
-      expect(wrapper.find('.el-table__header-wrapper').text()).toMatch('地址')
+      expect(wrapper.find('.el-table__header-wrapper').text()).toMatch('Name')
+      expect(wrapper.find('.el-table__header-wrapper').text()).toMatch(
+        'Address'
+      )
     })
 
     it('should not rendered other components in hidden-columns', async () => {

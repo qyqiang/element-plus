@@ -125,14 +125,14 @@ describe('Form', () => {
             labelWidth="150px"
             model={form}
           >
-            <FormItem label="名称">
+            <FormItem label="Name">
               <Input v-model={form.name} />
             </FormItem>
-            <FormItem label="活动区域" label-width="auto">
+            <FormItem label="Activity Region" label-width="auto">
               <Input v-model={form.region} />
             </FormItem>
             <FormItem
-              label="活动形式(我是一个很长很长很长很长的label)"
+              label="Activity Type (this is a very very very very long label)"
               label-width="auto"
             >
               <Input v-model={form.type} />

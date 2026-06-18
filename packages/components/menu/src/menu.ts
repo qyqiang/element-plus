@@ -245,7 +245,6 @@ export default defineComponent({
 
       const indexPath = activeItem.indexPath
 
-      // 展开该菜单项的路径上所有子菜单
       // expand all subMenus of the menu item
       indexPath.forEach((index) => {
         const subMenu = subMenus.value[index]
@@ -255,7 +254,6 @@ export default defineComponent({
 
     const openMenu: MenuProvider['openMenu'] = (index, indexPath) => {
       if (openedMenus.value.includes(index)) return
-      // 将不在该菜单路径下的其余菜单收起
       // collapse all menu that are not under current menu item
       if (props.uniqueOpened) {
         openedMenus.value = openedMenus.value.filter((index: string) =>

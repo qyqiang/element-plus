@@ -199,7 +199,7 @@ select/empty-values
 
 You can customize label.
 
-:::demo
+:::demo Use `label` slot to customize the selected display. The slot receives `label`, `value`, and `index`. It also receives `item`, which is the raw option object when you use object values, the `options` prop, or pass `raw-option` on `el-option`.
 
 select/custom-label
 
@@ -309,7 +309,7 @@ select/custom-label
 | suffixAfterIcon  | custom content displayed after the default suffix icon                                          | —                                                                                                                     |
 | tag ^(2.5.0)     | content as Select tag, subTags `data`, `selectDisabled` and `deleteTag` introduced in ^(2.10.3) | ^[object]`{ data: OptionBasic[], selectDisabled: boolean, deleteTag: (event: MouseEvent, tag: OptionBasic) => void }` |
 | loading ^(2.5.2) | content as Select loading                                                                       | —                                                                                                                     |
-| label ^(2.7.4)   | content as Select label. `index` introduced in ^(2.11.2)                                        | ^[object]`{ index: number, label: string \| any, value: string \| any }`                                              |
+| label ^(2.7.4)   | content as Select label. `index` introduced in ^(2.11.2), `item` introduced in ^(2.11.9)        | ^[object]`{ index: number, label: string \| any, value: string \| any, item?: Record<string, any> }`                  |
 
 ### Select Exposes
 
@@ -338,13 +338,14 @@ select/custom-label
 
 ### Option Attributes
 
-| Name      | Description                                 | Type                                                                                     | Default |
-| --------- | ------------------------------------------- | ---------------------------------------------------------------------------------------- | ------- |
-| value     | value of option                             | ^[string] / ^[number] / ^[boolean] / ^[object]                                           | —       |
-| showTip   | option show tip                             | ^[boolean]                                                                               | true    |
-| placement | placement of pop menu                       | ^[enum]`'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end'` | left    |
-| label     | label of option, same as `value` if omitted | ^[string] / ^[number]                                                                    | —       |
-| disabled  | whether option is disabled                  | ^[boolean]                                                                               | false   |
+| Name                 | Description                                                                            | Type                                                                                     | Default |
+| -------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------- |
+| value                | value of option                                                                        | ^[string] / ^[number] / ^[boolean] / ^[object]                                           | —       |
+| showTip              | option show tip                                                                        | ^[boolean]                                                                               | true    |
+| placement            | placement of pop menu                                                                  | ^[enum]`'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end'` | left    |
+| label                | label of option, same as `value` if omitted                                            | ^[string] / ^[number]                                                                    | —       |
+| disabled             | whether option is disabled                                                             | ^[boolean]                                                                               | false   |
+| raw-option ^(2.11.9) | raw option object exposed to slots such as `label`; useful when `value` is a primitive | ^[object]`Record<string, any>`                                                           | —       |
 
 ### Option Slots
 

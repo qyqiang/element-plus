@@ -113,7 +113,7 @@ describe('config-provider', () => {
       const wrapper = mount(() => (
         <>
           <ConfigProvider button={config}>
-            <ElButton>中文</ElButton>
+            <ElButton>Chinese</ElButton>
           </ConfigProvider>
           <button
             class="toggle"
@@ -144,7 +144,7 @@ describe('config-provider', () => {
 
       const wrapper = mount(() => (
         <ConfigProvider button={config}>
-          <ElButton>中文</ElButton>
+          <ElButton>Chinese</ElButton>
         </ConfigProvider>
       ))
       await nextTick()
@@ -187,7 +187,7 @@ describe('config-provider', () => {
 
       const wrapper = mount(() => (
         <ConfigProvider link={config}>
-          <ElLink>中文</ElLink>
+          <ElLink>Chinese</ElLink>
         </ConfigProvider>
       ))
       await nextTick()

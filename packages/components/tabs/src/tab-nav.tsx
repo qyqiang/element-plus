@@ -279,8 +279,8 @@ const TabNav = defineComponent({
         nextIndex = 0
       }
 
-      tabList[nextIndex].focus({ preventScroll: true }) // 改变焦点元素
-      tabList[nextIndex].click() // 选中下一个tab
+      tabList[nextIndex].focus({ preventScroll: true }) // move focus
+      tabList[nextIndex].click() // activate the next tab
       setFocus()
     }
 

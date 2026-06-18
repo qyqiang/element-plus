@@ -209,7 +209,7 @@ describe('Descriptions.vue', () => {
     const wrapper = mount(() => (
       <ElDescriptions border>
         {Array.from({ length: 3 }).map(() => (
-          <ElDescriptionsItem label="测试标签" labelWidth="150px" />
+          <ElDescriptionsItem label="Test Label" labelWidth="150px" />
         ))}
       </ElDescriptions>
     ))
@@ -223,7 +223,7 @@ describe('Descriptions.vue', () => {
     const wrapper = mount(() => (
       <ElDescriptions label-width="150px" border>
         {Array.from({ length: 3 }).map(() => (
-          <ElDescriptionsItem label="测试标签" />
+          <ElDescriptionsItem label="Test Label" />
         ))}
       </ElDescriptions>
     ))
@@ -236,9 +236,9 @@ describe('Descriptions.vue', () => {
   test('should render labelWidth prop of Descriptions and DescriptionsItem with higher priority', () => {
     const wrapper = mount(() => (
       <ElDescriptions label-width="100px" border>
-        <ElDescriptionsItem label="测试标签" />
+        <ElDescriptionsItem label="Test Label" />
         {Array.from({ length: 2 }).map(() => (
-          <ElDescriptionsItem label="测试标签" label-width="150px" />
+          <ElDescriptionsItem label="Test Label" label-width="150px" />
         ))}
       </ElDescriptions>
     ))
@@ -255,7 +255,7 @@ describe('Descriptions.vue', () => {
     const wrapper = mount(() => (
       <ElDescriptions>
         {Array.from({ length: 3 }).map(() => (
-          <ElDescriptionsItem label="测试标签" labelWidth="150px" />
+          <ElDescriptionsItem label="Test Label" labelWidth="150px" />
         ))}
       </ElDescriptions>
     ))
@@ -269,7 +269,7 @@ describe('Descriptions.vue', () => {
     const wrapper = mount(() => (
       <ElDescriptions label-width="150px">
         {Array.from({ length: 3 }).map(() => (
-          <ElDescriptionsItem label="测试标签" />
+          <ElDescriptionsItem label="Test Label" />
         ))}
       </ElDescriptions>
     ))
@@ -282,9 +282,9 @@ describe('Descriptions.vue', () => {
   test('should render labelWidth prop of Descriptions and DescriptionsItem with higher priority with no border', () => {
     const wrapper = mount(() => (
       <ElDescriptions label-width="100px">
-        <ElDescriptionsItem label="测试标签" />
+        <ElDescriptionsItem label="Test Label" />
         {Array.from({ length: 2 }).map(() => (
-          <ElDescriptionsItem label="测试标签" label-width="150px" />
+          <ElDescriptionsItem label="Test Label" label-width="150px" />
         ))}
       </ElDescriptions>
     ))

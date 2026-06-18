@@ -11,7 +11,7 @@ describe('Transfer', () => {
     for (let i = 1; i <= 15; i++) {
       data.push({
         key: i,
-        label: `备选项 ${i}`,
+        label: `Option ${i}`,
         disabled: i % 4 === 0,
       })
     }
@@ -76,7 +76,7 @@ describe('Transfer', () => {
   it('customize', () => {
     const state = reactive({
       value: [2],
-      titles: ['表1', '表2'],
+      titles: ['List 1', 'List 2'],
       format: { noChecked: 'no', hasChecked: 'has' },
     })
     const renderFunc: renderContent = (_h, option) => (
@@ -93,10 +93,10 @@ describe('Transfer', () => {
     ))
 
     const label = wrapper.find('.el-transfer-panel__header .el-checkbox__label')
-    expect(label.text().includes('表1')).toBeTruthy()
+    expect(label.text().includes('List 1')).toBeTruthy()
     expect(
       wrapper.find('.el-transfer-panel__list .el-checkbox__label span').text()
-    ).toBe('1 - 备选项 1')
+    ).toBe('1 - Option 1')
     expect(label.find('span').text()).toBe('no')
   })
 
@@ -129,10 +129,10 @@ describe('Transfer', () => {
         '.el-transfer__buttons + .el-transfer-panel .el-transfer-panel__body .el-checkbox__label span'
       )
       expect(targetItems.map((item) => item.text())).toStrictEqual([
-        '备选项 1',
-        '备选项 2',
-        '备选项 3',
-        '备选项 4',
+        'Option 1',
+        'Option 2',
+        'Option 3',
+        'Option 4',
       ])
     })
 
@@ -154,10 +154,10 @@ describe('Transfer', () => {
         '.el-transfer__buttons + .el-transfer-panel .el-transfer-panel__body .el-checkbox__label span'
       )
       expect(targetItems.map((item) => item.text())).toStrictEqual([
-        '备选项 1',
-        '备选项 4',
-        '备选项 2',
-        '备选项 3',
+        'Option 1',
+        'Option 4',
+        'Option 2',
+        'Option 3',
       ])
     })
 
@@ -179,10 +179,10 @@ describe('Transfer', () => {
         '.el-transfer__buttons + .el-transfer-panel .el-transfer-panel__body .el-checkbox__label span'
       )
       expect(targetItems.map((item) => item.text())).toStrictEqual([
-        '备选项 2',
-        '备选项 3',
-        '备选项 1',
-        '备选项 4',
+        'Option 2',
+        'Option 3',
+        'Option 1',
+        'Option 4',
       ])
     })
   })
@@ -234,21 +234,21 @@ describe('Transfer', () => {
 
       expect(labels.map((l) => l.text())).toMatchInlineSnapshot(`
         [
-          "备选项 1",
-          "备选项 2",
-          "备选项 3",
-          "备选项 4",
-          "备选项 5",
-          "备选项 6",
-          "备选项 7",
-          "备选项 8",
-          "备选项 9",
-          "备选项 10",
-          "备选项 11",
-          "备选项 12",
-          "备选项 13",
-          "备选项 14",
-          "备选项 15",
+          "Option 1",
+          "Option 2",
+          "Option 3",
+          "Option 4",
+          "Option 5",
+          "Option 6",
+          "Option 7",
+          "Option 8",
+          "Option 9",
+          "Option 10",
+          "Option 11",
+          "Option 12",
+          "Option 13",
+          "Option 14",
+          "Option 15",
         ]
       `)
     })
@@ -273,21 +273,21 @@ describe('Transfer', () => {
 
       expect(labels.map((l) => l.text())).toMatchInlineSnapshot(`
         [
-          "备选项 1",
-          "备选项 2",
-          "备选项 3",
-          "备选项 4",
-          "备选项 5",
-          "备选项 6",
-          "备选项 7",
-          "备选项 8",
-          "备选项 9",
-          "备选项 10",
-          "备选项 11",
-          "备选项 12",
-          "备选项 13",
-          "备选项 14",
-          "备选项 15",
+          "Option 1",
+          "Option 2",
+          "Option 3",
+          "Option 4",
+          "Option 5",
+          "Option 6",
+          "Option 7",
+          "Option 8",
+          "Option 9",
+          "Option 10",
+          "Option 11",
+          "Option 12",
+          "Option 13",
+          "Option 14",
+          "Option 15",
         ]
       `)
     })

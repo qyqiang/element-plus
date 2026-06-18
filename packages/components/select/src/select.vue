@@ -104,6 +104,7 @@
                   <span :class="nsSelect.e('tags-text')">
                     <slot
                       name="label"
+                      :item="getLabelSlotItem(item)"
                       :index="item.index"
                       :label="item.currentLabel"
                       :value="item.value"
@@ -165,6 +166,7 @@
                         <span :class="nsSelect.e('tags-text')">
                           <slot
                             name="label"
+                            :item="getLabelSlotItem(item)"
                             :index="item.index"
                             :label="item.currentLabel"
                             :value="item.value"
@@ -242,11 +244,16 @@
             >
               <slot
                 name="label"
+                :item="getLabelSlotItem(getOption(modelValue!))"
                 :index="getOption(modelValue!).index"
                 :label="currentPlaceholder"
                 :value="modelValue"
               >
-                <span>{{ currentPlaceholder }}</span>
+                <div v-if="$slots.itemIcon" class="iconItemWrap">
+                  <slot name="itemIcon"></slot>
+                  <span class="itemPlaceholder">{{ currentPlaceholder }}</span>
+                </div>
+                <span v-else>{{ currentPlaceholder }}</span>
               </slot>
             </div>
           </div>
@@ -545,6 +552,7 @@ export default defineComponent({
       label: getLabel(option),
       value: getValue(option),
       disabled: getDisabled(option),
+      rawOption: option,
     })
 
     const flatTreeSelectData = (data: any[]) => {
@@ -578,6 +586,7 @@ export default defineComponent({
             const treeData = item.props?.data || []
             const flatData = flatTreeSelectData(treeData)
             flatData.forEach((treeItem: any) => {
+              treeItem.rawOption = treeItem
               treeItem.currentLabel =
                 treeItem.label ||
                 (isObject(treeItem.value) ? '' : treeItem.value)

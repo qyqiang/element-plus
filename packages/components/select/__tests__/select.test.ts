@@ -103,28 +103,28 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
   if (!options) {
     options = [
       {
-        value: '选项1',
-        label: '黄金糕',
+        value: 'Option 1',
+        label: 'Golden Cake',
         disabled: false,
       },
       {
-        value: '选项2',
-        label: '双皮奶',
+        value: 'Option 2',
+        label: 'Double Skin Milk',
         disabled: false,
       },
       {
-        value: '选项3',
-        label: '蚵仔煎',
+        value: 'Option 3',
+        label: 'Oyster Omelet',
         disabled: false,
       },
       {
-        value: '选项4',
-        label: '龙须面',
+        value: 'Option 4',
+        label: 'Dragon Beard Noodles',
         disabled: false,
       },
       {
-        value: '选项5',
-        label: '北京烤鸭',
+        value: 'Option 5',
+        label: 'Peking Duck',
         disabled: false,
       },
     ]
@@ -385,20 +385,22 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
-        value: '选项2',
+        value: 'Option 2',
       })
     )
     await nextTick()
 
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('双皮奶')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Double Skin Milk'
+    )
   })
 
   test('the scenario of rendering label when there is a default value and persistent is false', async () => {
@@ -418,20 +420,22 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
-        value: '选项2',
+        value: 'Option 2',
       })
     )
     await nextTick()
 
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('双皮奶')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Double Skin Milk'
+    )
     delete process.env.RUN_TEST_WITH_PERSISTENT
   })
 
@@ -451,28 +455,32 @@ describe('Select', () => {
     `,
       () => ({
         options: [],
-        value: '选项2',
+        value: 'Option 2',
       })
     )
     await nextTick()
     const vm = wrapper.vm as any
     vm.options = [
       {
-        value: '选项1',
-        label: '黄金糕',
+        value: 'Option 1',
+        label: 'Golden Cake',
       },
       {
-        value: '选项2',
-        label: '双皮奶',
+        value: 'Option 2',
+        label: 'Double Skin Milk',
       },
     ]
     await nextTick()
 
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('双皮奶')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Double Skin Milk'
+    )
 
-    vm.value = '选项1'
+    vm.value = 'Option 1'
     await nextTick()
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('黄金糕')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Golden Cake'
+    )
 
     delete process.env.RUN_TEST_WITH_PERSISTENT
   })
@@ -495,12 +503,12 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
         value: [],
@@ -514,7 +522,7 @@ describe('Select', () => {
     const options = getOptions()
     options[0].click()
     await nextTick()
-    expect(selectVm.selectedLabel).toStrictEqual(['黄金糕'])
+    expect(selectVm.selectedLabel).toStrictEqual(['Golden Cake'])
 
     const emptySlot = document.querySelector('.empty-slot')
     expect(emptySlot).toBeNull()
@@ -537,22 +545,22 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
-        value: ['选项2'],
+        value: ['Option 2'],
       })
     )
     await nextTick()
 
     const tags = wrapper.findAll(`.${TAG_NAME}`)
     expect(tags.length).toBe(1)
-    expect(tags[0].text()).toBe('双皮奶')
+    expect(tags[0].text()).toBe('Double Skin Milk')
     delete process.env.RUN_TEST_WITH_PERSISTENT
   })
 
@@ -570,26 +578,26 @@ describe('Select', () => {
     `,
       () => ({
         options: [],
-        value: ['选项2'],
+        value: ['Option 2'],
       })
     )
     await nextTick()
     const vm = wrapper.vm as any
     vm.options = [
       {
-        value: '选项1',
-        label: '黄金糕',
+        value: 'Option 1',
+        label: 'Golden Cake',
       },
       {
-        value: '选项2',
-        label: '双皮奶',
+        value: 'Option 2',
+        label: 'Double Skin Milk',
       },
     ]
     await nextTick()
 
     const tags = wrapper.findAll(`.${TAG_NAME}`)
     expect(tags.length).toBe(1)
-    expect(tags[0].text()).toBe('双皮奶')
+    expect(tags[0].text()).toBe('Double Skin Milk')
   })
 
   test('expose select label', async () => {
@@ -606,10 +614,10 @@ describe('Select', () => {
     `,
       () => ({
         options: [
-          { value: '选项1', label: '黄金糕' },
-          { value: '选项2', label: '双皮奶' },
+          { value: 'Option 1', label: 'Golden Cake' },
+          { value: 'Option 2', label: 'Double Skin Milk' },
         ],
-        value: '选项2',
+        value: 'Option 2',
         multiple: false,
       })
     )
@@ -618,12 +626,12 @@ describe('Select', () => {
     const vm = wrapper.vm as any
     const selectVm = select.vm as any
 
-    expect(selectVm.selectedLabel).toBe('双皮奶')
+    expect(selectVm.selectedLabel).toBe('Double Skin Milk')
 
     const options = getOptions()
     options[0].click()
     await nextTick()
-    expect(selectVm.selectedLabel).toBe('黄金糕')
+    expect(selectVm.selectedLabel).toBe('Golden Cake')
     vm.value = ''
     await nextTick()
     expect(selectVm.selectedLabel).toBe('')
@@ -632,9 +640,12 @@ describe('Select', () => {
     vm.multiple = true
     await nextTick()
     expect(selectVm.selectedLabel).toStrictEqual([])
-    vm.value = ['选项1', '选项2']
+    vm.value = ['Option 1', 'Option 2']
     await nextTick()
-    expect(selectVm.selectedLabel).toStrictEqual(['黄金糕', '双皮奶'])
+    expect(selectVm.selectedLabel).toStrictEqual([
+      'Golden Cake',
+      'Double Skin Milk',
+    ])
   })
 
   test('set default value to object', async () => {
@@ -653,25 +664,27 @@ describe('Select', () => {
         options: [
           {
             value: {
-              value: '选项1',
+              value: 'Option 1',
             },
-            label: '黄金糕',
+            label: 'Golden Cake',
           },
           {
             value: {
-              value: '选项2',
+              value: 'Option 2',
             },
-            label: '双皮奶',
+            label: 'Double Skin Milk',
           },
         ],
         value: {
-          value: '选项2',
+          value: 'Option 2',
         },
       })
     )
     await nextTick()
 
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('双皮奶')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Double Skin Milk'
+    )
   })
 
   test('custom label', async () => {
@@ -690,11 +703,11 @@ describe('Select', () => {
         options: [
           {
             id: 1,
-            name: '黄金糕',
+            name: 'Golden Cake',
           },
           {
             id: 2,
-            name: '双皮奶',
+            name: 'Double Skin Milk',
           },
         ],
         value: 2,
@@ -702,7 +715,9 @@ describe('Select', () => {
     )
     await nextTick()
 
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('双皮奶')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Double Skin Milk'
+    )
   })
 
   test('custom label with object', async () => {
@@ -721,11 +736,11 @@ describe('Select', () => {
         options: [
           {
             id: 1,
-            name: '黄金糕',
+            name: 'Golden Cake',
           },
           {
             id: 2,
-            name: '双皮奶',
+            name: 'Double Skin Milk',
           },
         ],
         value: {
@@ -735,7 +750,9 @@ describe('Select', () => {
     )
     await nextTick()
 
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('双皮奶')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Double Skin Milk'
+    )
   })
 
   test('value bind object with value-key', async () => {
@@ -816,27 +833,29 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
-        value: '选项2',
+        value: 'Option 2',
       })
     )
     const vm = wrapper.vm as any
     vm.options = [
       {
-        value: '选项1',
-        label: '黄金糕',
+        value: 'Option 1',
+        label: 'Golden Cake',
       },
     ]
-    vm.value = '选项1'
+    vm.value = 'Option 1'
     await nextTick()
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('黄金糕')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Golden Cake'
+    )
   })
 
   test('single select', async () => {
@@ -855,24 +874,24 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎',
+            value: 'Option 3',
+            label: 'Oyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
         value: '',
@@ -896,13 +915,17 @@ describe('Select', () => {
     )
     options[2].click()
     await nextTick()
-    expect(vm.value).toBe('选项3')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('蚵仔煎')
+    expect(vm.value).toBe('Option 3')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Oyster Omelet'
+    )
     expect(vm.count).toBe(1)
     options[4].click()
     await nextTick()
-    expect(vm.value).toBe('选项5')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('北京烤鸭')
+    expect(vm.value).toBe('Option 5')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Peking Duck'
+    )
     expect(vm.count).toBe(2)
   })
 
@@ -1050,7 +1073,7 @@ describe('Select', () => {
     expect(vm.states.hoveringIndex).toBe(3)
     vm.selectOption()
     await nextTick()
-    expect((wrapper.vm as any).value).toBe('选项4')
+    expect((wrapper.vm as any).value).toBe('Option 4')
     vm.toggleMenu()
 
     vi.runAllTimers()
@@ -1122,7 +1145,7 @@ describe('Select', () => {
     wrapper = getSelectVm({ multiple: true, multipleLimit: 2 })
     const select = wrapper.findComponent({ name: 'ElSelect' })
     await wrapper.setProps({
-      modelValue: ['选项1', '选项2'],
+      modelValue: ['Option 1', 'Option 2'],
     })
     const selectVm = select.vm as any
     const input = select.find('input')
@@ -1139,7 +1162,7 @@ describe('Select', () => {
     const select = wrapper.findComponent({ name: 'ElSelect' })
     const vm = wrapper.vm as any
     const selectVm = select.vm as any
-    vm.value = '选项1'
+    vm.value = 'Option 1'
     await nextTick()
     selectVm.states.inputHovering = true
     await selectVm.$nextTick()
@@ -1297,12 +1320,12 @@ describe('Select', () => {
   test('allow create async option', async () => {
     const options = [
       {
-        value: '选项1',
-        label: '黄金糕',
+        value: 'Option 1',
+        label: 'Golden Cake',
       },
       {
-        value: '选项2',
-        label: '双皮奶',
+        value: 'Option 2',
+        label: 'Double Skin Milk',
       },
     ]
     wrapper = _mount(
@@ -1322,12 +1345,12 @@ describe('Select', () => {
     `,
       () => ({
         options: [],
-        value: '选项2',
+        value: 'Option 2',
       })
     )
 
     await nextTick()
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('选项2')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('Option 2')
     await wrapper.setData({
       options,
     })
@@ -1339,22 +1362,24 @@ describe('Select', () => {
     await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
     const options = getOptions()
     const vm = wrapper.vm as any
-    vm.value = ['选项1']
+    vm.value = ['Option 1']
     nextTick()
     options[1].click()
     await nextTick()
     options[3].click()
     await nextTick()
-    expect(vm.value.includes('选项2') && vm.value.includes('选项4')).toBe(true)
+    expect(vm.value.includes('Option 2') && vm.value.includes('Option 4')).toBe(
+      true
+    )
     const tagCloseIcons = wrapper.findAll('.el-tag__close')
     await tagCloseIcons[0].trigger('click')
-    expect(vm.value.indexOf('选项1')).toBe(-1)
+    expect(vm.value.indexOf('Option 1')).toBe(-1)
   })
 
   test('multiple select when content overflow', async () => {
     wrapper = _mount(
       `
-      <el-select v-model="selectedList" multiple placeholder="请选择">
+      <el-select v-model="selectedList" multiple placeholder="Please select">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -1362,26 +1387,27 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
+            value: 'Option 1',
             label:
-              '黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕',
+              'Golden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden Cake',
           },
           {
-            value: '选项2',
+            value: 'Option 2',
             label:
-              '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶',
+              'Double Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎',
+            value: 'Option 3',
+            label:
+              'Oyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
         selectedList: [],
@@ -1407,7 +1433,7 @@ describe('Select', () => {
   test('multiple select with collapseTags when content overflow', async () => {
     wrapper = _mount(
       `
-      <el-select v-model="selectedList" multiple collapseTags placeholder="请选择">
+      <el-select v-model="selectedList" multiple collapseTags placeholder="Please select">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -1415,26 +1441,27 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
+            value: 'Option 1',
             label:
-              '黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕黄金糕',
+              'Golden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden CakeGolden Cake',
           },
           {
-            value: '选项2',
+            value: 'Option 2',
             label:
-              '双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶双皮奶',
+              'Double Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin MilkDouble Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎蚵仔煎',
+            value: 'Option 3',
+            label:
+              'Oyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster OmeletOyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
         selectedList: [],
@@ -1463,7 +1490,7 @@ describe('Select', () => {
 
     wrapper = _mount(
       `
-      <el-select v-model="selectedList" multiple collapseTags collapse-tags-tooltip placeholder="请选择">
+      <el-select v-model="selectedList" multiple collapseTags collapse-tags-tooltip placeholder="Please select">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -1471,24 +1498,24 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎',
+            value: 'Option 3',
+            label: 'Oyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
         selectedList: [],
@@ -1515,7 +1542,7 @@ describe('Select', () => {
   test('multiple select with maxCollapseTags', async () => {
     wrapper = _mount(
       `
-      <el-select v-model="selectedList" multiple collapseTags :max-collapse-tags="3" placeholder="请选择">
+      <el-select v-model="selectedList" multiple collapseTags :max-collapse-tags="3" placeholder="Please select">
         <el-option v-for="item in options" :key="item.value" :label="item.label" :value="item.value">
         </el-option>
       </el-select>
@@ -1523,24 +1550,24 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎',
+            value: 'Option 3',
+            label: 'Oyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
         selectedList: [],
@@ -1579,27 +1606,27 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎',
+            value: 'Option 3',
+            label: 'Oyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
-        value: ['选项1', '选项2'],
+        value: ['Option 1', 'Option 2'],
         handleRemoveTag,
       })
     )
@@ -1614,7 +1641,7 @@ describe('Select', () => {
     const input = wrapper.find('input')
     input.trigger('keydown.delete')
     expect(vm.value.length).toBe(0)
-    expect(handleRemoveTag).toHaveBeenLastCalledWith('选项1')
+    expect(handleRemoveTag).toHaveBeenLastCalledWith('Option 1')
   })
 
   test('multiple limit', async () => {
@@ -1624,10 +1651,10 @@ describe('Select', () => {
     const options = getOptions()
     options[1].click()
     await nextTick()
-    expect(vm.value.includes('选项2')).toBe(true)
+    expect(vm.value.includes('Option 2')).toBe(true)
     options[3].click()
     await nextTick()
-    expect(vm.value.indexOf('选项4')).toBe(-1)
+    expect(vm.value.indexOf('Option 4')).toBe(-1)
   })
 
   test('event:focus', async () => {
@@ -1697,11 +1724,11 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
         ],
-        value: '选项1',
+        value: 'Option 1',
         handleFocus,
         handleBlur,
       })
@@ -1723,7 +1750,7 @@ describe('Select', () => {
     const options = getOptions()
     options[0].click()
     await nextTick()
-    expect(vm.value).toBe('选项1')
+    expect(vm.value).toBe('Option 1')
     selectVm.states.inputHovering = true
     await iconClear.trigger('click')
     expect(handleFocus).toHaveBeenCalledTimes(1)
@@ -1786,27 +1813,27 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎',
+            value: 'Option 3',
+            label: 'Oyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
-        value: ['选项1', '选项2'],
+        value: ['Option 1', 'Option 2'],
         handleFocus,
         handleBlur,
       })
@@ -1943,12 +1970,12 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
         value: undefined,
@@ -1960,9 +1987,11 @@ describe('Select', () => {
     expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
       DEFAULT_PLACEHOLDER
     )
-    vm.value = '选项1'
+    vm.value = 'Option 1'
     await nextTick()
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('黄金糕')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Golden Cake'
+    )
   })
 
   test('emptyText error show', async () => {
@@ -2023,7 +2052,7 @@ describe('Select', () => {
         filterable
         remote
         reserve-keyword
-        placeholder="请输入关键词"
+        placeholder="Please enter a keyword"
         :remote-method="remoteMethod"
         :loading="loading"
       >
@@ -2440,12 +2469,12 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
         ],
         value: [],
@@ -2735,9 +2764,9 @@ describe('Select', () => {
     const select = wrapper.findComponent({ name: 'ElSelect' })
     const vm = wrapper.vm as any
     const selectVm = select.vm as any
-    vm.value = '选项1'
+    vm.value = 'Option 1'
     await nextTick()
-    expect(selectVm.states.selectedLabel).toBe('黄金糕')
+    expect(selectVm.states.selectedLabel).toBe('Golden Cake')
     vm.multiple = true
     vm.value = []
     await nextTick()
@@ -2970,6 +2999,114 @@ describe('Select', () => {
     await nextTick()
     const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()
     expect(placeholder).toBe('foo = 0')
+  })
+
+  it('should expose selected option props on label slot item', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="'foo'">
+        <el-option
+          label="foo-label"
+          value="foo"
+          :disabled="true"
+          :show-tip="false"
+          placement="right"
+        />
+        <template #label="{ item }">
+          {{ item.label }}|{{ item.value }}|{{ item.disabled }}|{{ item.showTip }}|{{ item.placement }}
+        </template>
+      </el-select>
+    `
+    )
+    await nextTick()
+    const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()
+    expect(placeholder).toBe('foo-label|foo|true|false|right')
+  })
+
+  it('should expose the raw object value on label slot item', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="{ value: 'Option1' }" value-key="value">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item"
+        />
+        <template #label="{ item }">
+          {{ item.value }}|{{ item.label }}|{{ item.icon }}
+        </template>
+      </el-select>
+    `,
+      () => ({
+        options: [
+          {
+            value: 'Option1',
+            label: 'yyyygggghhhh',
+            icon: 'test',
+          },
+        ],
+      })
+    )
+    await nextTick()
+    const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()
+    expect(placeholder).toBe('Option1|yyyygggghhhh|test')
+  })
+
+  it('should expose raw-option on label slot item when value is primitive', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="'Option1'">
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+          :raw-option="item"
+        />
+        <template #label="{ item }">
+          {{ item.value }}|{{ item.label }}|{{ item.icon }}
+        </template>
+      </el-select>
+    `,
+      () => ({
+        options: [
+          {
+            value: 'Option1',
+            label: 'yyyygggghhhh',
+            icon: 'test',
+          },
+        ],
+      })
+    )
+    await nextTick()
+    const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()
+    expect(placeholder).toBe('Option1|yyyygggghhhh|test')
+  })
+
+  it('should expose raw option item on label slot when using options prop', async () => {
+    const wrapper = _mount(
+      `
+      <el-select v-model="value" :options="options">
+        <template #label="{ item }">
+          {{ item.value }}|{{ item.label }}|{{ item.icon }}
+        </template>
+      </el-select>
+    `,
+      () => ({
+        value: 'Option1',
+        options: [
+          {
+            value: 'Option1',
+            label: 'yyyygggghhhh',
+            icon: 'test',
+          },
+        ],
+      })
+    )
+    await nextTick()
+    const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()
+    expect(placeholder).toBe('Option1|yyyygggghhhh|test')
   })
 
   it('should label slot render dynamic index', async () => {
@@ -3235,7 +3372,7 @@ describe('Select', () => {
 
       selectVm.onInput({
         target: {
-          value: '蚵仔煎',
+          value: 'Oyster Omelet',
         },
       })
 
@@ -3261,7 +3398,7 @@ describe('Select', () => {
 
       selectVm.onInput({
         target: {
-          value: '蚵仔煎',
+          value: 'Oyster Omelet',
         },
       })
 
@@ -3287,7 +3424,7 @@ describe('Select', () => {
 
       selectVm.onInput({
         target: {
-          value: '蚵仔煎',
+          value: 'Oyster Omelet',
         },
       })
 
@@ -3315,15 +3452,15 @@ describe('Select', () => {
           options: [
             {
               id: 1,
-              name: '黄金糕',
+              name: 'Golden Cake',
             },
             {
               id: 2,
-              name: '双皮奶',
+              name: 'Double Skin Milk',
             },
             {
               id: 3,
-              name: '蚵仔煎',
+              name: 'Oyster Omelet',
             },
           ],
           value: null,
@@ -3337,7 +3474,7 @@ describe('Select', () => {
 
       selectVm.onInput({
         target: {
-          value: '蚵仔煎',
+          value: 'Oyster Omelet',
         },
       })
 
@@ -3494,10 +3631,10 @@ describe('Select', () => {
     `,
       () => ({
         options: [
-          { value: '黄金糕', label: '' },
-          { value: '双皮奶', label: 0 },
-          { value: '蚵仔煎', label: '蚵仔煎' },
-          { value: '北京烤鸭', label: undefined },
+          { value: 'Golden Cake', label: '' },
+          { value: 'Double Skin Milk', label: 0 },
+          { value: 'Oyster Omelet', label: 'Oyster Omelet' },
+          { value: 'Peking Duck', label: undefined },
         ],
       })
     )
@@ -3505,8 +3642,8 @@ describe('Select', () => {
     const options = getOptions()
     expect(options[0].textContent).toBe('')
     expect(options[1].textContent).toBe('0')
-    expect(options[2].textContent).toBe('蚵仔煎')
-    expect(options[3].textContent).toBe('北京烤鸭')
+    expect(options[2].textContent).toBe('Oyster Omelet')
+    expect(options[3].textContent).toBe('Peking Duck')
   })
 
   test('passes disabled prop to custom #tag slot', async () => {
@@ -3590,24 +3727,24 @@ describe('Select', () => {
       () => ({
         options: [
           {
-            value: '选项1',
-            label: '黄金糕',
+            value: 'Option 1',
+            label: 'Golden Cake',
           },
           {
-            value: '选项2',
-            label: '双皮奶',
+            value: 'Option 2',
+            label: 'Double Skin Milk',
           },
           {
-            value: '选项3',
-            label: '蚵仔煎',
+            value: 'Option 3',
+            label: 'Oyster Omelet',
           },
           {
-            value: '选项4',
-            label: '龙须面',
+            value: 'Option 4',
+            label: 'Dragon Beard Noodles',
           },
           {
-            value: '选项5',
-            label: '北京烤鸭',
+            value: 'Option 5',
+            label: 'Peking Duck',
           },
         ],
         value: '',
@@ -3631,13 +3768,17 @@ describe('Select', () => {
     )
     options[2].click()
     await nextTick()
-    expect(vm.value).toBe('选项3')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('蚵仔煎')
+    expect(vm.value).toBe('Option 3')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Oyster Omelet'
+    )
     expect(vm.count).toBe(1)
     options[4].click()
     await nextTick()
-    expect(vm.value).toBe('选项5')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('北京烤鸭')
+    expect(vm.value).toBe('Option 5')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Peking Duck'
+    )
     expect(vm.count).toBe(2)
   })
 
@@ -3650,23 +3791,23 @@ describe('Select', () => {
         options: [
           {
             id: 1,
-            label: '黄金糕',
+            label: 'Golden Cake',
           },
           {
             id: 2,
-            label: '双皮奶',
+            label: 'Double Skin Milk',
           },
           {
             id: 3,
-            label: '蚵仔煎',
+            label: 'Oyster Omelet',
           },
           {
             id: 4,
-            label: '龙须面',
+            label: 'Dragon Beard Noodles',
           },
           {
             id: 5,
-            label: '北京烤鸭',
+            label: 'Peking Duck',
           },
         ],
         value: '',
@@ -3691,12 +3832,16 @@ describe('Select', () => {
     options[2].click()
     await nextTick()
     expect(vm.value).toBe(3)
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('蚵仔煎')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Oyster Omelet'
+    )
     expect(vm.count).toBe(1)
     options[4].click()
     await nextTick()
     expect(vm.value).toBe(5)
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('北京烤鸭')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Peking Duck'
+    )
     expect(vm.count).toBe(2)
   })
 

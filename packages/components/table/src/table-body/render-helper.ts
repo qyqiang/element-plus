@@ -130,7 +130,7 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
           }
           if (isBoolean(treeRowData.expanded)) {
             data.treeNode.expanded = treeRowData.expanded
-            // 表明是懒加载
+            // marks lazy loading state
             if ('loading' in treeRowData) {
               data.treeNode.loading = treeRowData.loading
             }
@@ -201,12 +201,12 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
         return tr
       }
 
-      // 在没设置时候避免 h 执行
-      // 非保留模式且未展开时，直接返回
-      // 使用二维数组包装，避免修改 $index
+      // avoid calling h when expanded content is not needed
+      // return early when not preserving content and the row is collapsed
+      // wrap with a 2D array to avoid mutating $index
       const rows = [[tr]]
 
-      // 仅在需要时创建展开行（保留模式或展开状态）
+      // only create the expanded row when it is actually needed
       if (parent.props.preserveExpandedContent || expanded) {
         rows[0].push(
           h(
@@ -232,8 +232,8 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
       return rows
     } else if (Object.keys(treeData.value).length) {
       assertRowKey()
-      // TreeTable 时，rowKey 必须由用户设定，不使用 getKeyOfRow 计算
-      // 在调用 rowRender 函数时，仍然会计算 rowKey，不太好的操作
+      // TreeTable requires a user-defined rowKey instead of getKeyOfRow
+      // rowRender still recomputes rowKey here, which is not ideal
       const key = getRowIdentity(row, rowKey.value)
       let cur = treeData.value[key]
       let treeRowData = null
@@ -253,14 +253,14 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
         }
       }
       const tmp = [rowRender(row, $index, treeRowData ?? undefined)]
-      // 渲染嵌套数据
+      // render nested data
       if (cur) {
-        // currentRow 记录的是 index，所以还需主动增加 TreeTable 的 index
+        // currentRow stores the index, so TreeTable indices must be offset
         let i = 0
         const traverse = (children: T[], parent: TreeData) => {
           if (!(children && children.length && parent)) return
           children.forEach((node) => {
-            // 父节点的 display 状态影响子节点的显示状态
+            // the parent display state controls child visibility
             const innerTreeRowData: Partial<Record<string, any>> = {
               display: parent.display && parent.expanded,
               level: parent.level! + 1,
@@ -273,12 +273,12 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
               throw new Error('For nested data item, row-key is required.')
             }
             cur = { ...treeData.value[childKey] }
-            // 对于当前节点，分成有无子节点两种情况。
-            // 如果包含子节点的，设置 expanded 属性。
-            // 对于它子节点的 display 属性由它本身的 expanded 与 display 共同决定。
+            // handle current nodes differently depending on child presence.
+            // when children exist, sync the expanded flag.
+            // child display depends on both the current expanded and display state.
             if (cur) {
               innerTreeRowData.expanded = cur.expanded
-              // 懒加载的某些节点，level 未知
+              // some lazy-loaded nodes do not have a known level yet
               cur.level = cur.level || innerTreeRowData.level
               cur.display = !!(cur.expanded && innerTreeRowData.display)
               if (isBoolean(cur.lazy)) {
@@ -300,7 +300,7 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
             }
           })
         }
-        // 对于 root 节点，display 一定为 true
+        // root nodes are always displayed
         cur.display = true
         const nodes =
           lazyTreeNodeMap.value[key] || row[childrenColumnName.value]

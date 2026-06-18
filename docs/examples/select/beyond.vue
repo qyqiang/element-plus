@@ -12,11 +12,15 @@
       :filter-max-length="24"
       style="width: 240px"
     >
+      <template #itemIcon>
+        <div>ddd</div>
+      </template>
       <el-option
         v-for="item in options"
         :key="item.value"
         :label="item.label"
         :value="item.value"
+        :raw-option="item"
       >
         <template #optionIcon>
           <el-icon><info-filled></info-filled></el-icon>
@@ -281,7 +285,8 @@ const options1 = ref([])
 const options = ref([
   {
     value: 'Option1',
-    label: 'yyyygggghhhh',
+    label:
+      'yyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhh',
   },
   {
     value: 'Option2',

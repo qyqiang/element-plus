@@ -65,6 +65,18 @@ color-picker-panel/disabled
 | predefine                | predefined color options                   | ^[object]`string[]`                                                                                              | —       |
 | validate-event ^(2.11.6) | whether to trigger form validation         | ^[boolean]                                                                                                       | true    |
 
+### Slots
+
+| Name   | Description           |
+| ------ | --------------------- |
+| footer | custom footer content |
+
+### Events
+
+| Name              | Description                     | Type                                       |
+| ----------------- | ------------------------------- | ------------------------------------------ |
+| update:modelValue | triggers when the color changes | ^[Function]`(val: string \| null) => void` |
+
 ### Exposes
 
 | Name             | Description           | Type                     |

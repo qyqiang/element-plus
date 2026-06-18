@@ -109,12 +109,12 @@ function useWatcher<T extends DefaultRow>() {
     }
   )
 
-  // 检查 rowKey 是否存在
+  // ensure rowKey exists
   const assertRowKey = () => {
     if (!rowKey.value) throw new Error('[ElTable] prop row-key is required')
   }
 
-  // 更新 fixed
+  // update fixed columns
   const updateChildFixed = (column: TableColumnCtx<T>) => {
     column.children?.forEach((childColumn) => {
       childColumn.fixed = column.fixed
@@ -122,7 +122,7 @@ function useWatcher<T extends DefaultRow>() {
     })
   }
 
-  // 更新列
+  // update columns
   const updateColumns = () => {
     _columns.value.forEach((column) => {
       updateChildFixed(column)
@@ -175,7 +175,7 @@ function useWatcher<T extends DefaultRow>() {
       fixedColumns.value.length > 0 || rightFixedColumns.value.length > 0
   }
 
-  // 更新 DOM
+  // update the DOM
   const scheduleLayout = (needUpdateColumns?: boolean, immediate = false) => {
     if (needUpdateColumns) {
       updateColumns()
@@ -187,7 +187,7 @@ function useWatcher<T extends DefaultRow>() {
     }
   }
 
-  // 选择
+  // selection
   const isSelected = (row: T) => {
     if (selectedMap.value) {
       return !!selectedMap.value[getRowIdentity(row, rowKey.value)]
@@ -253,7 +253,7 @@ function useWatcher<T extends DefaultRow>() {
     )
     if (changed) {
       const newSelection = (selection.value || []).slice()
-      // 调用 API 修改选中值，不触发 select 事件
+      // update selection through the API without emitting the select event
       if (emitChange) {
         instance.emit('select', newSelection, row)
       }
@@ -306,7 +306,7 @@ function useWatcher<T extends DefaultRow>() {
   }
 
   const updateAllSelected = () => {
-    // data 为 null 时，解构时的默认值会被忽略
+    // when data is null, destructuring defaults are ignored
     if (data.value?.length === 0) {
       isAllSelected.value = false
       return
@@ -358,7 +358,7 @@ function useWatcher<T extends DefaultRow>() {
     return count
   }
 
-  // 过滤与排序
+  // filtering and sorting
   const updateFilters = (column: TableColumnCtx<T>, values: string[]) => {
     const filters_: Record<string, string[]> = {}
     ensureArray(column).forEach((col) => {
@@ -411,7 +411,7 @@ function useWatcher<T extends DefaultRow>() {
     })
   }
 
-  // 根据 filters 与 sort 去过滤 data
+  // filter data based on filters and sort state
   const execQuery = (ignore: { filter: boolean } | undefined = undefined) => {
     if (!ignore?.filter) {
       execFilter()
@@ -507,14 +507,14 @@ function useWatcher<T extends DefaultRow>() {
     data,
     rowKey,
   })
-  // 适配层，expand-row-keys 在 Expand 与 TreeTable 中都有使用
+  // adapter layer: expand-row-keys is shared by Expand and TreeTable
   const setExpandRowKeysAdapter = (val: string[]) => {
-    // 这里会触发额外的计算，但为了兼容性，暂时这么做
+    // this triggers extra computation, but keeps compatibility for now
     setExpandRowKeys(val)
     updateTreeExpandKeys(val)
   }
 
-  // 展开行与 TreeTable 都要使用
+  // shared by expanded rows and TreeTable
   const toggleRowExpansionAdapter = (row: T, expanded?: boolean) => {
     const hasExpandColumn = columns.value.some(({ type }) => type === 'expand')
     if (hasExpandColumn) {

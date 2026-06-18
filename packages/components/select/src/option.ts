@@ -32,4 +32,10 @@ export const optionProps = buildProps({
    * @description whether option is disabled
    */
   disabled: Boolean,
+  /**
+   * @description raw option data used by label slot and other custom rendering
+   */
+  rawOption: {
+    type: definePropType<Record<string, any>>(Object),
+  },
 })

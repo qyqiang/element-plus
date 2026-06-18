@@ -52,10 +52,10 @@ describe('Table.vue', () => {
       template: `
       <el-table :data="testData">
         <el-table-column prop="id" />
-        <el-table-column prop="name" label="片名" />
-        <el-table-column prop="release" label="发行日期" />
-        <el-table-column prop="director" label="导演" />
-        <el-table-column prop="runtime" label="时长（分）" />
+        <el-table-column prop="name" label="Title" />
+        <el-table-column prop="release" label="Release Date" />
+        <el-table-column prop="director" label="Director" />
+        <el-table-column prop="runtime" label="Runtime (min)" />
       </el-table>
       `,
       created() {
@@ -66,10 +66,10 @@ describe('Table.vue', () => {
       await doubleWait()
       const ths = wrapper.findAll('thead th')
       expect(ths.map((node) => node.text()).filter((o) => o)).toEqual([
-        '片名',
-        '发行日期',
-        '导演',
-        '时长（分）',
+        'Title',
+        'Release Date',
+        'Director',
+        'Runtime (min)',
       ])
     })
 
@@ -101,8 +101,8 @@ describe('Table.vue', () => {
         <el-table-column label="someLabel">
           <template #default="{ row }">
             <el-checkbox-group v-model="row.checkList">
-              <el-checkbox label="复选框 A" value="复选框 A"></el-checkbox>
-              <el-checkbox label="复选框 B" value="复选框 B"></el-checkbox>
+              <el-checkbox label="Checkbox A" value="Checkbox A"></el-checkbox>
+              <el-checkbox label="Checkbox B" value="Checkbox B"></el-checkbox>
             </el-checkbox-group>
           </template>
         </el-table-column>
@@ -115,10 +115,10 @@ describe('Table.vue', () => {
               checkList: [],
             },
             {
-              checkList: ['复选框 A'],
+              checkList: ['Checkbox A'],
             },
             {
-              checkList: ['复选框 A', '复选框 B'],
+              checkList: ['Checkbox A', 'Checkbox B'],
             },
           ],
         }
@@ -1045,10 +1045,10 @@ describe('Table.vue', () => {
             },
             template: `
           <el-table :data="testData" ${props}>
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
             created() {
@@ -1227,10 +1227,10 @@ describe('Table.vue', () => {
         },
         template: `
         <el-table :data="testData" row-key="id" highlight-current-row :current-row-key="currentRowKey">
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" />
         </el-table>
       `,
         created() {
@@ -1265,8 +1265,8 @@ describe('Table.vue', () => {
         },
         template: `
           <el-table ref="table" :data="testData" @filter-change="handleFilterChange">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
             <el-table-column
               prop="director"
               column-key="director"
@@ -1276,8 +1276,8 @@ describe('Table.vue', () => {
                 { text: 'Andrew Stanton', value: 'Andrew Stanton' }
               ]"
               :filter-method="filterMethod"
-              label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+              label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
 
@@ -1411,8 +1411,8 @@ describe('Table.vue', () => {
         },
         template: `
           <el-table ref="table" :data="testData" @filter-change="handleFilterChange">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
             <el-table-column
               prop="director"
               column-key="director"
@@ -1422,13 +1422,13 @@ describe('Table.vue', () => {
                 { text: 'Andrew Stanton', value: 'Andrew Stanton' }
               ]"
               :filter-method="filterMethod"
-              label="导演">
+              label="Director">
               <template #filter-icon="{ filterOpened }">
                 <CaretTop v-if="filterOpened" class="top" />
                 <CaretBottom v-else class="bottom" />
               </template>
             </el-table-column>
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
 
@@ -1548,10 +1548,10 @@ describe('Table.vue', () => {
           style="width: 100%; margin-top: 20px"
         >
           <el-table-column prop="id" label="ID" width="180" />
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" />
         </el-table>
       `,
         data() {
@@ -2106,10 +2106,10 @@ describe('Table.vue', () => {
       },
       template: `
         <el-table :data="testData">
-          <el-table-column prop="name" label="片名" fixed />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" />
+          <el-table-column prop="name" label="Title" fixed />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" />
         </el-table>
       `,
       data() {
@@ -2148,10 +2148,10 @@ describe('Table.vue', () => {
           style="width: 100%; margin-top: 20px"
         >
           <el-table-column prop="id" label="ID" width="180" />
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" />
         </el-table>
       `,
       data() {
@@ -2211,10 +2211,10 @@ describe('Table.vue', () => {
           style="width: 100%; margin-top: 20px"
         >
           <el-table-column prop="id" label="ID" width="180" />
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="amount1" label="发行日期" />
-          <el-table-column prop="amount2" label="导演" />
-          <el-table-column prop="amount3" label="时长（分）" />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="amount1" label="Release Date" />
+          <el-table-column prop="amount2" label="Director" />
+          <el-table-column prop="amount3" label="Runtime (min)" />
         </el-table>
       `,
       data() {
@@ -2263,10 +2263,10 @@ describe('Table.vue', () => {
       },
       template: `
         <el-table :data="testData" highlight-current-row>
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" sortable />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" sortable />
         </el-table>
       `,
 
@@ -2306,10 +2306,10 @@ describe('Table.vue', () => {
       },
       template: `
         <el-table :data="testData" highlight-current-row row-key="release">
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" sortable />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" sortable />
         </el-table>
       `,
       data() {
@@ -2349,10 +2349,10 @@ describe('Table.vue', () => {
       },
       template: `
         <el-table :data="testData" row-key="release" highlight-current-row >
-          <el-table-column prop="name" label="片名" />
-          <el-table-column prop="release" label="发行日期" />
-          <el-table-column prop="director" label="导演" />
-          <el-table-column prop="runtime" label="时长（分）" sortable />
+          <el-table-column prop="name" label="Title" />
+          <el-table-column prop="release" label="Release Date" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime (min)" sortable />
         </el-table>
       `,
       data() {
@@ -2381,13 +2381,13 @@ describe('Table.vue', () => {
       },
       template: `
       <el-table :data="[]" height="100%">
-        <el-table-column prop="name" label="片名" />
-        <el-table-column prop="release" label="发行日期" />
-        <el-table-column prop="director" label="导演" />
-        <el-table-column prop="runtime" label="时长（分）" />
+        <el-table-column prop="name" label="Title" />
+        <el-table-column prop="release" label="Release Date" />
+        <el-table-column prop="director" label="Director" />
+        <el-table-column prop="runtime" label="Runtime (min)" />
         <template #append>
           <div class="append-content" style="height: 48px;">
-            append 区域始终出现在视图内
+            append area always stays visible in the viewport
           </div>
         </template>
       </el-table>
@@ -2409,10 +2409,10 @@ describe('Table.vue', () => {
         template: `
           <el-table :data="testData" row-key="release" highlight-current-row >
             <el-table-column type="index" />
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" sortable />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" sortable />
           </el-table>
         `,
         data() {
@@ -2443,10 +2443,10 @@ describe('Table.vue', () => {
                 <span class="director">{{ props.row.director }}</span>
               </template>
             </el-table-column>
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" sortable />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" sortable />
           </el-table>
         `,
         data() {
@@ -2486,10 +2486,10 @@ describe('Table.vue', () => {
         },
         template: `
           <el-table :data="testData" row-key="release">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
         data() {
@@ -2539,10 +2539,10 @@ describe('Table.vue', () => {
         },
         template: `
           <el-table :data="testData" row-key="release" lazy :load="load" ref="table">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
         data() {
@@ -2613,10 +2613,10 @@ describe('Table.vue', () => {
           <el-table
             :data="testData" lazy default-expand-all row-key="release" :tree-props="{children: 'childrenTest', hasChildren: 'hasChildrenTest'}"
             :load="load" @expand-change="change">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
         data() {
@@ -2688,10 +2688,10 @@ describe('Table.vue', () => {
           <el-table
             :data="testData" default-expand-all row-key="id"
             >
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
         data() {
@@ -2772,9 +2772,9 @@ describe('Table.vue', () => {
         },
         template: `
           <el-table :data="testData" row-key="release" :expand-row-keys="expandRowKeys">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="edit" label="修改">
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="edit" label="Edit">
               <template #default="{row}">
                 <button class="edit" @click="row.release =Date.now()">click</button>
               </template>
@@ -2847,10 +2847,10 @@ describe('Table.vue', () => {
         },
         template: `
           <el-table :data="testData" row-key="release" lazy :load="load" :expand-row-keys="['2003-5-30']" ref="table">
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         `,
         data() {
@@ -2912,10 +2912,10 @@ describe('Table.vue', () => {
           <div>
             <button @click="hideName">hide name column</button>
             <el-table :data="testData">
-              <el-table-column key="name" label="片名" v-if="showName">
+              <el-table-column key="name" label="Title" v-if="showName">
                 <template #default="{ row }"><span class="name">{{ row.name }}</span></template>
               </el-table-column>
-              <el-table-column key="release" label="发行日期" >
+              <el-table-column key="release" label="Release Date" >
                 <template #default="{ row }"><span class="release">{{ row.release }}</span></template>
               </el-table-column>
             </el-table>
@@ -3036,10 +3036,10 @@ describe('Table.vue', () => {
       template: `
       <el-table :data="testData" table-layout="auto">
         <el-table-column prop="id" />
-        <el-table-column prop="name" label="片名" />
-        <el-table-column prop="release" label="发行日期" />
-        <el-table-column prop="director" label="导演" />
-        <el-table-column prop="runtime" label="时长（分）" />
+        <el-table-column prop="name" label="Title" />
+        <el-table-column prop="release" label="Release Date" />
+        <el-table-column prop="director" label="Director" />
+        <el-table-column prop="runtime" label="Runtime (min)" />
       </el-table>
       `,
       created() {
@@ -3062,10 +3062,10 @@ describe('Table.vue', () => {
         <div class="right">
           <el-table flexible :data="testData" table-layout="auto">
             <el-table-column prop="id" />
-            <el-table-column prop="name" label="片名" />
-            <el-table-column prop="release" label="发行日期" />
-            <el-table-column prop="director" label="导演" />
-            <el-table-column prop="runtime" label="时长（分）" />
+            <el-table-column prop="name" label="Title" />
+            <el-table-column prop="release" label="Release Date" />
+            <el-table-column prop="director" label="Director" />
+            <el-table-column prop="runtime" label="Runtime (min)" />
           </el-table>
         </div>
       `,
