@@ -257,6 +257,7 @@ import {
   onBeforeUnmount,
   provide,
   ref,
+  shallowRef,
   toRaw,
 } from 'vue'
 import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
@@ -345,7 +346,7 @@ export default defineComponent({
     table.store = store
     const editingRow = ref<any>(null)
     const activeEditableCell = ref<any>(null)
-    const addColumnTrigger = ref<AddColumnTrigger | null>(null)
+    const addColumnTrigger = shallowRef<AddColumnTrigger | null>(null)
     const addRowTrigger = ref<AddRowTrigger | null>(null)
 
     const startRowEdit = (
@@ -479,7 +480,7 @@ export default defineComponent({
       clearAddColumnTrigger()
       clearAddRowTrigger()
     }
-    const handleScrollbarScroll = (event: Event) => {
+    const handleScrollbarScroll = (event: any) => {
       clearAddColumnTrigger()
       clearAddRowTrigger()
       emit('scroll', event)
