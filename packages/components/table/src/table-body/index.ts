@@ -19,12 +19,14 @@ import type { VNode } from 'vue'
 export default defineComponent({
   name: 'ElTableBody',
   props: defaultProps,
-  setup(props) {
+  setup(props, { emit }) {
     const instance = getCurrentInstance()
     const parent = inject(TABLE_INJECTION_KEY)
     const ns = useNamespace('table')
-    const { wrappedRowRender, tooltipContent, tooltipTrigger } =
-      useRender(props)
+    const { wrappedRowRender, tooltipContent, tooltipTrigger } = useRender(
+      props,
+      emit
+    )
     const { onColumnsChange, onScrollableChange } = useLayoutObserver(parent!)
 
     const hoveredCellList: HTMLTableCellElement[] = []

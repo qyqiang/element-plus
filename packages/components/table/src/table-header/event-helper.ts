@@ -120,11 +120,43 @@ function useEvent<T extends DefaultRow>(
     startColumnLeft: number
     tableLeft: number
   }>()
+  const clearAddColumnTrigger = () => {
+    emit('update-add-column-trigger', null)
+  }
+  const isColumnBeforeLastRightFixedColumn = (column: TableColumnCtx<T>) => {
+    const rightFixedLeafColumnsLength =
+      props.store.states.rightFixedLeafColumnsLength.value
+    if (rightFixedLeafColumnsLength <= 0) {
+      return false
+    }
+
+    const columns = props.store.states.columns.value
+    const columnIndex = columns.findIndex((item) => item.id === column.id)
+    if (columnIndex < 0) {
+      return false
+    }
+
+    let lastRightFixedIndex = -1
+    for (let index = columns.length - 1; index >= 0; index--) {
+      if (columns[index].fixed === 'right') {
+        lastRightFixedIndex = index
+        break
+      }
+    }
+
+    if (lastRightFixedIndex <= 0) {
+      return false
+    }
+
+    return columnIndex === lastRightFixedIndex - 1
+  }
   const handleMouseDown = (event: MouseEvent, column: TableColumnCtx<T>) => {
     if (!isClient || !column.resizable) return
     if (column.children && column.children.length > 0) return
+    if (isColumnBeforeLastRightFixedColumn(column)) return
     /* istanbul ignore if */
     if (draggingColumn.value && props.border) {
+      clearAddColumnTrigger()
       dragging.value = true
 
       const table = parent
@@ -211,29 +243,64 @@ function useEvent<T extends DefaultRow>(
 
     if (!dragging.value && props.border) {
       const rect = target.getBoundingClientRect()
+      const tableRect = parent?.vnode.el?.getBoundingClientRect()
 
       const bodyStyle = document.body.style
       const isLastTh = target.parentNode?.lastElementChild === target
-      const allowDarg = props.allowDragLastColumn || !isLastTh
+      const allowDarg =
+        !isColumnBeforeLastRightFixedColumn(column) &&
+        (props.allowDragLastColumn || !isLastTh)
       if (rect.width > 12 && rect.right - event.clientX < 8 && allowDarg) {
         bodyStyle.cursor = 'col-resize'
         if (hasClass(target, 'is-sortable')) {
           target.style.cursor = 'col-resize'
         }
         draggingColumn.value = column as any
+        if (props.showAddColumnTrigger && tableRect) {
+          const columnIndex = props.store.states.columns.value.findIndex(
+            (item) => item.id === column.id
+          )
+          if (columnIndex > -1) {
+            emit('update-add-column-trigger', {
+              column,
+              columnIndex,
+              insertIndex: columnIndex + 1,
+              left: rect.right - tableRect.left,
+              top: rect.top - tableRect.top + rect.height / 2,
+            })
+          }
+        } else {
+          clearAddColumnTrigger()
+        }
       } else if (!dragging.value) {
         bodyStyle.cursor = ''
         if (hasClass(target, 'is-sortable')) {
           target.style.cursor = 'pointer'
         }
         draggingColumn.value = null
+        clearAddColumnTrigger()
       }
     }
   }
 
-  const handleMouseOut = () => {
+  const handleMouseOut = (event: MouseEvent) => {
     if (!isClient) return
+    const currentTarget = event.currentTarget as HTMLElement | null
+    const relatedTarget = event.relatedTarget as Node | null
+    const namespace = parent?.vnode.el?.dataset.prefix ?? 'el'
+    const triggerSelector = `.${namespace}-table__add-column-trigger`
+    if (
+      currentTarget &&
+      relatedTarget &&
+      currentTarget.contains(relatedTarget)
+    ) {
+      return
+    }
+    if (isElement(relatedTarget) && relatedTarget.closest(triggerSelector)) {
+      return
+    }
     document.body.style.cursor = ''
+    clearAddColumnTrigger()
   }
   const toggleOrder = ({ order, sortOrders }: TableColumnCtx<T>) => {
     if ((order as string) === '') return sortOrders[0]

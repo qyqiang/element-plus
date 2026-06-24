@@ -39,6 +39,7 @@ export interface TableHeaderProps<T extends DefaultRow> {
   border: boolean
   defaultSort: Sort
   allowDragLastColumn: boolean
+  showAddColumnTrigger: boolean
 }
 
 export default defineComponent({
@@ -69,6 +70,9 @@ export default defineComponent({
       type: String,
     },
     allowDragLastColumn: {
+      type: Boolean,
+    },
+    showAddColumnTrigger: {
       type: Boolean,
     },
   },
@@ -220,10 +224,17 @@ export default defineComponent({
             if (isTableLayoutAuto && column.fixed) {
               saveIndexSelection.set(_class, column)
             }
+            const diagonalHeader = column.diagonalHeader
+            const isDiagonalHeaderCell = !!diagonalHeader
             return h(
               'th',
               {
-                class: _class,
+                class: [
+                  _class,
+                  {
+                    [ns.is('diagonal-header')]: isDiagonalHeaderCell,
+                  },
+                ],
                 colspan: column.colSpan,
                 key: `${column.id}-thead`,
                 rowspan: column.rowSpan,
@@ -251,7 +262,7 @@ export default defineComponent({
                   handleMouseDown($event, column),
                 onMousemove: ($event: MouseEvent) =>
                   handleMouseMove($event, column),
-                onMouseout: handleMouseOut,
+                onMouseout: ($event: MouseEvent) => handleMouseOut($event),
               },
               [
                 h(
@@ -259,20 +270,40 @@ export default defineComponent({
                   {
                     class: [
                       'cell',
+                      {
+                        [ns.e('diagonal-header')]: isDiagonalHeaderCell,
+                      },
                       column.filteredValue && column.filteredValue.length > 0
                         ? 'highlight'
                         : '',
                     ],
                   },
                   [
-                    column.renderHeader
-                      ? column.renderHeader({
-                          column,
-                          $index: cellIndex,
-                          store,
-                          _self: $parent,
-                        })
-                      : column.label,
+                    isDiagonalHeaderCell
+                      ? [
+                          h(
+                            'span',
+                            {
+                              class: ns.e('diagonal-header-text'),
+                            },
+                            diagonalHeader.from
+                          ),
+                          h(
+                            'span',
+                            {
+                              class: ns.e('diagonal-header-text'),
+                            },
+                            diagonalHeader.to
+                          ),
+                        ]
+                      : column.renderHeader
+                        ? column.renderHeader({
+                            column,
+                            $index: cellIndex,
+                            store,
+                            _self: $parent,
+                          })
+                        : column.label,
                     column.sortable &&
                       h(
                         'span',

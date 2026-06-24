@@ -189,6 +189,8 @@ interface TableProps<T extends DefaultRow> {
   appendFilterPanelTo?: string
   scrollbarTabindex?: number | string
   nativeScrollbar?: boolean
+  showAddColumnTrigger?: boolean
+  showAddRowTrigger?: boolean
 }
 
 type TableTooltipData<T extends DefaultRow> = Parameters<
@@ -461,6 +463,14 @@ export default {
     type: [Number, String],
     default: undefined,
   },
+  /**
+   * @description whether to show an add-column trigger when hovering a header divider
+   */
+  showAddColumnTrigger: Boolean,
+  /**
+   * @description whether to show an add-row trigger when hovering a row divider
+   */
+  showAddRowTrigger: Boolean,
   /**
    * @description whether to allow drag the last column
    */

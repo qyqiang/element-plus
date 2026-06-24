@@ -21,6 +21,7 @@ interface TableBodyProps<T extends DefaultRow> {
   rowDraggable: any
   onDragstart: any
   onDragend: any
+  showAddRowTrigger?: boolean
 }
 
 const defaultProps = {
@@ -58,6 +59,7 @@ const defaultProps = {
     type: Function,
     default: undefined,
   },
+  showAddRowTrigger: Boolean,
 }
 
 export { TableBodyProps }

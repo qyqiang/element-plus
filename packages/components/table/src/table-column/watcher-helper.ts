@@ -57,6 +57,7 @@ function useWatcher<T extends DefaultRow>(
       'formatter',
       'className',
       'labelClassName',
+      'diagonalHeader',
       'filterClassName',
       'showOverflowTooltip',
       'tooltipFormatter',

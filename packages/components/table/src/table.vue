@@ -12,6 +12,8 @@
         [ns.m('fluid-height')]: maxHeight,
         [ns.m('scrollable-x')]: layout.scrollX.value,
         [ns.m('scrollable-y')]: layout.scrollY.value,
+        [ns.m('with-add-column-trigger')]: showAddColumnTrigger,
+        [ns.m('with-add-row-trigger')]: showAddRowTrigger,
         [ns.m('enable-row-hover')]: !store.states.isComplex.value,
         [ns.m('enable-row-transition')]:
           (store.states.data.value || []).length !== 0 &&
@@ -25,7 +27,7 @@
     ]"
     :style="style"
     :data-prefix="ns.namespace.value"
-    @mouseleave="handleMouseLeave"
+    @mouseleave="handleTableMouseLeave"
   >
     <div :class="ns.e('inner-wrapper')">
       <div ref="hiddenColumns" class="hidden-columns">
@@ -56,7 +58,9 @@
             :store="store"
             :append-filter-panel-to="appendFilterPanelTo"
             :allow-drag-last-column="allowDragLastColumn"
+            :show-add-column-trigger="showAddColumnTrigger"
             @set-drag-visible="setDragVisible"
+            @update-add-column-trigger="updateAddColumnTrigger"
           />
         </table>
       </div>
@@ -68,7 +72,7 @@
           :always="scrollbarAlwaysOn"
           :tabindex="scrollbarTabindex"
           :native="nativeScrollbar"
-          @scroll="$emit('scroll', $event)"
+          @scroll="handleScrollbarScroll"
         >
           <table
             ref="tableBody"
@@ -93,7 +97,10 @@
               :default-sort="defaultSort"
               :store="store"
               :append-filter-panel-to="appendFilterPanelTo"
+              :allow-drag-last-column="allowDragLastColumn"
+              :show-add-column-trigger="showAddColumnTrigger"
               @set-drag-visible="setDragVisible"
+              @update-add-column-trigger="updateAddColumnTrigger"
             />
             <table-body
               :context="context"
@@ -107,6 +114,8 @@
               :row-style="rowStyle"
               :store="store"
               :stripe="stripe"
+              :show-add-row-trigger="showAddRowTrigger"
+              @update-add-row-trigger="updateAddRowTrigger"
             />
             <table-footer
               v-if="showSummary && tableLayout === 'auto'"
@@ -170,6 +179,73 @@
       ref="resizeProxy"
       :class="ns.e('column-resize-proxy')"
     />
+    <div
+      v-show="addColumnTrigger"
+      :class="ns.e('add-column-trigger')"
+      :style="addColumnTriggerStyle"
+    >
+      <el-tooltip content="Add Column" placement="top">
+        <el-button
+          class="icon-button"
+          :class="ns.e('add-column-trigger-button')"
+          @click.stop="handleAddColumnClick"
+        >
+          <el-icon color="#2A3F4D" size="12px">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+            >
+              <g clip-path="url(#clip0_35669_24470)">
+                <path
+                  d="M12 5.25H6.75V0H5.25V5.25H0V6.75H5.25V12H6.75V6.75H12V5.25Z"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_35669_24470">
+                  <rect width="12" height="12" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </el-icon>
+        </el-button>
+      </el-tooltip>
+    </div>
+    <div
+      v-show="addRowTrigger"
+      :class="[ns.e('add-row-trigger')]"
+      :style="addRowTriggerStyle"
+    >
+      <el-tooltip content="Add Row" placement="top">
+        <el-button
+          class="icon-button"
+          :class="ns.e('add-row-trigger-button')"
+          aria-label="Add Row"
+          @click.stop="handleAddRowClick"
+        >
+          <el-icon color="#2A3F4D" size="12px">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="12"
+              height="12"
+              viewBox="0 0 12 12"
+            >
+              <g clip-path="url(#clip0_35669_24470)">
+                <path
+                  d="M12 5.25H6.75V0H5.25V5.25H0V6.75H5.25V12H6.75V6.75H12V5.25Z"
+                />
+              </g>
+              <defs>
+                <clipPath id="clip0_35669_24470">
+                  <rect width="12" height="12" fill="white" />
+                </clipPath>
+              </defs>
+            </svg>
+          </el-icon>
+        </el-button>
+      </el-tooltip>
+    </div>
   </div>
 </template>
 
@@ -183,6 +259,7 @@ import {
   ref,
   toRaw,
 } from 'vue'
+import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
 import { cloneDeep, debounce } from 'lodash-unified'
 import { Mousewheel } from '@element-plus/directives'
 import { useLocale, useNamespace } from '@element-plus/hooks'
@@ -201,7 +278,9 @@ import { TABLE_INJECTION_KEY } from './tokens'
 import { hColgroup } from './h-helper'
 import { useScrollbar } from './composables/use-scrollbar'
 
+import type { CSSProperties } from 'vue'
 import type { DefaultRow, Table } from './table/defaults'
+import type { TableColumnCtx } from './table-column/defaults'
 
 let tableIdSeed = 1
 export default defineComponent({
@@ -210,6 +289,7 @@ export default defineComponent({
     Mousewheel,
   },
   components: {
+    ElTooltip,
     TableHeader,
     TableBody,
     TableFooter,
@@ -238,9 +318,25 @@ export default defineComponent({
     'expand-change',
     'editable-cell-active-change',
     'scroll',
+    'add-column',
+    'add-row',
   ],
-  setup(props) {
+  setup(props, { emit }) {
     type Row = (typeof props.data)[number]
+    type AddColumnTrigger = {
+      column: TableColumnCtx<Row>
+      columnIndex: number
+      insertIndex: number
+      left: number
+      top: number
+    }
+    type AddRowTrigger = {
+      row: Row
+      rowIndex: number
+      insertIndex: number
+      top: number
+      placement: 'above' | 'below'
+    }
     const { t } = useLocale()
     const ns = useNamespace('table')
     const table = getCurrentInstance() as Table<Row>
@@ -249,6 +345,8 @@ export default defineComponent({
     table.store = store
     const editingRow = ref<any>(null)
     const activeEditableCell = ref<any>(null)
+    const addColumnTrigger = ref<AddColumnTrigger | null>(null)
+    const addRowTrigger = ref<AddRowTrigger | null>(null)
 
     const startRowEdit = (
       row: DefaultRow,
@@ -342,6 +440,51 @@ export default defineComponent({
       scrollbarStyle,
     } = useStyle<Row>(props, layout, store, table)
 
+    const clearAddColumnTrigger = () => {
+      addColumnTrigger.value = null
+    }
+    const updateAddColumnTrigger = (payload: AddColumnTrigger | null) => {
+      addColumnTrigger.value = payload
+    }
+    const handleAddColumnClick = (event: MouseEvent) => {
+      const trigger = addColumnTrigger.value
+      if (!trigger) return
+      emit('add-column', {
+        column: trigger.column,
+        columnIndex: trigger.columnIndex,
+        insertIndex: trigger.insertIndex,
+        event,
+      })
+      clearAddColumnTrigger()
+    }
+    const clearAddRowTrigger = () => {
+      addRowTrigger.value = null
+    }
+    const updateAddRowTrigger = (payload: AddRowTrigger | null) => {
+      addRowTrigger.value = payload
+    }
+    const handleAddRowClick = (event: MouseEvent) => {
+      const trigger = addRowTrigger.value
+      if (!trigger) return
+      emit('add-row', {
+        row: trigger.row,
+        rowIndex: trigger.rowIndex,
+        insertIndex: trigger.insertIndex,
+        event,
+      })
+      clearAddRowTrigger()
+    }
+    const handleTableMouseLeave = () => {
+      handleMouseLeave()
+      clearAddColumnTrigger()
+      clearAddRowTrigger()
+    }
+    const handleScrollbarScroll = (event: Event) => {
+      clearAddColumnTrigger()
+      clearAddRowTrigger()
+      emit('scroll', event)
+    }
+
     const { scrollBarRef, scrollTo, setScrollLeft, setScrollTop } =
       useScrollbar()
 
@@ -363,6 +506,18 @@ export default defineComponent({
     const computedEmptyText = computed(() => {
       return props.emptyText ?? t('el.table.emptyText')
     })
+    const addColumnTriggerStyle = computed<CSSProperties>(() => {
+      if (!addColumnTrigger.value) return {}
+      return {
+        left: `${addColumnTrigger.value.left}px`,
+      }
+    })
+    const addRowTriggerStyle = computed<CSSProperties>(() => {
+      if (!addRowTrigger.value) return {}
+      return {
+        top: `${addRowTrigger.value.top}px`,
+      }
+    })
 
     const columns = computed(() => {
       return convertToRows(store.states.originColumns.value)[0]
@@ -380,7 +535,7 @@ export default defineComponent({
       store,
       columns,
       handleHeaderFooterMousewheel,
-      handleMouseLeave,
+      handleTableMouseLeave,
       tableId,
       tableSize,
       isHidden,
@@ -450,12 +605,21 @@ export default defineComponent({
       clearEditingRow,
       applyEditingRow,
       hasEditingRow,
+      addColumnTrigger,
+      addColumnTriggerStyle,
+      handleAddColumnClick,
+      updateAddColumnTrigger,
+      addRowTrigger,
+      addRowTriggerStyle,
+      handleAddRowClick,
+      updateAddRowTrigger,
       computedSumText,
       computedEmptyText,
       tableLayout,
       scrollbarViewStyle,
       scrollbarStyle,
       scrollBarRef,
+      handleScrollbarScroll,
       /**
        * @description scrolls to a particular set of coordinates
        */
@@ -472,6 +636,14 @@ export default defineComponent({
        * @description whether to allow drag the last column
        */
       allowDragLastColumn: props.allowDragLastColumn,
+      /**
+       * @description whether to show an add-column trigger when hovering a header divider
+       */
+      showAddColumnTrigger: props.showAddColumnTrigger,
+      /**
+       * @description whether to show an add-row trigger when hovering a row divider
+       */
+      showAddRowTrigger: props.showAddRowTrigger,
     }
   },
 })

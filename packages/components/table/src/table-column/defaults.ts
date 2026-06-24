@@ -25,6 +25,10 @@ type FilterMethods<T extends DefaultRow> = (
 ) => void
 
 type ValueOf<T> = T[keyof T]
+type DiagonalHeaderConfig = {
+  from: string
+  to: string
+}
 
 type TableColumnCtx<T extends DefaultRow = DefaultRow> = {
   id: string
@@ -80,6 +84,7 @@ type TableColumnCtx<T extends DefaultRow = DefaultRow> = {
   filterOpened?: boolean
   renderFilterIcon?: (scope: any) => VNode
   renderExpand?: (scope: any) => VNode
+  diagonalHeader?: DiagonalHeaderConfig
 }
 
 interface TableColumn<T extends DefaultRow> extends ComponentInternalInstance {
@@ -139,6 +144,10 @@ export default {
    * @description render function for table header of this column
    */
   renderHeader: Function as PropType<TableColumnCtx<any>['renderHeader']>,
+  /**
+   * @description configures this column header as a diagonal header with `from` and `to` labels
+   */
+  diagonalHeader: Object as PropType<TableColumnCtx<any>['diagonalHeader']>,
   /**
    * @description whether column can be sorted. Remote sorting can be done by setting this attribute to 'custom' and listening to the `sort-change` event of Table
    */

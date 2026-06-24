@@ -20,7 +20,10 @@ import type {
 import type { TreeData } from '../store/tree'
 import type { TableOverflowTooltipOptions } from '../util'
 
-function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
+function useRender<T extends DefaultRow>(
+  props: Partial<TableBodyProps<T>>,
+  emit: (...args: any[]) => void
+) {
   const parent = inject(TABLE_INJECTION_KEY) as Table<T>
   const ns = useNamespace('table')
   const {
@@ -30,11 +33,13 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
     handleContextMenu,
     handleMouseEnter,
     handleMouseLeave,
+    handleRowMouseMove,
+    handleRowMouseOut,
     handleCellMouseEnter,
     handleCellMouseLeave,
     tooltipContent,
     tooltipTrigger,
-  } = useEvents(props)
+  } = useEvents(props, emit)
   const {
     getRowStyle,
     getRowClass,
@@ -102,6 +107,9 @@ function useRender<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
         onContextmenu: ($event: Event) => handleContextMenu($event, row),
         onMouseenter: () => handleMouseEnter($index),
         onMouseleave: handleMouseLeave,
+        onMousemove: ($event: MouseEvent) =>
+          handleRowMouseMove($event, row, $index),
+        onMouseout: ($event: MouseEvent) => handleRowMouseOut($event),
       },
       columns.value.map((column, cellIndex) => {
         const { rowspan, colspan } = getSpan(row, column, $index, cellIndex)

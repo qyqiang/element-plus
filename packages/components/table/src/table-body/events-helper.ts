@@ -1,6 +1,6 @@
 import { h, inject, nextTick, ref } from 'vue'
 import { debounce } from 'lodash-unified'
-import { addClass, hasClass, removeClass } from '@element-plus/utils'
+import { addClass, hasClass, isElement, removeClass } from '@element-plus/utils'
 import {
   createTablePopper,
   getCell,
@@ -17,10 +17,16 @@ import type { TableBodyProps } from './defaults'
 import type { TableOverflowTooltipOptions } from '../util'
 import type { DefaultRow } from '../table/defaults'
 
-function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
+function useEvents<T extends DefaultRow>(
+  props: Partial<TableBodyProps<T>>,
+  emit: (...args: any[]) => void
+) {
   const parent = inject(TABLE_INJECTION_KEY)
   const tooltipContent = ref('')
   const tooltipTrigger = ref(h('div'))
+  const clearAddRowTrigger = () => {
+    emit('update-add-row-trigger', null)
+  }
   const isRowEditLocked = (row?: T) => {
     const editingRow = parent?.editingRow?.value
     return parent?.props.editable && !!editingRow && editingRow.row !== row
@@ -92,6 +98,54 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
   const handleMouseLeave = debounce(() => {
     props.store?.commit('setHoverRow', null)
   }, 30)
+  const handleRowMouseMove = (event: MouseEvent, row: T, rowIndex: number) => {
+    if (!parent?.props.showAddRowTrigger || !parent?.props.border) {
+      clearAddRowTrigger()
+      return
+    }
+    const currentTarget = event.currentTarget as HTMLElement | null
+    const tableRect = parent?.vnode.el?.getBoundingClientRect()
+    if (!currentTarget || !tableRect) return
+    const rect = currentTarget.getBoundingClientRect()
+    const nearTop = rect.height > 12 && event.clientY - rect.top < 8
+    const nearBottom = rect.height > 12 && rect.bottom - event.clientY < 8
+    if (nearTop) {
+      emit('update-add-row-trigger', {
+        row,
+        rowIndex,
+        insertIndex: rowIndex,
+        top: rect.top - tableRect.top,
+        placement: 'below',
+      })
+    } else if (nearBottom) {
+      emit('update-add-row-trigger', {
+        row,
+        rowIndex,
+        insertIndex: rowIndex + 1,
+        top: rect.bottom - tableRect.top,
+        placement: 'above',
+      })
+    } else {
+      clearAddRowTrigger()
+    }
+  }
+  const handleRowMouseOut = (event: MouseEvent) => {
+    const currentTarget = event.currentTarget as HTMLElement | null
+    const relatedTarget = event.relatedTarget as Node | null
+    const namespace = parent?.vnode.el?.dataset.prefix ?? 'el'
+    const triggerSelector = `.${namespace}-table__add-row-trigger`
+    if (
+      currentTarget &&
+      relatedTarget &&
+      currentTarget.contains(relatedTarget)
+    ) {
+      return
+    }
+    if (isElement(relatedTarget) && relatedTarget.closest(triggerSelector)) {
+      return
+    }
+    clearAddRowTrigger()
+  }
 
   const handleCellMouseEnter = (
     event: MouseEvent,
@@ -214,6 +268,8 @@ function useEvents<T extends DefaultRow>(props: Partial<TableBodyProps<T>>) {
     handleContextMenu,
     handleMouseEnter,
     handleMouseLeave,
+    handleRowMouseMove,
+    handleRowMouseOut,
     handleCellMouseEnter,
     handleCellMouseLeave,
     tooltipContent,

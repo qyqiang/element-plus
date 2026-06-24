@@ -111,6 +111,7 @@ export default defineComponent({
         'labelClassName',
         'type',
         'renderHeader',
+        'diagonalHeader',
         'formatter',
         'fixed',
         'resizable',
