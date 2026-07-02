@@ -7,6 +7,7 @@ import { ArrowDown, CaretTop, CircleClose } from '@element-plus/icons-vue'
 import { usePopperContainerId } from '@element-plus/hooks'
 import { hasClass } from '@element-plus/utils'
 import { ElForm, ElFormItem } from '@element-plus/components/form'
+import { rAF } from '@element-plus/test-utils/tick'
 import Select from '../src/select.vue'
 import Group from '../src/option-group.vue'
 import Option from '../src/option.vue'
@@ -80,9 +81,7 @@ const _mount = (template: string, data: any = () => ({}), otherObj?) =>
 
 function getOptions(): HTMLElement[] {
   return Array.from(
-    document.querySelectorAll<HTMLElement>(
-      'body > div:last-child .el-select-dropdown__item'
-    )
+    document.querySelectorAll<HTMLElement>('.el-select-dropdown__item')
   )
 }
 
@@ -1433,6 +1432,28 @@ describe('Select', () => {
     const tagCloseIcons = wrapper.findAll('.el-tag__close')
     await tagCloseIcons[0].trigger('click')
     expect(vm.value.indexOf('Option 1')).toBe(-1)
+  })
+
+  test('multiple select should place selected options at the top with divider', async () => {
+    wrapper = getSelectVm({ multiple: true })
+    const select = wrapper.findComponent(Select)
+    const selectVm = select.vm as any
+
+    await wrapper.setData({
+      value: ['Option 2', 'Option 4'],
+    })
+    await nextTick()
+    await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+    await nextTick()
+    await rAF()
+
+    const option1 = selectVm.states.options.get('Option 1').$el as HTMLElement
+    const option2 = selectVm.states.options.get('Option 2').$el as HTMLElement
+    const option4 = selectVm.states.options.get('Option 4').$el as HTMLElement
+
+    expect(option2.style.order).toBe('1')
+    expect(option4.style.order).toBe('1')
+    expect(option1.style.borderTop).toContain('#E7ECEF')
   })
 
   test('multiple select when content overflow', async () => {

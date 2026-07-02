@@ -1,11 +1,13 @@
 <template>
-  <el-select-v2
-    v-model="value"
-    :options="options"
-    placeholder="Please select"
-    style="width: 240px"
-    multiple
-  />
+  <div style="position: relative; height: 32px; width: 100%">
+    <el-select-v2
+      v-model="value"
+      :options="options"
+      placeholder="Please select"
+      style="width: 240px"
+      multiple
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>

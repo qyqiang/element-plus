@@ -1,6 +1,6 @@
 <template>
   <h5>Base</h5>
-  <div class="flex flex-wrap gap-4 items-center">
+  <div class="flex flex-wrap gap-4 items-center relative">
     <el-select
       v-model="value"
       clearable
@@ -102,46 +102,50 @@
         <span>$</span>
       </template>
     </el-select>
-    <el-select
-      v-model="value1"
-      :float-label="false"
-      multiple
-      placeholder="Width Footer"
-      style="width: 240px"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-      <template #footer>
-        <div class="flex justify-between">
-          <el-button type="primary">Cancel</el-button>
-          <el-button>Reset</el-button>
-        </div>
-      </template>
-    </el-select>
-    <el-select
-      v-model="value1"
-      multiple
-      placeholder="Width Have All"
-      style="width: 240px"
-      have-all="(All)"
-    >
-      <el-option
-        v-for="item in options"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-      />
-      <template #footer>
-        <div class="flex justify-between">
-          <el-button type="primary">Cancel</el-button>
-          <el-button>Reset</el-button>
-        </div>
-      </template>
-    </el-select>
+    <div style="position: relative; height: 32px; width: 100%">
+      <el-select
+        v-model="value1"
+        multiple
+        placeholder="Width Footer"
+        style="width: 240px"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+        <template #footer>
+          <div class="flex justify-between">
+            <el-button type="primary">Cancel</el-button>
+            <el-button>Reset</el-button>
+          </div>
+        </template>
+      </el-select>
+    </div>
+    <div style="position: relative; height: 32px; width: 100%">
+      <el-select
+        v-model="value1"
+        multiple
+        placeholder="Width Have All"
+        style="width: 240px"
+        have-all="(All)"
+      >
+        <el-option
+          v-for="item in options"
+          :key="item.value"
+          :disabled="true"
+          :label="item.label"
+          :value="item.value"
+        />
+        <template #footer>
+          <div class="flex justify-between">
+            <el-button type="primary">Cancel</el-button>
+            <el-button>Reset</el-button>
+          </div>
+        </template>
+      </el-select>
+    </div>
   </div>
 
   <el-divider />
@@ -285,8 +289,7 @@ const options1 = ref([])
 const options = ref([
   {
     value: 'Option1',
-    label:
-      'yyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhhyyyygggghhhh',
+    label: '45545',
   },
   {
     value: 'Option2',
@@ -302,6 +305,26 @@ const options = ref([
   },
   {
     value: 'Option5',
+    label: 'Option5',
+  },
+  {
+    value: 'Option6',
+    label: '45545',
+  },
+  {
+    value: 'Option7',
+    label: 'Option2',
+  },
+  {
+    value: 'Option8',
+    label: 'Option3',
+  },
+  {
+    value: 'Option9',
+    label: 'Option4',
+  },
+  {
+    value: 'Option10',
     label: 'Option5',
   },
 ])

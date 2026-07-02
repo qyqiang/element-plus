@@ -214,6 +214,39 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     () => props.filterable && props.remote && isFunction(props.remoteMethod)
   )
 
+  const isOptionSelected = (option: Option) => {
+    if (!props.multiple || !isArray(props.modelValue)) return false
+
+    const optionValue = getValue(option)
+
+    if (!isObject(optionValue)) {
+      return props.modelValue.includes(optionValue)
+    }
+
+    return props.modelValue.some(
+      (value) => getValueKey(value) === getValueKey(optionValue)
+    )
+  }
+
+  const reorderFilteredOptions = (options: OptionType[]) => {
+    if (!props.multiple || options.some((option) => option.type === 'Group')) {
+      return options
+    }
+
+    const selectedOptions: OptionType[] = []
+    const unselectedOptions: OptionType[] = []
+
+    options.forEach((option) => {
+      if (isOptionSelected(option as Option)) {
+        selectedOptions.push(option)
+      } else {
+        unselectedOptions.push(option)
+      }
+    })
+
+    return [...selectedOptions, ...unselectedOptions]
+  }
+
   const filterOptions = (query: string) => {
     const regexp = new RegExp(escapeStringRegexp(query), 'i')
 
@@ -226,27 +259,29 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
       return []
     }
 
-    return [...states.createdOptions, ...props.options].reduce((all, item) => {
-      const options = getOptions(item)
+    return reorderFilteredOptions(
+      [...states.createdOptions, ...props.options].reduce((all, item) => {
+        const options = getOptions(item)
 
-      if (isArray(options)) {
-        const filtered = options.filter(isValidOption)
+        if (isArray(options)) {
+          const filtered = options.filter(isValidOption)
 
-        if (filtered.length > 0) {
-          all.push(
-            {
-              label: getLabel(item),
-              type: 'Group',
-            },
-            ...filtered
-          )
+          if (filtered.length > 0) {
+            all.push(
+              {
+                label: getLabel(item),
+                type: 'Group',
+              },
+              ...filtered
+            )
+          }
+        } else if (props.remote || isValidOption(item)) {
+          all.push(item)
         }
-      } else if (props.remote || isValidOption(item)) {
-        all.push(item)
-      }
 
-      return all
-    }, []) as OptionType[]
+        return all
+      }, []) as OptionType[]
+    )
   }
 
   const updateOptions = () => {

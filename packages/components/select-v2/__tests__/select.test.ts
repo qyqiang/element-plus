@@ -656,6 +656,128 @@ describe('Select', () => {
   })
 
   describe('multiple', () => {
+    it('renders checkbox for multiple options', async () => {
+      createSelect({
+        data: () => {
+          return {
+            multiple: true,
+            value: ['option_2'],
+          }
+        },
+      })
+      await nextTick()
+      const options = getOptions()
+      const firstCheckbox = options[0].querySelector('.el-checkbox')
+      const secondCheckbox = options[1].querySelector('.el-checkbox')
+
+      expect(firstCheckbox).not.toBeNull()
+      expect(secondCheckbox).not.toBeNull()
+      expect(
+        firstCheckbox
+          ?.querySelector('.el-checkbox__input')
+          ?.classList.contains('is-checked')
+      ).toBe(true)
+    })
+
+    it('places selected options at the top with divider', async () => {
+      const wrapper = createSelect({
+        data: () => {
+          return {
+            multiple: true,
+            value: ['option_2', 'option_4'],
+          }
+        },
+      })
+      await nextTick()
+      await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+      await nextTick()
+      await rAF()
+
+      const vm = wrapper.vm as any
+      const options = getOptions()
+
+      expect(options[0].textContent).toContain(vm.options[1].label)
+      expect(options[1].textContent).toContain(vm.options[3].label)
+      expect(options[2].textContent).toContain(vm.options[0].label)
+      expect(options[2].style.borderTopWidth).toBe('1px')
+      expect(options[2].style.borderTopStyle).toBe('solid')
+      expect(options[2].style.borderTopColor).toBe('#E7ECEF')
+    })
+
+    it('reorders selected options after interactive selection and shows a single divider', async () => {
+      const wrapper = createSelect({
+        data: () => {
+          return {
+            multiple: true,
+            value: [],
+          }
+        },
+      })
+      await nextTick()
+      await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+      await nextTick()
+      await rAF()
+
+      let options = getOptions()
+      options[4].click()
+      await nextTick()
+      await rAF()
+
+      options = getOptions()
+      expect(options[0].textContent).toContain('e4')
+      expect(options[1].style.borderTopWidth).toBe('1px')
+
+      options[6].click()
+      await nextTick()
+      await rAF()
+
+      options = getOptions()
+      expect(options[0].textContent).toContain('e4')
+      expect(options[1].textContent).toContain('g6')
+      expect(options[2].textContent).toContain('a0')
+      expect(options[2].style.borderTopWidth).toBe('1px')
+      expect(options[3].style.borderTopWidth).toBe('')
+      expect(options[4].style.borderTopWidth).toBe('')
+    })
+
+    it('reorders selected options after checkbox selection and keeps a single divider', async () => {
+      const wrapper = createSelect({
+        data: () => {
+          return {
+            multiple: true,
+            value: [],
+          }
+        },
+      })
+      await nextTick()
+      await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+      await nextTick()
+      await rAF()
+
+      let options = getOptions()
+      const firstCheckbox = options[4].querySelector('.el-checkbox')
+      const secondCheckbox = options[6].querySelector('.el-checkbox')
+
+      expect(firstCheckbox).not.toBeNull()
+      expect(secondCheckbox).not.toBeNull()
+
+      firstCheckbox?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await nextTick()
+      await rAF()
+
+      secondCheckbox?.dispatchEvent(new MouseEvent('click', { bubbles: true }))
+      await nextTick()
+      await rAF()
+
+      options = getOptions()
+      expect(options[0].textContent).toContain('e4')
+      expect(options[1].textContent).toContain('g6')
+      expect(options[2].style.borderTopWidth).toBe('1px')
+      expect(
+        options.filter((option) => option.style.borderTopWidth === '1px')
+      ).toHaveLength(1)
+    })
+
     it('multiple select', async () => {
       const wrapper = createSelect({
         data: () => {

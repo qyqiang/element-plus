@@ -4,7 +4,7 @@
     role="option"
     :aria-selected="selected"
     :aria-disabled="disabled || undefined"
-    :style="style"
+    :style="optionStyle"
     :class="[
       ns.be('dropdown', 'item'),
       ns.is('selected', selected),
@@ -18,6 +18,11 @@
   >
     <slot :item="item" :index="index" :disabled="disabled">
       <div class="option-wrap">
+        <el-checkbox
+          v-if="multiple"
+          :model-value="selected"
+          :disabled="disabled"
+        />
         <el-tooltip
           ref="tooltipRef"
           effect="light"
@@ -35,7 +40,7 @@
             >
           </div>
         </el-tooltip>
-        <div v-show="selected" class="option-wrap-icon">
+        <div v-if="selected && !multiple" class="option-wrap-icon">
           <el-icon size="16px" color="#2A3F4D"
             ><svg
               xmlns="http://www.w3.org/2000/svg"
@@ -54,11 +59,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, inject, ref } from 'vue'
+import { computed, defineComponent, inject, ref } from 'vue'
+import { get, isObject } from 'lodash-unified'
 import {
   getPadding,
   isGreaterThan,
 } from '@element-plus/components/table/src/util'
+import ElCheckbox from '@element-plus/components/checkbox'
 import ElTooltip from '@element-plus/components/tooltip'
 import { useNamespace } from '@element-plus/hooks'
 import { useOption } from './useOption'
@@ -68,16 +75,52 @@ import { selectV2InjectionKey } from './token'
 import ElIcon from '@element-plus/components/icon'
 
 export default defineComponent({
-  components: { ElIcon, ElTooltip },
+  components: { ElCheckbox, ElIcon, ElTooltip },
   props: optionV2Props,
   emits: optionV2Emits,
   setup(props, { emit }) {
     const select = inject(selectV2InjectionKey)!
     const showTip = ref(true)
     const ns = useNamespace('select')
+    const multiple = computed(() => select.props.multiple)
     const { hoverItem, selectOptionClick } = useOption(props, { emit })
-    const { getLabel } = useProps(select.props)
+    const { getLabel, getValue } = useProps(select.props)
     const contentId = select.contentId
+    const isItemSelected = (item?: Option) => {
+      if (!item || item.type === 'Group' || !multiple.value) return false
+
+      const values = Array.isArray(select.props.modelValue)
+        ? select.props.modelValue
+        : []
+      const itemValue = getValue(item)
+
+      if (!isObject(itemValue)) {
+        return values.includes(itemValue)
+      }
+
+      return values.some(
+        (value) =>
+          get(value, select.props.valueKey) ===
+          get(itemValue, select.props.valueKey)
+      )
+    }
+    const selectedCount = computed(() => {
+      if (!multiple.value || !Array.isArray(props.data)) return 0
+
+      return props.data.filter((item) => isItemSelected(item as Option)).length
+    })
+    const showSelectedDivider = computed(() => {
+      return (
+        !props.selected &&
+        multiple.value &&
+        selectedCount.value > 0 &&
+        props.index === selectedCount.value
+      )
+    })
+    const optionStyle = computed(() => ({
+      ...(props.style ?? {}),
+      borderTop: showSelectedDivider.value ? '1px solid #E7ECEF' : 'none',
+    }))
     const handleCellMouseEnter = (event: MouseEvent) => {
       const cellChild = (event.target as HTMLElement).querySelector(
         '.option-wrap-content'
@@ -108,7 +151,9 @@ export default defineComponent({
     return {
       ns,
       contentId,
+      multiple,
       showTip,
+      optionStyle,
       hoverItem,
       selectOptionClick,
       getLabel,

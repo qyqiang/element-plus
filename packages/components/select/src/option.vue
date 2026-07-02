@@ -3,6 +3,7 @@
     v-show="visible"
     :id="id"
     :class="containerKls"
+    :style="optionStyle"
     role="option"
     :aria-disabled="isDisabled || undefined"
     :aria-selected="itemSelected"
@@ -12,7 +13,11 @@
   >
     <slot>
       <div class="option-wrap">
-        <el-checkbox v-if="multiple" v-model="itemSelected"></el-checkbox>
+        <el-checkbox
+          v-if="multiple"
+          v-model="itemSelected"
+          :disabled="isDisabled"
+        ></el-checkbox>
         <el-tooltip
           ref="tooltipRef"
           effect="light"
@@ -120,6 +125,30 @@ export default defineComponent({
     const vm = (getCurrentInstance()! as OptionInternalInstance).proxy
     select.onOptionCreate(vm)
     const multiple = computed(() => select.props.multiple)
+    const isSelectedTop = computed(() => multiple.value && itemSelected.value)
+    const showSelectedDivider = computed(() => {
+      if (!multiple.value || itemSelected.value || !visible.value) return false
+
+      const visibleOptions = select.optionsArray.filter(
+        (option) => option.visible
+      )
+      const firstUnselectedOption = visibleOptions.find(
+        (option) => !option.itemSelected
+      )
+      const hasSelectedOption = visibleOptions.some(
+        (option) => option.itemSelected
+      )
+
+      return hasSelectedOption && firstUnselectedOption === vm
+    })
+    const optionStyle = computed(() => {
+      if (!multiple.value) return {}
+
+      return {
+        order: isSelectedTop.value ? 1 : 2,
+        borderTop: showSelectedDivider.value ? '1px solid #E7ECEF' : undefined,
+      }
+    })
     onBeforeUnmount(() => {
       const key = vm.value
 
@@ -201,6 +230,7 @@ export default defineComponent({
       disabled,
       showTip: props.showTip,
       placement: props.placement,
+      optionStyle,
       handleCellMouseEnter,
       hoverItem,
       updateOption,
