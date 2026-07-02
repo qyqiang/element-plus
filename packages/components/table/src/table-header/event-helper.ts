@@ -250,32 +250,64 @@ function useEvent<T extends DefaultRow>(
       const allowDarg =
         !isColumnBeforeLastRightFixedColumn(column) &&
         (props.allowDragLastColumn || !isLastTh)
-      if (rect.width > 12 && rect.right - event.clientX < 8 && allowDarg) {
+      const canShowAddColumnTrigger =
+        props.showAddColumnTrigger && tableRect && rect.width > 12
+      const columnIndex = props.store.states.columns.value.findIndex(
+        (item) => item.id === column.id
+      )
+      const isNearRightEdge = rect.right - event.clientX < 4 && allowDarg
+
+      if (rect.width > 12 && isNearRightEdge) {
         bodyStyle.cursor = 'col-resize'
         if (hasClass(target, 'is-sortable')) {
           target.style.cursor = 'col-resize'
         }
         draggingColumn.value = column as any
-        if (props.showAddColumnTrigger && tableRect) {
-          const columnIndex = props.store.states.columns.value.findIndex(
-            (item) => item.id === column.id
-          )
-          if (columnIndex > -1) {
-            emit('update-add-column-trigger', {
-              column,
-              columnIndex,
-              insertIndex: columnIndex + 1,
-              left: rect.right - tableRect.left,
-              top: rect.top - tableRect.top + rect.height / 2,
-            })
-          }
+        if (canShowAddColumnTrigger && columnIndex > -1) {
+          emit('update-add-column-trigger', {
+            column,
+            columnIndex,
+            insertIndex: columnIndex + 1,
+            left: rect.right - tableRect.left,
+            top: rect.top - tableRect.top + rect.height / 2,
+          })
         } else {
           clearAddColumnTrigger()
         }
-      } else if (!dragging.value) {
+      } else if (canShowAddColumnTrigger && columnIndex > -1) {
         bodyStyle.cursor = ''
         if (hasClass(target, 'is-sortable')) {
           target.style.cursor = 'pointer'
+        }
+        draggingColumn.value = null
+
+        const isLeftHalf = event.clientX < rect.left + rect.width / 2
+        const disableInsertBeforeFirstColumn =
+          columnIndex === 0 &&
+          isLeftHalf &&
+          column.allowInsertBeforeFirstColumn === false
+
+        if (disableInsertBeforeFirstColumn) {
+          clearAddColumnTrigger()
+          return
+        }
+
+        const insertBefore = isLeftHalf
+        emit('update-add-column-trigger', {
+          column,
+          columnIndex,
+          insertIndex: insertBefore ? columnIndex : columnIndex + 1,
+          left: insertBefore
+            ? rect.left - tableRect.left
+            : rect.right - tableRect.left,
+          top: rect.top - tableRect.top + rect.height / 2,
+        })
+      } else {
+        bodyStyle.cursor = ''
+        if (hasClass(target, 'is-sortable')) {
+          target.style.cursor = 'pointer'
+        } else {
+          target.style.cursor = ''
         }
         draggingColumn.value = null
         clearAddColumnTrigger()

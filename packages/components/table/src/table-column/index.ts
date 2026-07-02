@@ -112,6 +112,7 @@ export default defineComponent({
         'type',
         'renderHeader',
         'diagonalHeader',
+        'allowInsertBeforeFirstColumn',
         'formatter',
         'fixed',
         'resizable',

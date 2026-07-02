@@ -15,6 +15,7 @@ import {
   ensureArray,
   getEventCode,
   isArray,
+  isBoolean,
   isClient,
   isEmpty,
   isFunction,
@@ -22,8 +23,10 @@ import {
   isNumber,
   isObject,
   isPlainObject,
+  isPromise,
   isUndefined,
   scrollIntoView,
+  throwError,
 } from '@element-plus/utils'
 import {
   CHANGE_EVENT,
@@ -545,6 +548,37 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     }
   }
 
+  const checkBeforeChange = async (
+    value: OptionValue | OptionValue[],
+    oldValue: SelectProps['modelValue']
+  ) => {
+    if (isEqual(value, oldValue) || !props.beforeChange) return true
+
+    const shouldChange = props.beforeChange(value, oldValue)
+    const isPromiseOrBool = [
+      isPromise(shouldChange),
+      isBoolean(shouldChange),
+    ].includes(true)
+
+    if (!isPromiseOrBool) {
+      throwError(
+        'ElSelect',
+        'beforeChange must return type `Promise<boolean>` or `boolean`'
+      )
+    }
+
+    if (isPromise(shouldChange)) {
+      try {
+        return !!(await shouldChange)
+      } catch (error) {
+        debugWarn('ElSelect', `some error occurred: ${error}`)
+        return false
+      }
+    }
+
+    return shouldChange
+  }
+
   const getLastNotDisabledIndex = (value: OptionValue[]) =>
     findLastIndex(value, (it) => {
       const option = states.cachedOptions.get(it)
@@ -596,7 +630,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     focus()
   }
 
-  const handleOptionSelect = (option: OptionPublicInstance) => {
+  const handleOptionSelect = async (option: OptionPublicInstance) => {
     if (props.multiple) {
       const value = ensureArray(props.modelValue ?? []).slice()
       const optionIndex = getValueIndex(value, option)
@@ -608,6 +642,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
       ) {
         value.push(option.value)
       }
+      if (!(await checkBeforeChange(value, props.modelValue))) return
       emit(UPDATE_MODEL_EVENT, value)
       emitChange(value)
       if (option.created) {
@@ -617,6 +652,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
         states.inputValue = ''
       }
     } else {
+      if (!(await checkBeforeChange(option.value, props.modelValue))) return
       !isEqual(props.modelValue, option.value) &&
         emit(UPDATE_MODEL_EVENT, option.value)
       emitChange(option.value)

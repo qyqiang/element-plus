@@ -12,7 +12,7 @@ import { tagProps } from '@element-plus/components/tag'
 import { CHANGE_EVENT, UPDATE_MODEL_EVENT } from '@element-plus/constants'
 import { defaultProps } from '@element-plus/components/select-v2/src/useProps'
 
-import type { EmitFn } from '@element-plus/utils'
+import type { Awaitable, EmitFn } from '@element-plus/utils'
 import type {
   CSSProperties,
   ExtractPropTypes,
@@ -87,6 +87,17 @@ export const selectProps = buildProps({
    * @description whether Select is filterable
    */
   filterable: Boolean,
+  /**
+   * @description hook before the selected value changes. If `false` is returned or a `Promise` is returned and then is rejected, selection will be prevented
+   */
+  beforeChange: {
+    type: definePropType<
+      (
+        value: OptionValue | OptionValue[] | null | undefined,
+        oldValue: OptionValue | OptionValue[] | null | undefined
+      ) => Awaitable<boolean>
+    >(Function),
+  },
   /**
    * @description whether creating new items is allowed. To use this, `filterable` must be true
    */

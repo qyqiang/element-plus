@@ -560,6 +560,8 @@ const handleChange = async (event: Event) => {
   value = formatValue(value)
   if (props.modelModifiers.lazy) {
     emit(UPDATE_MODEL_EVENT, value)
+  } else if (String(value) !== nativeInputValue.value) {
+    emit(UPDATE_MODEL_EVENT, value)
   }
   emit(CHANGE_EVENT, value)
 

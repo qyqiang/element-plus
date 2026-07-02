@@ -505,6 +505,26 @@ describe('Input.vue', () => {
       expect(content.value).toEqual('a')
       expect(nativeInput.value).toEqual('a')
     })
+
+    test('change keeps the latest value when composition input skipped model sync', async () => {
+      const content = ref('')
+      const wrapper = mount(() => (
+        <Input type="textarea" v-model={content.value} />
+      ))
+      const textarea = wrapper.find('textarea')
+      const nativeTextarea = textarea.element as HTMLTextAreaElement
+
+      nativeTextarea.value = '中'
+      await textarea.trigger('compositionstart')
+      await textarea.trigger('input')
+
+      nativeTextarea.value = '123'
+      await textarea.trigger('change')
+      await nextTick()
+
+      expect(content.value).toBe('123')
+      expect(nativeTextarea.value).toBe('123')
+    })
   })
 
   test('non-emit event such as keyup should work', async () => {

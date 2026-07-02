@@ -34,6 +34,7 @@ vi.mock('@vueuse/core', async () => {
 interface SelectProps {
   filterMethod?: any
   remoteMethod?: any
+  beforeChange?: any
   multiple?: boolean
   clearable?: boolean
   filterable?: boolean
@@ -150,6 +151,7 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
       :remoteMethod="remoteMethod"
       :automatic-dropdown="automaticDropdown"
       :size="size"
+      :before-change="beforeChange"
       :fit-input-width="fitInputWidth">
       <el-option
         v-for="item in options"
@@ -177,6 +179,7 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
       filterMethod: configs.filterMethod,
       remote: configs.remote,
       remoteMethod: configs.remoteMethod,
+      beforeChange: configs.beforeChange,
       value: configs.multiple ? [] : '',
       size: configs.size || 'default',
     })
@@ -519,6 +522,7 @@ describe('Select', () => {
     const selectVm = select.vm as any
     expect(selectVm.selectedLabel).toStrictEqual([])
     await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+    await nextTick()
     const options = getOptions()
     options[0].click()
     await nextTick()
@@ -781,6 +785,7 @@ describe('Select', () => {
     )
     await nextTick()
     await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+    await nextTick()
     const options = getOptions()
     options[2].click()
     await nextTick()
@@ -927,6 +932,60 @@ describe('Select', () => {
       'Peking Duck'
     )
     expect(vm.count).toBe(2)
+  })
+
+  test('before-change prevents selecting a new option when it returns false', async () => {
+    const beforeChange = vi.fn(() => false)
+
+    wrapper = getSelectVm({ beforeChange })
+    ;(wrapper.vm as any).value = 'Option 1'
+    await nextTick()
+
+    const selectVm = wrapper.findComponent(Select).vm as any
+    const optionVm = wrapper.findAllComponents(Option)[1].vm as any
+    selectVm.handleOptionSelect(optionVm)
+    await nextTick()
+
+    const vm = wrapper.vm as any
+    expect(beforeChange).toHaveBeenCalledTimes(1)
+    expect(beforeChange).toHaveBeenCalledWith('Option 2', 'Option 1')
+    expect(vm.value).toBe('Option 1')
+  })
+
+  test('before-change allows selecting a new option when it returns true', async () => {
+    const beforeChange = vi.fn(() => true)
+
+    wrapper = getSelectVm({ beforeChange })
+    ;(wrapper.vm as any).value = 'Option 1'
+    await nextTick()
+
+    const selectVm = wrapper.findComponent(Select).vm as any
+    const optionVm = wrapper.findAllComponents(Option)[1].vm as any
+    selectVm.handleOptionSelect(optionVm)
+    await nextTick()
+
+    const vm = wrapper.vm as any
+    expect(beforeChange).toHaveBeenCalledTimes(1)
+    expect(beforeChange).toHaveBeenCalledWith('Option 2', 'Option 1')
+    expect(vm.value).toBe('Option 2')
+  })
+
+  test('before-change allows selecting a new option when promise resolves true', async () => {
+    const beforeChange = vi.fn(() => Promise.resolve(true))
+
+    wrapper = getSelectVm({ beforeChange })
+    ;(wrapper.vm as any).value = 'Option 1'
+    await nextTick()
+
+    const selectVm = wrapper.findComponent(Select).vm as any
+    const optionVm = wrapper.findAllComponents(Option)[1].vm as any
+    await selectVm.handleOptionSelect(optionVm)
+    await nextTick()
+
+    const vm = wrapper.vm as any
+    expect(beforeChange).toHaveBeenCalledTimes(1)
+    expect(beforeChange).toHaveBeenCalledWith('Option 2', 'Option 1')
+    expect(vm.value).toBe('Option 2')
   })
 
   test('disabled option', async () => {

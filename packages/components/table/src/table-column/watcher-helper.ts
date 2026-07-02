@@ -58,6 +58,7 @@ function useWatcher<T extends DefaultRow>(
       'className',
       'labelClassName',
       'diagonalHeader',
+      'allowInsertBeforeFirstColumn',
       'filterClassName',
       'showOverflowTooltip',
       'tooltipFormatter',

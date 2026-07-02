@@ -85,6 +85,7 @@ type TableColumnCtx<T extends DefaultRow = DefaultRow> = {
   renderFilterIcon?: (scope: any) => VNode
   renderExpand?: (scope: any) => VNode
   diagonalHeader?: DiagonalHeaderConfig
+  allowInsertBeforeFirstColumn: boolean
 }
 
 interface TableColumn<T extends DefaultRow> extends ComponentInternalInstance {
@@ -148,6 +149,13 @@ export default {
    * @description configures this column header as a diagonal header with `from` and `to` labels
    */
   diagonalHeader: Object as PropType<TableColumnCtx<any>['diagonalHeader']>,
+  /**
+   * @description whether the first column can insert a new column before itself when hovering the left half of its header
+   */
+  allowInsertBeforeFirstColumn: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description whether column can be sorted. Remote sorting can be done by setting this attribute to 'custom' and listening to the `sort-change` event of Table
    */

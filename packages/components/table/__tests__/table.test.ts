@@ -3566,6 +3566,314 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('shows add-column trigger before a column when hovering the left half', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+          @add-column="onAddColumn"
+        >
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+          onAddColumn: vi.fn(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const th = wrapper.findAll('thead th')[1].element as HTMLElement
+    const rect = {
+      left: 120,
+      right: 240,
+      top: 0,
+      bottom: 40,
+      width: 120,
+      height: 40,
+      x: 120,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
+
+    await wrapper.findAll('thead th')[1].trigger('mousemove', {
+      clientX: 145,
+      clientY: 20,
+    })
+    await doubleWait()
+
+    const trigger = wrapper.find('.el-table__add-column-trigger-button')
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    const tableWrapper = wrapper.findComponent(ElTable)
+    const payload = tableWrapper.emitted('add-column')?.[0]?.[0]
+    expect(payload).toMatchObject({
+      columnIndex: 1,
+      insertIndex: 1,
+    })
+    expect(payload.column.property).toBe('director')
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('inserts before the first column when hovering the left half of the first header', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+          @add-column="onAddColumn"
+        >
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+          onAddColumn: vi.fn(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const th = wrapper.findAll('thead th')[0].element as HTMLElement
+    const rect = {
+      left: 0,
+      right: 120,
+      top: 0,
+      bottom: 40,
+      width: 120,
+      height: 40,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
+
+    await wrapper.findAll('thead th')[0].trigger('mousemove', {
+      clientX: 20,
+      clientY: 20,
+    })
+    await doubleWait()
+
+    const trigger = wrapper.find('.el-table__add-column-trigger-button')
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    const tableWrapper = wrapper.findComponent(ElTable)
+    const payload = tableWrapper.emitted('add-column')?.[0]?.[0]
+    expect(payload).toMatchObject({
+      columnIndex: 0,
+      insertIndex: 0,
+    })
+    expect(payload.column.property).toBe('name')
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('does not show add-column trigger on the left half of the first column when allow-insert-before-first-column is disabled', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+          @add-column="onAddColumn"
+        >
+          <el-table-column
+            prop="name"
+            label="Name"
+            :allow-insert-before-first-column="false"
+          />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+          onAddColumn: vi.fn(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const th = wrapper.findAll('thead th')[0].element as HTMLElement
+    const rect = {
+      left: 0,
+      right: 120,
+      top: 0,
+      bottom: 40,
+      width: 120,
+      height: 40,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
+
+    await wrapper.findAll('thead th')[0].trigger('mousemove', {
+      clientX: 20,
+      clientY: 20,
+    })
+    await doubleWait()
+
+    const trigger = wrapper.find('.el-table__add-column-trigger-button')
+    const tableWrapper = wrapper.findComponent(ElTable)
+    expect(trigger.exists()).toBe(true)
+    expect(trigger.isVisible()).toBe(false)
+    expect(tableWrapper.emitted('add-column')).toBeUndefined()
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('shows add-column trigger after a column when hovering the right half away from the edge', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+          @add-column="onAddColumn"
+        >
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+          onAddColumn: vi.fn(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const th = wrapper.findAll('thead th')[1].element as HTMLElement
+    const rect = {
+      left: 120,
+      right: 240,
+      top: 0,
+      bottom: 40,
+      width: 120,
+      height: 40,
+      x: 120,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
+
+    await wrapper.findAll('thead th')[1].trigger('mousemove', {
+      clientX: 190,
+      clientY: 20,
+    })
+    await doubleWait()
+
+    const trigger = wrapper.find('.el-table__add-column-trigger-button')
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    const tableWrapper = wrapper.findComponent(ElTable)
+    const payload = tableWrapper.emitted('add-column')?.[0]?.[0]
+    expect(payload).toMatchObject({
+      columnIndex: 1,
+      insertIndex: 2,
+    })
+    expect(payload.column.property).toBe('director')
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('does not use the edge resize state when hovering 5px from the right edge', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData" border show-add-column-trigger>
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const thWrapper = wrapper.findAll('thead th')[0]
+    const th = thWrapper.element as HTMLElement
+    const rect = {
+      left: 0,
+      right: 120,
+      top: 0,
+      bottom: 40,
+      width: 120,
+      height: 40,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
+
+    document.body.style.cursor = ''
+
+    await thWrapper.trigger('mousemove', {
+      clientX: 115,
+      clientY: 20,
+    })
+    await doubleWait()
+
+    expect(document.body.style.cursor).toBe('')
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
   it('adds a wrapper state class when add-column trigger is enabled', async () => {
     const wrapper = mount({
       components: {
@@ -3660,7 +3968,7 @@ describe('Table.vue', () => {
     const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
 
     await thWrapper.trigger('mousemove', {
-      clientX: 115,
+      clientX: 117,
       clientY: 20,
     })
     await doubleWait()
@@ -3717,7 +4025,7 @@ describe('Table.vue', () => {
     const rectSpy = vi.spyOn(th, 'getBoundingClientRect').mockReturnValue(rect)
 
     await wrapper.findAll('thead th')[0].trigger('mousemove', {
-      clientX: 115,
+      clientX: 117,
       clientY: 20,
     })
     await doubleWait()
@@ -3773,7 +4081,7 @@ describe('Table.vue', () => {
     document.body.style.cursor = ''
 
     await thWrapper.trigger('mousemove', {
-      clientX: 115,
+      clientX: 117,
       clientY: 20,
     })
     await doubleWait()
@@ -3781,7 +4089,7 @@ describe('Table.vue', () => {
     expect(document.body.style.cursor).toBe('')
     const trigger = wrapper.find('.el-table__add-column-trigger-button')
     expect(trigger.exists()).toBe(true)
-    expect(trigger.isVisible()).toBe(false)
+    expect(trigger.isVisible()).toBe(true)
 
     rectSpy.mockRestore()
     wrapper.unmount()
