@@ -2,7 +2,7 @@ import { computed, ref, watch } from 'vue'
 import { useProps } from './useProps'
 
 import type { SelectV2Props } from './token'
-import type { Option, SelectStates } from './select.types'
+import type { Option, OptionType, SelectStates } from './select.types'
 
 export function useAllowCreate(props: SelectV2Props, states: SelectStates) {
   const { aliasProps, getLabel, getValue } = useProps(props)
@@ -17,7 +17,9 @@ export function useAllowCreate(props: SelectV2Props, states: SelectStates) {
   watch(
     () => props.options,
     (options) => {
-      const optionLabelsSet = new Set(options.map((option) => getLabel(option)))
+      const optionLabelsSet = new Set(
+        options.map((option: OptionType) => getLabel(option))
+      )
       states.createdOptions = states.createdOptions.filter(
         (createdOption) => !optionLabelsSet.has(getLabel(createdOption))
       )

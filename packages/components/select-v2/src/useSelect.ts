@@ -47,7 +47,7 @@ import { useProps } from './useProps'
 
 import type { Option, OptionType, SelectStates } from './select.types'
 import type { SelectV2Props } from './token'
-import type { SelectV2EmitFn } from './defaults'
+import type { SelectV2EmitFn, SelectV2ModelValue } from './defaults'
 import type { TooltipInstance } from '@element-plus/components/tooltip'
 import type { SelectDropdownInstance } from './select-dropdown'
 
@@ -224,7 +224,7 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     }
 
     return props.modelValue.some(
-      (value) => getValueKey(value) === getValueKey(optionValue)
+      (value: unknown) => getValueKey(value) === getValueKey(optionValue)
     )
   }
 
@@ -552,7 +552,7 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     nextTick(() => {
       if (props.multiple && isArray(props.modelValue)) {
         const cachedOptions = states.cachedOptions.slice()
-        const selectedOptions = props.modelValue.map((value) =>
+        const selectedOptions = props.modelValue.map((value: unknown) =>
           getOption(value, cachedOptions)
         )
 
@@ -609,8 +609,8 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
   }
 
   const checkBeforeChange = async (
-    value: SelectV2Props['modelValue'],
-    oldValue: SelectV2Props['modelValue']
+    value: SelectV2ModelValue,
+    oldValue: SelectV2ModelValue
   ) => {
     if (isEqual(value, oldValue) || !props.beforeChange) return true
 

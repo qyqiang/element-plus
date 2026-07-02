@@ -66,13 +66,15 @@ import {
   isGreaterThan,
 } from '@element-plus/components/table/src/util'
 import ElCheckbox from '@element-plus/components/checkbox'
+import ElIcon from '@element-plus/components/icon'
 import ElTooltip from '@element-plus/components/tooltip'
 import { useNamespace } from '@element-plus/hooks'
 import { useOption } from './useOption'
 import { useProps } from './useProps'
 import { optionV2Emits, optionV2Props } from './defaults'
 import { selectV2InjectionKey } from './token'
-import ElIcon from '@element-plus/components/icon'
+
+import type { Option } from './select.types'
 
 export default defineComponent({
   components: { ElCheckbox, ElIcon, ElTooltip },
@@ -99,7 +101,7 @@ export default defineComponent({
       }
 
       return values.some(
-        (value) =>
+        (value: unknown) =>
           get(value, select.props.valueKey) ===
           get(itemValue, select.props.valueKey)
       )
@@ -107,7 +109,9 @@ export default defineComponent({
     const selectedCount = computed(() => {
       if (!multiple.value || !Array.isArray(props.data)) return 0
 
-      return props.data.filter((item) => isItemSelected(item as Option)).length
+      return props.data.filter((item: unknown) =>
+        isItemSelected(item as Option)
+      ).length
     })
     const showSelectedDivider = computed(() => {
       return (

@@ -29,6 +29,14 @@ import type {
   PopperEffect,
 } from '@element-plus/components/popper'
 
+export type SelectV2ModelValue =
+  | any[]
+  | string
+  | number
+  | boolean
+  | Record<string, any>
+  | any
+
 export const selectV2Props = buildProps({
   /**
    * @description whether creating new items is allowed. To use this, `filterable` must be true
@@ -110,8 +118,8 @@ export const selectV2Props = buildProps({
   beforeChange: {
     type: definePropType<
       (
-        value: SelectV2Props['modelValue'],
-        oldValue: SelectV2Props['modelValue']
+        value: SelectV2ModelValue,
+        oldValue: SelectV2ModelValue
       ) => Awaitable<boolean>
     >(Function),
   },
@@ -352,8 +360,8 @@ export const optionV2Props = buildProps({
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 export const selectV2Emits = {
-  [UPDATE_MODEL_EVENT]: (val: SelectV2Props['modelValue']) => true,
-  [CHANGE_EVENT]: (val: SelectV2Props['modelValue']) => true,
+  [UPDATE_MODEL_EVENT]: (val: SelectV2ModelValue) => true,
+  [CHANGE_EVENT]: (val: SelectV2ModelValue) => true,
   'remove-tag': (val: unknown) => true,
   'visible-change': (visible: boolean) => true,
   focus: (evt: FocusEvent) => evt instanceof FocusEvent,
