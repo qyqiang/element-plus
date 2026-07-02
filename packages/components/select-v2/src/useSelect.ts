@@ -15,11 +15,14 @@ import {
   escapeStringRegexp,
   getEventCode,
   isArray,
+  isBoolean,
   isEmpty,
   isFunction,
   isNumber,
   isObject,
+  isPromise,
   isUndefined,
+  throwError,
 } from '@element-plus/utils'
 import {
   useComposition,
@@ -570,28 +573,64 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     tagTooltipRef.value?.updatePopper?.()
   }
 
-  const onSelect = (option: Option) => {
+  const checkBeforeChange = async (
+    value: SelectV2Props['modelValue'],
+    oldValue: SelectV2Props['modelValue']
+  ) => {
+    if (isEqual(value, oldValue) || !props.beforeChange) return true
+
+    const shouldChange = props.beforeChange(value, oldValue)
+    const isPromiseOrBool = [
+      isPromise(shouldChange),
+      isBoolean(shouldChange),
+    ].filter(Boolean).length
+
+    if (!isPromiseOrBool) {
+      throwError(
+        'ElSelectV2',
+        'beforeChange must return type `Promise<boolean>` or `boolean`'
+      )
+    }
+
+    if (isPromise(shouldChange)) {
+      return shouldChange.catch((err) => {
+        debugWarn('ElSelectV2', `some error occurred: ${err}`)
+        return false
+      })
+    }
+
+    return shouldChange
+  }
+
+  const onSelect = async (option: Option) => {
     const optionValue = getValue(option)
 
     if (props.multiple) {
       let selectedOptions = (props.modelValue as any[]).slice()
 
       const index = getValueIndex(selectedOptions, optionValue)
-      if (index > -1) {
+      const isSelected = index > -1
+      const canSelect =
+        props.multipleLimit <= 0 || selectedOptions.length < props.multipleLimit
+
+      if (isSelected) {
         selectedOptions = [
           ...selectedOptions.slice(0, index),
           ...selectedOptions.slice(index + 1),
         ]
+      } else if (canSelect) {
+        selectedOptions = [...selectedOptions, optionValue]
+      }
+      if (!(await checkBeforeChange(selectedOptions, props.modelValue))) return
+
+      if (isSelected) {
         states.cachedOptions.splice(index, 1)
         removeNewOption(option)
-      } else if (
-        props.multipleLimit <= 0 ||
-        selectedOptions.length < props.multipleLimit
-      ) {
-        selectedOptions = [...selectedOptions, optionValue]
+      } else if (canSelect) {
         states.cachedOptions.push(option)
         selectNewOption(option)
       }
+
       update(selectedOptions)
       if (option.created) {
         handleQueryChange('')
@@ -600,6 +639,7 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
         states.inputValue = ''
       }
     } else {
+      if (!(await checkBeforeChange(optionValue, props.modelValue))) return
       states.selectedLabel = getLabel(option)
       !isEqual(props.modelValue, optionValue) && update(optionValue)
       expanded.value = false

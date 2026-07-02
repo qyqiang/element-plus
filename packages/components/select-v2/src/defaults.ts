@@ -20,6 +20,7 @@ import { defaultProps } from './useProps'
 import type SelectV2 from './select.vue'
 import type { Option, OptionType } from './select.types'
 import type { Props } from './useProps'
+import type { Awaitable } from '@element-plus/utils'
 import type { EmitFn } from '@element-plus/utils/vue/typescript'
 import type { ExtractPropTypes, __ExtractPublicPropTypes } from 'vue'
 import type {
@@ -103,6 +104,17 @@ export const selectV2Props = buildProps({
    * @description whether Select is filterable
    */
   filterable: Boolean,
+  /**
+   * @description hook before the selected value changes. If `false` is returned or a `Promise` is returned and then is rejected, selection will be prevented
+   */
+  beforeChange: {
+    type: definePropType<
+      (
+        value: SelectV2Props['modelValue'],
+        oldValue: SelectV2Props['modelValue']
+      ) => Awaitable<boolean>
+    >(Function),
+  },
   /**
    * @description custom filter method, the first parameter is the current input value. To use this, `filterable` must be true
    */

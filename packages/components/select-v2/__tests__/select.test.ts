@@ -61,6 +61,7 @@ const clickClearButton = async (wrapper) => {
 interface SelectProps {
   popperClass?: string
   value?: string | string[] | number | number[]
+  beforeChange?: any
   options?: any[]
   props?: Props
   disabled?: boolean
@@ -137,6 +138,7 @@ const createSelect = (
         :collapseTagsTooltip="collapseTagsTooltip"
         :max-collapse-tags="maxCollapseTags"
         :filterable="filterable"
+        :before-change="beforeChange"
         :multiple-limit="multipleLimit"
         :placeholder="placeholder"
         :allow-create="allowCreate"
@@ -178,6 +180,7 @@ const createSelect = (
             options: 'options',
           },
           value: '',
+          beforeChange: undefined,
           popperClass: '',
           allowCreate: false,
           valueKey: 'value',
@@ -1247,6 +1250,108 @@ describe('Select', () => {
         key: EVENT_CODE.backspace,
       })
       expect(selectVm.filteredOptions.length).toBe(3)
+    })
+  })
+
+  describe('before-change', () => {
+    it('prevents selecting a new option when it returns false', async () => {
+      const beforeChange = vi.fn(() => false)
+      const wrapper = createSelect({
+        data: () => ({
+          beforeChange,
+          options: [
+            { value: 'Option 1', label: 'Option 1' },
+            { value: 'Option 2', label: 'Option 2' },
+          ],
+          value: 'Option 1',
+        }),
+      })
+
+      await nextTick()
+      const selectVm = wrapper.findComponent(Select).vm as any
+      const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`)
+
+      await selectVm.onSelect(selectVm.filteredOptions[1])
+
+      expect(beforeChange).toHaveBeenCalledTimes(1)
+      expect(beforeChange).toHaveBeenCalledWith('Option 2', 'Option 1')
+      expect((wrapper.vm as any).value).toBe('Option 1')
+      expect(selectVm.selectedLabel).toBe('Option 1')
+      expect(placeholder.text()).toBe('Option 1')
+    })
+
+    it('allows selecting a new option when it returns true', async () => {
+      const beforeChange = vi.fn(() => true)
+      const wrapper = createSelect({
+        data: () => ({
+          beforeChange,
+          options: [
+            { value: 'Option 1', label: 'Option 1' },
+            { value: 'Option 2', label: 'Option 2' },
+          ],
+          value: 'Option 1',
+        }),
+      })
+
+      await nextTick()
+      const selectVm = wrapper.findComponent(Select).vm as any
+
+      await selectVm.onSelect(selectVm.filteredOptions[1])
+
+      expect(beforeChange).toHaveBeenCalledTimes(1)
+      expect(beforeChange).toHaveBeenCalledWith('Option 2', 'Option 1')
+      expect((wrapper.vm as any).value).toBe('Option 2')
+    })
+
+    it('allows selecting a new option when promise resolves true', async () => {
+      const beforeChange = vi.fn(() => Promise.resolve(true))
+      const wrapper = createSelect({
+        data: () => ({
+          beforeChange,
+          options: [
+            { value: 'Option 1', label: 'Option 1' },
+            { value: 'Option 2', label: 'Option 2' },
+          ],
+          value: 'Option 1',
+        }),
+      })
+
+      await nextTick()
+      const selectVm = wrapper.findComponent(Select).vm as any
+
+      await selectVm.onSelect(selectVm.filteredOptions[1])
+
+      expect(beforeChange).toHaveBeenCalledTimes(1)
+      expect(beforeChange).toHaveBeenCalledWith('Option 2', 'Option 1')
+      expect((wrapper.vm as any).value).toBe('Option 2')
+    })
+
+    it('prevents updating selected tags in multiple mode when it returns false', async () => {
+      const beforeChange = vi.fn(() => false)
+      const wrapper = createSelect({
+        data: () => ({
+          beforeChange,
+          multiple: true,
+          options: [
+            { value: 'Option 1', label: 'Option 1' },
+            { value: 'Option 2', label: 'Option 2' },
+          ],
+          value: ['Option 1'],
+        }),
+      })
+
+      await nextTick()
+      const selectVm = wrapper.findComponent(Select).vm as any
+
+      await selectVm.onSelect(selectVm.filteredOptions[1])
+
+      expect(beforeChange).toHaveBeenCalledTimes(1)
+      expect(beforeChange).toHaveBeenCalledWith(
+        ['Option 1', 'Option 2'],
+        ['Option 1']
+      )
+      expect((wrapper.vm as any).value).toStrictEqual(['Option 1'])
+      expect(selectVm.selectedLabel).toStrictEqual(['Option 1'])
     })
   })
 
