@@ -9,7 +9,9 @@
       label="label1"
       filterable
       :float-label="false"
+      :fit-input-width="false"
       :filter-max-length="24"
+      :option-width="400"
       style="width: 240px"
     >
       <template #itemIcon>

@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[ns.b('dropdown'), ns.is('multiple', isMultiple), popperClass]"
-    :style="{ [isFitInputWidth ? 'width' : 'minWidth']: minWidth }"
+    :style="dropdownStyle"
   >
     <div v-if="$slots.header" :class="ns.be('dropdown', 'header')">
       <slot name="header" />
@@ -17,6 +17,7 @@
 import { computed, defineComponent, inject, onMounted, ref } from 'vue'
 import { useResizeObserver } from '@vueuse/core'
 import { useNamespace } from '@element-plus/hooks'
+import { addUnit } from '@element-plus/utils'
 import { selectKey } from './token'
 import { BORDER_HORIZONTAL_WIDTH } from '@element-plus/constants'
 
@@ -33,7 +34,18 @@ export default defineComponent({
     const popperClass = computed(() => select.props.popperClass)
     const isMultiple = computed(() => select.props.multiple)
     const isFitInputWidth = computed(() => select.props.fitInputWidth)
+    const optionWidth = computed(() => addUnit(select.props.optionWidth))
     const minWidth = ref('')
+    const dropdownStyle = computed(() => {
+      if (!isFitInputWidth.value && optionWidth.value) {
+        return {
+          width: optionWidth.value,
+        }
+      }
+      return {
+        [isFitInputWidth.value ? 'width' : 'minWidth']: minWidth.value,
+      }
+    })
 
     function updateMinWidth() {
       const offsetWidth = select.selectRef?.offsetWidth
@@ -54,6 +66,7 @@ export default defineComponent({
     return {
       ns,
       minWidth,
+      dropdownStyle,
       popperClass,
       isMultiple,
       isFitInputWidth,

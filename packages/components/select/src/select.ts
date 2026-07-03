@@ -252,6 +252,13 @@ export const selectProps = buildProps({
     default: true,
   },
   /**
+   * @description custom dropdown width, only works when `fit-input-width` is `false`
+   */
+  optionWidth: {
+    type: [String, Number],
+    default: undefined,
+  },
+  /**
    * @description custom suffix icon component
    */
   suffixIcon: {

@@ -48,6 +48,7 @@ interface SelectProps {
   popperStyle?: string
   defaultFirstOption?: boolean
   fitInputWidth?: boolean
+  optionWidth?: number | string
   size?: 'small' | 'default' | 'large'
   debounce?: number
 }
@@ -151,7 +152,8 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
       :automatic-dropdown="automaticDropdown"
       :size="size"
       :before-change="beforeChange"
-      :fit-input-width="fitInputWidth">
+      :fit-input-width="fitInputWidth"
+      :option-width="optionWidth">
       <el-option
         v-for="item in options"
         :label="item.label"
@@ -174,6 +176,7 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
       popperStyle: configs.popperStyle,
       automaticDropdown: configs.automaticDropdown,
       fitInputWidth: configs.fitInputWidth,
+      optionWidth: configs.optionWidth,
       loading: false,
       filterMethod: configs.filterMethod,
       remote: configs.remote,
@@ -1272,6 +1275,35 @@ describe('Select', () => {
     await nextTick()
     expect(dropdown.element.style.width).toBe('219px')
     mockSelectWidth.mockRestore()
+  })
+
+  test('optionWidth overrides dropdown width when fitInputWidth is false', async () => {
+    wrapper = getSelectVm({ fitInputWidth: false, optionWidth: 320 })
+    const dropdown = wrapper.findComponent({ name: 'ElSelectDropdown' })
+
+    await nextTick()
+
+    expect(dropdown.element.style.width).toBe('320px')
+    expect(dropdown.element.style.minWidth).toBe('')
+  })
+
+  test('optionWidth accepts numeric string and unit string when fitInputWidth is false', async () => {
+    wrapper = getSelectVm({ fitInputWidth: false, optionWidth: '320' })
+    let dropdown = wrapper.findComponent({ name: 'ElSelectDropdown' })
+
+    await nextTick()
+
+    expect(dropdown.element.style.width).toBe('320px')
+    expect(dropdown.element.style.minWidth).toBe('')
+
+    await wrapper.setProps({
+      optionWidth: '10px',
+    })
+    await nextTick()
+
+    dropdown = wrapper.findComponent({ name: 'ElSelectDropdown' })
+    expect(dropdown.element.style.width).toBe('10px')
+    expect(dropdown.element.style.minWidth).toBe('')
   })
 
   test('check default first option', async () => {
