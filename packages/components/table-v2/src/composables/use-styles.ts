@@ -22,6 +22,10 @@ export const useStyles = (
     fixedColumnsOnRight,
   }: UseStyleProps
 ) => {
+  const addRowHeight = computed(() =>
+    props.canEditTable && props.editable ? props.rowHeight : 0
+  )
+
   const bodyWidth = computed(() => {
     const { fixed, width, vScrollbarSize } = props
     const ret = width - vScrollbarSize
@@ -38,10 +42,10 @@ export const useStyles = (
       const total =
         _headerHeight + _fixedRowsHeight + _rowsHeight + hScrollbarSize
 
-      return Math.min(total, maxHeight - footerHeight)
+      return Math.min(total, maxHeight - footerHeight - unref(addRowHeight))
     }
 
-    return height - footerHeight
+    return height - footerHeight - unref(addRowHeight)
   })
 
   const fixedTableHeight = computed(() => {
@@ -90,11 +94,12 @@ export const useStyles = (
 
   const emptyStyle = computed<CSSProperties>(() => ({
     top: addUnit(unref(headerHeight)),
-    bottom: addUnit(props.footerHeight),
+    bottom: addUnit(props.footerHeight + unref(addRowHeight)),
     width: addUnit(props.width),
   }))
 
   return {
+    addRowHeight,
     bodyWidth,
     fixedTableHeight,
     mainTableHeight,

@@ -6,7 +6,11 @@
     fixed
     :height="400"
     :editable="editable"
+    :total="100"
+    is-footer-default
+    update-time="2026-07-07"
     :can-edit-table="true"
+    @row-add="handleAdd"
     @row-delete="handleDelete"
   />
   <el-button @click="handleEdit">Edit Mode</el-button>
@@ -19,7 +23,7 @@ import { ElButton, ElOption, ElSelect } from 'element-plus'
 
 import type { Column } from 'element-plus'
 
-const editable = ref(false)
+const editable = ref(true)
 let id = 0
 const handleEdit = () => {
   editable.value = true
@@ -46,6 +50,7 @@ const columns: Column<any>[] = [
     title: 'Date2',
     dataKey: 'date',
     width: 150,
+    cellRenderer: ({ cellData: date }) => <span>{date}</span>,
   },
   {
     key: 'date',
@@ -65,27 +70,17 @@ const columns: Column<any>[] = [
     cellRenderer: ({ cellData: name }) => {
       return (
         <El-select float-label={false} placeholder="test1">
-          <El-option>ddd</El-option>
+          <El-option value="1">ddd</El-option>
         </El-select>
       )
     },
-  },
-  {
-    key: 'operations',
-    title: 'Operations',
-    cellRenderer: () => (
-      <>
-        <ElButton size="small" type="danger">
-          Delete
-        </ElButton>
-      </>
-    ),
-    width: 150,
-    align: 'center',
   },
 ]
 const handleDelete = (val) => {
   console.log(val)
 }
-const data = ref(Array.from({ length: 200 }).map(dataGenerator))
+const handleAdd = (val) => {
+  console.log(val)
+}
+const data = ref(Array.from({ length: 20 }).map(dataGenerator))
 </script>

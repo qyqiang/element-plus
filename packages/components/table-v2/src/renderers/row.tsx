@@ -1,4 +1,5 @@
 import { Row } from '../components'
+import { rowAddSign } from '../private'
 import { tryCall } from '../utils'
 
 import type {
@@ -7,6 +8,7 @@ import type {
   UnwrapNestedRefs,
 } from 'vue'
 import type { UseNamespaceReturn } from '@element-plus/hooks'
+import type { RowAddHandler } from '../row'
 import type { UseTableReturn } from '../use-table'
 import type { TableV2Props } from '../table'
 import type { TableGridRowSlotParams } from '../table-grid'
@@ -32,6 +34,7 @@ type RowRendererProps = TableGridRowSlotParams &
       | 'columnsStyles'
     >
   > & {
+    onRowAdd?: RowAddHandler
     ns: UseNamespaceReturn
     tableInstance?: ComponentInternalInstance
   }
@@ -56,6 +59,7 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
     rowClass,
     rowKey,
     rowEventHandlers,
+    onRowAdd,
     ns,
     onRowHovered,
     onRowExpanded,
@@ -71,9 +75,11 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
   const depth = depthMap[_rowKey] || 0
   const canExpand = Boolean(expandColumnKey)
   const isFixedRow = rowIndex < 0
+  const isAddRow = Boolean(rowData[rowAddSign])
   const kls = [
     ns.e('row'),
     rowKls,
+    isAddRow && ns.is('add-row'),
     ns.is('expanded', canExpand && expandedRowKeys.includes(_rowKey)),
     ns.is('fixed', !depth && isFixedRow),
     ns.is('customized', Boolean(slots.row)),
@@ -120,9 +126,20 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
     })
   }
 
+  const handlerClick = (e: MouseEvent) => {
+    if (!isAddRow) return
+    onRowAdd?.({
+      event: e,
+      rowData,
+      rowIndex,
+      rowKey: _rowKey,
+    })
+  }
+
   return (
     <Row
       {..._rowProps}
+      onClick={handlerClick}
       onRowExpand={onRowExpanded}
       onMouseenter={handlerMouseEnter}
       onMouseleave={handlerMouseLeave}

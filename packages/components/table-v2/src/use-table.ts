@@ -99,6 +99,7 @@ function useTable(props: TableV2Props) {
   })
 
   const {
+    addRowHeight,
     bodyWidth,
     fixedTableHeight,
     mainTableHeight,
@@ -199,6 +200,7 @@ function useTable(props: TableV2Props) {
     fixedColumnsOnRight,
     mainColumns,
     // metadata
+    addRowHeight,
     bodyWidth,
     emptyStyle,
     rootStyle,
@@ -226,6 +228,7 @@ function useTable(props: TableV2Props) {
     scrollToRow,
     onScroll,
     onVerticalScroll,
+    scrollPos,
   }
 }
 

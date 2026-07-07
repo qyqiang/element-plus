@@ -12,7 +12,7 @@ const FooterDefault: FunctionalComponent<FooterRendererProps> = (props) => {
     <div class={['footer-default', props.class]} style={props.style}>
       <div class="count">{props.total} items</div>
       {props.updateTime && (
-        <div class="time">Last Updated {props.updateTime ?? ''}</div>
+        <div class="time">Last Updated {props.updateTime}</div>
       )}
     </div>
   )

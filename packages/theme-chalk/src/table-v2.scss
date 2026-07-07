@@ -162,6 +162,32 @@
     z-index: 9999;
   }
 
+  @include e('add-row-main') {
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 3;
+    overflow: hidden;
+    bottom: 44px;
+    box-shadow: 0 -3px 1px -1px rgba(26, 26, 26, 0.07);
+  }
+
+  @include e('add-row-left') {
+    position: absolute;
+    left: 0;
+    z-index: 4;
+    overflow: hidden;
+    box-shadow: 2px 0 4px 0 rgb(0 0 0 / 6%);
+  }
+
+  @include e('add-row-right') {
+    position: absolute;
+    right: 0;
+    z-index: 4;
+    overflow: hidden;
+    box-shadow: -2px 0 4px 0 rgb(0 0 0 / 6%);
+  }
+
   @include e('header-row') {
     display: flex;
     border-bottom: getCssVar('table', 'border');
@@ -216,6 +242,11 @@
       background-color: getCssVar('table-row', 'hover-bg-color');
     }
 
+    @include when('add-row') {
+      background-color: #fff;
+      cursor: pointer;
+    }
+
     &:hover {
       background-color: getCssVar('table-row', 'hover-bg-color');
     }
@@ -259,6 +290,10 @@
 
   .delete-icon {
     margin-left: 0 !important;
+  }
+
+  @include e('row-add-button') {
+    padding: 0;
   }
 
   @include when(dynamic) {

@@ -362,6 +362,8 @@ table-v2/manual-scroll
 | scroll               | Invoked after scrolling                                                                                                         | `object`\<[ScrollParams](#typings)\>          |
 | rows-rendered        | Invoked when rows are rendered                                                                                                  | `object`\<[RowsRenderedParams](#typings)\>    |
 | row-expand           | Invoked when expand/collapse the tree node by clicking the arrow icon                                                           | `object`\<[RowExpandParams](#typings)\>       |
+| row-add              | Invoked when the editable ghost row or its action button is clicked                                                             | `object`\<[RowAddParams](#typings)\>          |
+| row-delete           | Invoked when the editable delete action is clicked                                                                              | `object`\<[RowDeleteParams](#typings)\>       |
 
 ### TableV2 Exposes
 
@@ -552,6 +554,16 @@ type RowSlotProps = {
 
 type RowExpandParams = {
   expanded: boolean
+  rowKey: KeyType
+} & RowCommonParams
+
+type RowAddParams = {
+  event: MouseEvent
+  rowKey: KeyType
+} & RowCommonParams
+
+type RowDeleteParams = {
+  event: MouseEvent
   rowKey: KeyType
 } & RowCommonParams
 

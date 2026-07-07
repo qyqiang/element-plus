@@ -299,6 +299,115 @@ describe('TableV2.vue', () => {
     expect(wrapper.find('.el-table-v2__row-delete-button').exists()).toBe(false)
   })
 
+  test('renders add row above footer when canEditTable is true and editable is true', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        cellRenderer: ({ rowIndex }: { rowIndex: number }) => (
+          <span class={rowIndex < 0 ? 'add-row-editor' : 'data-row-editor'}>
+            {rowIndex}
+          </span>
+        ),
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        footerHeight={44}
+        canEditTable
+        editable
+      />
+    ))
+
+    const addRow = wrapper.find('.el-table-v2__add-row-main')
+    const addRowHeader = wrapper.find(
+      '.el-table-v2__add-row-main .el-table-v2__header'
+    )
+
+    expect(addRow.exists()).toBe(true)
+    expect(addRowHeader.attributes('style')).toContain('width: 700px;')
+    expect(wrapper.find('.add-row-editor').exists()).toBe(true)
+    expect(wrapper.find('.el-table-v2__row-add-button').exists()).toBe(true)
+    expect(wrapper.findAll('.el-table-v2__row-delete-button')).toHaveLength(1)
+  })
+
+  test('emits row-add when add row is clicked', async () => {
+    const columns = ref(generateColumns(1))
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+      />
+    ))
+
+    const addRow = wrapper.find('.el-table-v2__add-row-main .el-table-v2__row')
+    const table = wrapper.findComponent(TableV2)
+
+    await addRow.trigger('click')
+
+    expect(table.emitted('row-add')).toEqual([
+      [
+        expect.objectContaining({
+          rowIndex: -1,
+        }),
+      ],
+    ])
+  })
+
+  test('emits row-add when add row button is clicked', async () => {
+    const columns = ref(generateColumns(1))
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+      />
+    ))
+
+    const addButton = wrapper.find('.el-table-v2__row-add-button')
+    const table = wrapper.findComponent(TableV2)
+
+    await addButton.trigger('click')
+
+    expect(table.emitted('row-add')).toEqual([
+      [
+        expect.objectContaining({
+          rowIndex: -1,
+        }),
+      ],
+    ])
+  })
+
+  test('does not render add row when editable mode is disabled', async () => {
+    const columns = ref(generateColumns(1))
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable={false}
+      />
+    ))
+
+    expect(wrapper.find('.el-table-v2__add-row-main').exists()).toBe(false)
+  })
+
   test('slots header-cell scope', async () => {
     const columns = ref(generateColumns(10))
     const data = ref(generateData(columns.value, 20))

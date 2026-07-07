@@ -31,7 +31,7 @@ import type {
   SortBy,
   SortState,
 } from './types'
-import type { RowDeleteParams } from './row'
+import type { RowAddParams, RowDeleteParams } from './row'
 
 /**
  * Param types
@@ -84,6 +84,7 @@ export const tableV2Emits = {
   'update:expandedRowKeys': (expandedRowKeys: KeyType[]) =>
     Array.isArray(expandedRowKeys),
   'row-delete': (params: RowDeleteParams) => Boolean(params),
+  'row-add': (params: RowAddParams) => Boolean(params),
 }
 
 export const tableV2Props = buildProps({
@@ -117,7 +118,10 @@ export const tableV2Props = buildProps({
     type: Number,
     default: 0,
   },
-  isFooterDefault: Boolean,
+  isFooterDefault: {
+    type: Boolean,
+    default: true,
+  },
   editable: {
     type: Boolean,
     default: true,

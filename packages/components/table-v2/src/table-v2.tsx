@@ -1,7 +1,8 @@
-import { defineComponent, provide, unref } from 'vue'
+import { computed, defineComponent, provide, unref } from 'vue'
 import { useNamespace } from '@element-plus/hooks'
 import { useTable } from './use-table'
-import { TableV2InjectionKey } from './tokens'
+import { rowAddKey, rowAddSign } from './private'
+import { TABLE_V2_GRID_INJECTION_KEY, TableV2InjectionKey } from './tokens'
 import { tableV2Emits, tableV2Props } from './table'
 // renderers
 import MainTable from './renderers/main-table'
@@ -9,12 +10,13 @@ import LeftTable from './renderers/left-table'
 import RightTable from './renderers/right-table'
 import Row from './renderers/row'
 import Cell from './renderers/cell'
-import Header from './renderers/header'
+import HeaderRenderer from './renderers/header'
 import HeaderCell from './renderers/header-cell'
 import Footer from './renderers/footer'
 import FooterDefault from './renderers/footerDefault'
 import Empty from './renderers/empty'
 import Overlay from './renderers/overlay'
+import { Header } from './components'
 
 import type { CSSProperties } from 'vue'
 import type { TableGridRowSlotParams } from './table-grid'
@@ -25,7 +27,7 @@ import type {
   TableV2RowCellRenderParam,
 } from './components'
 import type { KeyType } from './types'
-import type { RowDeleteHandler } from './row'
+import type { RowAddHandler, RowDeleteHandler } from './row'
 
 const COMPONENT_NAME = 'ElTableV2'
 
@@ -57,6 +59,7 @@ const TableV2 = defineComponent({
       isScrolling,
 
       bodyWidth,
+      addRowHeight,
       emptyStyle,
       rootStyle,
       footerHeight,
@@ -77,6 +80,7 @@ const TableV2 = defineComponent({
       onRowsRendered,
       onScroll,
       onVerticalScroll,
+      scrollPos,
     } = useTable(props)
 
     expose({
@@ -108,9 +112,16 @@ const TableV2 = defineComponent({
       isResetting,
       isScrolling,
     })
+    provide(
+      TABLE_V2_GRID_INJECTION_KEY,
+      computed(() => unref(scrollPos).scrollLeft)
+    )
 
     const onRowDelete: RowDeleteHandler = (params) => {
       emit('row-delete', params)
+    }
+    const onRowAdd: RowAddHandler = (params) => {
+      emit('row-add', params)
     }
 
     return () => {
@@ -232,6 +243,7 @@ const TableV2 = defineComponent({
         rowClass,
         rowKey,
         rowEventHandlers,
+        onRowAdd,
         onRowHovered,
         onRowExpanded,
         onRowHeightChange,
@@ -244,6 +256,7 @@ const TableV2 = defineComponent({
         expandColumnKey,
         indentSize,
         iconSize,
+        onRowAdd,
         onRowDelete,
         rowKey,
         expandedRowKeys: unref(expandedRowKeys),
@@ -291,7 +304,7 @@ const TableV2 = defineComponent({
           </Row>
         ),
         header: (props: TableV2HeaderRendererParams) => (
-          <Header {...props} {...tableHeaderProps}>
+          <HeaderRenderer {...props} {...tableHeaderProps}>
             {{
               header: slots.header,
               cell: (props: TableV2HeaderRowCellRendererParams) =>
@@ -311,7 +324,7 @@ const TableV2 = defineComponent({
                   />
                 ),
             }}
-          </Header>
+          </HeaderRenderer>
         ),
       }
 
@@ -328,12 +341,77 @@ const TableV2 = defineComponent({
         total: props.total,
         updateTime: props.updateTime,
       }
+      const showAddRow = props.canEditTable && props.editable
+      const addRowData = {
+        [rowKey]: rowAddKey,
+        [rowAddSign]: true,
+      }
+      const addRowHeaderProps = {
+        fixedHeaderData: [addRowData],
+        headerData: _data,
+        headerHeight: [] as number[],
+        rowHeight,
+        height: unref(addRowHeight),
+      }
+      const addRowWrapperStyle = {
+        bottom: `${props.footerHeight}px`,
+      }
 
       return (
         <div class={rootKls} style={unref(rootStyle)}>
           <MainTable {...mainTableProps}>{tableSlots}</MainTable>
           <LeftTable {...leftTableProps}>{tableSlots}</LeftTable>
           <RightTable {...rightTableProps}>{tableSlots}</RightTable>
+          {showAddRow && (
+            <>
+              <div class={ns.e('add-row-main')} style={addRowWrapperStyle}>
+                <Header
+                  {...addRowHeaderProps}
+                  {...tableHeaderProps}
+                  columns={unref(mainColumns)}
+                  class={ns.e('add-row-main-inner')}
+                  rowWidth={width}
+                  width={width}
+                >
+                  {{
+                    fixed: tableSlots.row,
+                  }}
+                </Header>
+              </div>
+              {leftColumnsWidth > 0 && (
+                <div class={ns.e('add-row-left')} style={addRowWrapperStyle}>
+                  <Header
+                    {...addRowHeaderProps}
+                    {...tableHeaderProps}
+                    columns={unref(fixedColumnsOnLeft)}
+                    class={ns.e('add-row-left-inner')}
+                    rowWidth={leftColumnsWidth}
+                    width={leftColumnsWidth}
+                  >
+                    {{
+                      fixed: tableSlots.row,
+                    }}
+                  </Header>
+                </div>
+              )}
+              {rightColumnsWidth > 0 && (
+                <div class={ns.e('add-row-right')} style={addRowWrapperStyle}>
+                  <Header
+                    {...addRowHeaderProps}
+                    {...tableHeaderProps}
+                    columns={unref(fixedColumnsOnRight)}
+                    class={ns.e('add-row-right-inner')}
+                    rowWidth={rightColumnsWidth}
+                    width={rightColumnsWidth}
+                  >
+                    {{
+                      fixed: tableSlots.row,
+                    }}
+                  </Header>
+                </div>
+              )}
+            </>
+          )}
           {slots.footer ? (
             <Footer {...footerProps}>{{ default: slots.footer }}</Footer>
           ) : props.isFooterDefault ? (
