@@ -110,6 +110,15 @@ export const tableV2Props = buildProps({
     type: Number,
     default: 0,
   },
+  isFooterDefault: Boolean,
+  total: {
+    type: Number,
+    default: 0,
+  },
+  updateTime: {
+    type: String,
+    default: '',
+  },
   /**
    * Row attributes
    */
@@ -121,7 +130,7 @@ export const tableV2Props = buildProps({
   },
   rowHeight: {
     type: Number,
-    default: 50,
+    default: 44,
   },
 
   /**

@@ -91,6 +91,7 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
         <SortIcon
           class={[ns.e('sort-icon'), sorting && ns.is('sorting')]}
           sortOrder={sortOrder}
+          sorting={sorting}
         />
       )}
     </div>

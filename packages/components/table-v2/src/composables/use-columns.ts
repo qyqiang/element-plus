@@ -103,9 +103,12 @@ function useColumns(
     let order = SortOrder.ASC
 
     if (isObject(sortState)) {
-      order = oppositeOrderMap[sortState[key]]
+      order = oppositeOrderMap[sortState[key]] ?? SortOrder.ASC
     } else {
-      order = oppositeOrderMap[sortBy.order]
+      order =
+        sortBy.key === key
+          ? (oppositeOrderMap[sortBy.order] ?? SortOrder.ASC)
+          : SortOrder.ASC
     }
 
     props.onColumnSort?.({ column: getColumn(key)!, key, order })

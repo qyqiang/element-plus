@@ -12,6 +12,7 @@ import Cell from './renderers/cell'
 import Header from './renderers/header'
 import HeaderCell from './renderers/header-cell'
 import Footer from './renderers/footer'
+import FooterDefault from './renderers/footerDefault'
 import Empty from './renderers/empty'
 import Overlay from './renderers/overlay'
 
@@ -315,6 +316,8 @@ const TableV2 = defineComponent({
       const footerProps = {
         class: ns.e('footer'),
         style: unref(footerHeight),
+        total: props.total,
+        updateTime: props.updateTime,
       }
 
       return (
@@ -322,9 +325,13 @@ const TableV2 = defineComponent({
           <MainTable {...mainTableProps}>{tableSlots}</MainTable>
           <LeftTable {...leftTableProps}>{tableSlots}</LeftTable>
           <RightTable {...rightTableProps}>{tableSlots}</RightTable>
-          {slots.footer && (
+          {slots.footer ? (
             <Footer {...footerProps}>{{ default: slots.footer }}</Footer>
-          )}
+          ) : props.isFooterDefault ? (
+            <FooterDefault {...footerProps}>
+              {{ default: slots.footer }}
+            </FooterDefault>
+          ) : null}
           {unref(showEmpty) && (
             <Empty class={ns.e('empty')} style={unref(emptyStyle)}>
               {{ default: slots.empty }}

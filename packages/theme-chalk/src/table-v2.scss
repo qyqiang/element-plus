@@ -105,6 +105,9 @@
 
   @include e('header-wrapper') {
     overflow: hidden;
+    box-shadow: var(--shadow-table);
+    border-top: var(--el-table-border);
+    border-bottom: var(--el-table-border);
   }
 
   @include e('header') {
@@ -122,6 +125,27 @@
     right: 0;
     bottom: 0;
     overflow: hidden;
+    &.footer-default {
+      background-color: var(--color-cyan-100);
+      height: 44px;
+      padding: 12px 20px;
+      font-size: 14px;
+      color: var(--color-gray-990);
+      display: flex;
+      align-items: center;
+
+      .count {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        text-align: center;
+      }
+
+      .time {
+        margin-left: auto;
+        text-align: right;
+      }
+    }
   }
 
   @include e('empty') {
@@ -146,15 +170,20 @@
       height: 100%;
       user-select: none;
       overflow: hidden;
-      background-color: getCssVar('table-header', 'bg-color');
-      color: getCssVar('table-header', 'text-color');
-      font-weight: bold;
+      background-color: var(--color-cyan-100);
+      color: var(--color-gray-990);
+      border-right: var(--el-table-border);
       @include center-flex;
       @include cell-padding;
       @include cell-alignment;
 
+      &:last-child {
+        border-right: none;
+      }
+
       @include when(sortable) {
         cursor: pointer;
+        justify-content: space-between;
       }
 
       &:hover {
@@ -165,12 +194,6 @@
     }
 
     @include e('sort-icon') {
-      transition:
-        opacity,
-        display getCssVar('transition-duration', '');
-      opacity: 0.6;
-      display: none;
-
       @include when(sorting) {
         display: block;
         opacity: 1;

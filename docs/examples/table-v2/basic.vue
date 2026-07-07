@@ -5,6 +5,9 @@
     :width="700"
     :height="400"
     fixed
+    :total="100"
+    is-footer-default
+    update-time="2026-07-07"
   />
 </template>
 

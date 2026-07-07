@@ -1,7 +1,8 @@
 import { h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
-import { describe, expect, test } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 import TableV2 from '../src/table-v2'
+import { SortOrder } from '../src/constants'
 
 import type {
   TableV2HeaderRowCellRendererParams,
@@ -184,6 +185,93 @@ describe('TableV2.vue', () => {
     expect(cell.find('span').text()).toBe(
       `${columns.value[0].title}${customText}`
     )
+  })
+
+  test('sortable header icon uses default color when sortState is not provided', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+      />
+    ))
+
+    const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+    expect(sortIcon.exists()).toBe(true)
+    expect(sortIcon.attributes('style')).toContain('--color: #9FB1BD')
+  })
+
+  test('column-sort emits asc order on first click when sortState is not provided', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const onColumnSort = vi.fn()
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        onColumnSort={onColumnSort}
+      />
+    ))
+
+    const headerCell = wrapper.find('.el-table-v2__header-cell.is-sortable')
+    await headerCell.trigger('click')
+
+    expect(onColumnSort).toHaveBeenCalledTimes(1)
+    expect(onColumnSort).toHaveBeenCalledWith(
+      expect.objectContaining({
+        key: columns.value[0].key,
+        order: SortOrder.ASC,
+      })
+    )
+  })
+
+  test('default footer uses total and updateTime props', async () => {
+    const columns = ref(generateColumns(3))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        footerHeight={44}
+        total={12}
+        updateTime="2026-07-07 12:30"
+      />
+    ))
+
+    const footer = wrapper.find('.footer-default')
+    const count = footer.find('.count')
+    const time = footer.find('.time')
+
+    expect(footer.classes()).toContain('el-table-v2__footer')
+    expect(count.text()).toBe('12')
+    expect(time.text()).toBe('2026-07-07 12:30')
+  })
+
+  test('default footer is hidden when isFooterDefault is false', async () => {
+    const columns = ref(generateColumns(3))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        footerHeight={44}
+        isFooterDefault={false}
+        total={12}
+        updateTime="2026-07-07 12:30"
+      />
+    ))
+
+    expect(wrapper.find('.footer-default').exists()).toBe(false)
   })
 
   test('expandable mode wrongly enabled, by column not key', async () => {
