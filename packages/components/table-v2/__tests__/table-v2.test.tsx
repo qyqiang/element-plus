@@ -159,6 +159,146 @@ describe('TableV2.vue', () => {
     )
   })
 
+  test('renders raw value when canEditTable is true and editable is false', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        cellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="custom-editor">{cellData}-editor</span>
+        ),
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable={false}
+      />
+    ))
+
+    const cell = wrapper.find('.el-table-v2__row-cell')
+
+    expect(cell.find('.custom-editor').exists()).toBe(false)
+    expect(cell.find('.el-table-v2__cell-text').text()).toBe('Row 0 - Col 0')
+  })
+
+  test('renders cellRenderer result when canEditTable is true and editable is true', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        cellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="custom-editor">{cellData}-editor</span>
+        ),
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+      />
+    ))
+
+    const cell = wrapper.find('.el-table-v2__row-cell')
+
+    expect(cell.find('.custom-editor').exists()).toBe(true)
+    expect(cell.find('.custom-editor').text()).toBe('Row 0 - Col 0-editor')
+  })
+
+  test('keeps original cellRenderer behavior when canEditTable is false', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        cellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="custom-editor">{cellData}-editor</span>
+        ),
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        editable={false}
+      />
+    ))
+
+    const cell = wrapper.find('.el-table-v2__row-cell')
+
+    expect(cell.find('.custom-editor').exists()).toBe(true)
+    expect(cell.find('.custom-editor').text()).toBe('Row 0 - Col 0-editor')
+  })
+
+  test('renders delete action column and emits row-delete when canEditTable is true and editable is true', async () => {
+    const columns = ref(generateColumns(1))
+    const data = ref(generateData(columns.value, 1))
+    const onRowDelete = vi.fn()
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+        onRowDelete={onRowDelete}
+      />
+    ))
+
+    const headerCells = wrapper.findAll('.el-table-v2__header-cell')
+    const deleteButton = wrapper.find('.el-table-v2__row-delete-button')
+    const table = wrapper.findComponent(TableV2)
+
+    expect(headerCells).toHaveLength(2)
+    expect(deleteButton.exists()).toBe(true)
+
+    await deleteButton.trigger('click')
+
+    expect(onRowDelete).toHaveBeenCalledTimes(1)
+    expect(onRowDelete).toHaveBeenCalledWith(
+      expect.objectContaining({
+        rowData: data.value[0],
+        rowIndex: 0,
+        rowKey: data.value[0].id,
+      })
+    )
+    expect(table.emitted('row-delete')).toEqual([
+      [
+        expect.objectContaining({
+          rowData: data.value[0],
+          rowIndex: 0,
+          rowKey: data.value[0].id,
+        }),
+      ],
+    ])
+  })
+
+  test('does not render delete action column when canEditTable is false', async () => {
+    const columns = ref(generateColumns(1))
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        editable
+      />
+    ))
+
+    expect(wrapper.find('.el-table-v2__row-delete-button').exists()).toBe(false)
+  })
+
   test('slots header-cell scope', async () => {
     const columns = ref(generateColumns(10))
     const data = ref(generateData(columns.value, 20))

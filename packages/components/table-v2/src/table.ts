@@ -31,6 +31,7 @@ import type {
   SortBy,
   SortState,
 } from './types'
+import type { RowDeleteParams } from './row'
 
 /**
  * Param types
@@ -79,6 +80,12 @@ export type ColumnSortHandler<T> = (params: ColumnSortParams<T>) => void
 export type ColumnResizeHandler<T> = (column: Column<T>, width: number) => void
 export type ExpandedRowsChangeHandler = (expandedRowKeys: KeyType[]) => void
 
+export const tableV2Emits = {
+  'update:expandedRowKeys': (expandedRowKeys: KeyType[]) =>
+    Array.isArray(expandedRowKeys),
+  'row-delete': (params: RowDeleteParams) => Boolean(params),
+}
+
 export const tableV2Props = buildProps({
   cache: tableV2GridProps.cache,
   estimatedRowHeight: tableV2RowProps.estimatedRowHeight,
@@ -111,6 +118,11 @@ export const tableV2Props = buildProps({
     default: 0,
   },
   isFooterDefault: Boolean,
+  editable: {
+    type: Boolean,
+    default: true,
+  },
+  canEditTable: Boolean,
   total: {
     type: Number,
     default: 0,

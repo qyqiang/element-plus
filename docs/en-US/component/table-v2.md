@@ -15,7 +15,13 @@ This component is **still under testing**, use at your own risk. If you find any
 fully developed yet, which is why they are not mentioned here.
 
 **Even though** Virtualized Table is efficient, when the data load is too large, your **network** and **memory size** can become the bottleneck of your app. So keep in mind that Virtualized Table is never the ultimate solution for everything, consider paginating your data, adding filters etc.
+:::
 
+## Edit Table
+
+:::demo
+
+table-v2/editable-table
 :::
 
 ## Basic usage

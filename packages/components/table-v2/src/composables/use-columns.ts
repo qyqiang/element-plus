@@ -1,7 +1,11 @@
 import { computed, unref } from 'vue'
 import { isObject } from '@element-plus/utils'
 import { SortOrder, oppositeOrderMap } from '../constants'
-import { placeholderSign } from '../private'
+import {
+  placeholderSign,
+  rowDeleteColumnKey,
+  rowDeleteColumnWidth,
+} from '../private'
 import { calcColumnStyle } from './utils'
 
 import type { CSSProperties, Ref } from 'vue'
@@ -13,12 +17,30 @@ function useColumns(
   columns: Ref<AnyColumns>,
   fixed: Ref<boolean>
 ) {
-  const _columns = computed(() =>
-    unref(columns).map((column, index) => ({
+  const _columns = computed(() => {
+    const normalizedColumns = unref(columns).map((column, index) => ({
       ...column,
       key: column.key ?? column.dataKey ?? index,
     }))
-  )
+
+    if (!(props.canEditTable && props.editable)) {
+      return normalizedColumns
+    }
+
+    return [
+      ...normalizedColumns,
+      {
+        key: rowDeleteColumnKey,
+        dataKey: rowDeleteColumnKey,
+        title: '',
+        width: rowDeleteColumnWidth,
+        fixed: 'right' as const,
+        align: 'center' as const,
+        class: 'is-row-delete-column',
+        headerClass: 'is-row-delete-column',
+      },
+    ]
+  })
 
   const visibleColumns = computed(() => {
     return unref(_columns).filter((column) => !column.hidden)

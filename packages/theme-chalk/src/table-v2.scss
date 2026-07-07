@@ -165,12 +165,12 @@
   @include e('header-row') {
     display: flex;
     border-bottom: getCssVar('table', 'border');
+    background-color: var(--color-cyan-100);
 
     @include e('header-cell') {
       height: 100%;
       user-select: none;
       overflow: hidden;
-      background-color: var(--color-cyan-100);
       color: var(--color-gray-990);
       border-right: var(--el-table-border);
       @include center-flex;
@@ -190,6 +190,11 @@
         .#{$namespace}-icon {
           display: block;
         }
+      }
+
+      &.is-row-delete-column {
+        padding: 0;
+        justify-content: center;
       }
     }
 
@@ -221,6 +226,10 @@
       @include center-flex;
       @include cell-padding;
       @include cell-alignment;
+
+      &.is-row-delete-column {
+        padding: 0;
+      }
     }
 
     @include e('expand-icon') {
@@ -246,6 +255,10 @@
       text-overflow: ellipsis;
       white-space: nowrap;
     }
+  }
+
+  .delete-icon {
+    margin-left: 0 !important;
   }
 
   @include when(dynamic) {

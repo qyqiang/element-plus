@@ -2,7 +2,7 @@ import { defineComponent, provide, unref } from 'vue'
 import { useNamespace } from '@element-plus/hooks'
 import { useTable } from './use-table'
 import { TableV2InjectionKey } from './tokens'
-import { tableV2Props } from './table'
+import { tableV2Emits, tableV2Props } from './table'
 // renderers
 import MainTable from './renderers/main-table'
 import LeftTable from './renderers/left-table'
@@ -25,13 +25,15 @@ import type {
   TableV2RowCellRenderParam,
 } from './components'
 import type { KeyType } from './types'
+import type { RowDeleteHandler } from './row'
 
 const COMPONENT_NAME = 'ElTableV2'
 
 const TableV2 = defineComponent({
   name: COMPONENT_NAME,
   props: tableV2Props,
-  setup(props, { slots, expose }) {
+  emits: tableV2Emits,
+  setup(props, { slots, expose, emit }) {
     const ns = useNamespace('table-v2')
 
     const {
@@ -106,6 +108,10 @@ const TableV2 = defineComponent({
       isResetting,
       isScrolling,
     })
+
+    const onRowDelete: RowDeleteHandler = (params) => {
+      emit('row-delete', params)
+    }
 
     return () => {
       const {
@@ -232,10 +238,13 @@ const TableV2 = defineComponent({
       }
 
       const tableCellProps = {
+        canEditTable: props.canEditTable,
         cellProps,
+        editable: props.editable,
         expandColumnKey,
         indentSize,
         iconSize,
+        onRowDelete,
         rowKey,
         expandedRowKeys: unref(expandedRowKeys),
         ns,
