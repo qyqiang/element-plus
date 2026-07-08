@@ -304,6 +304,14 @@
   tr {
     background-color: getCssVar('table-tr-bg-color');
 
+    &.is-ghost-row {
+      box-shadow: var(--shadow-ghost-row);
+
+      .icon-column {
+        box-shadow: var(--shadow-ghost-row);
+      }
+    }
+
     input[type='checkbox'] {
       margin: 0;
     }
@@ -311,6 +319,10 @@
 
   td.#{$namespace}-table__cell {
     border-bottom: 1px solid #E7ECEF;
+
+    &.is-diagonal-header-column {
+      background-color: var(--color-cyan-100);
+    }
   }
 
   th.#{$namespace}-table__cell.is-sortable {
@@ -323,17 +335,6 @@
 
     > .cell.highlight {
       color: getCssVar('color-primary');
-    }
-
-    &.required-column > div::before {
-      display: inline-block;
-      content: '';
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #ff4d51;
-      margin-right: 5px;
-      vertical-align: middle;
     }
 
     &.is-diagonal-header {
@@ -671,19 +672,19 @@
   }
 
   @include e(body) {
-    tr.hover-row {
+    tr.hover-row:not(.is-ghost-row) {
       &,
       &.#{$namespace}-table__row--striped {
         &,
         &.current-row {
-          > td.#{$namespace}-table__cell {
+          > td.#{$namespace}-table__cell:not(.is-diagonal-header-column) {
             background-color: getCssVar('table-row-hover-bg-color');
           }
         }
       }
     }
 
-    tr > td.hover-cell {
+    tr:not(.is-ghost-row) > td.hover-cell:not(.is-diagonal-header-column) {
       background-color: getCssVar('table-row-hover-bg-color');
     }
 
@@ -818,7 +819,7 @@
   }
 
   @include m(enable-row-hover) {
-    .#{$namespace}-table__body tr:hover > td.#{$namespace}-table__cell {
+    .#{$namespace}-table__body tr:not(.is-ghost-row):hover > td.#{$namespace}-table__cell:not(.is-diagonal-header-column) {
       background-color: getCssVar('table-row-hover-bg-color');
     }
   }

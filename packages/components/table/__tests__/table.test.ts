@@ -1,4 +1,6 @@
 // @ts-nocheck
+import { readFileSync } from 'node:fs'
+import { resolve } from 'node:path'
 import { h, nextTick } from 'vue'
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import ElCheckbox from '@element-plus/components/checkbox'
@@ -167,12 +169,59 @@ describe('Table.vue', () => {
     await doubleWait()
 
     const firstHeader = wrapper.findAll('thead th')[0]
+    const firstBodyCell = wrapper.findAll('tbody tr:first-child td')[0]
+    const secondBodyCell = wrapper.findAll('tbody tr:first-child td')[1]
     expect(firstHeader.classes()).toContain('is-diagonal-header')
-    expect(firstHeader.find('.el-table__diagonal-header-from').text()).toBe(
-      'From'
-    )
-    expect(firstHeader.find('.el-table__diagonal-header-to').text()).toBe('To')
+    expect(firstBodyCell.classes()).toContain('is-diagonal-header-column')
+    expect(secondBodyCell.classes()).not.toContain('is-diagonal-header-column')
+    const diagonalTexts = firstHeader
+      .findAll('.el-table__diagonal-header-text')
+      .map((node) => node.text())
+    expect(diagonalTexts).toEqual(['From', 'To'])
     expect(wrapper.findAll('thead th')[1].text()).toContain('Director')
+
+    wrapper.unmount()
+  })
+
+  it('keeps the diagonal first column background when hovering the row', async () => {
+    const tableStyles = readFileSync(
+      resolve(__dirname, '../../../theme-chalk/src/table.scss'),
+      'utf8'
+    )
+
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData">
+          <el-table-column
+            prop="name"
+            label="Name"
+            :diagonal-header="{ from: 'From', to: 'To' }"
+          />
+          <el-table-column prop="director" label="Director" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const cells = wrapper.findAll(
+      '.el-table__body-wrapper tbody tr:first-child td'
+    )
+    const firstBodyCell = cells[0].element as HTMLTableCellElement
+
+    expect(tableStyles).toContain(
+      '> td.#{$namespace}-table__cell:not(.is-diagonal-header-column)'
+    )
+    expect(firstBodyCell.outerHTML).toContain('is-diagonal-header-column')
 
     wrapper.unmount()
   })

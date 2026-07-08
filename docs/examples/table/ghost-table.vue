@@ -57,7 +57,12 @@
           </template>
         </template>
       </el-table-column>
-      <el-table-column width="36px" fixed="right" class-name="icon-column">
+      <el-table-column
+        v-if="editTable"
+        width="36px"
+        fixed="right"
+        class-name="icon-column"
+      >
         <template #default="{ $index }">
           <el-button
             class="icon-button"
