@@ -212,6 +212,12 @@
   .icon-column {
     .cell {
       padding: 0 1px;
+
+      .el-button {
+        .el-icon {
+          margin-left: 0;
+        }
+      }
     }
   }
   .editable-table-cell {

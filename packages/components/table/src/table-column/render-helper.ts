@@ -18,6 +18,7 @@ import {
 } from '../config'
 import { parseMinWidth, parseWidth } from '../util'
 import { ghostRowSign } from '../private'
+import GhostRowAddButton from '../ghost-row-add-button.vue'
 
 import type { ComputedRef, RendererNode, Slots, VNode } from 'vue'
 import type { TableColumn, TableColumnCtx } from './defaults'
@@ -176,12 +177,27 @@ function useRender<T extends DefaultRow>(
       // wrap renderCell
       column.renderCell = (data) => {
         let children: VNode | VNode[] | null = null
+        const { columns } = owner.value.store.states
+        const columnCount = columns.value.length
+        const shouldRenderAddButton =
+          owner.value.props.ghostTable &&
+          owner.value.props.editTable &&
+          !!data.row?.[ghostRowSign] &&
+          (columnCount === 1
+            ? data.cellIndex === 0
+            : data.cellIndex === columnCount - 1)
         const shouldRenderEditCell =
           owner.value.props.ghostTable &&
           owner.value.props.editTable &&
           !!column.renderEditCell
 
-        if (shouldRenderEditCell) {
+        if (shouldRenderAddButton) {
+          children = [
+            h(GhostRowAddButton, {
+              row: data.row,
+            }),
+          ]
+        } else if (shouldRenderEditCell) {
           const vnodes = column.renderEditCell!(data)
           children = vnodes.some((v) => v.type !== Comment)
             ? vnodes
@@ -194,7 +210,6 @@ function useRender<T extends DefaultRow>(
         } else {
           children = originRenderCell(data)
         }
-        const { columns } = owner.value.store.states
         const firstUserColumnIndex = columns.value.findIndex(
           (item) => item.type === 'default'
         )

@@ -206,10 +206,13 @@ describe('Table.vue', () => {
 
     expect(wrapper.findAll('tbody tr')).toHaveLength(3)
     expect(wrapper.find('tbody tr.is-ghost-row').exists()).toBe(true)
-    expect(wrapper.findAll('.edit-cell')).toHaveLength(3)
+    expect(wrapper.findAll('.edit-cell')).toHaveLength(2)
     expect(wrapper.findAll('.view-cell')).toHaveLength(0)
-    expect(wrapper.find('tbody tr.is-ghost-row .edit-cell').text()).toBe(
-      'ghost'
+    expect(
+      wrapper.findAll('tbody tr.is-ghost-row .el-table__row-add-button')
+    ).toHaveLength(1)
+    expect(wrapper.find('tbody tr.is-ghost-row .edit-cell').exists()).toBe(
+      false
     )
     wrapper.unmount()
   })
@@ -280,9 +283,92 @@ describe('Table.vue', () => {
     expect(wrapper.findAll('tbody tr')).toHaveLength(2)
     expect(wrapper.find('tbody tr.is-ghost-row').exists()).toBe(true)
     expect(wrapper.find('.el-table__row-delete-button').exists()).toBe(false)
-    expect(wrapper.find('.el-table__row-add-button').exists()).toBe(false)
     expect(wrapper.find('th.is-row-action-column').exists()).toBe(false)
     expect(wrapper.find('td.is-row-action-column').exists()).toBe(false)
+    expect(
+      wrapper.findAll('tbody tr.is-ghost-row .el-table__row-add-button')
+    ).toHaveLength(1)
+
+    wrapper.unmount()
+  })
+
+  it('renders a ghost-row placeholder from the header label and keeps only the trailing add button', async () => {
+    const onRowAdd = vi.fn()
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="tableData"
+          ghost-table
+          edit-table
+          row-key="id"
+          @add-ghost-row="onRowAdd"
+        >
+          <el-table-column prop="name" label="Name">
+            <template #edit-cell="{ row, column }">
+              <input
+                class="edit-cell"
+                :placeholder="column.label"
+                :value="row.name || ''"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="action" label="Action" width="36">
+            <template #default="{ $index }">
+              <span class="ghost-delete">delete-{{ $index }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 1),
+          onRowAdd,
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const rows = wrapper.findAll('tbody tr')
+    const ghostRow = wrapper.find('tbody tr.is-ghost-row')
+    const addButtons = ghostRow.findAll('.el-table__row-add-button')
+    const table = wrapper.findComponent(ElTable)
+
+    expect(rows).toHaveLength(2)
+    expect(wrapper.find('.ghost-delete').exists()).toBe(true)
+    expect(ghostRow.exists()).toBe(true)
+    expect(addButtons).toHaveLength(1)
+    expect(ghostRow.findAll('.edit-cell')).toHaveLength(1)
+    expect(ghostRow.find('.edit-cell').attributes('placeholder')).toBe('Name')
+    expect(ghostRow.findAll('td')).toHaveLength(2)
+
+    await addButtons[0].trigger('click')
+
+    expect(onRowAdd).toHaveBeenCalledTimes(1)
+    expect(onRowAdd).toHaveBeenCalledWith(
+      expect.objectContaining({
+        rowIndex: -1,
+        row: expect.objectContaining({
+          __ep_table_ghost_row__: true,
+        }),
+        rowKey: 'ghost-row',
+      })
+    )
+    expect(table.emitted('add-ghost-row')).toEqual([
+      [
+        expect.objectContaining({
+          rowIndex: -1,
+          row: expect.objectContaining({
+            __ep_table_ghost_row__: true,
+          }),
+          rowKey: 'ghost-row',
+        }),
+      ],
+    ])
 
     wrapper.unmount()
   })
