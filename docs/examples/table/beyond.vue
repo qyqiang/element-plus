@@ -61,7 +61,6 @@
                 <el-dropdown-menu>
                   <el-dropdown-item command="delete">
                     <span class="flex-center text-gray-990">
-                      <svg-icon class="mr-2" name="fi-ss-trash" />
                       Delete
                     </span></el-dropdown-item
                   >

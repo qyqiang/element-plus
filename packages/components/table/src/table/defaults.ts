@@ -90,6 +90,7 @@ interface Table<T extends DefaultRow = any> extends ComponentInternalInstance {
   hoverState?: HoverState<T> | null
   editingRow?: Ref<EditingRow<T>>
   activeEditableCell?: Ref<ActiveEditableCell<T>>
+  ghostRowData?: Ref<DefaultRow>
   startRowEdit?: (
     row: DefaultRow,
     prop: string,
@@ -184,6 +185,11 @@ interface TableProps<T extends DefaultRow> {
   scrollbarAlwaysOn?: boolean
   flexible?: boolean
   editable?: boolean
+  ghostTable?: boolean
+  editTable?: boolean
+  total?: number
+  updateTime?: string
+  haveTableText?: boolean
   showOverflowTooltip?: boolean | TableOverflowTooltipOptions
   tooltipFormatter?: TableOverflowTooltipFormatter<T>
   appendFilterPanelTo?: string
@@ -436,6 +442,32 @@ export default {
    * @description whether editable cells can enter edit mode by clicking the table cell
    */
   editable: Boolean,
+  /**
+   * @description whether to enable ghost table behavior
+   */
+  ghostTable: Boolean,
+  /**
+   * @description whether to render edit cells for ghost table
+   */
+  editTable: Boolean,
+  /**
+   * @description total item count shown in the default table text footer
+   */
+  total: {
+    type: Number,
+    default: 0,
+  },
+  /**
+   * @description update time shown in the default table text footer
+   */
+  updateTime: {
+    type: String,
+    default: '',
+  },
+  /**
+   * @description whether to show the default table text footer
+   */
+  haveTableText: Boolean,
   /**
    * @description whether to hide extra content and show them in a tooltip when hovering on the cell.It will affect all the table columns
    */

@@ -174,6 +174,11 @@
         </table>
       </div>
     </div>
+    <table-text
+      v-if="haveTableText"
+      :total="total"
+      :update-time="updateTime"
+    ></table-text>
     <div
       v-show="resizeProxyVisible"
       ref="resizeProxy"
@@ -250,6 +255,7 @@
 </template>
 
 <script lang="ts">
+import TableText from '@element-plus/components/table/src/table-footer/tableText.vue'
 import {
   computed,
   defineComponent,
@@ -258,7 +264,7 @@ import {
   provide,
   ref,
   shallowRef,
-  toRaw,
+  toRaw
 } from 'vue'
 import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
 import { cloneDeep, debounce } from 'lodash-unified'
@@ -278,6 +284,7 @@ import defaultProps from './table/defaults'
 import { TABLE_INJECTION_KEY } from './tokens'
 import { hColgroup } from './h-helper'
 import { useScrollbar } from './composables/use-scrollbar'
+import { ghostRowKey, ghostRowSign } from './private'
 
 import type { CSSProperties } from 'vue'
 import type { DefaultRow, Table } from './table/defaults'
@@ -287,15 +294,16 @@ let tableIdSeed = 1
 export default defineComponent({
   name: 'ElTable',
   directives: {
-    Mousewheel,
+    Mousewheel
   },
   components: {
+    TableText,
     ElTooltip,
     TableHeader,
     TableBody,
     TableFooter,
     ElScrollbar,
-    hColgroup,
+    hColgroup
   },
   props: defaultProps,
   emits: [
@@ -320,7 +328,7 @@ export default defineComponent({
     'editable-cell-active-change',
     'scroll',
     'add-column',
-    'add-row',
+    'add-row'
   ],
   setup(props, { emit }) {
     type Row = (typeof props.data)[number]
@@ -346,6 +354,10 @@ export default defineComponent({
     table.store = store
     const editingRow = ref<any>(null)
     const activeEditableCell = ref<any>(null)
+    const ghostRowData = ref<any>({
+      [ghostRowSign]: true,
+      [ghostRowKey]: 'ghost-row',
+    })
     const addColumnTrigger = shallowRef<AddColumnTrigger | null>(null)
     const addRowTrigger = ref<AddRowTrigger | null>(null)
 
@@ -361,7 +373,7 @@ export default defineComponent({
           ...current,
           prop,
           rowIndex,
-          cellIndex,
+          cellIndex
         }
         return
       }
@@ -370,15 +382,15 @@ export default defineComponent({
         prop,
         rowIndex,
         cellIndex,
-        draft: cloneDeep(toRaw(row)),
+        draft: cloneDeep(toRaw(row))
       }
       activeEditableCell.value = editingRow.value
         ? {
-            row: editingRow.value?.row,
-            prop: editingRow.value?.prop,
-            rowIndex: editingRow.value.rowIndex,
-            cellIndex: editingRow.value.cellIndex,
-          }
+          row: editingRow.value?.row,
+          prop: editingRow.value?.prop,
+          rowIndex: editingRow.value.rowIndex,
+          cellIndex: editingRow.value.cellIndex
+        }
         : null
     }
     const clearEditingRow = () => {
@@ -393,6 +405,7 @@ export default defineComponent({
 
     table.editingRow = editingRow
     table.activeEditableCell = activeEditableCell
+    table.ghostRowData = ghostRowData
     table.startRowEdit = startRowEdit
     table.clearEditingRow = clearEditingRow
     table.applyEditingRow = applyEditingRow
@@ -400,11 +413,14 @@ export default defineComponent({
       store: table.store,
       table,
       fit: props.fit,
-      showHeader: props.showHeader,
+      showHeader: props.showHeader
     })
     table.layout = layout
 
-    const isEmpty = computed(() => (store.states.data.value || []).length === 0)
+    const isEmpty = computed(() => {
+      const hasRows = (store.states.data.value || []).length > 0
+      return !hasRows && !(props.ghostTable && props.editTable)
+    })
 
     /**
      * open functions
@@ -420,7 +436,7 @@ export default defineComponent({
       clearSort,
       updateSort,
       sort,
-      updateKeyChildren,
+      updateKeyChildren
     } = useUtils<Row>(store)
     const {
       isHidden,
@@ -438,7 +454,7 @@ export default defineComponent({
       tableBodyStyles,
       tableLayout,
       scrollbarViewStyle,
-      scrollbarStyle,
+      scrollbarStyle
     } = useStyle<Row>(props, layout, store, table)
 
     const clearAddColumnTrigger = () => {
@@ -454,7 +470,7 @@ export default defineComponent({
         column: trigger.column,
         columnIndex: trigger.columnIndex,
         insertIndex: trigger.insertIndex,
-        event,
+        event
       })
       clearAddColumnTrigger()
     }
@@ -471,7 +487,7 @@ export default defineComponent({
         row: trigger.row,
         rowIndex: trigger.rowIndex,
         insertIndex: trigger.insertIndex,
-        event,
+        event
       })
       clearAddRowTrigger()
     }
@@ -497,7 +513,7 @@ export default defineComponent({
       isGroup,
       resizeState,
       doLayout,
-      debouncedUpdateLayout,
+      debouncedUpdateLayout
     }
     const hasEditingRow = computed(() => !!editingRow.value)
     const computedSumText = computed(
@@ -510,13 +526,13 @@ export default defineComponent({
     const addColumnTriggerStyle = computed<CSSProperties>(() => {
       if (!addColumnTrigger.value) return {}
       return {
-        left: `${addColumnTrigger.value.left}px`,
+        left: `${addColumnTrigger.value.left}px`
       }
     })
     const addRowTriggerStyle = computed<CSSProperties>(() => {
       if (!addRowTrigger.value) return {}
       return {
-        top: `${addRowTrigger.value.top}px`,
+        top: `${addRowTrigger.value.top}px`
       }
     })
 
@@ -644,8 +660,8 @@ export default defineComponent({
       /**
        * @description whether to show an add-row trigger when hovering a row divider
        */
-      showAddRowTrigger: props.showAddRowTrigger,
+      showAddRowTrigger: props.showAddRowTrigger
     }
-  },
+  }
 })
 </script>

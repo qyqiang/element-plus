@@ -86,6 +86,7 @@ type TableColumnCtx<T extends DefaultRow = DefaultRow> = {
   renderExpand?: (scope: any) => VNode
   diagonalHeader?: DiagonalHeaderConfig
   allowInsertBeforeFirstColumn: boolean
+  renderEditCell?: (data: any) => VNode | VNode[]
 }
 
 interface TableColumn<T extends DefaultRow> extends ComponentInternalInstance {

@@ -17,6 +17,7 @@ import {
   treeCellPrefix,
 } from '../config'
 import { parseMinWidth, parseWidth } from '../util'
+import { ghostRowSign } from '../private'
 
 import type { ComputedRef, RendererNode, Slots, VNode } from 'vue'
 import type { TableColumn, TableColumnCtx } from './defaults'
@@ -147,6 +148,14 @@ function useRender<T extends DefaultRow>(
       }
     }
 
+    const editSlot = slots['edit-cell']
+
+    if (editSlot) {
+      column.renderEditCell = (scope) => {
+        return editSlot(scope)
+      }
+    }
+
     let originRenderCell = column.renderCell
     // TODO: refine this implementation
     if (column.type === 'expand') {
@@ -167,7 +176,17 @@ function useRender<T extends DefaultRow>(
       // wrap renderCell
       column.renderCell = (data) => {
         let children: VNode | VNode[] | null = null
-        if (slots.default) {
+        const shouldRenderEditCell =
+          owner.value.props.ghostTable &&
+          owner.value.props.editTable &&
+          !!column.renderEditCell
+
+        if (shouldRenderEditCell) {
+          const vnodes = column.renderEditCell!(data)
+          children = vnodes.some((v) => v.type !== Comment)
+            ? vnodes
+            : originRenderCell(data)
+        } else if (slots.default) {
           const vnodes = slots.default(data)
           children = vnodes.some((v) => v.type !== Comment)
             ? vnodes
@@ -180,7 +199,9 @@ function useRender<T extends DefaultRow>(
           (item) => item.type === 'default'
         )
         const shouldCreatePlaceholder =
-          hasTreeColumn.value && data.cellIndex === firstUserColumnIndex
+          hasTreeColumn.value &&
+          !data.row?.[ghostRowSign] &&
+          data.cellIndex === firstUserColumnIndex
         const prefix = treeCellPrefix(data, shouldCreatePlaceholder)
         const props = {
           class: 'cell',

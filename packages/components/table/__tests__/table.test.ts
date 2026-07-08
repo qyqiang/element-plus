@@ -177,6 +177,116 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('renders edit-cell slot and appends a ghost row when ghostTable and editTable are true', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="tableData" ghost-table edit-table>
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <span class="view-cell">{{ row.name }}</span>
+            </template>
+            <template #edit-cell="{ row }">
+              <span class="edit-cell">{{ row.name || 'ghost' }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 2),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.findAll('tbody tr')).toHaveLength(3)
+    expect(wrapper.find('tbody tr.is-ghost-row').exists()).toBe(true)
+    expect(wrapper.findAll('.edit-cell')).toHaveLength(3)
+    expect(wrapper.findAll('.view-cell')).toHaveLength(0)
+    expect(wrapper.find('tbody tr.is-ghost-row .edit-cell').text()).toBe(
+      'ghost'
+    )
+    wrapper.unmount()
+  })
+
+  it('keeps default slot rendering and hides ghost row by default', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="tableData">
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <span class="view-cell">{{ row.name }}</span>
+            </template>
+            <template #edit-cell="{ row }">
+              <span class="edit-cell">{{ row.name || 'ghost' }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 2),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.findAll('tbody tr')).toHaveLength(2)
+    expect(wrapper.find('tbody tr.is-ghost-row').exists()).toBe(false)
+    expect(wrapper.findAll('.view-cell')).toHaveLength(2)
+    expect(wrapper.findAll('.edit-cell')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
+  it('does not render an action column when ghostTable and editTable are true', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="tableData"
+          ghost-table
+          edit-table
+        >
+          <el-table-column prop="name" label="Name">
+            <template #edit-cell="{ row }">
+              <span class="edit-cell">{{ row.name || 'ghost' }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 1),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.findAll('thead th')).toHaveLength(1)
+    expect(wrapper.findAll('tbody tr')).toHaveLength(2)
+    expect(wrapper.find('tbody tr.is-ghost-row').exists()).toBe(true)
+    expect(wrapper.find('.el-table__row-delete-button').exists()).toBe(false)
+    expect(wrapper.find('.el-table__row-add-button').exists()).toBe(false)
+    expect(wrapper.find('th.is-row-action-column').exists()).toBe(false)
+    expect(wrapper.find('td.is-row-action-column').exists()).toBe(false)
+
+    wrapper.unmount()
+  })
+
   it('activates editable input cells on click', async () => {
     const wrapper = mount({
       components: {
@@ -1786,6 +1896,67 @@ describe('Table.vue', () => {
       wrapper.unmount()
     })
   })
+
+  describe('table text footer', () => {
+    it('renders table text footer with total and updateTime when haveTableText is true', async () => {
+      const wrapper = mount({
+        components: {
+          ElTable,
+          ElTableColumn,
+        },
+        template: `
+          <el-table
+            :data="testData"
+            have-table-text
+            :total="12"
+            update-time="2026-07-08 12:30"
+          >
+            <el-table-column prop="name" />
+            <el-table-column prop="runtime" />
+          </el-table>
+        `,
+
+        created() {
+          this.testData = getTestData()
+        },
+      })
+
+      await doubleWait()
+
+      const footerText = wrapper.find('.footer-text')
+      expect(footerText.exists()).toBe(true)
+      expect(footerText.find('.count').text()).toEqual('12 items')
+      expect(footerText.find('.time').text()).toEqual(
+        'Last Updated 2026-07-08 12:30'
+      )
+      wrapper.unmount()
+    })
+
+    it('does not render table text footer by default', async () => {
+      const wrapper = mount({
+        components: {
+          ElTable,
+          ElTableColumn,
+        },
+        template: `
+          <el-table :data="testData">
+            <el-table-column prop="name" />
+            <el-table-column prop="runtime" />
+          </el-table>
+        `,
+
+        created() {
+          this.testData = getTestData()
+        },
+      })
+
+      await doubleWait()
+
+      expect(wrapper.find('.footer-text').exists()).toBe(false)
+      wrapper.unmount()
+    })
+  })
+
   describe('methods', () => {
     const createTable = function (prop = '') {
       return mount({

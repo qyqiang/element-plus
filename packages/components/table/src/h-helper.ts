@@ -40,4 +40,7 @@ export function hColgroup(props: Props) {
   )
 }
 
-hColgroup.props = ['columns', 'tableLayout']
+hColgroup.props = [
+  'columns',
+  'tableLayout',
+]

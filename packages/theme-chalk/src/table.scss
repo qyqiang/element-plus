@@ -209,7 +209,11 @@
       min-width: 50px;
     }
   }
-
+  .icon-column {
+    .cell {
+      padding: 0 1px;
+    }
+  }
   .editable-table-cell {
     width: 100%;
     min-height: 44px;

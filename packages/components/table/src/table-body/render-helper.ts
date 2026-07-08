@@ -7,6 +7,7 @@ import { TABLE_INJECTION_KEY } from '../tokens'
 import useEvents from './events-helper'
 import useStyles from './styles-helper'
 import TdWrapper from './td-wrapper.vue'
+import { ghostRowKey, ghostRowSign } from '../private'
 
 import type { TableBodyProps } from './defaults'
 import type {
@@ -57,6 +58,9 @@ function useRender<T extends DefaultRow>(
     )
   })
   const getKeyOfRow = (row: T, index: number) => {
+    if (row?.[ghostRowSign]) {
+      return row[ghostRowKey] ?? `${ghostRowKey}_${index}`
+    }
     const rowKey = (parent?.props as Partial<TableProps<T>>)?.rowKey
     if (rowKey) {
       return getRowIdentity(row, rowKey)
@@ -79,6 +83,7 @@ function useRender<T extends DefaultRow>(
     } = props
     const { indent, columns } = store!.states
     const rowClasses = []
+    const isGhostRow = Boolean(row?.[ghostRowSign])
     let display = true
     if (treeRowData) {
       rowClasses.push(ns.em('row', `level-${treeRowData.level}`))
@@ -91,7 +96,83 @@ function useRender<T extends DefaultRow>(
       displayIndex++
     }
     rowClasses.push(...getRowClass(row, $index, displayIndex))
+    if (isGhostRow) {
+      rowClasses.push('is-ghost-row')
+    }
     const displayStyle = display ? null : { display: 'none' }
+    const cells = columns.value.map((column, cellIndex) => {
+      const { rowspan, colspan } = getSpan(row, column, $index, cellIndex)
+      if (!rowspan || !colspan) {
+        return null
+      }
+      const columnData = Object.assign({}, column)
+      columnData.realWidth = getColspanRealWidth(
+        columns.value,
+        colspan,
+        cellIndex
+      )
+      const data: RenderRowData<T> = {
+        store: store!,
+        _self: props.context || parent!,
+        column: columnData,
+        row,
+        $index,
+        cellIndex,
+        expanded,
+      }
+      if (cellIndex === firstDefaultColumnIndex.value && treeRowData) {
+        data.treeNode = {
+          indent: treeRowData.level && treeRowData.level * indent.value,
+          level: treeRowData.level,
+        }
+        if (isBoolean(treeRowData.expanded)) {
+          data.treeNode.expanded = treeRowData.expanded
+          // marks lazy loading state
+          if ('loading' in treeRowData) {
+            data.treeNode.loading = treeRowData.loading
+          }
+          if ('noLazyChildren' in treeRowData) {
+            data.treeNode.noLazyChildren = treeRowData.noLazyChildren
+          }
+        }
+      }
+      const baseKey = `${getKeyOfRow(row, $index)},${cellIndex}`
+      const patchKey = columnData.columnKey || columnData.rawColumnKey || ''
+      const mergedTooltipOptions =
+        column.showOverflowTooltip &&
+        merge(
+          {
+            effect: tooltipEffect,
+          },
+          tooltipOptions,
+          column.showOverflowTooltip
+        )
+      return h(
+        TdWrapper,
+        {
+          style: getCellStyle($index, cellIndex, row, column),
+          class: getCellClass($index, cellIndex, row, column, colspan - 1),
+          key: `${patchKey}${baseKey}`,
+          rowspan,
+          cellIndex,
+          columnIndex: $index,
+          colspan,
+          onClick: ($event: Event) =>
+            handleCellClick($event, row, column, $index, cellIndex),
+          onMouseenter: ($event: MouseEvent) =>
+            handleCellMouseEnter(
+              $event,
+              row,
+              mergedTooltipOptions as TableOverflowTooltipOptions
+            ),
+          onMouseleave: handleCellMouseLeave,
+        },
+        {
+          default: () => cellChildren(cellIndex, column, data),
+        }
+      )
+    })
+
     return h(
       'tr',
       {
@@ -111,78 +192,7 @@ function useRender<T extends DefaultRow>(
           handleRowMouseMove($event, row, $index),
         onMouseout: ($event: MouseEvent) => handleRowMouseOut($event),
       },
-      columns.value.map((column, cellIndex) => {
-        const { rowspan, colspan } = getSpan(row, column, $index, cellIndex)
-        if (!rowspan || !colspan) {
-          return null
-        }
-        const columnData = Object.assign({}, column)
-        columnData.realWidth = getColspanRealWidth(
-          columns.value,
-          colspan,
-          cellIndex
-        )
-        const data: RenderRowData<T> = {
-          store: store!,
-          _self: props.context || parent!,
-          column: columnData,
-          row,
-          $index,
-          cellIndex,
-          expanded,
-        }
-        if (cellIndex === firstDefaultColumnIndex.value && treeRowData) {
-          data.treeNode = {
-            indent: treeRowData.level && treeRowData.level * indent.value,
-            level: treeRowData.level,
-          }
-          if (isBoolean(treeRowData.expanded)) {
-            data.treeNode.expanded = treeRowData.expanded
-            // marks lazy loading state
-            if ('loading' in treeRowData) {
-              data.treeNode.loading = treeRowData.loading
-            }
-            if ('noLazyChildren' in treeRowData) {
-              data.treeNode.noLazyChildren = treeRowData.noLazyChildren
-            }
-          }
-        }
-        const baseKey = `${getKeyOfRow(row, $index)},${cellIndex}`
-        const patchKey = columnData.columnKey || columnData.rawColumnKey || ''
-        const mergedTooltipOptions =
-          column.showOverflowTooltip &&
-          merge(
-            {
-              effect: tooltipEffect,
-            },
-            tooltipOptions,
-            column.showOverflowTooltip
-          )
-        return h(
-          TdWrapper,
-          {
-            style: getCellStyle($index, cellIndex, row, column),
-            class: getCellClass($index, cellIndex, row, column, colspan - 1),
-            key: `${patchKey}${baseKey}`,
-            rowspan,
-            cellIndex,
-            columnIndex: $index,
-            colspan,
-            onClick: ($event: Event) =>
-              handleCellClick($event, row, column, $index, cellIndex),
-            onMouseenter: ($event: MouseEvent) =>
-              handleCellMouseEnter(
-                $event,
-                row,
-                mergedTooltipOptions as TableOverflowTooltipOptions
-              ),
-            onMouseleave: handleCellMouseLeave,
-          },
-          {
-            default: () => cellChildren(cellIndex, column, data),
-          }
-        )
-      })
+      cells
     )
   }
   const cellChildren = <T extends DefaultRow>(
