@@ -42,6 +42,7 @@ export interface TableHeaderProps<T extends DefaultRow> {
   allowDragLastColumn: boolean
   showAddColumnTrigger: boolean
   addColumnButton: boolean
+  editTable: boolean
 }
 
 export default defineComponent({
@@ -80,6 +81,9 @@ export default defineComponent({
     addColumnButton: {
       type: Boolean,
       default: true,
+    },
+    editTable: {
+      type: Boolean,
     },
   },
   setup(props, { emit }) {
@@ -219,6 +223,7 @@ export default defineComponent({
       isTableLayoutAuto,
       showAddColumnTrigger,
       addColumnButton,
+      editTable,
       handleAddColumn,
     } = this
     let rowSpan = 1
@@ -252,6 +257,7 @@ export default defineComponent({
             const diagonalHeader = column.diagonalHeader
             const isDiagonalHeaderCell = !!diagonalHeader
             const shouldRenderAddColumnButton =
+              editTable &&
               showAddColumnTrigger &&
               addColumnButton &&
               rowIndex === columnRows.length - 1 &&

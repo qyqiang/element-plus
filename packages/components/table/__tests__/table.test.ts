@@ -3920,6 +3920,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           @add-column="onAddColumn"
         >
@@ -3954,6 +3955,39 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('does not show the last header add-column button when edit-table is false', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+        >
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.find('.el-table__header-add-column-button').exists()).toBe(
+      false
+    )
+
+    wrapper.unmount()
+  })
+
   it('does not show the last header add-column button when add-column-button is false', async () => {
     const wrapper = mount({
       components: {
@@ -3964,6 +3998,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           :add-column-button="false"
         >
