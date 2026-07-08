@@ -1,7 +1,7 @@
 import { renderSlot } from 'vue'
 import ElIcon from '@element-plus/components/icon'
 import ElButton from '@element-plus/components/button'
-import { get } from 'lodash-unified'
+import { get, set } from 'lodash-unified'
 import { isFunction, isObject } from '@element-plus/utils'
 import { ExpandIcon, TableCell } from '../components'
 import { Alignment } from '../constants'
@@ -67,29 +67,39 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
   }
   const { cellRenderer, dataKey, dataGetter } = column
 
-  const cellData = isFunction(dataGetter)
-    ? dataGetter({ columns, column, columnIndex, rowData, rowIndex })
-    : get(rowData, dataKey ?? '')
+  const getCellData = () =>
+    isFunction(dataGetter)
+      ? dataGetter({ columns, column, columnIndex, rowData, rowIndex })
+      : get(rowData, dataKey ?? '')
 
-  const extraCellProps = tryCall(_cellProps, {
-    cellData,
-    columns,
-    column,
-    columnIndex,
-    rowIndex,
-    rowData,
-  })
+  const setCellData = (value: unknown) => {
+    if (!rowData || dataKey == null) return
 
-  const cellProps = {
+    if (typeof dataKey === 'symbol') {
+      rowData[dataKey] = value
+      return
+    }
+
+    set(rowData, dataKey, value)
+  }
+
+  const baseCellProps = {
     class: ns.e('cell-text'),
     columns,
     column,
     columnIndex,
-    cellData,
     isScrolling,
     rowData,
     rowIndex,
   }
+  const cellProps = Object.defineProperty(baseCellProps, 'cellData', {
+    enumerable: true,
+    configurable: true,
+    get: getCellData,
+    set: setCellData,
+  })
+
+  const extraCellProps = tryCall(_cellProps, cellProps)
   const isAddRow = Boolean(rowData[rowAddSign])
   const isRowDeleteColumn = column.key === rowDeleteColumnKey
   const columnCellRenderer = componentToSlot<typeof cellProps>(cellRenderer)
@@ -156,6 +166,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
 
   const kls = [
     ns.e('row-cell'),
+    column.required && 'required-column',
     column.class,
     column.align === Alignment.CENTER && ns.is('align-center'),
     column.align === Alignment.RIGHT && ns.is('align-right'),

@@ -1,4 +1,4 @@
-import { h, nextTick, ref } from 'vue'
+import { defineComponent, h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 import TableV2 from '../src/table-v2'
@@ -211,6 +211,58 @@ describe('TableV2.vue', () => {
 
     expect(cell.find('.custom-editor').exists()).toBe(true)
     expect(cell.find('.custom-editor').text()).toBe('Row 0 - Col 0-editor')
+  })
+
+  test('supports two-way binding through cellRenderer cellData', async () => {
+    const Editor = defineComponent({
+      props: {
+        modelValue: {
+          type: String,
+          default: '',
+        },
+      },
+      emits: ['update:modelValue'],
+      setup(props, { emit }) {
+        return () => (
+          <input
+            class="editable-input"
+            value={props.modelValue}
+            onInput={(event) =>
+              emit(
+                'update:modelValue',
+                (event.target as HTMLInputElement).value
+              )
+            }
+          />
+        )
+      },
+    })
+
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        cellRenderer: (column: { cellData: string }) => (
+          <Editor v-model={column.cellData} />
+        ),
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+      />
+    ))
+
+    const input = wrapper.find('.editable-input')
+
+    await input.setValue('Updated Value')
+
+    expect(data.value[0][columns.value[0].dataKey]).toBe('Updated Value')
   })
 
   test('keeps original cellRenderer behavior when canEditTable is false', async () => {
@@ -434,6 +486,30 @@ describe('TableV2.vue', () => {
     expect(cell.find('span').text()).toBe(
       `${columns.value[0].title}${customText}`
     )
+  })
+
+  test('adds required-column class to header and body cells when column.required is true', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        required: true,
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+      />
+    ))
+
+    const headerCell = wrapper.find('.el-table-v2__header-cell')
+    const bodyCell = wrapper.find('.el-table-v2__row-cell')
+
+    expect(headerCell.classes()).toContain('required-column')
+    expect(bodyCell.classes()).toContain('required-column')
   })
 
   test('sortable header icon uses default color when sortState is not provided', async () => {

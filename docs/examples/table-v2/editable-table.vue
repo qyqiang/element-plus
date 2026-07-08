@@ -33,7 +33,7 @@ const handlePlay = () => {
 }
 const dataGenerator = () => ({
   id: `random-id-${++id}`,
-  name: 'Tom',
+  name: '1',
   date: '2020-10-1',
 })
 
@@ -57,9 +57,10 @@ const columns: Column<any>[] = [
     title: 'Date',
     dataKey: 'date',
     width: 150,
-    cellRenderer: ({ cellData: date }) => (
-      <El-input placeholder="test1" float-label={false}></El-input>
-    ),
+    required: true,
+    cellRenderer: (cloumn) => {
+      return <El-input placeholder="test1" float-label={false} v-model={cloumn.cellData}></El-input>
+    },
   },
   {
     key: 'name',
@@ -67,10 +68,12 @@ const columns: Column<any>[] = [
     dataKey: 'name',
     width: 150,
     align: 'center',
-    cellRenderer: ({ cellData: name }) => {
+    required: true,
+    cellRenderer: (cloumn) => {
       return (
-        <El-select float-label={false} placeholder="test1">
+        <El-select float-label={false} placeholder="test1" v-model={cloumn.cellData}>
           <El-option value="1">ddd</El-option>
+          <El-option value="2">ddd2</El-option>
         </El-select>
       )
     },
@@ -82,5 +85,5 @@ const handleDelete = (val) => {
 const handleAdd = (val) => {
   console.log(val)
 }
-const data = ref(Array.from({ length: 20 }).map(dataGenerator))
+const data = ref(Array.from({ length: 520 }).map(dataGenerator))
 </script>
