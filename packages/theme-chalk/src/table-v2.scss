@@ -126,7 +126,7 @@
     bottom: 0;
     overflow: hidden;
     &.footer-default {
-      background-color: var(--color-cyan-100);
+      background-color: getCssVar('table-header-bg-color');
       height: 44px;
       padding: 12px 20px;
       font-size: 14px;
@@ -191,7 +191,7 @@
   @include e('header-row') {
     display: flex;
     border-bottom: getCssVar('table', 'border');
-    background-color: var(--color-cyan-100);
+    background-color: getCssVar('table-header-bg-color');
 
     @include e('header-cell') {
       height: 100%;
