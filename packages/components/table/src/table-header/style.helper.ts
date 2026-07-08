@@ -92,6 +92,10 @@ function useStyle<T extends DefaultRow>(props: TableHeaderProps<T>) {
       classes.push('is-sortable')
     }
 
+    if (column.required) {
+      classes.push('required-column')
+    }
+
     const headerCellClassName = parent?.props.headerCellClassName
     if (isString(headerCellClassName)) {
       classes.push(headerCellClassName)

@@ -30,6 +30,7 @@
         :key="column.prop"
         :prop="column.prop"
         :label="column.label"
+        :required="column?.required"
         :min-width="column.minWidth"
       >
         <template #edit-cell="{ row }">
@@ -102,8 +103,9 @@ interface ColumnItem {
   prop: string
   label: string
   minWidth: number
-  editor: EditorType
+  editor?: EditorType
   options?: OptionItem[]
+  required?: boolean
   isNumber?: boolean | { place?: number }
 }
 
@@ -142,6 +144,7 @@ const columns = ref<ColumnItem[]>([
     prop: 'description',
     label: 'Description',
     minWidth: 220,
+    required: true,
     editor: 'input',
   },
   {
@@ -155,6 +158,7 @@ const columns = ref<ColumnItem[]>([
     prop: 'unit',
     label: 'Unit',
     minWidth: 140,
+    required: true,
     editor: 'select',
     options: unitOptions,
   },

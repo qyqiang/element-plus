@@ -133,10 +133,6 @@
   .el-table__cell {
     &:has(.el-input) {
       padding: 0;
-
-      .cell {
-        padding: 0;
-      }
     }
   }
 

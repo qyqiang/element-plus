@@ -164,6 +164,10 @@
       min-height: 44px;
       display: flex;
       align-items: center;
+
+      &.is-full-width {
+        width: 100%;
+      }
     }
 
     @include when(center) {
@@ -208,7 +212,12 @@
       white-space: nowrap;
       min-width: 50px;
     }
+
+    &.is-full-width {
+      width: 100%;
+    }
   }
+
   .icon-column {
     .cell {
       padding: 0 1px;
@@ -316,7 +325,7 @@
       color: getCssVar('color-primary');
     }
 
-    &.required > div::before {
+    &.required-column > div::before {
       display: inline-block;
       content: '';
       width: 8px;

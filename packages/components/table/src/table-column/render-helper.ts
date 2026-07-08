@@ -232,6 +232,9 @@ function useRender<T extends DefaultRow>(
             }px`,
           }
         }
+        if (owner.value.props.ghostTable) {
+          props.class = `${props.class} is-full-width`
+        }
         checkSubColumn(children)
         return h('div', props, [prefix, children])
       }

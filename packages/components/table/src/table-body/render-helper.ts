@@ -157,6 +157,7 @@ function useRender<T extends DefaultRow>(
           cellIndex,
           columnIndex: $index,
           colspan,
+          fullWidth: props.ghostTable,
           onClick: ($event: Event) =>
             handleCellClick($event, row, column, $index, cellIndex),
           onMouseenter: ($event: MouseEvent) =>
