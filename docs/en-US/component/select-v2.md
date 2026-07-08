@@ -37,6 +37,16 @@ select-v2/multiple
 
 :::
 
+## Have all label
+
+Use `have-all` in multiple mode to show a fallback label when nothing is selected, and show the same label at the top of the dropdown after options are selected.
+
+:::demo
+
+select-v2/have-all
+
+:::
+
 ## Sizes
 
 :::demo Add `size` attribute to change the size of Select-V2. In addition to the default size, there are two other options: `large`, `small`.
@@ -251,6 +261,7 @@ select-v2/custom-width
 | options                             | data of the options, the key of `value` and `label` can be customize by `props`                                                             | ^[array]                                                                                                                                                                    | —                                              |
 | [props](#props) ^(2.4.2)            | configuration options, see the following table                                                                                              | ^[object]                                                                                                                                                                   | —                                              |
 | multiple                            | is multiple                                                                                                                                 | ^[boolean]                                                                                                                                                                  | false                                          |
+| have-all                            | label shown in multiple mode when no option is selected, and shown at the top of the dropdown when selections exist                         | ^[string]                                                                                                                                                                   | —                                              |
 | disabled                            | is disabled                                                                                                                                 | ^[boolean]                                                                                                                                                                  | false                                          |
 | value-key                           | unique identity key name for value, required when value is an object                                                                        | ^[string]                                                                                                                                                                   | value                                          |
 | size                                | size of component                                                                                                                           | ^[enum]`'' \| 'large' \| 'default' \| 'small'`                                                                                                                              | ''                                             |

@@ -66,6 +66,7 @@ interface SelectProps {
   props?: Props
   disabled?: boolean
   clearable?: boolean
+  haveAll?: string
   multiple?: boolean
   collapseTags?: boolean
   collapseTagsTooltip?: boolean
@@ -133,6 +134,7 @@ const createSelect = (
         :value-key="valueKey"
         :disabled="disabled"
         :clearable="clearable"
+        :have-all="haveAll"
         :multiple="multiple"
         :collapseTags="collapseTags"
         :collapseTagsTooltip="collapseTagsTooltip"
@@ -186,6 +188,7 @@ const createSelect = (
           valueKey: 'value',
           disabled: false,
           clearable: false,
+          haveAll: undefined,
           multiple: false,
           collapseTags: false,
           collapseTagsTooltip: false,
@@ -656,6 +659,42 @@ describe('Select', () => {
   })
 
   describe('multiple', () => {
+    it('renders haveAll tag when no option is selected', async () => {
+      const wrapper = createSelect({
+        data: () => {
+          return {
+            multiple: true,
+            haveAll: 'All Units',
+            value: [],
+          }
+        },
+      })
+
+      await nextTick()
+      expect(wrapper.find('.select-all-tag').text()).toBe('All Units')
+    })
+
+    it('renders haveAll header when selected options exist', async () => {
+      const wrapper = createSelect({
+        data: () => {
+          return {
+            multiple: true,
+            haveAll: 'All Units',
+            value: ['option_2'],
+          }
+        },
+      })
+
+      await nextTick()
+      await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+      await nextTick()
+      await rAF()
+
+      expect(document.querySelector('.select-all-item')?.textContent).toContain(
+        'All Units'
+      )
+    })
+
     it('renders checkbox for multiple options', async () => {
       createSelect({
         data: () => {

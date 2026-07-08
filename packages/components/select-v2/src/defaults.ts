@@ -56,6 +56,9 @@ export const selectV2Props = buildProps({
     type: Boolean,
     default: true,
   },
+  haveAll: {
+    type: String,
+  },
   /**
    * @description for non-filterable Select, this prop decides if the option menu pops up when the input is focused
    */

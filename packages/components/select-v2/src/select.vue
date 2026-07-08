@@ -38,6 +38,7 @@
           :class="[
             nsSelect.e('wrapper'),
             nsSelect.is('focused', isFocused),
+            nsSelect.is('all', !!haveAll),
             nsSelect.is('hovering', states.inputHovering),
             nsSelect.is('filterable', filterable),
             nsSelect.is('disabled', selectDisabled),
@@ -70,6 +71,11 @@
               :delete-tag="deleteTag"
               :select-disabled="selectDisabled"
             >
+              <span
+                v-if="haveAll && !states.cachedOptions.length"
+                class="select-all-tag"
+                >{{ haveAll }}</span
+              >
               <div
                 v-for="item in showTagList"
                 :key="getValueKey(getValue(item))"
@@ -320,9 +326,22 @@
           :scrollbar-always-on="scrollbarAlwaysOn"
           :aria-label="ariaLabel"
         >
-          <template v-if="$slots.header" #header>
-            <div :class="nsSelect.be('dropdown', 'header')" @click.stop>
+          <template
+            v-if="$slots.header || (multiple && modelValue.length && haveAll)"
+            #header
+          >
+            <div
+              v-if="$slots.header"
+              :class="nsSelect.be('dropdown', 'header')"
+              @click.stop
+            >
               <slot name="header" />
+            </div>
+            <div
+              v-if="multiple && modelValue.length && haveAll"
+              class="select-all-item"
+            >
+              {{ haveAll }}
             </div>
           </template>
           <template #default="scope">
