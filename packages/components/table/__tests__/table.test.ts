@@ -3852,6 +3852,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           @add-column="onAddColumn"
         >
@@ -4033,6 +4034,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           @add-column="onAddColumn"
         >
@@ -4098,6 +4100,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           @add-column="onAddColumn"
         >
@@ -4163,6 +4166,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           @add-column="onAddColumn"
         >
@@ -4225,6 +4229,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-column-trigger
           @add-column="onAddColumn"
         >
@@ -4287,7 +4292,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-column-trigger>
+        <el-table :data="testData" border edit-table show-add-column-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" />
           <el-table-column prop="runtime" label="Runtime" />
@@ -4338,7 +4343,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-column-trigger>
+        <el-table :data="testData" border edit-table show-add-column-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" />
         </el-table>
@@ -4359,6 +4364,34 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('does not add a wrapper state class for add-column trigger when edit-table is false', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData" border show-add-column-trigger>
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.find('.el-table').classes()).not.toContain(
+      'el-table--with-add-column-trigger'
+    )
+
+    wrapper.unmount()
+  })
+
   it('adds a wrapper state class when add-row trigger is enabled', async () => {
     const wrapper = mount({
       components: {
@@ -4366,7 +4399,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-row-trigger>
+        <el-table :data="testData" border edit-table show-add-row-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" />
         </el-table>
@@ -4387,6 +4420,34 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('does not add a wrapper state class for add-row trigger when edit-table is false', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData" border show-add-row-trigger>
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.find('.el-table').classes()).not.toContain(
+      'el-table--with-add-row-trigger'
+    )
+
+    wrapper.unmount()
+  })
+
   it('keeps add-column trigger visible when moving from header edge onto the trigger', async () => {
     const wrapper = mount({
       components: {
@@ -4394,7 +4455,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-column-trigger>
+        <el-table :data="testData" border edit-table show-add-column-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" />
           <el-table-column prop="runtime" label="Runtime" />
@@ -4502,7 +4563,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-column-trigger>
+        <el-table :data="testData" border edit-table show-add-column-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" fixed="right" />
           <el-table-column prop="release" label="Release" />
@@ -4562,6 +4623,7 @@ describe('Table.vue', () => {
         <el-table
           :data="testData"
           border
+          edit-table
           show-add-row-trigger
           @add-row="onAddRow"
         >
@@ -4634,7 +4696,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-row-trigger>
+        <el-table :data="testData" border edit-table show-add-row-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" />
           <el-table-column prop="runtime" label="Runtime" />
@@ -4693,7 +4755,7 @@ describe('Table.vue', () => {
         ElTableColumn,
       },
       template: `
-        <el-table :data="testData" border show-add-row-trigger>
+        <el-table :data="testData" border edit-table show-add-row-trigger>
           <el-table-column prop="name" label="Name" />
           <el-table-column prop="director" label="Director" />
           <el-table-column prop="runtime" label="Runtime" />
@@ -4740,6 +4802,57 @@ describe('Table.vue', () => {
       top: 44,
       placement: 'below',
     })
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
+  it('does not show add-row trigger when edit-table is false', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData" border show-add-row-trigger>
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const rowWrapper = wrapper.findAll('tbody tr')[0]
+    const row = rowWrapper.element as HTMLElement
+    const rect = {
+      left: 0,
+      right: 480,
+      top: 0,
+      bottom: 44,
+      width: 480,
+      height: 44,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi.spyOn(row, 'getBoundingClientRect').mockReturnValue(rect)
+
+    await rowWrapper.trigger('mousemove', {
+      clientX: 120,
+      clientY: 40,
+    })
+    await doubleWait()
+
+    expect(wrapper.find('.el-table__add-row-trigger-button').isVisible()).toBe(
+      false
+    )
 
     rectSpy.mockRestore()
     wrapper.unmount()

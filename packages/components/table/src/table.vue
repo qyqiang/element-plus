@@ -12,8 +12,8 @@
         [ns.m('fluid-height')]: maxHeight,
         [ns.m('scrollable-x')]: layout.scrollX.value,
         [ns.m('scrollable-y')]: layout.scrollY.value,
-        [ns.m('with-add-column-trigger')]: showAddColumnTrigger,
-        [ns.m('with-add-row-trigger')]: showAddRowTrigger,
+        [ns.m('with-add-column-trigger')]: effectiveShowAddColumnTrigger,
+        [ns.m('with-add-row-trigger')]: effectiveShowAddRowTrigger,
         [ns.m('enable-row-hover')]: !store.states.isComplex.value,
         [ns.m('enable-row-transition')]:
           (store.states.data.value || []).length !== 0 &&
@@ -58,7 +58,7 @@
             :store="store"
             :append-filter-panel-to="appendFilterPanelTo"
             :allow-drag-last-column="allowDragLastColumn"
-            :show-add-column-trigger="showAddColumnTrigger"
+            :show-add-column-trigger="effectiveShowAddColumnTrigger"
             :add-column-button="addColumnButton"
             :edit-table="editTable"
             @set-drag-visible="setDragVisible"
@@ -101,7 +101,7 @@
               :store="store"
               :append-filter-panel-to="appendFilterPanelTo"
               :allow-drag-last-column="allowDragLastColumn"
-              :show-add-column-trigger="showAddColumnTrigger"
+              :show-add-column-trigger="effectiveShowAddColumnTrigger"
               :add-column-button="addColumnButton"
               :edit-table="editTable"
               @set-drag-visible="setDragVisible"
@@ -120,7 +120,7 @@
               :row-style="rowStyle"
               :store="store"
               :stripe="stripe"
-              :show-add-row-trigger="showAddRowTrigger"
+              :show-add-row-trigger="effectiveShowAddRowTrigger"
               @update-add-row-trigger="updateAddRowTrigger"
             />
             <table-footer
@@ -191,7 +191,7 @@
       :class="ns.e('column-resize-proxy')"
     />
     <div
-      v-show="addColumnTrigger"
+      v-show="effectiveShowAddColumnTrigger && addColumnTrigger"
       :class="ns.e('add-column-trigger')"
       :style="addColumnTriggerStyle"
     >
@@ -224,7 +224,7 @@
       </el-tooltip>
     </div>
     <div
-      v-show="addRowTrigger"
+      v-show="effectiveShowAddRowTrigger && addRowTrigger"
       :class="[ns.e('add-row-trigger')]"
       :style="addRowTriggerStyle"
     >
@@ -270,6 +270,7 @@ import {
   ref,
   shallowRef,
   toRaw,
+  watch,
 } from 'vue'
 import TableText from '@element-plus/components/table/src/table-footer/tableText.vue'
 import ElTooltip from '@element-plus/components/tooltip/src/tooltip.vue'
@@ -532,6 +533,12 @@ export default defineComponent({
       debouncedUpdateLayout,
     }
     const hasEditingRow = computed(() => !!editingRow.value)
+    const effectiveShowAddColumnTrigger = computed(
+      () => props.editTable && props.showAddColumnTrigger
+    )
+    const effectiveShowAddRowTrigger = computed(
+      () => props.editTable && props.showAddRowTrigger
+    )
     const computedSumText = computed(
       () => props.sumText ?? t('el.table.sumText')
     )
@@ -549,6 +556,18 @@ export default defineComponent({
       if (!addRowTrigger.value) return {}
       return {
         top: `${addRowTrigger.value.top}px`,
+      }
+    })
+
+    watch(effectiveShowAddColumnTrigger, (enabled) => {
+      if (!enabled) {
+        clearAddColumnTrigger()
+      }
+    })
+
+    watch(effectiveShowAddRowTrigger, (enabled) => {
+      if (!enabled) {
+        clearAddRowTrigger()
       }
     })
 
@@ -638,6 +657,8 @@ export default defineComponent({
       clearEditingRow,
       applyEditingRow,
       hasEditingRow,
+      effectiveShowAddColumnTrigger,
+      effectiveShowAddRowTrigger,
       addColumnTrigger,
       addColumnTriggerStyle,
       handleAddColumnTailClick,
@@ -673,11 +694,11 @@ export default defineComponent({
       /**
        * @description whether to show an add-column trigger when hovering a header divider
        */
-      showAddColumnTrigger: props.showAddColumnTrigger,
+      showAddColumnTrigger: effectiveShowAddColumnTrigger,
       /**
        * @description whether to show an add-row trigger when hovering a row divider
        */
-      showAddRowTrigger: props.showAddRowTrigger,
+      showAddRowTrigger: effectiveShowAddRowTrigger,
     }
   },
 })

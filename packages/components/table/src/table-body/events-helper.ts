@@ -99,7 +99,11 @@ function useEvents<T extends DefaultRow>(
     props.store?.commit('setHoverRow', null)
   }, 30)
   const handleRowMouseMove = (event: MouseEvent, row: T, rowIndex: number) => {
-    if (!parent?.props.showAddRowTrigger || !parent?.props.border) {
+    if (
+      !parent?.props.showAddRowTrigger ||
+      !parent?.props.editTable ||
+      !parent?.props.border
+    ) {
       clearAddRowTrigger()
       return
     }
