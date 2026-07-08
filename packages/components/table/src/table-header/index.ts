@@ -212,143 +212,143 @@ export default defineComponent({
             style: getHeaderRowStyle(rowIndex),
           },
           subColumns.map((column, cellIndex) => {
-              if (column.rowSpan > rowSpan) {
-                rowSpan = column.rowSpan
-              }
-              const _class = getHeaderCellClass(
-                rowIndex,
-                cellIndex,
-                subColumns,
-                column
-              )
-              if (isTableLayoutAuto && column.fixed) {
-                saveIndexSelection.set(_class, column)
-              }
-              const diagonalHeader = column.diagonalHeader
-              const isDiagonalHeaderCell = !!diagonalHeader
-              return h(
-                'th',
-                {
-                  class: [
-                    _class,
-                    {
-                      [ns.is('diagonal-header')]: isDiagonalHeaderCell,
-                    },
-                  ],
-                  colspan: column.colSpan,
-                  key: `${column.id}-thead`,
-                  rowspan: column.rowSpan,
-                  style: getHeaderCellStyle(
-                    rowIndex,
-                    cellIndex,
-                    subColumns,
-                    column
-                  ),
-                  onMouseenter: ($event: MouseEvent) =>
-                    handleCellMouseEnter($event, column),
-                  onClick: ($event: Event) => {
-                    if (
-                      ($event.currentTarget as Element)?.classList.contains(
-                        'noclick'
-                      )
-                    ) {
-                      return
-                    }
-                    handleHeaderClick($event, column)
+            if (column.rowSpan > rowSpan) {
+              rowSpan = column.rowSpan
+            }
+            const _class = getHeaderCellClass(
+              rowIndex,
+              cellIndex,
+              subColumns,
+              column
+            )
+            if (isTableLayoutAuto && column.fixed) {
+              saveIndexSelection.set(_class, column)
+            }
+            const diagonalHeader = column.diagonalHeader
+            const isDiagonalHeaderCell = !!diagonalHeader
+            return h(
+              'th',
+              {
+                class: [
+                  _class,
+                  {
+                    [ns.is('diagonal-header')]: isDiagonalHeaderCell,
                   },
-                  onContextmenu: ($event: MouseEvent) =>
-                    handleHeaderContextMenu($event, column),
-                  onMousedown: ($event: MouseEvent) =>
-                    handleMouseDown($event, column),
-                  onMousemove: ($event: MouseEvent) =>
-                    handleMouseMove($event, column),
-                  onMouseout: ($event: MouseEvent) => handleMouseOut($event),
+                ],
+                colspan: column.colSpan,
+                key: `${column.id}-thead`,
+                rowspan: column.rowSpan,
+                style: getHeaderCellStyle(
+                  rowIndex,
+                  cellIndex,
+                  subColumns,
+                  column
+                ),
+                onMouseenter: ($event: MouseEvent) =>
+                  handleCellMouseEnter($event, column),
+                onClick: ($event: Event) => {
+                  if (
+                    ($event.currentTarget as Element)?.classList.contains(
+                      'noclick'
+                    )
+                  ) {
+                    return
+                  }
+                  handleHeaderClick($event, column)
                 },
-                [
-                  h(
-                    'div',
-                    {
-                      class: [
-                        'cell',
-                        {
-                          [ns.e('diagonal-header')]: isDiagonalHeaderCell,
-                        },
-                        column.filteredValue && column.filteredValue.length > 0
-                          ? 'highlight'
-                          : '',
-                      ],
-                    },
-                    [
-                      isDiagonalHeaderCell
-                        ? [
-                            h(
-                              'span',
-                              {
-                                class: ns.e('diagonal-header-text'),
-                              },
-                              diagonalHeader.from
-                            ),
-                            h(
-                              'span',
-                              {
-                                class: ns.e('diagonal-header-text'),
-                              },
-                              diagonalHeader.to
-                            ),
-                          ]
-                        : column.renderHeader
-                          ? column.renderHeader({
-                              column,
-                              $index: cellIndex,
-                              store,
-                              _self: $parent,
-                            })
-                          : column.label,
-                      column.sortable &&
-                        h(
-                          'span',
-                          {
-                            class: 'icon-wrap',
-                            onClick: ($event: any) =>
-                              handleSortClick($event, column),
-                          },
-                          [
-                            // beyond v3
-                            h(
-                              ElIcon,
-                              { class: 'icon-arrow' },
-                              {
-                                default: () => h(FilterIcon),
-                              }
-                            ),
-                          ]
-                        ),
-                      column.filterable &&
-                        h(
-                          FilterPanel as any,
-                          {
-                            store,
-                            placement: column.filterPlacement || 'bottom-start',
-                            appendTo: ($parent as any)?.appendFilterPanelTo,
-                            column,
-                            upDataColumn: (key: never, value: never) => {
-                              column[key] = value
+                onContextmenu: ($event: MouseEvent) =>
+                  handleHeaderContextMenu($event, column),
+                onMousedown: ($event: MouseEvent) =>
+                  handleMouseDown($event, column),
+                onMousemove: ($event: MouseEvent) =>
+                  handleMouseMove($event, column),
+                onMouseout: ($event: MouseEvent) => handleMouseOut($event),
+              },
+              [
+                h(
+                  'div',
+                  {
+                    class: [
+                      'cell',
+                      {
+                        [ns.e('diagonal-header')]: isDiagonalHeaderCell,
+                      },
+                      column.filteredValue && column.filteredValue.length > 0
+                        ? 'highlight'
+                        : '',
+                    ],
+                  },
+                  [
+                    isDiagonalHeaderCell
+                      ? [
+                          h(
+                            'span',
+                            {
+                              class: ns.e('diagonal-header-text'),
                             },
+                            diagonalHeader.from
+                          ),
+                          h(
+                            'span',
+                            {
+                              class: ns.e('diagonal-header-text'),
+                            },
+                            diagonalHeader.to
+                          ),
+                        ]
+                      : column.renderHeader
+                        ? column.renderHeader({
+                            column,
+                            $index: cellIndex,
+                            store,
+                            _self: $parent,
+                          })
+                        : column.label,
+                    column.sortable &&
+                      h(
+                        'span',
+                        {
+                          class: 'icon-wrap',
+                          onClick: ($event: any) =>
+                            handleSortClick($event, column),
+                        },
+                        [
+                          // beyond v3
+                          h(
+                            ElIcon,
+                            { class: 'icon-arrow' },
+                            {
+                              default: () => h(FilterIcon),
+                            }
+                          ),
+                        ]
+                      ),
+                    column.filterable &&
+                      h(
+                        FilterPanel as any,
+                        {
+                          store,
+                          placement: column.filterPlacement || 'bottom-start',
+                          appendTo: ($parent as any)?.appendFilterPanelTo,
+                          column,
+                          upDataColumn: (key: never, value: never) => {
+                            column[key] = value
                           },
-                          {
-                            'filter-icon': () =>
-                              column.renderFilterIcon
-                                ? column.renderFilterIcon({
-                                    filterOpened: column.filterOpened,
-                                  })
-                                : null,
-                          }
-                        ),
-                    ]
-                  ),
-                ]
-              )
-            })
+                        },
+                        {
+                          'filter-icon': () =>
+                            column.renderFilterIcon
+                              ? column.renderFilterIcon({
+                                  filterOpened: column.filterOpened,
+                                })
+                              : null,
+                        }
+                      ),
+                  ]
+                ),
+              ]
+            )
+          })
         )
       )
     )

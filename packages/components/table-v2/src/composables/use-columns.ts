@@ -1,6 +1,6 @@
 import { computed, unref } from 'vue'
 import { isObject } from '@element-plus/utils'
-import { SortOrder, oppositeOrderMap } from '../constants'
+import { FixedDir, SortOrder, oppositeOrderMap } from '../constants'
 import {
   placeholderSign,
   rowDeleteColumnKey,
@@ -17,29 +17,30 @@ function useColumns(
   columns: Ref<AnyColumns>,
   fixed: Ref<boolean>
 ) {
-  const _columns = computed(() => {
-    const normalizedColumns = unref(columns).map((column, index) => ({
-      ...column,
-      key: column.key ?? column.dataKey ?? index,
-    }))
+  const _columns = computed<AnyColumns>(() => {
+    const normalizedColumns: AnyColumns = unref(columns).map(
+      (column, index) => ({
+        ...column,
+        key: column.key ?? column.dataKey ?? index,
+      })
+    )
 
     if (!(props.canEditTable && props.editable)) {
       return normalizedColumns
     }
 
-    return [
-      ...normalizedColumns,
-      {
-        key: rowDeleteColumnKey,
-        dataKey: rowDeleteColumnKey,
-        title: '',
-        width: rowDeleteColumnWidth,
-        fixed: 'right' as const,
-        align: 'center' as const,
-        class: 'is-row-delete-column',
-        headerClass: 'is-row-delete-column',
-      },
-    ]
+    const rowDeleteColumn: Column<any> = {
+      key: rowDeleteColumnKey,
+      dataKey: rowDeleteColumnKey,
+      title: '',
+      width: rowDeleteColumnWidth,
+      fixed: FixedDir.RIGHT,
+      align: 'center',
+      class: 'is-row-delete-column',
+      headerClass: 'is-row-delete-column',
+    }
+
+    return [...normalizedColumns, rowDeleteColumn]
   })
 
   const visibleColumns = computed(() => {
@@ -91,7 +92,8 @@ function useColumns(
   const columnsStyles = computed(() => {
     return unref(_columns).reduce<Record<KeyType, CSSProperties>>(
       (style, column) => {
-        style[column.key] = calcColumnStyle(column, unref(fixed), props.fixed)
+        const key = column.key!
+        style[key] = calcColumnStyle(column, unref(fixed), props.fixed)
         return style
       },
       {}

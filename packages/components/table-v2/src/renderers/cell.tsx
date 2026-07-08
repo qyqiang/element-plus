@@ -97,7 +97,9 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     configurable: true,
     get: getCellData,
     set: setCellData,
-  })
+  }) as typeof baseCellProps & {
+    cellData: ReturnType<typeof getCellData>
+  }
 
   const extraCellProps = tryCall(_cellProps, cellProps)
   const isAddRow = Boolean(rowData[rowAddSign])

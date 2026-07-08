@@ -199,12 +199,14 @@ function useRender<T extends DefaultRow>(
           ]
         } else if (shouldRenderEditCell) {
           const vnodes = column.renderEditCell!(data)
-          children = vnodes.some((v) => v.type !== Comment)
+          const editVNodes = isArray(vnodes) ? vnodes : [vnodes]
+          children = editVNodes.some((v) => v.type !== Comment)
             ? vnodes
             : originRenderCell(data)
         } else if (slots.default) {
           const vnodes = slots.default(data)
-          children = vnodes.some((v) => v.type !== Comment)
+          const defaultVNodes = isArray(vnodes) ? vnodes : [vnodes]
+          children = defaultVNodes.some((v) => v.type !== Comment)
             ? vnodes
             : originRenderCell(data)
         } else {
