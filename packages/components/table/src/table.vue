@@ -59,8 +59,10 @@
             :append-filter-panel-to="appendFilterPanelTo"
             :allow-drag-last-column="allowDragLastColumn"
             :show-add-column-trigger="showAddColumnTrigger"
+            :add-column-button="addColumnButton"
             @set-drag-visible="setDragVisible"
             @update-add-column-trigger="updateAddColumnTrigger"
+            @tail-add-column="handleAddColumnTailClick"
           />
         </table>
       </div>
@@ -99,8 +101,10 @@
               :append-filter-panel-to="appendFilterPanelTo"
               :allow-drag-last-column="allowDragLastColumn"
               :show-add-column-trigger="showAddColumnTrigger"
+              :add-column-button="addColumnButton"
               @set-drag-visible="setDragVisible"
               @update-add-column-trigger="updateAddColumnTrigger"
+              @tail-add-column="handleAddColumnTailClick"
             />
             <table-body
               :context="context"
@@ -475,6 +479,15 @@ export default defineComponent({
       })
       clearAddColumnTrigger()
     }
+    const handleAddColumnTailClick = (payload: {
+      column: TableColumnCtx<Row>
+      columnIndex: number
+      insertIndex: number
+      event: MouseEvent
+    }) => {
+      emit('add-column', payload)
+      clearAddColumnTrigger()
+    }
     const clearAddRowTrigger = () => {
       addRowTrigger.value = null
     }
@@ -625,6 +638,7 @@ export default defineComponent({
       hasEditingRow,
       addColumnTrigger,
       addColumnTriggerStyle,
+      handleAddColumnTailClick,
       handleAddColumnClick,
       updateAddColumnTrigger,
       addRowTrigger,

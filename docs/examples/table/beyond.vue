@@ -1,10 +1,5 @@
 <template>
   <div class="editable-row-demo">
-    <div class="editable-row-demo__title">Current Contained</div>
-    <div class="editable-row-demo__subtitle">
-      Current Contained Specification
-    </div>
-
     <el-table
       ref="table"
       :data="tableData"

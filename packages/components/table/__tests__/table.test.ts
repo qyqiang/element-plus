@@ -3910,6 +3910,84 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('shows add-column button in the last header cell and appends after the last column', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+          @add-column="onAddColumn"
+        >
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+          onAddColumn: vi.fn(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const trigger = wrapper.find('.el-table__header-add-column-button')
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    const tableWrapper = wrapper.findComponent(ElTable)
+    const payload = tableWrapper.emitted('add-column')?.[0]?.[0]
+    expect(payload).toMatchObject({
+      columnIndex: 2,
+      insertIndex: 3,
+    })
+    expect(payload.column.property).toBe('runtime')
+
+    wrapper.unmount()
+  })
+
+  it('does not show the last header add-column button when add-column-button is false', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="testData"
+          border
+          show-add-column-trigger
+          :add-column-button="false"
+        >
+          <el-table-column prop="name" label="Name" />
+          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="runtime" label="Runtime" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.find('.el-table__header-add-column-button').exists()).toBe(
+      false
+    )
+
+    wrapper.unmount()
+  })
+
   it('shows add-column trigger before a column when hovering the left half', async () => {
     const wrapper = mount({
       components: {

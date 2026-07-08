@@ -196,6 +196,7 @@ interface TableProps<T extends DefaultRow> {
   scrollbarTabindex?: number | string
   nativeScrollbar?: boolean
   showAddColumnTrigger?: boolean
+  addColumnButton?: boolean
   showAddRowTrigger?: boolean
 }
 
@@ -499,6 +500,13 @@ export default {
    * @description whether to show an add-column trigger when hovering a header divider
    */
   showAddColumnTrigger: Boolean,
+  /**
+   * @description whether to show an add-column button in the last header cell when `show-add-column-trigger` is enabled
+   */
+  addColumnButton: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description whether to show an add-row trigger when hovering a row divider
    */

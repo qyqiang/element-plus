@@ -12,6 +12,7 @@ import {
 } from 'vue'
 import { useNamespace } from '@element-plus/hooks'
 import ElIcon from '@element-plus/components/icon'
+import ElButton from '@element-plus/components/button'
 import ElCheckbox from '@element-plus/components/checkbox'
 import FilterPanel from '../filter-panel.vue'
 import useLayoutObserver from '../layout-observer'
@@ -40,6 +41,7 @@ export interface TableHeaderProps<T extends DefaultRow> {
   defaultSort: Sort
   allowDragLastColumn: boolean
   showAddColumnTrigger: boolean
+  addColumnButton: boolean
 }
 
 export default defineComponent({
@@ -74,6 +76,10 @@ export default defineComponent({
     },
     showAddColumnTrigger: {
       type: Boolean,
+    },
+    addColumnButton: {
+      type: Boolean,
+      default: true,
     },
   },
   setup(props, { emit }) {
@@ -142,6 +148,21 @@ export default defineComponent({
     const { isGroup, toggleAllSelection, columnRows } = useUtils(
       props as TableHeaderProps<any>
     )
+    const handleAddColumn = (event: MouseEvent) => {
+      event.stopPropagation()
+      const columns = props.store.states.columns.value
+      const columnIndex = columns.length - 1
+      const column = columns[columnIndex]
+
+      if (!column) return
+
+      emit('tail-add-column', {
+        column,
+        columnIndex,
+        insertIndex: columnIndex + 1,
+        event,
+      })
+    }
 
     instance.state = {
       onColumnsChange,
@@ -171,6 +192,7 @@ export default defineComponent({
       toggleAllSelection,
       saveIndexSelection,
       isTableLayoutAuto,
+      handleAddColumn,
       theadRef,
       updateFixedColumnStyle,
     }
@@ -195,6 +217,9 @@ export default defineComponent({
       $parent,
       saveIndexSelection,
       isTableLayoutAuto,
+      showAddColumnTrigger,
+      addColumnButton,
+      handleAddColumn,
     } = this
     let rowSpan = 1
     return h(
@@ -226,6 +251,37 @@ export default defineComponent({
             }
             const diagonalHeader = column.diagonalHeader
             const isDiagonalHeaderCell = !!diagonalHeader
+            const shouldRenderAddColumnButton =
+              showAddColumnTrigger &&
+              addColumnButton &&
+              rowIndex === columnRows.length - 1 &&
+              cellIndex === subColumns.length - 1
+            const headerContent = isDiagonalHeaderCell
+              ? [
+                  h(
+                    'span',
+                    {
+                      class: ns.e('diagonal-header-text'),
+                    },
+                    diagonalHeader.from
+                  ),
+                  h(
+                    'span',
+                    {
+                      class: ns.e('diagonal-header-text'),
+                    },
+                    diagonalHeader.to
+                  ),
+                ]
+              : column.renderHeader
+                ? column.renderHeader({
+                    column,
+                    $index: cellIndex,
+                    store,
+                    _self: $parent,
+                  })
+                : column.label
+
             return h(
               'th',
               {
@@ -279,31 +335,7 @@ export default defineComponent({
                     ],
                   },
                   [
-                    isDiagonalHeaderCell
-                      ? [
-                          h(
-                            'span',
-                            {
-                              class: ns.e('diagonal-header-text'),
-                            },
-                            diagonalHeader.from
-                          ),
-                          h(
-                            'span',
-                            {
-                              class: ns.e('diagonal-header-text'),
-                            },
-                            diagonalHeader.to
-                          ),
-                        ]
-                      : column.renderHeader
-                        ? column.renderHeader({
-                            column,
-                            $index: cellIndex,
-                            store,
-                            _self: $parent,
-                          })
-                        : column.label,
+                    headerContent,
                     column.sortable &&
                       h(
                         'span',
@@ -322,6 +354,51 @@ export default defineComponent({
                             }
                           ),
                         ]
+                      ),
+                    shouldRenderAddColumnButton &&
+                      h(
+                        ElButton,
+                        {
+                          class: [
+                            'icon-button',
+                            ns.e('header-add-column-button'),
+                          ],
+                          text: true,
+                          onClick: handleAddColumn,
+                        },
+                        {
+                          default: () => [
+                            h(
+                              ElIcon,
+                              {
+                                size: '12',
+                              },
+                              {
+                                default: () =>
+                                  h(
+                                    'svg',
+                                    {
+                                      xmlns: 'http://www.w3.org/2000/svg',
+                                      width: '12',
+                                      height: '12',
+                                      viewBox: '0 0 12 12',
+                                    },
+                                    [
+                                      h('path', {
+                                        d: 'M2.49988 12L2.49988 0L1.49988 0L1.49988 12H2.49988Z',
+                                      }),
+                                      h('path', {
+                                        d: 'M5 12L5 0L4 0L4 12H5Z',
+                                      }),
+                                      h('path', {
+                                        d: 'M9.5 8.25V6.75H11V5.25H9.5V3.75H8V5.25H6.5V6.75H8V8.25H9.5Z',
+                                      }),
+                                    ]
+                                  ),
+                              }
+                            ),
+                          ],
+                        }
                       ),
                     column.filterable &&
                       h(

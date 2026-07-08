@@ -1,4 +1,9 @@
+@use 'sass:map';
+
+@use '../mixins/mixins' as *;
+@use '../mixins/var' as *;
 @use './font.scss' as *;
+@use '../common/var' as *;
 
 .el-table {
   border-bottom: 1px solid #e7ecef;
@@ -49,6 +54,7 @@
       .cell {
         display: flex;
         align-items: center;
+        line-height: 32px;
       }
 
       &.is-diagonal-header {
