@@ -19,7 +19,7 @@
       :editor="editor"
       :is-editing="isEditing"
       :options="options"
-      :input-props="inputProps"
+      :input-props="resolvedInputProps"
       :select-props="selectProps"
       :update-model-value="updateModelValue"
       :commit-value="commitValue"
@@ -48,7 +48,7 @@
       v-model="editorModel"
       v-price="isNumber"
       :clearable="clearable"
-      v-bind="inputProps"
+      v-bind="resolvedInputProps"
       :autofocus="isActiveEditingCell"
       @blur="handleInputBlur"
       @change="handleInputChange"
@@ -66,6 +66,7 @@ import { TABLE_INJECTION_KEY } from './tokens'
 
 import type { Directive, PropType } from 'vue'
 import type { DefaultRow, Table } from './table/defaults'
+import type { TableColumnCtx } from './table-column/defaults'
 
 type NumericLimit = boolean | number | { place?: number }
 
@@ -214,6 +215,34 @@ const selectRef = ref<InstanceType<typeof ElSelect>>()
 const draftValue = ref(getProp(props.cellData.row, props.property).value)
 const hasEditorSlot = computed(() => !!slots.editor)
 const activeEditableCell = computed(() => table?.activeEditableCell?.value)
+const currentColumn = computed<TableColumnCtx<DefaultRow> | undefined>(() => {
+  const columns = table?.store?.states?.columns?.value
+  if (!columns?.length) return undefined
+
+  return (
+    columns.find((column) => column.property === props.property) ??
+    columns[props.cellData.cellIndex]
+  )
+})
+const isRequiredEmptyInput = computed(() => {
+  if (props.editor !== 'input') return false
+  if (!currentColumn.value?.required) return false
+
+  return (
+    currentValue.value === '' ||
+    currentValue.value === null ||
+    currentValue.value === undefined
+  )
+})
+const resolvedInputProps = computed(() => {
+  if (!isRequiredEmptyInput.value) return props.inputProps
+
+  return {
+    ...props.inputProps,
+    inputType: props.inputProps.inputType ?? 'error',
+    infoTip: props.inputProps.infoTip ?? 'Required',
+  }
+})
 
 const currentValue = computed(() => {
   if (

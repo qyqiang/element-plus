@@ -6,9 +6,14 @@
       their column labels as placeholders, and keep the built-in add action on
       the trailing side.
     </p>
-    <el-button @click="handleEdit">Edit mode</el-button>
-    <el-button @click="handleDisplay">Display mode</el-button>
+    <div style="margin-bottom: 12px">
+      <el-button @click="handleEdit">Edit mode</el-button>
+      <el-button @click="handleDisplay">Display mode</el-button>
+      <el-button @click="handleSubmit">Submit</el-button>
+    </div>
+
     <el-table
+      ref="table"
       :data="tableData"
       border
       ghost-table
@@ -90,11 +95,30 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
+import { ElMessage } from 'element-plus'
 
 type EditorType = 'input' | 'select'
 const editTable = ref(true)
+const table = ref(null)
 const handleEdit = () => {
   editTable.value = true
+}
+const handleSubmit = () => {
+  const valid = table.value?.validateRequiredColumns?.() ?? true
+  if (valid) {
+    ElMessage({
+      alert: true,
+      type: 'success',
+      message: 'Successfully edited',
+    })
+  } else {
+    ElMessage({
+      alert: true,
+      type: 'error',
+      message: 'Please complete all required fields',
+    })
+    return
+  }
 }
 const handleDisplay = () => {
   editTable.value = false
@@ -156,6 +180,7 @@ const columns = ref<ColumnItem[]>([
     prop: 'qty',
     label: 'Qty',
     minWidth: 140,
+    required: true,
     editor: 'input',
     isNumber: { place: 2 },
   },
@@ -181,7 +206,7 @@ const tableData = ref<TableRow[]>([
     id: 1,
     product: 'Sand',
     description: 'Base material',
-    qty: '1000',
+    qty: '',
     unit: 'lbs',
     rate: '3.45',
   },

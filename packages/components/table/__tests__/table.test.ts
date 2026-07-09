@@ -7,6 +7,7 @@ import ElCheckbox from '@element-plus/components/checkbox'
 import triggerEvent from '@element-plus/test-utils/trigger-event'
 import { rAF } from '@element-plus/test-utils/tick'
 import { CaretBottom, CaretTop } from '@element-plus/icons-vue'
+import ElInput from '@element-plus/components/input'
 import ElTable from '../src/table.vue'
 import ElTableColumn from '../src/table-column'
 import ElTableEditableCell from '../src/editable-cell.vue'
@@ -460,6 +461,101 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('disables the ghost-row add button when a required column is empty', async () => {
+    const onRowAdd = vi.fn()
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElInput,
+      },
+      template: `
+        <el-table
+          :data="tableData"
+          ghost-table
+          edit-table
+          row-key="id"
+          @add-ghost-row="onRowAdd"
+        >
+          <el-table-column prop="name" label="Name" required>
+            <template #edit-cell="{ row, column }">
+              <el-input
+                v-model="row.name"
+                :placeholder="column.label"
+                :float-label="false"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 1),
+          onRowAdd,
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const ghostRow = wrapper.find('tbody tr.is-ghost-row')
+    const addButton = ghostRow.find('.icon-button')
+    const table = wrapper.findComponent(ElTable)
+
+    expect(addButton.attributes('disabled')).toBeDefined()
+
+    await addButton.trigger('click')
+
+    expect(onRowAdd).not.toHaveBeenCalled()
+    expect(table.emitted('add-ghost-row')).toBeUndefined()
+
+    wrapper.unmount()
+  })
+
+  it('passes error input props to required ghost-row inputs when the value is empty', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElInput,
+      },
+      template: `
+        <el-table
+          :data="tableData"
+          ghost-table
+          edit-table
+        >
+          <el-table-column prop="name" label="Name" required>
+            <template #edit-cell="{ row, column }">
+              <el-input
+                v-model="row.name"
+                :placeholder="column.label"
+                :float-label="false"
+              />
+            </template>
+          </el-table-column>
+          <el-table-column prop="director" label="Director" />
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 1),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const ghostRow = wrapper.find('tbody tr.is-ghost-row')
+    const ghostInput = ghostRow.findComponent(ElInput)
+
+    expect(ghostInput.exists()).toBe(true)
+    expect(ghostInput.props('inputType')).toBe('error')
+    expect(ghostInput.props('infoTip')).toBe('Required')
+
+    wrapper.unmount()
+  })
+
   it('activates editable input cells on click', async () => {
     const wrapper = mount({
       components: {
@@ -496,6 +592,49 @@ describe('Table.vue', () => {
     const input = wrapper.find('.el-input__inner')
     expect(input.exists()).toBe(true)
     expect(document.activeElement).toBe(input.element)
+    wrapper.unmount()
+  })
+
+  it('applies error input props to required editable input cells when the value is empty', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElTableEditableCell,
+        ElInput,
+      },
+      template: `
+        <el-table :data="tableData" editable>
+          <el-table-column prop="name" label="Name" required>
+            <template #default="{ row, $index, cellIndex }">
+              <el-table-editable-cell
+                :cell-data="{ row, rowIndex: $index, cellIndex }"
+                property="name"
+              />
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: [
+            {
+              name: '',
+            },
+          ],
+        }
+      },
+    })
+
+    await doubleWait()
+    await wrapper.find('.el-table__body-wrapper tbody td').trigger('click')
+    await doubleWait()
+
+    const input = wrapper.findComponent({ name: 'ElInput' })
+    expect(input.exists()).toBe(true)
+    expect(input.props('inputType')).toBe('error')
+    expect(input.props('infoTip')).toBe('Required')
+
     wrapper.unmount()
   })
 
@@ -2221,6 +2360,43 @@ describe('Table.vue', () => {
 
       vm.$refs.table.clearSelection()
       expect(vm.fireCount).toEqual(2)
+
+      wrapper.unmount()
+    })
+
+    it('validateRequiredColumns', async () => {
+      const wrapper = mount({
+        components: {
+          ElTable,
+          ElTableColumn,
+        },
+        template: `
+          <el-table ref="table" :data="testData">
+            <el-table-column prop="name" label="Name" required />
+            <el-table-column prop="director" label="Director" />
+          </el-table>
+        `,
+        data() {
+          return {
+            testData: [
+              {
+                name: '',
+                director: 'John Lasseter',
+              },
+            ],
+          }
+        },
+      })
+
+      await doubleWait()
+
+      const vm = wrapper.vm as any
+      expect(vm.$refs.table.validateRequiredColumns()).toBe(false)
+
+      vm.testData[0].name = 'Toy Story'
+      await doubleWait()
+
+      expect(vm.$refs.table.validateRequiredColumns()).toBe(true)
 
       wrapper.unmount()
     })

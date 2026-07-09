@@ -1,5 +1,5 @@
 <template>
-  <el-button class="icon-button" text @click="handleAdd">
+  <el-button class="icon-button" text :disabled="isDisabled" @click="handleAdd">
     <el-icon size="12">
       <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { inject } from 'vue'
+import { computed, inject } from 'vue'
 import ElButton from '@element-plus/components/button'
 import ElIcon from '@element-plus/components/icon'
 import { TABLE_INJECTION_KEY } from './tokens'
@@ -24,6 +24,7 @@ import { ghostRowKey } from './private'
 
 import type { PropType } from 'vue'
 import type { DefaultRow, Table } from './table/defaults'
+import type { TableColumnCtx } from './table-column/defaults'
 
 const props = defineProps({
   row: {
@@ -34,7 +35,27 @@ const props = defineProps({
 
 const table = inject(TABLE_INJECTION_KEY) as Table<DefaultRow> | undefined
 
+const isEmptyValue = (value: unknown) =>
+  value === '' || value === null || value === undefined
+
+const requiredColumns = computed(() => {
+  const columns = table?.store?.states?.columns?.value ?? []
+
+  return columns.filter(
+    (column): column is TableColumnCtx<DefaultRow> =>
+      !!column.required && !!column.property
+  )
+})
+
+const isDisabled = computed(() =>
+  requiredColumns.value.some((column) =>
+    isEmptyValue(props.row?.[column.property as keyof DefaultRow])
+  )
+)
+
 const handleAdd = (event: MouseEvent) => {
+  if (isDisabled.value) return
+
   table?.emit('add-ghost-row', {
     event,
     row: props.row,

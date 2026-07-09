@@ -546,6 +546,27 @@ export default defineComponent({
     const computedEmptyText = computed(() => {
       return props.emptyText ?? t('el.table.emptyText')
     })
+    const isEmptyRequiredValue = (value: unknown) =>
+      value === '' || value === null || value === undefined
+    const validateRequiredColumns = () => {
+      const requiredColumns = store.states.columns.value.filter(
+        (column) => !!column.required && !!column.property
+      )
+
+      if (!requiredColumns.length) return true
+
+      return props.data.every((row) => {
+        const source =
+          editingRow.value?.row === row ? editingRow.value.draft : row
+
+        return requiredColumns.every(
+          (column) =>
+            !isEmptyRequiredValue(
+              source?.[column.property as keyof typeof source]
+            )
+        )
+      })
+    }
     const addColumnTriggerStyle = computed<CSSProperties>(() => {
       if (!addColumnTrigger.value) return {}
       return {
@@ -699,6 +720,10 @@ export default defineComponent({
        * @description whether to show an add-row trigger when hovering a row divider
        */
       showAddRowTrigger: effectiveShowAddRowTrigger,
+      /**
+       * @description validates required columns in the table data, returns `false` when any required cell is empty
+       */
+      validateRequiredColumns,
     }
   },
 })

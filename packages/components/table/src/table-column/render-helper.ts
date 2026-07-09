@@ -1,5 +1,6 @@
 import {
   Comment,
+  cloneVNode,
   computed,
   getCurrentInstance,
   h,
@@ -23,6 +24,38 @@ import GhostRowAddButton from '../ghost-row-add-button.vue'
 import type { ComputedRef, RendererNode, Slots, VNode } from 'vue'
 import type { TableColumn, TableColumnCtx } from './defaults'
 import type { DefaultRow, Table } from '../table/defaults'
+
+const isEmptyRequiredValue = (value: unknown) =>
+  value === '' || value === null || value === undefined
+
+const isElInputVNode = (vnode: VNode) => {
+  const type = vnode.type as { name?: string; __name?: string }
+  return type?.name === 'ElInput' || type?.__name === 'ElInput'
+}
+
+const applyRequiredInputState = <T extends DefaultRow>(
+  vnodes: VNode | VNode[],
+  column: TableColumnCtx<T>,
+  row: T
+) => {
+  if (!column.required || !column.property) return vnodes
+  if (!isEmptyRequiredValue(row?.[column.property])) return vnodes
+
+  const patchVNode = (vnode: VNode) => {
+    if (!isElInputVNode(vnode)) return vnode
+
+    const vnodeProps = (vnode.props ?? {}) as Record<string, any>
+
+    return cloneVNode(vnode, {
+      inputType: vnodeProps.inputType ?? vnodeProps['input-type'] ?? 'error',
+      infoTip: vnodeProps.infoTip ?? vnodeProps['info-tip'] ?? 'Required',
+    })
+  }
+
+  return isArray(vnodes)
+    ? vnodes.map((vnode) => patchVNode(vnode))
+    : patchVNode(vnodes)
+}
 
 function useRender<T extends DefaultRow>(
   props: TableColumnCtx<T>,
@@ -198,7 +231,11 @@ function useRender<T extends DefaultRow>(
             }),
           ]
         } else if (shouldRenderEditCell) {
-          const vnodes = column.renderEditCell!(data)
+          const vnodes = applyRequiredInputState(
+            column.renderEditCell!(data),
+            column,
+            data.row
+          )
           const editVNodes = isArray(vnodes) ? vnodes : [vnodes]
           children = editVNodes.some((v) => v.type !== Comment)
             ? vnodes
