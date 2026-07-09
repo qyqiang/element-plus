@@ -18,6 +18,18 @@
       clearable
     />
     <el-input
+      input-type="error"
+      style="width: 240px"
+      placeholder="Hover me when empty"
+    />
+    <el-input
+      v-model="input"
+      input-type="error"
+      info-tip="Custom required message"
+      style="width: 240px"
+      placeholder="Custom empty error tip"
+    />
+    <el-input
       v-model="input6"
       disabled
       style="width: 240px"

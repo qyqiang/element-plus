@@ -162,6 +162,14 @@ describe('Input.vue', () => {
     expect(infoWrapper.classes('el-input--info')).toBe(true)
   })
 
+  test('inputType with value adds filled modifier class', () => {
+    const wrapper = mount(() => (
+      <Input inputType="warning" modelValue="hello" />
+    ))
+
+    expect(wrapper.classes('el-input--filled')).toBe(true)
+  })
+
   test('infoTip renders built-in info tooltip when inputType is info', () => {
     const tip = 'Important Information'
     const wrapper = mount(() => <Input inputType="info" infoTip={tip} />)
@@ -169,6 +177,25 @@ describe('Input.vue', () => {
     expect(tooltips.some((tooltip) => tooltip.props('content') === tip)).toBe(
       true
     )
+  })
+
+  test('error inputType shows Required tooltip when empty', () => {
+    const wrapper = mount(() => <Input inputType="error" />)
+    const tooltip = wrapper.findComponent({ name: 'ElTooltip' })
+
+    expect(tooltip.props('content')).toBe('Required')
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(tooltip.props('trigger')).toBe('hover')
+  })
+
+  test('error inputType uses infoTip as tooltip content when empty', () => {
+    const tip = 'Custom required message'
+    const wrapper = mount(() => <Input inputType="error" infoTip={tip} />)
+    const tooltip = wrapper.findComponent({ name: 'ElTooltip' })
+
+    expect(tooltip.props('content')).toBe(tip)
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(tooltip.props('trigger')).toBe('hover')
   })
 
   test('rows', () => {

@@ -45,6 +45,12 @@
       background-color: #fff;
     }
 
+    &.el-input--filled {
+      .el-input__wrapper {
+        background-color: #fff;
+      }
+    }
+
     .float-label {
       background-color: transparent;
       color: var(--color-gray-990);
@@ -53,6 +59,14 @@
 }
 
 .el-textarea {
+  &.el-input--inputType {
+    &.el-input--filled {
+      .el-textarea__inner {
+        background-color: #fff;
+      }
+    }
+  }
+
   &.is-disabled {
     border-color: var(--color-gray-100);
 

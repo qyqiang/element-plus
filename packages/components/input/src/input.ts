@@ -89,7 +89,7 @@ export const inputProps = buildProps({
     values: ['error', 'info', 'warning'],
   },
   /**
-   * @description tooltip content shown by the built-in info icon when `input-type` is `info`
+   * @description tooltip content shown by the built-in info icon when `input-type` is `info`; also used by the empty `error` hover tooltip
    */
   infoTip: {
     type: String,

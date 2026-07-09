@@ -12,11 +12,11 @@
     @mouseleave="handleMouseLeave"
   >
     <el-tooltip
-      :content="validateError ? validateMsg : nativeInputValue"
+      :content="inputTooltipContent"
       placement="top-start"
-      :disabled="!validateError && isEmpty(nativeInputValue)"
+      :disabled="inputTooltipDisabled"
       :offset="12"
-      trigger="click"
+      :trigger="inputTooltipTrigger"
     >
       <!-- input -->
       <template v-if="type !== 'textarea'">
@@ -339,6 +339,7 @@ const containerKls = computed(() => [
     [nsInput.b('hidden')]: props.type === 'hidden',
     [nsInput.m(props.inputType)]: !!props.inputType,
     [nsInput.m('inputType')]: !!props.inputType,
+    [nsInput.m('filled')]: !!props.inputType && !!nativeInputValue.value,
   },
   rawAttrs.class,
 ])
@@ -396,6 +397,24 @@ const textareaStyle = computed<StyleValue>(() => [
 ])
 const nativeInputValue = computed(() =>
   isNil(props.modelValue) ? '' : String(props.modelValue)
+)
+const showEmptyErrorTooltip = computed(
+  () => props.inputType === 'error' && isEmpty(nativeInputValue.value)
+)
+const inputTooltipContent = computed(() => {
+  if (validateError.value) return validateMsg.value
+  if (showEmptyErrorTooltip.value) return props.infoTip || 'Required'
+
+  return nativeInputValue.value
+})
+const inputTooltipDisabled = computed(
+  () =>
+    !validateError.value &&
+    !showEmptyErrorTooltip.value &&
+    isEmpty(nativeInputValue.value)
+)
+const inputTooltipTrigger = computed(() =>
+  showEmptyErrorTooltip.value ? 'hover' : 'click'
 )
 const showClear = computed(
   () =>
