@@ -313,6 +313,50 @@ describe('Select', () => {
     )
   })
 
+  it('auto selects the only option when clearable is false', async () => {
+    const wrapper = createSelect({
+      data: () => ({
+        clearable: false,
+        value: '',
+        options: [
+          {
+            value: '1',
+            label: 'option_a',
+          },
+        ],
+      }),
+    })
+    const vm = wrapper.vm as any
+    await nextTick()
+
+    expect(vm.value).toBe('1')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('option_a')
+  })
+
+  it('auto selects the only option when options become available and clearable is false', async () => {
+    const wrapper = createSelect({
+      data: () => ({
+        clearable: false,
+        value: '',
+        options: [],
+      }),
+    })
+    const vm = wrapper.vm as any
+    await nextTick()
+
+    vm.options = [
+      {
+        value: '1',
+        label: 'option_a',
+      },
+    ]
+    await nextTick()
+    await nextTick()
+
+    expect(vm.value).toBe('1')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('option_a')
+  })
+
   it('default value is null or undefined', async () => {
     const wrapper = createSelect({
       data: () => ({

@@ -104,7 +104,7 @@ const handleEdit = () => {
   editTable.value = true
 }
 const handleSubmit = () => {
-  const valid = table.value?.validateRequiredColumns?.() ?? true
+  const valid = table.value?.validateRequiredColumns()
   if (valid) {
     ElMessage({
       alert: true,

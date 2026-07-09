@@ -243,6 +243,21 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     })
   }
 
+  const tryAutoSelectSingleOption = () => {
+    if (props.multiple || props.clearable || hasModelValue.value) return
+
+    const availableOptions = optionsArray.value.filter(
+      (option) => !option.isDisabled
+    )
+
+    if (availableOptions.length !== 1) return
+
+    const [option] = availableOptions
+    if (isEmptyValue(option.value)) return
+
+    emit(UPDATE_MODEL_EVENT, option.value)
+  }
+
   const selectSize = useFormSize()
 
   const collapseTagSize = computed(() =>
@@ -326,6 +341,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     () => {
       if (!isClient) return
       // tooltipRef.value?.updatePopper?.()
+      tryAutoSelectSingleOption()
       setSelected()
       if (
         props.defaultFirstOption &&
@@ -896,6 +912,7 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
   )
 
   onMounted(() => {
+    tryAutoSelectSingleOption()
     setSelected()
   })
 

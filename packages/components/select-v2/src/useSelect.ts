@@ -153,6 +153,21 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
       : !isEmptyValue(props.modelValue)
   })
 
+  const tryAutoSelectSingleOption = () => {
+    if (props.multiple || props.clearable || hasModelValue.value) return
+
+    const availableOptions = allOptions.value.filter(
+      (option) => option.type !== 'Group' && !getDisabled(option)
+    )
+
+    if (availableOptions.length !== 1) return
+
+    const optionValue = getValue(availableOptions[0])
+    if (isEmptyValue(optionValue)) return
+
+    emit(UPDATE_MODEL_EVENT, optionValue)
+  }
+
   const showClearBtn = computed(() => {
     return (
       props.clearable &&
@@ -996,6 +1011,7 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
     () => props.options,
     () => {
       const input = inputRef.value
+      tryAutoSelectSingleOption()
       // filter or remote-search scenarios are not initialized
       if (!input || (input && document.activeElement !== input)) {
         initStates()
@@ -1045,6 +1061,7 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
   })
 
   onMounted(() => {
+    tryAutoSelectSingleOption()
     initStates()
   })
   useResizeObserver(selectRef, handleResize)

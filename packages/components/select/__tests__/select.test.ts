@@ -408,6 +408,71 @@ describe('Select', () => {
     )
   })
 
+  test('auto selects the only option when clearable is false', async () => {
+    wrapper = _mount(
+      `
+      <el-select v-model="value" :clearable="false">
+        <el-option
+          v-for="item in options"
+          :label="item.label"
+          :key="item.value"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    `,
+      () => ({
+        options: [
+          {
+            value: 'Option 1',
+            label: 'Golden Cake',
+          },
+        ],
+        value: '',
+      })
+    )
+    await nextTick()
+
+    expect((wrapper.vm as any).value).toBe('Option 1')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Golden Cake'
+    )
+  })
+
+  test('auto selects the only option when options become available and clearable is false', async () => {
+    wrapper = _mount(
+      `
+      <el-select v-model="value" :clearable="false">
+        <el-option
+          v-for="item in options"
+          :label="item.label"
+          :key="item.value"
+          :value="item.value">
+        </el-option>
+      </el-select>
+    `,
+      () => ({
+        options: [],
+        value: '',
+      })
+    )
+    const vm = wrapper.vm as any
+    await nextTick()
+
+    vm.options = [
+      {
+        value: 'Option 1',
+        label: 'Golden Cake',
+      },
+    ]
+    await nextTick()
+    await nextTick()
+
+    expect(vm.value).toBe('Option 1')
+    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
+      'Golden Cake'
+    )
+  })
+
   test('the scenario of rendering label when there is a default value and persistent is false', async () => {
     // This is convenient for testing the default value label rendering when persistent is false.
     process.env.RUN_TEST_WITH_PERSISTENT = 'true'

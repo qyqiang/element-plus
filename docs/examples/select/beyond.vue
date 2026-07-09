@@ -2,6 +2,21 @@
   <h5>Base</h5>
   <div class="flex flex-wrap gap-4 items-center relative">
     <el-select
+      v-model="value7"
+      placeholder="Test Only 1"
+      label="label1"
+      :fit-input-width="false"
+      :filter-max-length="24"
+      :option-width="400"
+      style="width: 240px"
+    >
+      <el-option
+        :label="test"
+        :value="1"
+      >
+      </el-option>
+    </el-select>
+    <el-select
       v-model="value"
       clearable
       pre-star
@@ -25,7 +40,9 @@
         :raw-option="item"
       >
         <template #optionIcon>
-          <el-icon><info-filled></info-filled></el-icon>
+          <el-icon>
+            <info-filled></info-filled>
+          </el-icon>
         </template>
       </el-option>
     </el-select>
@@ -49,7 +66,9 @@
         :value="item.value"
       >
         <template #optionIcon>
-          <el-icon><info-filled></info-filled></el-icon>
+          <el-icon>
+            <info-filled></info-filled>
+          </el-icon>
         </template>
       </el-option>
     </el-select>
@@ -273,6 +292,7 @@ import { ref } from 'vue'
 import { InfoFilled, Search } from '@element-plus/icons-vue'
 
 const value = ref('Option1')
+const value7 = ref()
 const value1 = ref([])
 const value2 = ref('')
 const value3 = ref('')
@@ -291,44 +311,44 @@ const options1 = ref([])
 const options = ref([
   {
     value: 'Option1',
-    label: '45545',
+    label: '45545'
   },
   {
     value: 'Option2',
-    label: 'Option2',
+    label: 'Option2'
   },
   {
     value: 'Option3',
-    label: 'Option3',
+    label: 'Option3'
   },
   {
     value: 'Option4',
-    label: 'Option4',
+    label: 'Option4'
   },
   {
     value: 'Option5',
-    label: 'Option5',
+    label: 'Option5'
   },
   {
     value: 'Option6',
-    label: '45545',
+    label: '45545'
   },
   {
     value: 'Option7',
-    label: 'Option2',
+    label: 'Option2'
   },
   {
     value: 'Option8',
-    label: 'Option3',
+    label: 'Option3'
   },
   {
     value: 'Option9',
-    label: 'Option4',
+    label: 'Option4'
   },
   {
     value: 'Option10',
-    label: 'Option5',
-  },
+    label: 'Option5'
+  }
 ])
 const options2 = [
   {
@@ -336,40 +356,40 @@ const options2 = [
     options: [
       {
         value: 'Shanghai',
-        label: 'Shanghai',
+        label: 'Shanghai'
       },
       {
         value: 'Beijing',
-        label: 'Beijing',
-      },
-    ],
+        label: 'Beijing'
+      }
+    ]
   },
   {
     label: 'City name',
     options: [
       {
         value: 'Chengdu',
-        label: 'Chengdu',
+        label: 'Chengdu'
       },
       {
         value: 'Shenzhen',
-        label: 'Shenzhen',
+        label: 'Shenzhen'
       },
       {
         value: 'Guangzhou',
-        label: 'Guangzhou',
+        label: 'Guangzhou'
       },
       {
         value: 'Dalian',
-        label: 'Dalian',
-      },
-    ],
-  },
+        label: 'Dalian'
+      }
+    ]
+  }
 ]
 const handleAdd = (val: string) => {
   options.value.push({
     value: val,
-    label: val,
+    label: val
   })
 }
 </script>
