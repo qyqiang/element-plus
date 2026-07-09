@@ -1,7 +1,22 @@
 <template>
-  <h5>Width Header</h5>
+  <h5>Status Input</h5>
   <el-divider />
   <div class="flex flex-wrap gap-4 items-center">
+    <el-input v-model="input" style="width: 240px" placeholder="Please input" />
+    <el-input
+      v-model="input"
+      input-type="warning"
+      style="width: 240px"
+      placeholder="Warning Input"
+      clearable
+    />
+    <el-input
+      v-model="input"
+      input-type="error"
+      style="width: 240px"
+      placeholder="Error Input"
+      clearable
+    />
     <el-input
       v-model="input6"
       disabled
@@ -22,43 +37,24 @@
     <el-form-item style="width: 240px">
       <el-input
         v-model="input5"
+        input-type="info"
+        info-tip="Important Information"
         clearable
         placeholder="Please input"
         :prefix-icon="Search"
         pre-star
-      >
-        <template #suffix>
-          <el-icon size="12px">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-            >
-              <path
-                fill-rule="evenodd"
-                clip-rule="evenodd"
-                d="M12 6C12 9.31371 9.31371 12 6 12C2.68629 12 0 9.31371 0 6C0 2.68629 2.68629 0 6 0C9.31371 0 12 2.68629 12 6ZM6.5 2.5V7H5.5V2.5H6.5ZM6.5 9V8H5.5V9H6.5Z"
-              />
-            </svg>
-          </el-icon>
-        </template>
-      </el-input>
+      />
     </el-form-item>
     <el-form-item style="width: 240px" error="Input is required">
       <el-input
         v-model="input5"
+        input-type="info"
+        info-tip="Important Information"
         clearable
         placeholder="Please input"
         :prefix-icon="Search"
         pre-star
-      >
-        <template #suffix>
-          <el-icon>
-            <warning-filled />
-          </el-icon>
-        </template>
-      </el-input>
+      />
     </el-form-item>
     <el-form-item style="width: 240px" error="Input is required">
       <el-input
@@ -137,7 +133,7 @@
   </div>
 
   <el-divider />
-  <h5>Clean</h5>
+  <h5>Float Label Off</h5>
   <el-divider />
   <el-input
     v-model="input"

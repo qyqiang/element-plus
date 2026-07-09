@@ -152,6 +152,25 @@ describe('Input.vue', () => {
     expect(wrapper.classes('el-textarea')).toBe(true)
   })
 
+  test('inputType adds status modifier classes', () => {
+    const errorWrapper = mount(() => <Input inputType="error" />)
+    const warningWrapper = mount(() => <Input inputType="warning" />)
+    const infoWrapper = mount(() => <Input inputType="info" />)
+
+    expect(errorWrapper.classes('el-input--error')).toBe(true)
+    expect(warningWrapper.classes('el-input--warning')).toBe(true)
+    expect(infoWrapper.classes('el-input--info')).toBe(true)
+  })
+
+  test('infoTip renders built-in info tooltip when inputType is info', () => {
+    const tip = 'Important Information'
+    const wrapper = mount(() => <Input inputType="info" infoTip={tip} />)
+    const tooltips = wrapper.findAllComponents({ name: 'ElTooltip' })
+    expect(tooltips.some((tooltip) => tooltip.props('content') === tip)).toBe(
+      true
+    )
+  })
+
   test('rows', () => {
     const wrapper = mount(() => {
       return <Input type="textarea" rows={3} />

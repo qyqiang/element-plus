@@ -82,6 +82,19 @@ export const inputProps = buildProps({
     default: 'text',
   },
   /**
+   * @description visual status style of input
+   */
+  inputType: {
+    type: String,
+    values: ['error', 'info', 'warning'],
+  },
+  /**
+   * @description tooltip content shown by the built-in info icon when `input-type` is `info`
+   */
+  infoTip: {
+    type: String,
+  },
+  /**
    * @description control the resizability
    */
   resize: {

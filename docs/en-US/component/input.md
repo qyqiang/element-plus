@@ -7,6 +7,8 @@ lang: en-US
 
 ## Demo
 
+Status inputs support `input-type="error" | "warning" | "info"`. When `input-type` is `info`, you can use `info-tip` to render a built-in tooltip icon in the suffix area.
+
 :::demo
 
 input/beyond
@@ -128,6 +130,8 @@ input/length-limiting
 | Name                          | Description                                                                                                                            | Type                                                                                                                                                                                                                         | Default     |
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | type                          | type of input                                                                                                                          | ^[string]`'text' \| 'textarea' \| 'password' \| 'button' \| 'checkbox' \| 'file' \| 'number' \| 'radio' \| ...` [native input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types) | text        |
+| input-type                    | visual status style of input                                                                                                           | ^[enum]`'error' \| 'info' \| 'warning'`                                                                                                                                                                                      | —           |
+| info-tip                      | tooltip content shown by the built-in info icon when `input-type` is `info`                                                            | ^[string]                                                                                                                                                                                                                    | —           |
 | model-value / v-model         | binding value                                                                                                                          | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
 | model-modifiers ^(2.11.5)     | v-model modifiers, reference [Vue modifiers](https://vuejs.org/guide/essentials/forms.html#modifiers)                                  | ^[object]`{ lazy?: boolean, number?: boolean, trim?: boolean }`                                                                                                                                                              | —           |
 | maxlength                     | same as `maxlength` in native input                                                                                                    | ^[string] / ^[number]                                                                                                                                                                                                        | —           |

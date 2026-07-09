@@ -11,253 +11,255 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <!-- input -->
-    <template v-if="type !== 'textarea'">
-      <!-- prepend slot -->
-      <div v-if="$slots.prepend" :class="nsInput.be('group', 'prepend')">
-        <slot name="prepend" />
-      </div>
+    <el-tooltip
+      :content="validateError ? validateMsg : nativeInputValue"
+      placement="top-start"
+      :disabled="!validateError && isEmpty(nativeInputValue)"
+      :offset="12"
+      trigger="click"
+    >
+      <!-- input -->
+      <template v-if="type !== 'textarea'">
+        <!-- prepend slot -->
+        <div v-if="$slots.prepend" :class="nsInput.be('group', 'prepend')">
+          <slot name="prepend" />
+        </div>
 
-      <div ref="wrapperRef" :class="wrapperKls">
-        <!-- prefix slot -->
-        <span v-if="$slots.prefix || prefixIcon" :class="nsInput.e('prefix')">
-          <span :class="nsInput.e('prefix-inner')">
-            <slot name="prefix" />
-            <el-icon v-if="prefixIcon" :class="nsInput.e('icon')" size="12px">
-              <component :is="prefixIcon" />
-            </el-icon>
+        <div ref="wrapperRef" :class="wrapperKls">
+          <!-- prefix slot -->
+          <span v-if="$slots.prefix || prefixIcon" :class="nsInput.e('prefix')">
+            <span :class="nsInput.e('prefix-inner')">
+              <slot name="prefix" />
+              <el-icon v-if="prefixIcon" :class="nsInput.e('icon')" size="12px">
+                <component :is="prefixIcon" />
+              </el-icon>
+            </span>
           </span>
-        </span>
-        <input
+          <input
+            :id="inputId"
+            ref="input"
+            required
+            :class="nsInput.e('inner')"
+            v-bind="attrs"
+            :name="name"
+            :minlength="minlength"
+            :maxlength="maxlength"
+            :type="
+              showPassword ? (passwordVisible ? 'text' : 'password') : type
+            "
+            :disabled="inputDisabled"
+            :readonly="readonly"
+            :autocomplete="autocomplete"
+            :tabindex="tabindex"
+            :aria-label="ariaLabel"
+            :placeholder="!floatLabel ? placeholder : ''"
+            :style="inputStyle"
+            :form="form"
+            :autofocus="autofocus"
+            :role="containerRole"
+            :inputmode="inputmode"
+            @compositionstart="handleCompositionStart"
+            @compositionupdate="handleCompositionUpdate"
+            @compositionend="handleCompositionEnd"
+            @input="handleInput"
+            @change="handleChange"
+            @keydown="handleKeydown"
+          />
+          <span
+            v-if="floatLabel && placeholder"
+            class="float-label"
+            :class="{
+              'prefix-label': $slots.prefix || prefixIcon,
+              'has-value': !isEmpty(modelValue),
+            }"
+            >{{ placeholder }}</span
+          >
+          <!-- suffix slot -->
+          <span v-if="suffixVisible" :class="nsInput.e('suffix')">
+            <span :class="nsInput.e('suffix-inner')">
+              <el-tooltip
+                v-if="showInfoTip"
+                placement="top"
+                :content="infoTip"
+                :offset="12"
+              >
+                <el-icon :class="nsInput.e('icon')" size="12px" color="#2A3F4D">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="12"
+                    height="12"
+                    viewBox="0 0 12 12"
+                  >
+                    <g clip-path="url(#clip0_2517_514)">
+                      <path
+                        d="M7.16666 9.34083H5.66667V6.27234H4.98467V4.77234H5.93917C6.26464 4.7726 6.5767 4.90201 6.80684 5.13216C7.03699 5.3623 7.1664 5.67436 7.16666 5.99984V9.34083Z"
+                      />
+                      <path
+                        d="M6 12C4.81331 12 3.65328 11.6481 2.66658 10.9888C1.67989 10.3295 0.910851 9.39246 0.456725 8.2961C0.0025996 7.19975 -0.11622 5.99335 0.115291 4.82946C0.346802 3.66557 0.918247 2.59648 1.75736 1.75736C2.59648 0.918247 3.66557 0.346802 4.82946 0.115291C5.99335 -0.11622 7.19975 0.00259968 8.2961 0.456725C9.39246 0.910851 10.3295 1.67989 10.9888 2.66658C11.6481 3.65328 12 4.81331 12 6C11.9983 7.59077 11.3656 9.1159 10.2407 10.2407C9.1159 11.3656 7.59077 11.9983 6 12ZM6 1.5C5.10999 1.5 4.23996 1.76392 3.49994 2.25839C2.75991 2.75286 2.18314 3.45566 1.84254 4.27793C1.50195 5.10019 1.41283 6.00499 1.58647 6.87791C1.7601 7.75082 2.18869 8.55264 2.81802 9.18198C3.44736 9.81132 4.24918 10.2399 5.1221 10.4135C5.99501 10.5872 6.89981 10.4981 7.72208 10.1575C8.54434 9.81686 9.24715 9.24009 9.74161 8.50007C10.2361 7.76005 10.5 6.89002 10.5 6C10.4985 4.80697 10.024 3.66323 9.18037 2.81963C8.33678 1.97603 7.19303 1.50146 6 1.5Z"
+                      />
+                      <path
+                        d="M6.142 4.23321C6.61586 4.23321 7 3.84907 7 3.37521C7 2.90135 6.61586 2.51721 6.142 2.51721C5.66814 2.51721 5.284 2.90135 5.284 3.37521C5.284 3.84907 5.66814 4.23321 6.142 4.23321Z"
+                      />
+                    </g>
+                    <defs>
+                      <clipPath id="clip0_2517_514">
+                        <rect width="12" height="12" fill="white" />
+                      </clipPath>
+                    </defs>
+                  </svg>
+                </el-icon>
+              </el-tooltip>
+              <el-icon
+                v-if="showClear"
+                :class="[nsInput.e('icon'), nsInput.e('clear')]"
+                @mousedown.prevent="NOOP"
+                @click="clear"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="12"
+                  height="12"
+                  viewBox="0 0 12 12"
+                >
+                  <path
+                    d="M9.35349 3.35342L8.64648 2.64642L5.99998 5.29292L3.35348 2.64642L2.64648 3.35342L5.29298 5.99992L2.64648 8.64642L3.35348 9.35342L5.99998 6.70692L8.64648 9.35342L9.35349 8.64642L6.70698 5.99992L9.35349 3.35342Z"
+                  />
+                </svg>
+              </el-icon>
+              <template
+                v-if="
+                  (!showClear || !showPwdVisible || !isWordLimitVisible) &&
+                  (alwaysShowSuffix ?? !validateState)
+                "
+              >
+                <slot
+                  v-if="(isHoverSuffix && hovering) || !isHoverSuffix"
+                  name="suffix"
+                />
+                <el-icon v-if="suffixIcon" :class="nsInput.e('icon')">
+                  <component :is="suffixIcon" />
+                </el-icon>
+              </template>
+
+              <el-icon
+                v-if="showPwdVisible"
+                :class="[nsInput.e('icon'), nsInput.e('password')]"
+                @click="handlePasswordVisible"
+                @mousedown.prevent="NOOP"
+                @mouseup.prevent="NOOP"
+              >
+                <svg
+                  v-if="passwordVisible"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                  width="24"
+                  height="24"
+                  fill="#1a1f36"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    id="ujy5xle6ka"
+                    d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
+                  />
+                </svg>
+                <svg
+                  v-else
+                  width="18"
+                  fill="#1a1f36"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  xmlns="http://www.w3.org/2000/svg"
+                  xmlns:xlink="http://www.w3.org/1999/xlink"
+                >
+                  <path
+                    id="a"
+                    d="M9 5.25c2.07 0 3.75 1.68 3.75 3.75 0 .488-.098.945-.27 1.373l2.19 2.19A8.863 8.863 0 0 0 17.242 9c-1.297-3.293-4.5-5.625-8.25-5.625-1.05 0-2.055.188-2.985.525l1.62 1.62A3.64 3.64 0 0 1 9 5.25zM1.5 3.203l1.71 1.71.345.345A8.853 8.853 0 0 0 .75 9c1.297 3.293 4.5 5.625 8.25 5.625a8.832 8.832 0 0 0 3.285-.63l.315.315 2.197 2.19.953-.953L2.453 2.25l-.953.953zM5.647 7.35 6.81 8.512c-.037.158-.06.323-.06.488A2.247 2.247 0 0 0 9 11.25c.165 0 .33-.023.488-.06l1.162 1.162A3.717 3.717 0 0 1 9 12.75c-2.07 0-3.75-1.68-3.75-3.75 0-.592.15-1.147.397-1.65zm3.233-.585 2.362 2.362.015-.12a2.247 2.247 0 0 0-2.25-2.25l-.127.008z"
+                  />
+                </svg>
+              </el-icon>
+              <span
+                v-if="isWordLimitVisible"
+                :class="[
+                  nsInput.e('count'),
+                  nsInput.is('outside', wordLimitPosition === 'outside'),
+                ]"
+              >
+                <span :class="nsInput.e('count-inner')">
+                  {{ textLength }} / {{ maxlength }}
+                </span>
+              </span>
+              <el-icon
+                v-if="validateState && validateIcon && needStatusIcon"
+                :class="[
+                  nsInput.e('icon'),
+                  nsInput.e('validateIcon'),
+                  nsInput.is('loading', validateState === 'validating'),
+                ]"
+                v-html="validateIcon"
+              />
+            </span>
+          </span>
+        </div>
+        <!-- append slot -->
+        <div v-if="$slots.append" :class="nsInput.be('group', 'append')">
+          <slot name="append" />
+        </div>
+      </template>
+      <!-- textarea -->
+      <template v-else>
+        <textarea
           :id="inputId"
-          ref="input"
-          required
-          :class="nsInput.e('inner')"
+          ref="textarea"
+          :class="[nsTextarea.e('inner'), nsInput.is('focus', isFocused)]"
           v-bind="attrs"
-          :name="name"
           :minlength="minlength"
           :maxlength="maxlength"
-          :type="showPassword ? (passwordVisible ? 'text' : 'password') : type"
+          :tabindex="tabindex"
           :disabled="inputDisabled"
           :readonly="readonly"
           :autocomplete="autocomplete"
-          :tabindex="tabindex"
+          :style="textareaStyle"
           :aria-label="ariaLabel"
           :placeholder="!floatLabel ? placeholder : ''"
-          :style="inputStyle"
           :form="form"
           :autofocus="autofocus"
+          :rows="rows"
           :role="containerRole"
-          :inputmode="inputmode"
           @compositionstart="handleCompositionStart"
           @compositionupdate="handleCompositionUpdate"
           @compositionend="handleCompositionEnd"
           @input="handleInput"
+          @focus="handleFocus"
+          @blur="handleBlur"
           @change="handleChange"
           @keydown="handleKeydown"
         />
+        <span v-if="$slots.textareaPrefix" class="textarea-prefix">
+          <slot name="textareaPrefix" />
+        </span>
+        <span v-if="$slots.textareaSuffix" class="textarea-suffix">
+          <slot name="textareaSuffix" />
+        </span>
         <span
           v-if="floatLabel && placeholder"
           class="float-label"
-          :class="{
-            'prefix-label': $slots.prefix || prefixIcon,
-            'has-value': !isEmpty(modelValue),
-          }"
-          >{{ placeholder }}</span
+          :class="{ 'has-value': !isEmpty(modelValue) }"
+          @click="handleTextareaFocus"
         >
-        <!-- suffix slot -->
-        <span v-if="suffixVisible" :class="nsInput.e('suffix')">
-          <span :class="nsInput.e('suffix-inner')">
-            <el-icon
-              v-if="showClear"
-              :class="[nsInput.e('icon'), nsInput.e('clear')]"
-              @mousedown.prevent="NOOP"
-              @click="clear"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="12"
-                height="12"
-                viewBox="0 0 12 12"
-              >
-                <path
-                  d="M9.35349 3.35342L8.64648 2.64642L5.99998 5.29292L3.35348 2.64642L2.64648 3.35342L5.29298 5.99992L2.64648 8.64642L3.35348 9.35342L5.99998 6.70692L8.64648 9.35342L9.35349 8.64642L6.70698 5.99992L9.35349 3.35342Z"
-                />
-              </svg>
-            </el-icon>
-            <template
-              v-if="
-                (!showClear || !showPwdVisible || !isWordLimitVisible) &&
-                (alwaysShowSuffix ?? !validateState)
-              "
-            >
-              <slot
-                v-if="(isHoverSuffix && hovering) || !isHoverSuffix"
-                name="suffix"
-              />
-              <el-icon v-if="suffixIcon" :class="nsInput.e('icon')">
-                <component :is="suffixIcon" />
-              </el-icon>
-            </template>
-
-            <el-icon
-              v-if="showPwdVisible"
-              :class="[nsInput.e('icon'), nsInput.e('password')]"
-              @click="handlePasswordVisible"
-              @mousedown.prevent="NOOP"
-              @mouseup.prevent="NOOP"
-            >
-              <svg
-                v-if="passwordVisible"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-                width="24"
-                height="24"
-                fill="#1a1f36"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  id="ujy5xle6ka"
-                  d="M12 4.5C7 4.5 2.73 7.61 1 12c1.73 4.39 6 7.5 11 7.5s9.27-3.11 11-7.5c-1.73-4.39-6-7.5-11-7.5zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5zm0-8c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3z"
-                />
-              </svg>
-              <svg
-                v-else
-                width="18"
-                fill="#1a1f36"
-                height="18"
-                viewBox="0 0 18 18"
-                xmlns="http://www.w3.org/2000/svg"
-                xmlns:xlink="http://www.w3.org/1999/xlink"
-              >
-                <path
-                  id="a"
-                  d="M9 5.25c2.07 0 3.75 1.68 3.75 3.75 0 .488-.098.945-.27 1.373l2.19 2.19A8.863 8.863 0 0 0 17.242 9c-1.297-3.293-4.5-5.625-8.25-5.625-1.05 0-2.055.188-2.985.525l1.62 1.62A3.64 3.64 0 0 1 9 5.25zM1.5 3.203l1.71 1.71.345.345A8.853 8.853 0 0 0 .75 9c1.297 3.293 4.5 5.625 8.25 5.625a8.832 8.832 0 0 0 3.285-.63l.315.315 2.197 2.19.953-.953L2.453 2.25l-.953.953zM5.647 7.35 6.81 8.512c-.037.158-.06.323-.06.488A2.247 2.247 0 0 0 9 11.25c.165 0 .33-.023.488-.06l1.162 1.162A3.717 3.717 0 0 1 9 12.75c-2.07 0-3.75-1.68-3.75-3.75 0-.592.15-1.147.397-1.65zm3.233-.585 2.362 2.362.015-.12a2.247 2.247 0 0 0-2.25-2.25l-.127.008z"
-                />
-              </svg>
-            </el-icon>
-            <span
-              v-if="isWordLimitVisible"
-              :class="[
-                nsInput.e('count'),
-                nsInput.is('outside', wordLimitPosition === 'outside'),
-              ]"
-            >
-              <span :class="nsInput.e('count-inner')">
-                {{ textLength }} / {{ maxlength }}
-              </span>
-            </span>
-            <el-icon
-              v-if="validateState && validateIcon && needStatusIcon"
-              :class="[
-                nsInput.e('icon'),
-                nsInput.e('validateIcon'),
-                nsInput.is('loading', validateState === 'validating'),
-              ]"
-              v-html="validateIcon"
-            />
-          </span>
+          {{ placeholder }}
         </span>
-        <el-tooltip
-          v-if="validateError"
-          :content="validateMsg"
-          effect="light"
-          placement="top"
-          :offset="4"
+        <span
+          v-if="isWordLimitVisible"
+          :style="countStyle"
+          :class="[
+            nsInput.e('count'),
+            nsInput.is('outside', wordLimitPosition === 'outside'),
+          ]"
         >
-          <el-icon class="error-icon" color="#A1160A">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="12"
-              height="12"
-              viewBox="0 0 12 12"
-            >
-              <path
-                d="M6.00041 1C8.00045 1 6.75037 5.25 6.75037 5.25C6.75037 5.25 10.1112 2.75 11.0004 4.5C11.8896 6.25 7.25037 6.75 7.25037 6.75C7.25037 6.75 10.7186 9.88284 9.25035 10.9496C7.78208 12.0164 6.00037 7.5 6.00037 7.5C6.00037 7.5 4.23586 12.0164 2.76759 10.9496C1.29932 9.88283 4.75037 6.75 4.75037 6.75C4.75037 6.75 0.250258 6.25 1.00035 4.5C1.75045 2.75 5.25037 5.25 5.25037 5.25C5.25037 5.25 4.00037 1 6.00041 1Z"
-              />
-            </svg>
-          </el-icon>
-        </el-tooltip>
-      </div>
-      <!-- append slot -->
-      <div v-if="$slots.append" :class="nsInput.be('group', 'append')">
-        <slot name="append" />
-      </div>
-    </template>
-    <!-- textarea -->
-    <template v-else>
-      <textarea
-        :id="inputId"
-        ref="textarea"
-        :class="[nsTextarea.e('inner'), nsInput.is('focus', isFocused)]"
-        v-bind="attrs"
-        :minlength="minlength"
-        :maxlength="maxlength"
-        :tabindex="tabindex"
-        :disabled="inputDisabled"
-        :readonly="readonly"
-        :autocomplete="autocomplete"
-        :style="textareaStyle"
-        :aria-label="ariaLabel"
-        :placeholder="!floatLabel ? placeholder : ''"
-        :form="form"
-        :autofocus="autofocus"
-        :rows="rows"
-        :role="containerRole"
-        @compositionstart="handleCompositionStart"
-        @compositionupdate="handleCompositionUpdate"
-        @compositionend="handleCompositionEnd"
-        @input="handleInput"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @change="handleChange"
-        @keydown="handleKeydown"
-      />
-      <span v-if="$slots.textareaPrefix" class="textarea-prefix">
-        <slot name="textareaPrefix" />
-      </span>
-      <span v-if="$slots.textareaSuffix" class="textarea-suffix">
-        <slot name="textareaSuffix" />
-      </span>
-      <el-tooltip
-        v-if="validateError"
-        :content="validateMsg"
-        effect="light"
-        placement="top"
-        :offset="4"
-      >
-        <el-icon class="error-icon" color="#A1160A">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-          >
-            <path
-              d="M6.00041 1C8.00045 1 6.75037 5.25 6.75037 5.25C6.75037 5.25 10.1112 2.75 11.0004 4.5C11.8896 6.25 7.25037 6.75 7.25037 6.75C7.25037 6.75 10.7186 9.88284 9.25035 10.9496C7.78208 12.0164 6.00037 7.5 6.00037 7.5C6.00037 7.5 4.23586 12.0164 2.76759 10.9496C1.29932 9.88283 4.75037 6.75 4.75037 6.75C4.75037 6.75 0.250258 6.25 1.00035 4.5C1.75045 2.75 5.25037 5.25 5.25037 5.25C5.25037 5.25 4.00037 1 6.00041 1Z"
-            />
-          </svg>
-        </el-icon>
-      </el-tooltip>
-      <span
-        v-if="floatLabel && placeholder"
-        class="float-label"
-        :class="{ 'has-value': !isEmpty(modelValue) }"
-        @click="handleTextareaFocus"
-      >
-        {{ placeholder }}
-      </span>
-      <span
-        v-if="isWordLimitVisible"
-        :style="countStyle"
-        :class="[
-          nsInput.e('count'),
-          nsInput.is('outside', wordLimitPosition === 'outside'),
-        ]"
-      >
-        {{ textLength }} / {{ maxlength }}
-      </span>
-    </template>
+          {{ textLength }} / {{ maxlength }}
+        </span>
+      </template>
+    </el-tooltip>
   </div>
 </template>
 
@@ -335,6 +337,8 @@ const containerKls = computed(() => [
     [nsInput.bm('suffix', 'password-clear')]:
       showClear.value && showPwdVisible.value,
     [nsInput.b('hidden')]: props.type === 'hidden',
+    [nsInput.m(props.inputType)]: !!props.inputType,
+    [nsInput.m('inputType')]: !!props.inputType,
   },
   rawAttrs.class,
 ])
@@ -404,6 +408,9 @@ const showClear = computed(
 const showPwdVisible = computed(
   () => props.showPassword && !inputDisabled.value && !!nativeInputValue.value
 )
+const showInfoTip = computed(
+  () => props.inputType === 'info' && !!props.infoTip
+)
 const isWordLimitVisible = computed(
   () =>
     props.showWordLimit &&
@@ -423,6 +430,7 @@ const suffixVisible = computed(
   () =>
     !!slots.suffix ||
     !!props.suffixIcon ||
+    showInfoTip.value ||
     showClear.value ||
     props.showPassword ||
     isWordLimitVisible.value ||
