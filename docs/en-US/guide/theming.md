@@ -15,25 +15,25 @@ We provide four ways to change the style variables.
 
 These are examples about custom theme.
 
-- Full import: [element-plus-vite-starter](https://github.com/element-plus/element-plus-vite-starter)
-- On demand: [unplugin-element-plus/examples/vite](https://github.com/element-plus/unplugin-element-plus)
+- Full import: element-plus-vite-starter
+- On demand: unplugin-element-plus/examples/vite
 
 ### By SCSS variables
 
 `theme-chalk` is written in SCSS.
-You can find SCSS variables in [`packages/theme-chalk/src/common/var.scss`](https://github.com/element-plus/element-plus/blob/dev/packages/theme-chalk/src/common/var.scss).
+You can find SCSS variables in `packages/theme-chalk/src/common/var.scss`.
 
 :::warning
 
-We use sass modules ([sass:map](https://sass-lang.com/documentation/values/maps)...) and `@use` to refactor all SCSS variables. And by using `@use` to all SCSS variables, it solves the duplicate output problem caused by `@import`.
+We use sass modules (sass:map...) and `@use` to refactor all SCSS variables. And by using `@use` to all SCSS variables, it solves the duplicate output problem caused by `@import`.
 
-> [Introducing Sass Modules | CSS-TRICKS](https://css-tricks.com/introducing-sass-modules/)
+> Introducing Sass Modules | CSS-TRICKS
 
 For example, We use `$colors` as a map to preserve different types of colors.
 
 `$notification` is a map where all variables of the `notification` component at.
 
-In the future, we will write documentation for variables that can be customized for each component. You can also directly checkout the source [var.scss](https://github.com/element-plus/element-plus/blob/dev/packages/theme-chalk/src/common/var.scss).
+In the future, we will write documentation for variables that can be customized for each component. You can also directly checkout the source var.scss.
 
 :::
 
@@ -76,7 +76,7 @@ You should use `@use 'xxx.scss' as *;` instead of `@import 'xxx.scss';`.
 
 Because the sass team said they will remove `@import` eventually.
 
-> [Sass: @use](https://sass-lang.com/documentation/at-rules/use) vs [Sass: @import](https://sass-lang.com/documentation/at-rules/import)
+> Sass: @use vs Sass: @import
 
 :::
 
@@ -196,7 +196,7 @@ export default defineConfig({
 
 CSS Variables is a very useful feature, already supported by almost all browsers. (IE: Wait?)
 
-> Learn more from [Using CSS custom properties (variables) | MDN](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties)
+> Learn more from Using CSS custom properties (variables) | MDN
 
 We have used css variables to reconstruct the style system of almost all components.
 
@@ -247,4 +247,4 @@ el.style['--el-color-primary'] = 'red'
 ```
 
 If you want a more elegant way, check this out.
-[useCssVar | VueUse](https://vueuse.org/core/usecssvar/)
+useCssVar | VueUse

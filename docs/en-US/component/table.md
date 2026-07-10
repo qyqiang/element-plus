@@ -199,7 +199,7 @@ table/filter
 
 Customize table column so it can be integrated with other components.
 
-:::demo You have access to the following data: row, column, $index and store (state management of Table) by [slot](https://v3.vuejs.org/guide/component-slots.html).
+:::demo You have access to the following data: row, column, $index and store (state management of Table) by slot.
 
 table/custom-column
 
@@ -209,7 +209,7 @@ table/custom-column
 
 Customize table header so it can be even more customized.
 
-:::demo You can customize how the header looks by header [slots](https://v3.vuejs.org/guide/component-slots.html).
+:::demo You can customize how the header looks by header slots.
 
 table/custom-header
 
@@ -285,7 +285,7 @@ table/custom-index
 
 ## Table Layout
 
-The [table-layout](https://developer.mozilla.org/en-US/docs/Web/CSS/table-layout) property sets the algorithm used to lay out table cells, rows, and columns.
+The table-layout property sets the algorithm used to lay out table cells, rows, and columns.
 
 :::demo
 
@@ -333,7 +333,7 @@ table/tooltip-formatter
 | expand-row-keys                    | set expanded rows by this prop, prop's value is the keys of expand rows, you should set row-key before using this prop.                                                                                                                                                    | ^[object]`Array<string>`                                                                                                                                             | —                                                                                                                       |
 | default-sort                       | set the default sort column and order. property `prop` is used to set default sort column, property `order` is used to set default sort order                                                                                                                              | ^[object]`Sort`                                                                                                                                                      | if `prop` is set, and `order` is not set, then `order` is default to ascending                                          |
 | tooltip-effect                     | the `effect` of the overflow tooltip                                                                                                                                                                                                                                       | ^[enum]`'dark' \| 'light'`                                                                                                                                           | dark                                                                                                                    |
-| tooltip-options ^(2.2.28)          | the options for the overflow tooltip, [see the following tooltip component](tooltip.html#attributes)                                                                                                                                                                       | ^[object]`Pick<ElTooltipProps, 'effect' \| 'enterable' \| 'hideAfter' \| 'offset' \| 'placement' \| 'popperClass' \| 'popperOptions' \| 'showAfter' \| 'showArrow'>` | ^[object]`{ enterable: true, placement: 'top', showArrow: true, hideAfter: 200, popperOptions: { strategy: 'fixed' } }` |
+| tooltip-options ^(2.2.28)          | the options for the overflow tooltip, see the following tooltip component                                                                                                                                                                       | ^[object]`Pick<ElTooltipProps, 'effect' \| 'enterable' \| 'hideAfter' \| 'offset' \| 'placement' \| 'popperClass' \| 'popperOptions' \| 'showAfter' \| 'showArrow'>` | ^[object]`{ enterable: true, placement: 'top', showArrow: true, hideAfter: 200, popperOptions: { strategy: 'fixed' } }` |
 | append-filter-panel-to ^(2.8.4)    | which element the filter panels appends to                                                                                                                                                                                                                                 | ^[string]                                                                                                                                                            | —                                                                                                                       |
 | show-summary                       | whether to display a summary row                                                                                                                                                                                                                                           | ^[boolean]                                                                                                                                                           | false                                                                                                                   |
 | sum-text                           | displayed text for the first column of summary row                                                                                                                                                                                                                         | ^[string]                                                                                                                                                            | Sum                                                                                                                     |
@@ -351,7 +351,7 @@ table/tooltip-formatter
 | scrollbar-always-on                | always show scrollbar                                                                                                                                                                                                                                                      | ^[boolean]                                                                                                                                                           | false                                                                                                                   |
 | ghost-table                        | whether to enable ghost table rendering with a bottom draft row                                                                                                                                                                                                            | ^[boolean]                                                                                                                                                           | false                                                                                                                   |
 | edit-table                         | whether to render column `edit-cell` slots for the ghost row when `ghost-table` is enabled                                                                                                                                                                                 | ^[boolean]                                                                                                                                                           | false                                                                                                                   |
-| show-overflow-tooltip              | whether to hide extra content and show them in a tooltip when hovering on the cell.It will affect all the table columns, refer to table [tooltip-options](#table-attributes)                                                                                               | ^[boolean] / [`object`](#table-attributes) ^(2.3.7)                                                                                                                  | —                                                                                                                       |
+| show-overflow-tooltip              | whether to hide extra content and show them in a tooltip when hovering on the cell.It will affect all the table columns, refer to table tooltip-options                                                                                               | ^[boolean] / `object` ^(2.3.7)                                                                                                                  | —                                                                                                                       |
 | flexible ^(2.2.1)                  | ensure main axis minimum-size doesn't follow the content                                                                                                                                                                                                                   | ^[boolean]                                                                                                                                                           | false                                                                                                                   |
 | scrollbar-tabindex ^(2.8.3)        | body scrollbar's wrap container tabindex                                                                                                                                                                                                                                   | ^[string] / ^[number]                                                                                                                                                | —                                                                                                                       |
 | allow-drag-last-column ^(2.9.2)    | whether to allow drag the last column                                                                                                                                                                                                                                      | ^[boolean]                                                                                                                                                           | true                                                                                                                    |
@@ -439,7 +439,7 @@ table/tooltip-formatter
 | sort-orders                      | the order of the sorting strategies used when sorting the data, works when `sortable` is `true`. Accepts an array, as the user clicks on the header, the column is sorted in order of the elements in the array    | ^[object]`('ascending' \| 'descending' \| null)[]`                                                                                                                          | ['ascending', 'descending', null] |
 | resizable                        | whether column width can be resized, works when `border` of `el-table` is `true`                                                                                                                                   | ^[boolean]                                                                                                                                                                  | true                              |
 | formatter                        | function that formats cell content                                                                                                                                                                                 | ^[function]`(row: any, column: TableColumnCtx<T>, cellValue: any, index: number) => VNode \| string`                                                                        | —                                 |
-| show-overflow-tooltip            | whether to hide extra content and show them in a tooltip when hovering on the cell                                                                                                                                 | ^[boolean] / [`object`](#table-attributes) ^(2.2.28)                                                                                                                        | undefined                         |
+| show-overflow-tooltip            | whether to hide extra content and show them in a tooltip when hovering on the cell                                                                                                                                 | ^[boolean] / `object` ^(2.2.28)                                                                                                                        | undefined                         |
 | align                            | alignment                                                                                                                                                                                                          | ^[enum]`'left' \| 'center' \| 'right'`                                                                                                                                      | left                              |
 | header-align                     | alignment of the table header. If omitted, the value of the above `align` attribute will be applied                                                                                                                | ^[enum]`'left' \| 'center' \| 'right'`                                                                                                                                      | left                              |
 | diagonal-header                  | configures this column header as a diagonal header with `from` and `to` labels                                                                                                                                     | ^[object]`{ from: string, to: string }`                                                                                                                                     | —                                 |
@@ -554,25 +554,3 @@ type TableColumnCtx<T extends DefaultRow = DefaultRow> = {
 ```
 
 </details>
-
-## FAQ
-
-#### How to use image preview in the table?
-
-```vue{4}
-<template>
-  <el-table-column width="180">
-    <template #default="scope">
-      <el-image preview-teleported :preview-src-list="srcList" />
-    </template>
-  </el-table-column>
-</template>
-```
-
-#### Why column is not rendered when use DOM templates?
-
-Typical issue: [#5046](https://github.com/element-plus/element-plus/issues/5046) [#5862](https://github.com/element-plus/element-plus/issues/5862) [#6919](https://github.com/element-plus/element-plus/issues/6919)
-
-This is because the HTML spec only allows a few specific elements to omit closing tags, the most common being `<input>` and `<img>`. For all other elements, if you omit the closing tag, the native HTML parser will think you never terminated the opening tag
-
-For more details please refer to [vue docs](https://vuejs.org/guide/essentials/component-basics.html#self-closing-tags)

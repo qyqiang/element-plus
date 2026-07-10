@@ -120,36 +120,7 @@ onMounted(() => {
 
 <template>
   <div ref="target" class="home-page">
-    <div class="banner" text="center">
-      <div class="banner-desc">
-        <h1>{{ homeLang['title'] }}</h1>
-        <p>{{ homeLang['title_sub'] }}</p>
-      </div>
-    </div>
-    <div ref="jumbotronRef" class="jumbotron">
-      <div class="parallax-container" :style="containerStyle">
-        <div :style="cardStyle">
-          <screen-svg :style="screenLayer" alt="banner" />
-          <people-svg
-            :style="peopleLayer"
-            alt="banner"
-            class="cursor-pointer"
-            @click="jumpTo('guide/quickstart.html')"
-          />
-          <left-layer-svg :style="leftLayer" alt="banner" />
-          <left-bottom-layer-svg :style="leftBottomLayer" alt="banner" />
-          <right-layer-svg :style="rightLayer" alt="banner" />
-        </div>
-      </div>
-    </div>
-    <img
-      :src="withBase(`/images/theme-index-blue${isDark ? '-dark' : ''}.png`)"
-      alt="banner"
-      class="mobile-banner"
-    />
-    <HomeCards />
   </div>
-  <HomeFooter :is-home="true" />
 </template>
 
 <style lang="scss">

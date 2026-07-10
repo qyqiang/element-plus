@@ -7,7 +7,7 @@ lang: en-US
 
 :::tip
 
-We provide a example in [element-plus-vite-starter](https://github.com/element-plus/element-plus-vite-starter).
+We provide a example in element-plus-vite-starter.
 Just check it.
 
 :::

@@ -157,7 +157,7 @@ dialog/custom-animation
 
 :::tip
 
-Animation classes are dynamically generated based on the transition name. For granular control over animation behavior, you may explicitly define these classes. Refer to [custom-transition-classes](https://vuejs.org/guide/built-ins/transition.html#custom-transition-classes) for details.
+Animation classes are dynamically generated based on the transition name. For granular control over animation behavior, you may explicitly define these classes. Refer to custom-transition-classes for details.
 
 :::
 
@@ -247,17 +247,3 @@ dialog/events
 | ---------------------- | -------------- | ----------------------- |
 | resetPosition ^(2.8.1) | reset position | ^[Function]`() => void` |
 | handleClose ^(2.9.8)   | close dialog   | ^[Function]`() => void` |
-
-## FAQ
-
-#### Using dialog in SFC, the scope style does not take effect
-
-Typical issue: [#10515](https://github.com/element-plus/element-plus/issues/10515)
-
-PS: Since the dialog is rendered using `Teleport`, the style of the root node is recommended to be written globally.
-
-#### When the dialog is displayed and hidden, there is a situation where the page elements are displaced back and forth
-
-Typical issue: [#10481](https://github.com/element-plus/element-plus/issues/10481)
-
-PS: It is recommended to place the scroll area inside a vue mounted node, e.g. `<div id="app" />`, and use the `overflow: hidden` style for the body.

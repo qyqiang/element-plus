@@ -129,11 +129,11 @@ input/length-limiting
 
 | Name                          | Description                                                                                                                                             | Type                                                                                                                                                                                                                         | Default     |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
-| type                          | type of input                                                                                                                                           | ^[string]`'text' \| 'textarea' \| 'password' \| 'button' \| 'checkbox' \| 'file' \| 'number' \| 'radio' \| ...` [native input types](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input#Form_%3Cinput%3E_types) | text        |
+| type                          | type of input                                                                                                                                           | ^[string]`'text' \| 'textarea' \| 'password' \| 'button' \| 'checkbox' \| 'file' \| 'number' \| 'radio' \| ...` native input types | text        |
 | input-type                    | visual status style of input                                                                                                                            | ^[enum]`'error' \| 'info' \| 'warning'`                                                                                                                                                                                      | —           |
 | info-tip                      | tooltip content shown by the built-in info icon when `input-type` is `info`; also used by the empty `error` hover tooltip, which defaults to `Required` | ^[string]                                                                                                                                                                                                                    | —           |
 | model-value / v-model         | binding value                                                                                                                                           | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
-| model-modifiers ^(2.11.5)     | v-model modifiers, reference [Vue modifiers](https://vuejs.org/guide/essentials/forms.html#modifiers)                                                   | ^[object]`{ lazy?: boolean, number?: boolean, trim?: boolean }`                                                                                                                                                              | —           |
+| model-modifiers ^(2.11.5)     | v-model modifiers, reference Vue modifiers                                                   | ^[object]`{ lazy?: boolean, number?: boolean, trim?: boolean }`                                                                                                                                                              | —           |
 | maxlength                     | same as `maxlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
 | minlength                     | same as `minlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
 | show-word-limit               | whether show word count, only works when `type` is 'text' or 'textarea'                                                                                 | ^[boolean]                                                                                                                                                                                                                   | false       |
@@ -210,15 +210,3 @@ input/length-limiting
 | textarea             | HTML textarea element            | ^[object]`Ref<HTMLTextAreaElement>`                     |
 | textareaStyle        | style of textarea                | ^[object]`Ref<StyleValue>`                              |
 | isComposing ^(2.8.0) | is input composing               | ^[object]`Ref<boolean>`                                 |
-
-## FAQ
-
-#### Why is the width of the ElInput component expanded by clearable?
-
-Typical issue: [#7287](https://github.com/element-plus/element-plus/issues/7287)
-
-PS: Since the ElInput component does not have a default width, when the clearable icon is displayed, the width of the component will be expanded, which can be solved by setting width.
-
-```vue
-<el-input v-model="input" clearable style="width: 200px" />
-```

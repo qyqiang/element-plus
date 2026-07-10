@@ -88,7 +88,7 @@ mention/form
 :::
 
 ::: tip
-Since this component is developed based on the component [`el-input`](./input.md#attributes) , the original properties have not changed, so no repetition here,
+Since this component is developed based on the component `el-input` , the original properties have not changed, so no repetition here,
 and please go to the original component to view the documentation.
 :::
 
@@ -112,8 +112,8 @@ and please go to the original component to view the documentation.
 | model-value / v-model                | input value                                                                            | ^[string]                                                                    | —                                                        |
 | popper-class                         | custom class name for dropdown panel                                                   | ^[string] / ^[object]                                                        | ''                                                       |
 | popper-style ^(2.11.5)               | custom style for dropdown panel                                                        | ^[string] / ^[object]                                                        | —                                                        |
-| popper-options                       | [popper.js](https://popper.js.org/docs/v2/) parameters                                 | ^[object] refer to [popper.js doc](https://popper.js.org/docs/v2/)           | —                                                        |
-| [input props](./input.md#attributes) | —                                                                                      | —                                                                            | —                                                        |
+| popper-options                       | popper.js parameters                                 | ^[object] refer to popper.js doc           | —                                                        |
+| input props | —                                                                                      | —                                                                            | —                                                        |
 
 ### Events
 
@@ -122,7 +122,7 @@ and please go to the original component to view the documentation.
 | search                            | trigger when prefix hit                                                                     | ^[Function]`(pattern: string, prefix: string) => void`       |
 | select                            | trigger when user select the option                                                         | ^[Function]`(option: MentionOption, prefix: string) => void` |
 | whole-remove ^(2.10.4)            | trigger when a whole mention is removed and `whole` is `true` or `check-is-whole` is `true` | ^[Function]`(pattern: string, prefix: string) => void`       |
-| [input events](./input.md#events) | —                                                                                           | —                                                            |
+| input events | —                                                                                           | —                                                            |
 
 ### Slots
 
@@ -132,7 +132,7 @@ and please go to the original component to view the documentation.
 | loading                         | content as option loading             | —                                                 |
 | header                          | content at the top of the dropdown    | —                                                 |
 | footer                          | content at the bottom of the dropdown | —                                                 |
-| [input slots](./input.md#slots) | —                                     | —                                                 |
+| input slots | —                                     | —                                                 |
 
 ### Exposes
 

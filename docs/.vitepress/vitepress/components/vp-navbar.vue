@@ -15,20 +15,20 @@ const { theme } = useData()
 </script>
 
 <template>
-  <div class="navbar-wrapper">
-    <div class="header-container">
-      <div class="content">
-        <VPNavbarSearch class="search" :options="theme.agolia" multilang />
-        <VPNavbarMenu class="menu" />
-        <VPNavbarThemeToggler class="theme-toggler" />
-        <VPNavbarHamburger
-          :active="fullScreen"
-          class="hamburger"
-          @click="$emit('toggle')"
-        />
-      </div>
-    </div>
-  </div>
+<!--  <div class="navbar-wrapper">-->
+<!--    <div class="header-container">-->
+<!--      <div class="content">-->
+<!--&lt;!&ndash;        <VPNavbarSearch class="search" :options="theme.agolia" multilang />&ndash;&gt;-->
+<!--&lt;!&ndash;        <VPNavbarMenu class="menu" />&ndash;&gt;-->
+<!--&lt;!&ndash;        <VPNavbarThemeToggler class="theme-toggler" />&ndash;&gt;-->
+<!--&lt;!&ndash;        <VPNavbarHamburger&ndash;&gt;-->
+<!--&lt;!&ndash;          :active="fullScreen"&ndash;&gt;-->
+<!--&lt;!&ndash;          class="hamburger"&ndash;&gt;-->
+<!--&lt;!&ndash;          @click="$emit('toggle')"&ndash;&gt;-->
+<!--&lt;!&ndash;        />&ndash;&gt;-->
+<!--      </div>-->
+<!--    </div>-->
+<!--  </div>-->
 </template>
 
 <style scoped lang="scss">

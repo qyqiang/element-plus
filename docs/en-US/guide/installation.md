@@ -9,7 +9,7 @@ lang: en-US
 
 Element Plus can run on browsers that support last 2 versions.
 
-If you really need to support outdated browsers, please add [Babel](https://babeljs.io/) and Polyfill yourself.
+If you really need to support outdated browsers, please add Babel and Polyfill yourself.
 
 Since Vue 3 no longer supports IE11, Element Plus does not support IE either.
 
@@ -20,9 +20,9 @@ Since Vue 3 no longer supports IE11, Element Plus does not support IE either.
 
 ### Sass
 
-Version `2.8.5` and later, the minimum compatible version of [Sass](https://github.com/sass) is `1.79.0`.
+Version `2.8.5` and later, the minimum compatible version of Sass is `1.79.0`.
 
-If your terminal prompts `legacy JS API Deprecation Warning`, you can configure the following code in [vite.config.ts](https://vitejs.dev/config/shared-options.html#css-preprocessoroptions).
+If your terminal prompts `legacy JS API Deprecation Warning`, you can configure the following code in vite.config.ts.
 
 ```ts{3}
 css: {
@@ -34,15 +34,15 @@ css: {
 
 ### Version
 
-Element Plus is currently in a rapid development iteration. [![ElementPlus version badge](https://img.shields.io/npm/v/element-plus.svg?style=flat-square)](https://www.npmjs.org/package/element-plus)
+Element Plus is currently in a rapid development iteration. ![ElementPlus version badge](https://img.shields.io/npm/v/element-plus.svg?style=flat-square)
 
-In addition, every commit and PR on the dev branch will be published to [pkg.pr.new](https://github.com/stackblitz-labs/pkg.pr.new), if you want to use some unpublished content, you can refer to [here](https://github.com/element-plus/element-plus/issues/18433#issuecomment-2392618431).
+In addition, every commit and PR on the dev branch will be published to pkg.pr.new, if you want to use some unpublished content, you can refer to here.
 
 ## Using Package Manager
 
-**We recommend using the package manager (NPM, [Yarn](https://classic.yarnpkg.com/lang/en/), [pnpm](https://pnpm.io/)) to install Element Plus**,
-so that you can utilize bundlers like [Vite](https://vitejs.dev) and
-[webpack](https://webpack.js.org/).
+**We recommend using the package manager (NPM, Yarn, pnpm) to install Element Plus**,
+so that you can utilize bundlers like Vite and
+webpack.
 
 Choose a package manager you like.
 
@@ -62,7 +62,7 @@ $ pnpm install element-plus
 
 :::
 
-If your network environment is not good, it is recommended to use a mirror registry [cnpm](https://github.com/cnpm/cnpm) or [npmmirror](https://npmmirror.com/).
+If your network environment is not good, it is recommended to use a mirror registry cnpm or npmmirror.
 
 ```shell
 npm config set registry https://registry.npmmirror.com
@@ -73,7 +73,7 @@ npm config set registry https://registry.npmmirror.com
 Import Element Plus through browser HTML tags directly, and use global variable `ElementPlus`.
 
 According to different CDN providers, there are different introduction methods.
-Here we use [unpkg](https://unpkg.com) and [jsDelivr](https://jsdelivr.com) as example.
+Here we use unpkg and jsDelivr as example.
 You can also use other CDN providers.
 
 ### unpkg
@@ -109,10 +109,10 @@ You can also use other CDN providers.
 
 We recommend using CDN to import Element Plus users to lock the version
 on the link address, so as not to be affected by incompatible updates when Element Plus
-is upgraded in the future. Please check [unpkg.com](https://unpkg.com) for
+is upgraded in the future. Please check unpkg.com for
 the method to lock the version.
 
-Due to the limitations of native HTML parsing behavior, single-closed tags may cause some exceptions, so please use double-closed tags, [reference](https://vuejs.org/guide/essentials/component-basics.html#in-dom-template-parsing-caveats)
+Due to the limitations of native HTML parsing behavior, single-closed tags may cause some exceptions, so please use double-closed tags, reference
 
 ```html
 <!-- examples -->
@@ -127,13 +127,13 @@ Due to the limitations of native HTML parsing behavior, single-closed tags may c
 ## Hello World
 
 With CDN, we can easily use Element Plus to
-write a Hello World page. [Online Demo](https://codepen.io/iamkun/pen/YzWMaVr)
+write a Hello World page. Online Demo
 
 <iframe height="469" style="width: 100%;" scrolling="no" title="YzWMaVr" src="https://codepen.io/iamkun/embed/YzWMaVr?height=469&theme-id=light&default-tab=html,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/iamkun/pen/YzWMaVr'>YzWMaVr</a> by iamkun
-  (<a href='https://codepen.io/iamkun'>@iamkun</a>) on <a href='https://codepen.io'>CodePen</a>.
+  See the Pen YzWMaVr by iamkun
+  (@iamkun) on CodePen.
 </iframe>
 
 If you are installing via package manager and want to use it with
 a packaging tool, please read the
-next section: [Quick Start](/en-US/guide/quickstart).
+next section: Quick Start.

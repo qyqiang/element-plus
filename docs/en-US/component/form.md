@@ -25,7 +25,7 @@ form/basic-form
 
 :::tip
 
-[W3C](https://www.w3.org/MarkUp/html-spec/html-spec_8.html#SEC8.2) regulates that
+W3C regulates that
 
 > <i>When there is only one single-line text input field in a form, the user agent should accept Enter in that field as a request to submit the form.</i>
 
@@ -59,7 +59,7 @@ form/alignment
 
 Form component allows you to verify your data, helping you find and correct errors.
 
-:::demo Just add the `rules` attribute for `Form` component, pass validation rules, and set `prop` attribute for `FormItem` as a specific key that needs to be validated. See more information at [async-validator](https://github.com/yiminghe/async-validator).
+:::demo Just add the `rules` attribute for `Form` component, pass validation rules, and set `prop` attribute for `FormItem` as a specific key that needs to be validated. See more information at async-validator.
 
 form/validation
 
@@ -77,7 +77,7 @@ form/custom-validation
 
 :::tip
 
-Custom validate callback function must be called. See more advanced usage at [async-validator](https://github.com/yiminghe/async-validator).
+Custom validate callback function must be called. See more advanced usage at async-validator.
 
 :::
 
@@ -115,7 +115,7 @@ form/size-control
 
 ## Accessibility
 
-When only a single input (or related control such as select or checkbox) is inside of a `el-form-item`, the form item's label will automatically be attached to that input. However, if multiple inputs are inside of the `el-form-item`, the form item will be assigned the [WAI-ARIA](https://www.w3.org/WAI/standards-guidelines/aria/) role of [group](https://www.w3.org/TR/wai-aria/#group) instead. In this case, it is your responsibility to assign assistive labels to the individual inputs.
+When only a single input (or related control such as select or checkbox) is inside of a `el-form-item`, the form item's label will automatically be attached to that input. However, if multiple inputs are inside of the `el-form-item`, the form item will be assigned the WAI-ARIA role of group instead. In this case, it is your responsibility to assign assistive labels to the individual inputs.
 
 :::demo
 
@@ -144,7 +144,7 @@ form/accessibility
 | size                              | Control the size of components in this form.                                                                                                                                             | ^[enum]`'' \| 'large' \| 'default' \| 'small'` | —       |
 | disabled                          | Whether to disable all components in this form. If set to `true`, it will override the `disabled` prop of the inner component.                                                           | ^[boolean]                                     | false   |
 | scroll-to-error                   | When validation fails, scroll to the first error form entry.                                                                                                                             | ^[boolean]                                     | false   |
-| scroll-into-view-options ^(2.3.2) | When validation fails, it scrolls to the first error item based on the scrollIntoView option. [scrollIntoView](https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView). | ^[object]`ScrollIntoViewOptions` / ^[boolean]  | true    |
+| scroll-into-view-options ^(2.3.2) | When validation fails, it scrolls to the first error item based on the scrollIntoView option. scrollIntoView. | ^[object]`ScrollIntoViewOptions` / ^[boolean]  | true    |
 
 ### Form Events
 
@@ -182,7 +182,7 @@ form/accessibility
 | label-width             | Width of label, e.g. `'50px'`. `'auto'` is supported.                                                                                                                  | ^[string] / ^[number]                               | ''      |
 | required                | Whether the field is required or not, will be determined by validation rules if omitted.                                                                               | ^[boolean]                                          | —       |
 | always-show-error       | Whether the field is alwaysShowError or not, will be determined by validation rules if omitted.                                                                        | ^[boolean]                                          | true    |
-| rules                   | Validation rules of form, see the [following table](#formitemrule), more advanced usage at [async-validator](https://github.com/yiminghe/async-validator).             | ^[object]`Arrayable<FormItemRule>`                  | —       |
+| rules                   | Validation rules of form, see the following table, more advanced usage at async-validator.             | ^[object]`Arrayable<FormItemRule>`                  | —       |
 | error                   | Field error message, set its value and the field will validate error and show this message immediately.                                                                | ^[string]                                           | —       |
 | show-message            | Whether to show the error message.                                                                                                                                     | ^[boolean]                                          | true    |
 | inline-message          | Inline style validate message.                                                                                                                                         | ^[boolean]                                          | false   |
@@ -231,13 +231,13 @@ type Arrayable<T> = T | T[]
 
 type FormValidationResult = Promise<boolean>
 
-// ValidateFieldsError: see [async-validator](https://github.com/yiminghe/async-validator/blob/master/src/interface.ts)
+// ValidateFieldsError: see async-validator
 type FormValidateCallback = (
   isValid: boolean,
   invalidFields?: ValidateFieldsError
 ) => Promise<void> | void
 
-// RuleItem: see [async-validator](https://github.com/yiminghe/async-validator/blob/master/src/interface.ts)
+// RuleItem: see async-validator
 interface FormItemRule extends RuleItem {
   trigger?: Arrayable<string>
 }
@@ -266,8 +266,8 @@ type Path<T> =
         [K in keyof T]-?: PathImpl<Exclude<K, symbol>, T[K]>
       }[keyof T]
 type FieldPath<T> = T extends object ? Path<T> : never
-// MaybeRef: see [@vueuse/core](https://github.com/vueuse/vueuse/blob/main/packages/shared/utils/types.ts)
-// UnwrapRef: see [vue](https://github.com/vuejs/core/blob/main/packages/reactivity/src/ref.ts)
+// MaybeRef: see @vueuse/core
+// UnwrapRef: see vue
 type FormRules<T extends MaybeRef<Record<string, any> | string> = string> =
   Partial<
     Record<

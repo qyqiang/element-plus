@@ -66,7 +66,7 @@ popconfirm/trigger-event
 | teleported                         | whether popconfirm is teleported to the body                                                        | ^[boolean]                                                                   | true           |
 | persistent                         | when popconfirm inactive and `persistent` is `false` , popconfirm will be destroyed                 | ^[boolean]                                                                   | false          |
 | width                              | popconfirm width, min width 150px                                                                   | ^[string] / ^[number]                                                        | 150            |
-| [tooltip](./tooltip.md#attributes) | Inherits all attributes from Tooltip, except: `popper-class`, `popper-style`, `fallback-placements` | —                                                                            | —              |
+| tooltip | Inherits all attributes from Tooltip, except: `popper-class`, `popper-style`, `fallback-placements` | —                                                                            | —              |
 
 ### Events
 

@@ -9,7 +9,7 @@ Besides the native features of img, support lazy load, custom placeholder and lo
 
 ## Basic Usage
 
-:::demo Indicate how the image should be resized to fit its container by `fit`, same as native [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit).
+:::demo Indicate how the image should be resized to fit its container by `fit`, same as native object-fit.
 
 image/basic-usage
 
@@ -86,14 +86,14 @@ image/custom-progress
 | Name                   | Description                                                                                                                                       | Type                                                                    | Default |
 | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------- | ------- |
 | src                    | image source, same as native.                                                                                                                     | ^[string]                                                               | ''      |
-| fit                    | indicate how the image should be resized to fit its container, same as [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit). | ^[enum]`'' \| 'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | ''      |
+| fit                    | indicate how the image should be resized to fit its container, same as object-fit. | ^[enum]`'' \| 'fill' \| 'contain' \| 'cover' \| 'none' \| 'scale-down'` | ''      |
 | hide-on-click-modal    | when enabling preview, use this flag to control whether clicking on backdrop can exit preview mode.                                               | ^[boolean]                                                              | false   |
-| loading ^(2.2.3)       | Indicates how the browser should load the image, same as [native](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/img#attr-loading).    | ^[enum]`'eager' \| 'lazy'`                                              | —       |
+| loading ^(2.2.3)       | Indicates how the browser should load the image, same as native.    | ^[enum]`'eager' \| 'lazy'`                                              | —       |
 | lazy                   | whether to use lazy load.                                                                                                                         | ^[boolean]                                                              | false   |
 | scroll-container       | the container to add scroll listener when using lazy load. By default, the container to add scroll listener when using lazy load.                 | ^[string] / ^[object]`HTMLElement`                                      | —       |
 | alt                    | native attribute `alt`.                                                                                                                           | ^[string]                                                               | —       |
-| referrerpolicy         | native attribute [referrerPolicy](https://developer.mozilla.org/en-US/docs/Web/API/HTMLImageElement/referrerPolicy).                              | ^[string]                                                               | —       |
-| crossorigin            | native attribute [crossorigin](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/crossorigin).                                         | ^[enum]`'' \| 'anonymous' \| 'use-credentials'`                         | —       |
+| referrerpolicy         | native attribute referrerPolicy.                              | ^[string]                                                               | —       |
+| crossorigin            | native attribute crossorigin.                                         | ^[enum]`'' \| 'anonymous' \| 'use-credentials'`                         | —       |
 | preview-src-list       | allow big image preview.                                                                                                                          | ^[object]`string[]`                                                     | []      |
 | z-index                | set image preview z-index.                                                                                                                        | ^[number]                                                               | —       |
 | initial-index          | initial preview image index, less than the length of `url-list`.                                                                                  | ^[number]                                                               | 0       |
@@ -122,7 +122,7 @@ image/custom-progress
 | ----------------------------------------- | --------------------------------------------------------------------- | ---- |
 | placeholder                               | custom placeholder content when image hasn't loaded yet.              | -    |
 | error                                     | custom image load failed content.                                     | -    |
-| [image viewer slots](#image-viewer-slots) | when you allow big image preview, image viewer slots all can be used. | -    |
+| image viewer slots | when you allow big image preview, image viewer slots all can be used. | -    |
 
 ### Image Exposes
 

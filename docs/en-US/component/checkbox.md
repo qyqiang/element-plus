@@ -136,10 +136,10 @@ checkbox/with-border
 | validate-event                 | whether to trigger form validation                                                                                                                             | ^[boolean]                                     | true    |
 | tabindex                       | input tabindex                                                                                                                                                 | ^[string] / ^[number]                          | —       |
 | id                             | input id                                                                                                                                                       | ^[string]                                      | —       |
-| aria-controls ^(a11y) ^(2.7.2) | same as [aria-controls](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-controls), takes effect when `indeterminate` is `true` | ^[string]                                      | —       |
+| aria-controls ^(a11y) ^(2.7.2) | same as aria-controls, takes effect when `indeterminate` is `true` | ^[string]                                      | —       |
 | true-label ^(deprecated)       | value of the Checkbox if it's checked                                                                                                                          | ^[string] / ^[number]                          | —       |
 | false-label ^(deprecated)      | value of the Checkbox if it's not checked                                                                                                                      | ^[string] / ^[number]                          | —       |
-| controls ^(a11y) ^(deprecated) | same as [aria-controls](https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA/Attributes/aria-controls), takes effect when `indeterminate` is `true` | ^[string]                                      | —       |
+| controls ^(a11y) ^(deprecated) | same as aria-controls, takes effect when `indeterminate` is `true` | ^[string]                                      | —       |
 
 ### Checkbox Events
 

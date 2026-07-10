@@ -39,7 +39,7 @@ avatar/fallback
 
 ## Fit Container
 
-Set how the image fit its container for an image avatar, same as [object-fit](https://developer.mozilla.org/en-US/docs/Web/CSS/object-fit).
+Set how the image fit its container for an image avatar, same as object-fit.
 
 :::demo
 

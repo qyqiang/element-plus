@@ -62,7 +62,7 @@ In addition to basic usages, there are some attributes that allow you to customi
 
 `disabled` attribute allows you to disable `tooltip`. You just need set it to `true`.
 
-In fact, Tooltip is an extension based on [ElPopper](https://github.com/element-plus/element-plus/tree/dev/packages/components/popper), you can use any attribute that are allowed in ElPopper.
+In fact, Tooltip is an extension based on ElPopper, you can use any attribute that are allowed in ElPopper.
 
 :::demo
 
@@ -74,7 +74,7 @@ tooltip/advanced-usage
 
 The `router-link` component is not supported in tooltip, please use `vm.$router.push`.
 
-Disabled form elements are not supported for Tooltip, more information can be found at [MDN](https://developer.mozilla.org/en-US/docs/Web/Events/mouseenter). You need to wrap the disabled form element with a container element for Tooltip to work.
+Disabled form elements are not supported for Tooltip, more information can be found at MDN. You need to wrap the disabled form element with a container element for Tooltip to work.
 
 :::
 
@@ -84,7 +84,7 @@ The content attribute can be set to HTML string.
 
 :::warning
 
-Although `content` property supports HTML strings, dynamically rendering arbitrary HTML on your website can be very dangerous because it can easily lead to [XSS attacks](https://en.wikipedia.org/wiki/Cross-site_scripting). So when `raw-content` is on, please make sure `content` is trusted, and **never** assign user-provided `content`.
+Although `content` property supports HTML strings, dynamically rendering arbitrary HTML on your website can be very dangerous because it can easily lead to XSS attacks. So when `raw-content` is on, please make sure `content` is trusted, and **never** assign user-provided `content`.
 
 :::
 
@@ -154,7 +154,7 @@ Tooltip can be customized animated, you can set the desired animation use `trans
 
 :::tip
 
-Transition Classes, more information can be found at [Vue Transition](https://vuejs.org/guide/built-ins/transition.html#css-based-transitions).
+Transition Classes, more information can be found at Vue Transition.
 
 :::
 
@@ -185,7 +185,7 @@ tooltip/append-to
 | content                   | display content, can be overridden by `slot#content`                                                                                                                                  | ^[string]                                                                                                                                                                   | ''                |
 | raw-content               | whether `content` is treated as HTML string                                                                                                                                           | ^[boolean]                                                                                                                                                                  | false             |
 | placement                 | position of Tooltip                                                                                                                                                                   | ^[enum]`'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end' \| 'left' \| 'left-start' \| 'left-end' \| 'right' \| 'right-start' \| 'right-end'` | bottom            |
-| fallback-placements       | list of possible positions for Tooltip [popper.js](https://popper.js.org/docs/v2/modifiers/flip/#fallbackplacements)                                                                  | ^[array]`Placement[]`                                                                                                                                                       | —                 |
+| fallback-placements       | list of possible positions for Tooltip popper.js                                                                  | ^[array]`Placement[]`                                                                                                                                                       | —                 |
 | visible / v-model:visible | visibility of Tooltip                                                                                                                                                                 | ^[boolean]                                                                                                                                                                  | —                 |
 | disabled                  | whether Tooltip is disabled                                                                                                                                                           | ^[boolean]                                                                                                                                                                  | —                 |
 | modal                     | whether a mask is displayed                                                                                                                                                           | ^[boolean]                                                                                                                                                                  | false             |
@@ -193,7 +193,7 @@ tooltip/append-to
 | close-on-click-modal      | whether the Tooltip can be closed by clicking the mask                                                                                                                                | ^[boolean]                                                                                                                                                                  | true              |
 | offset                    | offset of the Tooltip                                                                                                                                                                 | ^[number]                                                                                                                                                                   | 12                |
 | transition                | animation name                                                                                                                                                                        | ^[string]                                                                                                                                                                   | —                 |
-| popper-options            | [popper.js](https://popper.js.org/docs/v2/) parameters                                                                                                                                | ^[object]refer to [popper.js](https://popper.js.org/docs/v2/) doc                                                                                                           | {}                |
+| popper-options            | popper.js parameters                                                                                                                                | ^[object]refer to popper.js doc                                                                                                           | {}                |
 | arrow-offset ^(2.9.10)    | Controls the offset (padding) of the tooltip’s arrow relative to the popper.                                                                                                          | ^[number]                                                                                                                                                                   | 5                 |
 | show-after                | delay of appearance, in millisecond, not valid in controlled mode                                                                                                                     | ^[number]                                                                                                                                                                   | 0                 |
 | show-arrow                | whether the tooltip content has an arrow                                                                                                                                              | ^[boolean]                                                                                                                                                                  | true              |
@@ -240,17 +240,3 @@ tooltip/append-to
 | onOpen               | expose onOpen function to mange el-tooltip open state             | ^[Function]`(event?: Event \| undefined) => void`   |
 | onClose              | expose onClose function to mange el-tooltip open state            | ^[Function]`(event?: Event \| undefined) => void`   |
 | hide                 | expose hide function                                              | ^[Function]`(event?: Event \| undefined) => void`   |
-
-## FAQ
-
-#### How to allow spaces in the input box when tooltip is nested?
-
-Typical issue: [#20907](https://github.com/element-plus/element-plus/issues/20907)
-
-```vue
-<template>
-  <el-tooltip content="tooltip content" placement="top" :trigger-keys="[]">
-    <el-input v-model="value" placeholder="" />
-  </el-tooltip>
-</template>
-```

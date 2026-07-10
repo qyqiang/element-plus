@@ -59,7 +59,7 @@ watermark/custom
 | z-index | The z-index of the appended watermark element                                                   | ^[number]                     | 9                          |
 | image   | Image source, it is recommended to export 2x or 3x image, high priority                         | ^[string]                     | —                          |
 | content | Watermark text content                                                                          | ^[string]/^[object]`string[]` | Element Plus               |
-| font    | Text style                                                                                      | [Font](#font)                 | [Font](#font)              |
+| font    | Text style                                                                                      | Font                 | Font              |
 | gap     | The spacing between watermarks                                                                  | ^[object]`[number, number]`   | \[100, 100\]               |
 | offset  | The offset of the watermark from the upper left corner of the container. The default is `gap/2` | ^[object]`[number, number]`   | \[gap\[0\]/2, gap\[1\]/2\] |
 

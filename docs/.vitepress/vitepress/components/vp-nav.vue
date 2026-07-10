@@ -20,8 +20,8 @@ useToggleWidgets(isFullScreen, () => {
 </script>
 
 <template>
-  <header :class="{ navbar: true, 'has-sidebar': hasSidebar }">
-    <VpNavbar :full-screen="isFullScreen" @toggle="toggleFullScreen" />
-    <VpNavFull :full-screen="isFullScreen" class="full-screen" @close="close" />
-  </header>
+<!--  <header :class="{ navbar: true, 'has-sidebar': hasSidebar }">-->
+<!--    <VpNavbar :full-screen="isFullScreen" @toggle="toggleFullScreen" />-->
+<!--    <VpNavFull :full-screen="isFullScreen" class="full-screen" @close="close" />-->
+<!--  </header>-->
 </template>

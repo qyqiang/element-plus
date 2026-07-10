@@ -29,7 +29,7 @@ loading/customization
 
 :::warning
 
-Although the `element-loading-spinner / element-loading-svg` attribute supports incoming HTML fragments, it is very dangerous to dynamically render arbitrary HTML on the website, because it is easy to cause [XSS attack](https://en.wikipedia.org/wiki/Cross-site_scripting). Please make sure that the content of `element-loading-spinner / element-loading-svg` is trustworthy. **Never** assign user-submitted content to the `element-loading-spinner / element-loading-svg` attribute.
+Although the `element-loading-spinner / element-loading-svg` attribute supports incoming HTML fragments, it is very dangerous to dynamically render arbitrary HTML on the website, because it is easy to cause XSS attack. Please make sure that the content of `element-loading-spinner / element-loading-svg` is trustworthy. **Never** assign user-submitted content to the `element-loading-spinner / element-loading-svg` attribute.
 
 :::
 

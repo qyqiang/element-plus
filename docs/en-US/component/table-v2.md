@@ -5,13 +5,13 @@ lang: en-US
 
 # Virtualized Table ^(beta)
 
-Along with evolutionary web development, table component has always been the most popular component in our web apps especially for dashboards, data analysis. For [Table V1](./table.md), with even just 1000 records of data, it can be very annoying when using it, because of the poor performance.
+Along with evolutionary web development, table component has always been the most popular component in our web apps especially for dashboards, data analysis. For Table V1, with even just 1000 records of data, it can be very annoying when using it, because of the poor performance.
 
 With Virtualized Table, you can render massive chunks of data in a blink of an eye.
 
 :::tip
 
-This component is **still under testing**, use at your own risk. If you find any bugs or issues, please report them at [GitHub](https://github.com/element-plus/element-plus/issues) for us to fix. Also there were some APIs which are not mentioned in this documentation, some of them were not
+This component is **still under testing**, use at your own risk. If you find any bugs or issues, please report them at GitHub for us to fix. Also there were some APIs which are not mentioned in this documentation, some of them were not
 fully developed yet, which is why they are not mentioned here.
 
 **Even though** Virtualized Table is efficient, when the data load is too large, your **network** and **memory size** can become the bottleneck of your app. So keep in mind that Virtualized Table is never the ultimate solution for everything, consider paginating your data, adding filters etc.
@@ -181,7 +181,7 @@ table-v2/cross-hovering
 
 ## Colspan
 
-The virtualized table doesn't use the built-in `table` element, so `colspan` and `rowspan` behave a bit differently compared to [TableV1](./table.md). However, with a customized row renderer, these features can still be implemented. In this section, we'll demonstrate how to achieve this.
+The virtualized table doesn't use the built-in `table` element, so `colspan` and `rowspan` behave a bit differently compared to TableV1. However, with a customized row renderer, these features can still be implemented. In this section, we'll demonstrate how to achieve this.
 
 :::demo
 
@@ -191,7 +191,7 @@ table-v2/colspan
 
 ## Rowspan
 
-Since we have covered [Colspan](#colspan), it's worth noting that we also have row span. It's a little bit different from colspan but the idea
+Since we have covered Colspan, it's worth noting that we also have row span. It's a little bit different from colspan but the idea
 is basically the same.
 
 :::demo
@@ -307,24 +307,24 @@ table-v2/manual-scroll
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------- |
 | cache                     | Number of rows rendered in advance to boost the performance                                                                | `number`                                               | 2         |
 | estimated-row-height      | The estimated row height for rendering dynamic height rows                                                                 | `number`                                               | —         |
-| header-class              | Customized class name passed to header wrapper                                                                             | `string` / Function<[HeaderClassGetter](#typings)>     | —         |
-| header-props              | Customized props name passed to header component                                                                           | `object` / Function<[HeaderPropsGetter](#typings)>     | —         |
-| header-cell-props         | Customized props name passed to header cell component                                                                      | `object` / Function<[HeaderCellPropsGetter](#typings)> | —         |
+| header-class              | Customized class name passed to header wrapper                                                                             | `string` / Function<HeaderClassGetter>     | —         |
+| header-props              | Customized props name passed to header component                                                                           | `object` / Function<HeaderPropsGetter>     | —         |
+| header-cell-props         | Customized props name passed to header cell component                                                                      | `object` / Function<HeaderCellPropsGetter> | —         |
 | header-height             | The height of the header is set by `height`. If given an array, it renders header rows equal to its length                 | `number`/ `number[]`                                   | 44        |
 | footer-height             | The height of the footer element, when provided, will be part to the calculation of the table's height.                    | `number`                                               | 0         |
 | is-footer-default         | Whether to render the built-in default footer when no `footer` slot is provided                                            | `boolean`                                              | false     |
 | total                     | Total value displayed by the built-in default footer                                                                       | `number`                                               | 0         |
 | update-time               | Update time displayed by the built-in default footer                                                                       | `string`                                               | ''        |
-| row-class                 | Customized class name passed to row wrapper                                                                                | `string` / Function<[RowClassGetter](#typings)>        | —         |
+| row-class                 | Customized class name passed to row wrapper                                                                                | `string` / Function<RowClassGetter>        | —         |
 | row-key                   | The key of each row, if not provided, will be the index of the row                                                         | `string` / `Symbol` / `number`                         | id        |
-| row-props                 | Customized props name passed to row component                                                                              | `object` / Function<[RowPropsGetter](#typings)>        | —         |
+| row-props                 | Customized props name passed to row component                                                                              | `object` / Function<RowPropsGetter>        | —         |
 | row-height                | The height of each row, used for calculating the total height of the table                                                 | `number`                                               | 44        |
-| row-event-handlers        | A collection of handlers attached to each row                                                                              | `object`\<[RowEventHandlers](#typings)\>               | —         |
-| cell-props                | extra props passed to each cell (except header cells)                                                                      | `object` / Function<[CellPropsGetter](#typings)>       | —         |
+| row-event-handlers        | A collection of handlers attached to each row                                                                              | `object`\<RowEventHandlers\>               | —         |
+| cell-props                | extra props passed to each cell (except header cells)                                                                      | `object` / Function<CellPropsGetter>       | —         |
 | columns                   | An array of column definitions.                                                                                            | [Column[]](#column-attribute)                          | —         |
 | data                      | An array of data to be rendered in the table.                                                                              | [Data[]](#typings)                                     | []        |
-| data-getter               | A method to customize data fetch from the data source.                                                                     | Function<[DataGetter\<T\>](#typings)>                  | —         |
-| fixed-data                | Data for rendering rows above the main content and below the header                                                        | `object`\<[Data](#typings)\>                           | —         |
+| data-getter               | A method to customize data fetch from the data source.                                                                     | Function<DataGetter\<T\>>                  | —         |
+| fixed-data                | Data for rendering rows above the main content and below the header                                                        | `object`\<Data\>                           | —         |
 | expand-column-key         | The column key indicates which row is expandable                                                                           | `string`                                               | —         |
 | expanded-row-keys         | An array of keys for expanded rows, can be used with `v-model`                                                             | [KeyType[]](#typings)                                  | —         |
 | default-expanded-row-keys | An array of keys for default expanded rows, **NON REACTIVE**                                                               | [KeyType[]](#typings)                                  | —         |
@@ -337,17 +337,17 @@ table-v2/manual-scroll
 | h-scrollbar-size          | Indicates the horizontal scrollbar's size for the table, used to prevent the horizontal and vertical scrollbar to collapse | `number`                                               | 6         |
 | v-scrollbar-size          | Indicates the vertical scrollbar's size for the table, used to prevent the horizontal and vertical scrollbar to collapse   | `number`                                               | 6         |
 | scrollbar-always-on       | If true, the scrollbar will always be shown instead of when mouse is placed above the table                                | `boolean`                                              | false     |
-| sort-by                   | Sort indicator                                                                                                             | `object`\<[SortBy](#typings)\>                         | {}        |
-| sort-state                | Multiple sort indicator                                                                                                    | `object`\<[SortState](#typings)\>                      | undefined |
+| sort-by                   | Sort indicator                                                                                                             | `object`\<SortBy\>                         | {}        |
+| sort-state                | Multiple sort indicator                                                                                                    | `object`\<SortState\>                      | undefined |
 
 ### TableV2 Slots
 
 | Name        | Params                                      |
 | ----------- | ------------------------------------------- |
-| cell        | `object`\<[CellSlotProps](#typings)\>       |
-| header      | `object`\<[HeaderSlotProps](#typings)\>     |
-| header-cell | `object`\<[HeaderCellSlotProps](#typings)\> |
-| row         | `object`\<[RowSlotProps](#typings)\>        |
+| cell        | `object`\<CellSlotProps\>       |
+| header      | `object`\<HeaderSlotProps\>     |
+| header-cell | `object`\<HeaderCellSlotProps\> |
+| row         | `object`\<RowSlotProps\>        |
 | footer      | —                                           |
 | empty       | —                                           |
 | overlay     | —                                           |
@@ -356,14 +356,14 @@ table-v2/manual-scroll
 
 | Name                 | Description                                                                                                                     | Parameters                                    |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| column-sort          | Invoked when column sorted                                                                                                      | `object`\<[ColumnSortParam](#typings)\>       |
+| column-sort          | Invoked when column sorted                                                                                                      | `object`\<ColumnSortParam\>       |
 | expanded-rows-change | Invoked when expanded rows changed                                                                                              | [KeyType[]](#typings)                         |
 | end-reached          | Invoked when the end of the table is reached. The callback contain the remain distance, it is the usually the scrollbar height. | ^[Function]`(remainDistance: number) => void` |
-| scroll               | Invoked after scrolling                                                                                                         | `object`\<[ScrollParams](#typings)\>          |
-| rows-rendered        | Invoked when rows are rendered                                                                                                  | `object`\<[RowsRenderedParams](#typings)\>    |
-| row-expand           | Invoked when expand/collapse the tree node by clicking the arrow icon                                                           | `object`\<[RowExpandParams](#typings)\>       |
-| row-add              | Invoked when the editable ghost row or its action button is clicked                                                             | `object`\<[RowAddParams](#typings)\>          |
-| row-delete           | Invoked when the editable delete action is clicked                                                                              | `object`\<[RowDeleteParams](#typings)\>       |
+| scroll               | Invoked after scrolling                                                                                                         | `object`\<ScrollParams\>          |
+| rows-rendered        | Invoked when rows are rendered                                                                                                  | `object`\<RowsRenderedParams\>    |
+| row-expand           | Invoked when expand/collapse the tree node by clicking the arrow icon                                                           | `object`\<RowExpandParams\>       |
+| row-add              | Invoked when the editable ghost row or its action button is clicked                                                             | `object`\<RowAddParams\>          |
+| row-delete           | Invoked when the editable delete action is clicked                                                                              | `object`\<RowDeleteParams\>       |
 
 ### TableV2 Exposes
 
@@ -384,11 +384,11 @@ Note that these are `JavaScript` Objects, so you **CANNOT USE** kebab-case for t
 
 | Name               | Description                                                           | Type                                                                                                                                                                 | Default |
 | ------------------ | --------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
-| align              | Alignment of the table cell content                                   | [Alignment](https://github.com/element-plus/element-plus/blob/b92b22932758f0ddea98810ae248f6ca62f77e25/packages/components/table-v2/src/constants.ts#L6)             | left    |
+| align              | Alignment of the table cell content                                   | Alignment             | left    |
 | class              | Class name for the column                                             | `string`                                                                                                                                                             | —       |
-| key                | Unique identification                                                 | [KeyType](#typings)                                                                                                                                                  | —       |
-| dataKey            | Unique identification of data                                         | [KeyType](#typings)                                                                                                                                                  | —       |
-| fixed              | Fixed direction of the column                                         | `boolean` / [FixedDir](https://github.com/element-plus/element-plus/blob/b92b22932758f0ddea98810ae248f6ca62f77e25/packages/components/table-v2/src/constants.ts#L11) | false   |
+| key                | Unique identification                                                 | KeyType                                                                                                                                                  | —       |
+| dataKey            | Unique identification of data                                         | KeyType                                                                                                                                                  | —       |
+| fixed              | Fixed direction of the column                                         | `boolean` / FixedDir | false   |
 | flexGrow           | CSSProperties flex grow, Only useful when this is not a fixed table   | `number`                                                                                                                                                             | 0       |
 | flexShrink         | CSSProperties flex shrink, Only useful when this is not a fixed table | `number`                                                                                                                                                             | 1       |
 | headerClass        | Used for customizing header column class                              | `string`                                                                                                                                                             | —       |
@@ -400,8 +400,8 @@ Note that these are `JavaScript` Objects, so you **CANNOT USE** kebab-case for t
 | maxWidth           | Maximum width for the column                                          | `number`                                                                                                                                                             | —       |
 | minWidth           | Minimum width for the column                                          | `number`                                                                                                                                                             | —       |
 | width ^(required)  | Width for the column                                                  | `number`                                                                                                                                                             | —       |
-| cellRenderer       | Customized Cell renderer                                              | `VueComponent` / (props: [CellRenderProps](#typings)) => VNode                                                                                                       | —       |
-| headerCellRenderer | Customized Header renderer                                            | `VueComponent` / (props: [HeaderRenderProps](#typings)) => VNode                                                                                                     | —       |
+| cellRenderer       | Customized Cell renderer                                              | `VueComponent` / (props: CellRenderProps) => VNode                                                                                                       | —       |
+| headerCellRenderer | Customized Header renderer                                            | `VueComponent` / (props: HeaderRenderProps) => VNode                                                                                                     | —       |
 
 ## Typings{#typings}
 
@@ -601,11 +601,11 @@ type SortState = Record<KeyType, SortOrder>
 #### How do I render a list with a checkbox in the first column?
 
 Since you are allowed to define your own cell renderer, you can do what the example
-[Customize Cell Renderer](#customize-cell-renderer) did to render `checkbox` yourself, and maintain the
+Customize Cell Renderer did to render `checkbox` yourself, and maintain the
 state by yourself.
 
-#### Why does virtualized table provide less features than [TableV1](./table.md)
+#### Why does virtualized table provide less features than TableV1
 
 For virtualized table, we intend to provide less feature and let our users implement their own features as needed.
 Integrating too many features makes the code hard to maintain and for most users the basic features are enough. Some key
-features were not developed yet. We would love to hear from you. Join [Discord](https://discord.com/invite/gXK9XNzW3X) to stay tuned.
+features were not developed yet. We would love to hear from you. Join Discord to stay tuned.

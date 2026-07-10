@@ -106,7 +106,7 @@ module.exports = {
 }
 ```
 
-For more bundlers ([Rollup](https://rollupjs.org/), [Vue CLI](https://cli.vuejs.org/)) and configs please reference [unplugin-vue-components](https://github.com/antfu/unplugin-vue-components#installation) and [unplugin-auto-import](https://github.com/antfu/unplugin-auto-import#install).
+For more bundlers (Rollup, Vue CLI) and configs please reference unplugin-vue-components and unplugin-auto-import.
 
 #### Nuxt
 
@@ -136,15 +136,15 @@ export default defineNuxtConfig({
 })
 ```
 
-Refer to the [docs](https://github.com/element-plus/element-plus-nuxt#readme) for how to configure it.
+Refer to the docs for how to configure it.
 
 ### Manually import
 
-Element Plus provides out of box [Tree Shaking](https://webpack.js.org/guides/tree-shaking/)
+Element Plus provides out of box Tree Shaking
 functionalities based on ES Module.
 
-But you need install [unplugin-element-plus](https://github.com/element-plus/unplugin-element-plus) for style import.
-And refer to the [docs](https://github.com/element-plus/unplugin-element-plus#readme) for how to configure it.
+But you need install unplugin-element-plus for style import.
+And refer to the docs for how to configure it.
 
 ```vue [App.vue]
 <template>
@@ -172,11 +172,11 @@ export default defineConfig({
 
 ## Starter Template
 
-We provide a [Vite Template](https://github.com/element-plus/element-plus-vite-starter).
+We provide a Vite Template.
 
-For Nuxt users we have a [Nuxt Template](https://github.com/element-plus/element-plus-nuxt-starter).
+For Nuxt users we have a Nuxt Template.
 
-For Laravel users we have a [Laravel Template](https://github.com/element-plus/element-plus-in-laravel-starter).
+For Laravel users we have a Laravel Template.
 
 ## Global Configuration
 
@@ -224,9 +224,9 @@ export default defineComponent({
 
 ## Using Nuxt.js
 
-We can also use [Nuxt.js](https://nuxt.com). Please refer to [Element Plus Nuxt.js starter template](https://github.com/element-plus/element-plus-nuxt-starter) for more details.
+We can also use Nuxt.js. Please refer to Element Plus Nuxt.js starter template for more details.
 
 ## Let's Get Started
 
 You can bootstrap your project from now on. For each components usage, please
-refer to [the individual component documentation](https://element-plus.org/en-US/component/button.html).
+refer to the individual component documentation.

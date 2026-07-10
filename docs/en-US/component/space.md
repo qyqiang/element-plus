@@ -5,7 +5,7 @@ lang: en-US
 
 # Space
 
-Even though we have [Divider](/en-US/component/divider), but sometimes we need more than one [Divider](/en-US/component/divider) to split the elements apart, so we stack each elements upon [Divider](/en-US/component/divider), but doing so not only makes our code ugly but also makes it difficult to maintain. **Space** is this kind of component provides us both productivity and elegance.
+Even though we have Divider, but sometimes we need more than one Divider to split the elements apart, so we stack each elements upon Divider, but doing so not only makes our code ugly but also makes it difficult to maintain. **Space** is this kind of component provides us both productivity and elegance.
 
 ## Basic usage
 
@@ -89,7 +89,7 @@ space/vnode-type-spacer
 
 ## Alignment
 
-Setting this attribute can adjust the alignment of child nodes, the desirable value can be found at [align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items).
+Setting this attribute can adjust the alignment of child nodes, the desirable value can be found at align-items.
 
 :::demo Using `alignment`
 
@@ -125,7 +125,7 @@ space/fill-ratio
 
 | Name       | Description                     | Type                                                                                                                          | Default    |
 | ---------- | ------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ---------- |
-| alignment  | Controls the alignment of items | ^[enum]`'center' \| 'normal' \| 'stretch' \| ...` [align-items](https://developer.mozilla.org/en-US/docs/Web/CSS/align-items) | center     |
+| alignment  | Controls the alignment of items | ^[enum]`'center' \| 'normal' \| 'stretch' \| ...` align-items | center     |
 | class      | className                       | ^[string] / ^[object] / ^[array]                                                                                              | —          |
 | direction  | Placement direction             | ^[enum]`'vertical' \| 'horizontal'`                                                                                           | horizontal |
 | prefix-cls | Prefix for space-items          | ^[string]                                                                                                                     | —          |

@@ -87,7 +87,7 @@ autocomplete/custom-header-footer
 | fit-input-width                      | whether the width of the dropdown is the same as the input                                                                 | ^[boolean]                                                                                | false        |
 | popper-append-to-body ^(deprecated)  | whether to append the dropdown to body. If the positioning of the dropdown is wrong, you can try to set this prop to false | ^[boolean]                                                                                | false        |
 | loop-navigation ^(2.11.4)            | whether keyboard navigation loops from end to start                                                                        | ^[boolean]                                                                                | true         |
-| [input props](./input.md#attributes) | —                                                                                                                          | —                                                                                         | —            |
+| input props | —                                                                                                                          | —                                                                                         | —            |
 
 ### Events
 

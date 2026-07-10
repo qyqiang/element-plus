@@ -22,7 +22,7 @@ First you can create a switch to toggle `dark` class of html.
 </html>
 ```
 
-> If you want to toggle it, i recommend [useDark | VueUse](https://vueuse.org/core/useDark/).
+> If you want to toggle it, i recommend useDark | VueUse.
 
 Then, you can quickly enable it with just one line of code to import CSS in your entry.
 
@@ -31,7 +31,7 @@ Then, you can quickly enable it with just one line of code to import CSS in your
 import 'element-plus/theme-chalk/dark/css-vars.css'
 ```
 
-> If you want an example, you can refer to [element-plus-vite-starter](https://github.com/element-plus/element-plus-vite-starter).
+> If you want an example, you can refer to element-plus-vite-starter.
 
 ## Custom variables
 
@@ -59,7 +59,7 @@ import './styles/dark/css-vars.css'
 
 If you use scss, you can also import scss file to compile.
 
-> You can refer [Theming](./theming.md) to get more info.
+> You can refer Theming to get more info.
 
 ```scss [styles/element/index.scss]
 /*just override what you need*/

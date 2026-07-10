@@ -23,7 +23,7 @@ time-select/basic
 
 Use `format` to control format of time(hours and minutes).
 
-Check the list [here](https://day.js.org/docs/en/display/format#list-of-all-available-formats) of all available formats of Day.js.
+Check the list here of all available formats of Day.js.
 
 :::warning
 
@@ -69,9 +69,9 @@ time-select/time-range
 | step                      | time step                                                                                                      | ^[string]                                                                                        | 00:30       |
 | min-time                  | minimum time, any time before this time will be disabled                                                       | ^[string]                                                                                        | —           |
 | max-time                  | maximum time, any time after this time will be disabled                                                        | ^[string]                                                                                        | —           |
-| format                    | set format of time                                                                                             | ^[string] see [formats](https://day.js.org/docs/en/display/format#list-of-all-available-formats) | HH:mm       |
-| empty-values ^(2.7.0)     | empty values of component, [see config-provider](/en-US/component/config-provider#empty-values-configurations) | ^[array]                                                                                         | —           |
-| value-on-clear ^(2.7.0)   | clear return value, [see config-provider](/en-US/component/config-provider#empty-values-configurations)        | ^[string] / ^[number] / ^[boolean] / ^[Function]                                                 | —           |
+| format                    | set format of time                                                                                             | ^[string] see formats | HH:mm       |
+| empty-values ^(2.7.0)     | empty values of component, see config-provider | ^[array]                                                                                         | —           |
+| value-on-clear ^(2.7.0)   | clear return value, see config-provider        | ^[string] / ^[number] / ^[boolean] / ^[Function]                                                 | —           |
 | popper-class ^(2.11.4)    | custom class name for TimeSelect's dropdown                                                                    | ^[string]                                                                                        | ''          |
 | popper-style ^(2.11.4)    | custom style for TimeSelect's dropdown                                                                         | ^[string] / ^[object]                                                                            | —           |
 
