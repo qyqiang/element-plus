@@ -17,11 +17,23 @@
       <el-radio value="2" size="small">Option 2</el-radio>
     </el-radio-group>
   </div>
+  <div class="my-4 ml-4">
+    <el-radio v-model="radio" disabled value="disabled">Option A</el-radio>
+    <el-radio v-model="radio" disabled value="selected and disabled">
+      Option B
+    </el-radio>
+  </div>
+  <el-radio-group v-model="radio">
+    <el-radio :value="3">Option A</el-radio>
+    <el-radio :value="6">Option B</el-radio>
+    <el-radio :value="9">Option C</el-radio>
+  </el-radio-group>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 
+const radio = ref('1')
 const radio1 = ref('1')
 const radio2 = ref('1')
 const radio3 = ref('1')

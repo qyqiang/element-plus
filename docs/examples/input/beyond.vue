@@ -46,6 +46,13 @@
       :prefix-icon="Search"
       clearable
     />
+    <el-input
+      v-model="input"
+      style="width: 240px"
+      type="password"
+      placeholder="Please input password"
+      show-password
+    />
     <el-form-item style="width: 240px">
       <el-input
         v-model="input5"
@@ -153,17 +160,44 @@
     style="width: 240px"
     placeholder="Please input"
   />
+  <h5>Length Limit</h5>
+  <el-divider />
+  <el-input
+    v-model="text"
+    style="width: 240px"
+    maxlength="10"
+    placeholder="Please input"
+    show-word-limit
+    type="text"
+  />
+  <el-input
+    v-model="text"
+    class="ml-4"
+    style="width: 240px"
+    maxlength="10"
+    placeholder="Please input"
+    show-word-limit
+    word-limit-position="outside"
+    type="text"
+  />
+  <el-input
+    v-model="textarea"
+    class="ml-4"
+    maxlength="30"
+    style="width: 240px"
+    placeholder="Please input"
+    show-word-limit
+    word-limit-position="outside"
+    type="textarea"
+  />
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
-import {
-  ArrowDown,
-  InfoFilled,
-  Search,
-  WarningFilled,
-} from '@element-plus/icons-vue'
+import { Search, WarningFilled } from '@element-plus/icons-vue'
 
+const text = ref('')
+const textarea = ref('')
 const input = ref('')
 const input5 = ref('')
 const input6 = ref(0)

@@ -3,34 +3,6 @@ title: Radio
 lang: en-US
 ---
 
-# Radio
-
-Single selection among multiple options.
-
-:::warning
-
-`label` act as `value` has been **deprecated**, `label` is used only as display text, this action **will be** removed in ^(3.0.0), consider switching to new API.
-
-:::
-
-:::tip
-
-New API `value` has been added in ^(2.6.0), the examples in the document all use the `value`.
-If you are using a version **less than** ^(2.6.0), please refer to:
-
-:::
-
-```vue
-<template>
-  <el-radio-group v-model="radio1">
-    <!-- works when >=2.6.0, recommended ✔️ not work when <2.6.0 ❌ -->
-    <el-radio value="Value 1">Option 1</el-radio>
-    <!-- works when <2.6.0, deprecated act as value when >=3.0.0 -->
-    <el-radio label="Label 2 & Value 2">Option 2</el-radio>
-  </el-radio-group>
-</template>
-```
-
 ## Basic usage
 
 Radio should not have too many options. Otherwise, use the Select component instead.
@@ -38,52 +10,6 @@ Radio should not have too many options. Otherwise, use the Select component inst
 :::demo Creating a radio component is easy, you just need to bind a variable to Radio's `v-model`. It equals to the value of `value` of the chosen radio. The type of `value` is `String`, `Number` or `Boolean`.
 
 radio/basic-usage
-
-:::
-
-## Disabled
-
-`disabled` attribute is used to disable the radio.
-
-:::demo You just need to add the `disabled` attribute.
-
-radio/disabled
-
-:::
-
-## Radio Group
-
-Suitable for choosing from some mutually exclusive options.
-
-:::demo Combine `el-radio-group` with `el-radio` to display a radio group. Bind a variable with `v-model` of `el-radio-group` element and set label value in `el-radio`. It also provides `change` event with the current value as its parameter.
-
-radio/radio-group
-
-:::
-
-## With borders
-
-:::demo The `border` attribute adds a border to Radios.
-
-radio/with-borders
-
-:::
-
-## Options attribute ^(2.11.2)
-
-:::demo Shortcut from basic `el-radio-group` usage. You can customize the alias of the `options` through the `props` attribute.
-
-radio/options
-
-:::
-
-## Radio Button
-
-Radio with button group visual effect.
-
-:::demo You just need to change `el-radio` element into `el-radio-button` element. You can also set the style of the button when it is active by using `fill` and `text-color`.
-
-radio/radio-button
 
 :::
 

@@ -15,40 +15,6 @@ input/beyond
 
 :::
 
-Input data using mouse or keyboard.
-
-## Basic usage
-
-:::demo
-
-input/basic
-
-:::
-
-## Disabled
-
-:::demo Disable the Input with the `disabled` attribute.
-
-input/disabled
-
-:::
-
-## Clearable
-
-:::demo Make the Input clearable with the `clearable` attribute.
-
-input/clearable
-
-:::
-
-## Custom Clear Icon ^(2.11.0)
-
-:::demo You can customize the clear icon by setting the `clear-icon` attribute.
-
-input/clear-icon
-
-:::
-
 ## Formatter
 
 Display value within it's situation with `formatter`, and we usually use `parser` at the same time.
@@ -59,115 +25,51 @@ input/formatter
 
 :::
 
-## Password box
-
-:::demo Make a toggle-able password Input with the `show-password` attribute.
-
-input/password
-
-:::
-
-## Input with icon
-
-Add an icon to indicate input type.
-
-:::demo To add icons in Input, you can simply use `prefix-icon` and `suffix-icon` attributes. Also, the `prefix` and `suffix` named slots works as well.
-
-input/with-icon
-
-:::
-
-## Textarea
-
-Resizable for entering multiple lines of text information. Add attribute `type="textarea"` to change `input` into native `textarea`.
-
-:::demo Control the height by setting the `rows` prop.
-
-input/textarea
-
-:::
-
-## Autosize Textarea
-
-Setting the `autosize` prop for a textarea type of Input makes the height to automatically adjust based on the content. An options object can be provided to `autosize` to specify the minimum and maximum number of lines the textarea can automatically adjust.
-
-:::demo
-
-input/auto-sizing-textarea
-
-:::
-
-## Mixed input
-
-Prepend or append an element, generally a label or a button.
-
-:::demo Use `slot` to distribute elements that prepend or append to Input.
-
-input/mixed-input
-
-:::
-
-## Sizes
-
-:::demo Add `size` attribute to change the size of Input. In addition to the default size, there are two other options: `large`, `small`.
-
-input/various-size
-
-:::
-
-## Limit length
-
-:::demo `maxlength` and `minlength` attributes of input, they declare a limit on the number of characters a user can input. The "number of characters" is measured using JavaScript string length.Setting the `maxlength` prop for a text or textarea type of Input can limit the length of input value, allows you to show word count by setting `show-word-limit` to `true` at the same time. In ^(2.11.5), You can set `word-limit-position` to `outside` to display the word count outside the input.
-
-input/length-limiting
-
-:::
-
 ## API
 
 ### Attributes
 
-| Name                          | Description                                                                                                                                             | Type                                                                                                                                                                                                                         | Default     |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| Name                          | Description                                                                                                                                             | Type                                                                                                                               | Default     |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | type                          | type of input                                                                                                                                           | ^[string]`'text' \| 'textarea' \| 'password' \| 'button' \| 'checkbox' \| 'file' \| 'number' \| 'radio' \| ...` native input types | text        |
-| input-type                    | visual status style of input                                                                                                                            | ^[enum]`'error' \| 'info' \| 'warning'`                                                                                                                                                                                      | —           |
-| info-tip                      | tooltip content shown by the built-in info icon when `input-type` is `info`; also used by the empty `error` hover tooltip, which defaults to `Required` | ^[string]                                                                                                                                                                                                                    | —           |
-| model-value / v-model         | binding value                                                                                                                                           | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
-| model-modifiers ^(2.11.5)     | v-model modifiers, reference Vue modifiers                                                   | ^[object]`{ lazy?: boolean, number?: boolean, trim?: boolean }`                                                                                                                                                              | —           |
-| maxlength                     | same as `maxlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
-| minlength                     | same as `minlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
-| show-word-limit               | whether show word count, only works when `type` is 'text' or 'textarea'                                                                                 | ^[boolean]                                                                                                                                                                                                                   | false       |
-| word-limit-position ^(2.11.5) | word count position, valid when `show-word-limit` is true                                                                                               | ^[enum]`'inside' \| 'outside' `                                                                                                                                                                                              | "inside"    |
-| placeholder                   | placeholder of Input                                                                                                                                    | ^[string]                                                                                                                                                                                                                    | —           |
-| float-label                   | whether to show the floating label                                                                                                                      | ^[boolean]                                                                                                                                                                                                                   | true        |
-| is-hover-suffix               | whether the suffix area is displayed only on hover                                                                                                      | ^[boolean]                                                                                                                                                                                                                   | false       |
-| always-show-suffix            | whether to always display the suffix area                                                                                                               | ^[boolean]                                                                                                                                                                                                                   | true        |
-| clearable                     | whether to show clear button, only works when `type` is not 'textarea'                                                                                  | ^[boolean]                                                                                                                                                                                                                   | false       |
-| clear-icon ^(2.11.0)          | custom clear icon component                                                                                                                             | ^[string] / ^[object]`Component`                                                                                                                                                                                             | CircleClose |
-| formatter                     | specifies the format of the value presented input.(only works when `type` is 'text')                                                                    | ^[Function]`(value: string \| number) => string`                                                                                                                                                                             | —           |
-| parser                        | specifies the value extracted from formatter input.(only works when `type` is 'text')                                                                   | ^[Function]`(value: string) => string`                                                                                                                                                                                       | —           |
-| show-password                 | whether to show toggleable password input                                                                                                               | ^[boolean]                                                                                                                                                                                                                   | false       |
-| disabled                      | whether Input is disabled                                                                                                                               | ^[boolean]                                                                                                                                                                                                                   | false       |
-| size                          | size of Input, works when `type` is not 'textarea'                                                                                                      | ^[enum]`'large' \| 'default' \| 'small'`                                                                                                                                                                                     | —           |
-| prefix-icon                   | prefix icon component                                                                                                                                   | ^[string] / ^[Component]                                                                                                                                                                                                     | —           |
-| suffix-icon                   | suffix icon component                                                                                                                                   | ^[string] / ^[Component]                                                                                                                                                                                                     | —           |
-| rows                          | number of rows of textarea, only works when `type` is 'textarea'                                                                                        | ^[number]                                                                                                                                                                                                                    | 2           |
-| autosize                      | whether textarea has an adaptive height, only works when `type` is 'textarea'. Can accept an object, e.g. `{ minRows: 2, maxRows: 6 }`                  | ^[boolean] / ^[object]`{ minRows?: number, maxRows?: number }`                                                                                                                                                               | false       |
-| autocomplete                  | same as `autocomplete` in native input                                                                                                                  | ^[string]                                                                                                                                                                                                                    | off         |
-| name                          | same as `name` in native input                                                                                                                          | ^[string]                                                                                                                                                                                                                    | —           |
-| readonly                      | same as `readonly` in native input                                                                                                                      | ^[boolean]                                                                                                                                                                                                                   | false       |
-| max                           | same as `max` in native input                                                                                                                           | —                                                                                                                                                                                                                            | —           |
-| min                           | same as `min` in native input                                                                                                                           | —                                                                                                                                                                                                                            | —           |
-| step                          | same as `step` in native input                                                                                                                          | —                                                                                                                                                                                                                            | —           |
-| resize                        | control the resizability                                                                                                                                | ^[enum]`'none' \| 'both' \| 'horizontal' \| 'vertical'`                                                                                                                                                                      | —           |
-| autofocus                     | same as `autofocus` in native input                                                                                                                     | ^[boolean]                                                                                                                                                                                                                   | false       |
-| form                          | same as `form` in native input                                                                                                                          | `string`                                                                                                                                                                                                                     | —           |
-| aria-label ^(a11y) ^(2.7.2)   | same as `aria-label` in native input                                                                                                                    | ^[string]                                                                                                                                                                                                                    | —           |
-| tabindex                      | input tabindex                                                                                                                                          | ^[string] / ^[number]                                                                                                                                                                                                        | —           |
-| validate-event                | whether to trigger form validation                                                                                                                      | ^[boolean]                                                                                                                                                                                                                   | true        |
-| input-style                   | the style of the input element or textarea element                                                                                                      | ^[string] / ^[object]`CSSProperties \| CSSProperties[] \| string[]`                                                                                                                                                          | {}          |
-| label ^(a11y) ^(deprecated)   | same as `aria-label` in native input                                                                                                                    | ^[string]                                                                                                                                                                                                                    | —           |
-| inputmode ^(2.10.3)           | same as `inputmode` in native input                                                                                                                     | ^[string]                                                                                                                                                                                                                    | —           |
+| input-type                    | visual status style of input                                                                                                                            | ^[enum]`'error' \| 'info' \| 'warning'`                                                                                            | —           |
+| info-tip                      | tooltip content shown by the built-in info icon when `input-type` is `info`; also used by the empty `error` hover tooltip, which defaults to `Required` | ^[string]                                                                                                                          | —           |
+| model-value / v-model         | binding value                                                                                                                                           | ^[string] / ^[number]                                                                                                              | —           |
+| model-modifiers ^(2.11.5)     | v-model modifiers, reference Vue modifiers                                                                                                              | ^[object]`{ lazy?: boolean, number?: boolean, trim?: boolean }`                                                                    | —           |
+| maxlength                     | same as `maxlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                              | —           |
+| minlength                     | same as `minlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                              | —           |
+| show-word-limit               | whether show word count, only works when `type` is 'text' or 'textarea'                                                                                 | ^[boolean]                                                                                                                         | false       |
+| word-limit-position ^(2.11.5) | word count position, valid when `show-word-limit` is true                                                                                               | ^[enum]`'inside' \| 'outside' `                                                                                                    | "inside"    |
+| placeholder                   | placeholder of Input                                                                                                                                    | ^[string]                                                                                                                          | —           |
+| float-label                   | whether to show the floating label                                                                                                                      | ^[boolean]                                                                                                                         | true        |
+| is-hover-suffix               | whether the suffix area is displayed only on hover                                                                                                      | ^[boolean]                                                                                                                         | false       |
+| always-show-suffix            | whether to always display the suffix area                                                                                                               | ^[boolean]                                                                                                                         | true        |
+| clearable                     | whether to show clear button, only works when `type` is not 'textarea'                                                                                  | ^[boolean]                                                                                                                         | false       |
+| clear-icon ^(2.11.0)          | custom clear icon component                                                                                                                             | ^[string] / ^[object]`Component`                                                                                                   | CircleClose |
+| formatter                     | specifies the format of the value presented input.(only works when `type` is 'text')                                                                    | ^[Function]`(value: string \| number) => string`                                                                                   | —           |
+| parser                        | specifies the value extracted from formatter input.(only works when `type` is 'text')                                                                   | ^[Function]`(value: string) => string`                                                                                             | —           |
+| show-password                 | whether to show toggleable password input                                                                                                               | ^[boolean]                                                                                                                         | false       |
+| disabled                      | whether Input is disabled                                                                                                                               | ^[boolean]                                                                                                                         | false       |
+| size                          | size of Input, works when `type` is not 'textarea'                                                                                                      | ^[enum]`'large' \| 'default' \| 'small'`                                                                                           | —           |
+| prefix-icon                   | prefix icon component                                                                                                                                   | ^[string] / ^[Component]                                                                                                           | —           |
+| suffix-icon                   | suffix icon component                                                                                                                                   | ^[string] / ^[Component]                                                                                                           | —           |
+| rows                          | number of rows of textarea, only works when `type` is 'textarea'                                                                                        | ^[number]                                                                                                                          | 2           |
+| autosize                      | whether textarea has an adaptive height, only works when `type` is 'textarea'. Can accept an object, e.g. `{ minRows: 2, maxRows: 6 }`                  | ^[boolean] / ^[object]`{ minRows?: number, maxRows?: number }`                                                                     | false       |
+| autocomplete                  | same as `autocomplete` in native input                                                                                                                  | ^[string]                                                                                                                          | off         |
+| name                          | same as `name` in native input                                                                                                                          | ^[string]                                                                                                                          | —           |
+| readonly                      | same as `readonly` in native input                                                                                                                      | ^[boolean]                                                                                                                         | false       |
+| max                           | same as `max` in native input                                                                                                                           | —                                                                                                                                  | —           |
+| min                           | same as `min` in native input                                                                                                                           | —                                                                                                                                  | —           |
+| step                          | same as `step` in native input                                                                                                                          | —                                                                                                                                  | —           |
+| resize                        | control the resizability                                                                                                                                | ^[enum]`'none' \| 'both' \| 'horizontal' \| 'vertical'`                                                                            | —           |
+| autofocus                     | same as `autofocus` in native input                                                                                                                     | ^[boolean]                                                                                                                         | false       |
+| form                          | same as `form` in native input                                                                                                                          | `string`                                                                                                                           | —           |
+| aria-label ^(a11y) ^(2.7.2)   | same as `aria-label` in native input                                                                                                                    | ^[string]                                                                                                                          | —           |
+| tabindex                      | input tabindex                                                                                                                                          | ^[string] / ^[number]                                                                                                              | —           |
+| validate-event                | whether to trigger form validation                                                                                                                      | ^[boolean]                                                                                                                         | true        |
+| input-style                   | the style of the input element or textarea element                                                                                                      | ^[string] / ^[object]`CSSProperties \| CSSProperties[] \| string[]`                                                                | {}          |
+| label ^(a11y) ^(deprecated)   | same as `aria-label` in native input                                                                                                                    | ^[string]                                                                                                                          | —           |
+| inputmode ^(2.10.3)           | same as `inputmode` in native input                                                                                                                     | ^[string]                                                                                                                          | —           |
 
 ### Events
 
