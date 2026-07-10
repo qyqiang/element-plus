@@ -512,7 +512,7 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
-  it('passes error input props to required ghost-row inputs when the value is empty', async () => {
+  it('does not apply error input props to required ghost-row inputs until the row has values', async () => {
     const wrapper = mount({
       components: {
         ElTable,
@@ -534,7 +534,15 @@ describe('Table.vue', () => {
               />
             </template>
           </el-table-column>
-          <el-table-column prop="director" label="Director" />
+          <el-table-column prop="director" label="Director">
+            <template #edit-cell="{ row, column }">
+              <el-input
+                v-model="row.director"
+                :placeholder="column.label"
+                :float-label="false"
+              />
+            </template>
+          </el-table-column>
         </el-table>
       `,
       data() {
@@ -547,11 +555,24 @@ describe('Table.vue', () => {
     await doubleWait()
 
     const ghostRow = wrapper.find('tbody tr.is-ghost-row')
-    const ghostInput = ghostRow.findComponent(ElInput)
+    const ghostInputs = ghostRow.findAllComponents(ElInput)
+    const requiredInput = ghostInputs[0]
+    const optionalInput = ghostInputs[1]
 
-    expect(ghostInput.exists()).toBe(true)
-    expect(ghostInput.props('inputType')).toBe('error')
-    expect(ghostInput.props('infoTip')).toBe('Required')
+    expect(requiredInput.exists()).toBe(true)
+    expect(optionalInput.exists()).toBe(true)
+    expect(requiredInput.props('inputType')).toBeUndefined()
+    expect(requiredInput.props('infoTip')).toBeUndefined()
+
+    await optionalInput.find('input').setValue('Spielberg')
+    await doubleWait()
+
+    const updatedRequiredInput = wrapper
+      .find('tbody tr.is-ghost-row')
+      .findAllComponents(ElInput)[0]
+
+    expect(updatedRequiredInput.props('inputType')).toBe('error')
+    expect(updatedRequiredInput.props('infoTip')).toBe('Required')
 
     wrapper.unmount()
   })

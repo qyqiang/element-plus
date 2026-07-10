@@ -18,7 +18,7 @@ import {
   treeCellPrefix,
 } from '../config'
 import { parseMinWidth, parseWidth } from '../util'
-import { ghostRowSign } from '../private'
+import { ghostRowKey, ghostRowSign } from '../private'
 import GhostRowAddButton from '../ghost-row-add-button.vue'
 
 import type { ComputedRef, RendererNode, Slots, VNode } from 'vue'
@@ -27,6 +27,13 @@ import type { DefaultRow, Table } from '../table/defaults'
 
 const isEmptyRequiredValue = (value: unknown) =>
   value === '' || value === null || value === undefined
+
+const hasGhostRowValue = <T extends DefaultRow>(row: T) => {
+  return Object.entries(row ?? {}).some(([key, value]) => {
+    if (key === ghostRowSign || key === ghostRowKey) return false
+    return !isEmptyRequiredValue(value)
+  })
+}
 
 const isElInputVNode = (vnode: VNode) => {
   const type = vnode.type as { name?: string; __name?: string }
@@ -39,6 +46,7 @@ const applyRequiredInputState = <T extends DefaultRow>(
   row: T
 ) => {
   if (!column.required || !column.property) return vnodes
+  if (row?.[ghostRowSign] && !hasGhostRowValue(row)) return vnodes
   if (!isEmptyRequiredValue(row?.[column.property])) return vnodes
 
   const patchVNode = (vnode: VNode) => {
