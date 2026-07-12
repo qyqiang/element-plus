@@ -1,4 +1,4 @@
-import { computed, unref } from 'vue'
+import { computed, ref, unref } from 'vue'
 import { isObject } from '@element-plus/utils'
 import { FixedDir, SortOrder, oppositeOrderMap } from '../constants'
 import {
@@ -17,15 +17,21 @@ function useColumns(
   columns: Ref<AnyColumns>,
   fixed: Ref<boolean>
 ) {
+  const columnWidths = ref<Record<KeyType, number>>({})
+
   const _columns = computed<AnyColumns>(() => {
     const normalizedColumns: AnyColumns = unref(columns).map(
       (column, index) => ({
         ...column,
         key: column.key ?? column.dataKey ?? index,
+        resizable: column.resizable !== false,
+        width:
+          columnWidths.value[column.key ?? column.dataKey ?? index] ??
+          column.width,
       })
     )
 
-    if (!(props.canEditTable && props.editable)) {
+    if (!(props.canEditTable && props.editable) || props.ghostTable) {
       return normalizedColumns
     }
 
@@ -34,6 +40,7 @@ function useColumns(
       dataKey: rowDeleteColumnKey,
       title: '',
       width: rowDeleteColumnWidth,
+      resizable: false,
       fixed: FixedDir.RIGHT,
       align: 'center',
       class: 'is-row-delete-column',
@@ -116,6 +123,10 @@ function useColumns(
   }
 
   const updateColumnWidth = (column: Column<any>, width: number) => {
+    columnWidths.value = {
+      ...columnWidths.value,
+      [column.key!]: width,
+    }
     column.width = width
   }
 

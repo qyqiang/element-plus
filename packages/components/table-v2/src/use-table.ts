@@ -32,7 +32,9 @@ function useTable(props: TableV2Props) {
     fixedColumnsOnRight,
     hasFixedColumns,
     mainColumns,
+    visibleColumns,
 
+    updateColumnWidth,
     onColumnSorted,
   } = useColumns(props, toRef(props, 'columns'), toRef(props, 'fixed'))
 
@@ -199,6 +201,7 @@ function useTable(props: TableV2Props) {
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
     mainColumns,
+    visibleColumns,
     // metadata
     addRowHeight,
     bodyWidth,
@@ -216,6 +219,7 @@ function useTable(props: TableV2Props) {
     getRowHeight,
 
     // event handlers
+    updateColumnWidth,
     onColumnSorted,
     onRowHovered,
     onRowExpanded,

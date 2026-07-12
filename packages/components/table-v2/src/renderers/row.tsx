@@ -1,5 +1,5 @@
 import { Row } from '../components'
-import { rowAddSign } from '../private'
+import { ghostRowSign, rowAddSign } from '../private'
 import { tryCall } from '../utils'
 
 import type {
@@ -10,18 +10,28 @@ import type {
 import type { UseNamespaceReturn } from '@element-plus/hooks'
 import type { RowAddHandler } from '../row'
 import type { UseTableReturn } from '../use-table'
-import type { TableV2Props } from '../table'
+import type { RowInsertParams, TableV2Props } from '../table'
 import type { TableGridRowSlotParams } from '../table-grid'
+
+type RowTriggerState = Omit<RowInsertParams<any>, 'event'> & {
+  top: number
+  placement: 'above' | 'below'
+}
 
 type RowRendererProps = TableGridRowSlotParams &
   Pick<
     TableV2Props,
     | 'expandColumnKey'
     | 'estimatedRowHeight'
+    | 'canEditTable'
+    | 'editable'
+    | 'editTable'
+    | 'ghostTable'
     | 'rowProps'
     | 'rowClass'
     | 'rowKey'
     | 'rowEventHandlers'
+    | 'showAddRowTrigger'
   > &
   UnwrapNestedRefs<
     Pick<
@@ -35,6 +45,7 @@ type RowRendererProps = TableGridRowSlotParams &
     >
   > & {
     onRowAdd?: RowAddHandler
+    onAddRowTriggerChange?: (payload: RowTriggerState | null) => void
     ns: UseNamespaceReturn
     tableInstance?: ComponentInternalInstance
   }
@@ -55,11 +66,17 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
     rowIndex,
     style,
     isScrolling,
+    canEditTable,
+    editable,
+    editTable,
+    ghostTable,
     rowProps,
     rowClass,
     rowKey,
     rowEventHandlers,
     onRowAdd,
+    onAddRowTriggerChange,
+    showAddRowTrigger,
     ns,
     onRowHovered,
     onRowExpanded,
@@ -76,10 +93,12 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
   const canExpand = Boolean(expandColumnKey)
   const isFixedRow = rowIndex < 0
   const isAddRow = Boolean(rowData[rowAddSign])
+  const isGhostRow = Boolean(rowData[ghostRowSign])
   const kls = [
     ns.e('row'),
     rowKls,
     isAddRow && ns.is('add-row'),
+    isGhostRow && ns.is('ghost-row'),
     ns.is('expanded', canExpand && expandedRowKeys.includes(_rowKey)),
     ns.is('fixed', !depth && isFixedRow),
     ns.is('customized', Boolean(slots.row)),
@@ -89,6 +108,9 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
   ]
 
   const onRowHover = hasFixedColumns ? onRowHovered : undefined
+  const clearAddRowTrigger = () => {
+    onAddRowTriggerChange?.(null)
+  }
 
   const _rowProps = {
     ...additionalProps,
@@ -136,10 +158,80 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
     })
   }
 
+  const handlerMouseMove = (e: MouseEvent) => {
+    const canUseAddRowTrigger = ghostTable ? editTable : canEditTable && editable
+
+    if (!showAddRowTrigger || !canUseAddRowTrigger) {
+      clearAddRowTrigger()
+      return
+    }
+
+    const currentTarget = e.currentTarget as HTMLElement | null
+    const root = currentTarget?.closest(`.${ns.b()}`) as HTMLElement | null
+    if (!currentTarget || !root || rowIndex < 0) {
+      clearAddRowTrigger()
+      return
+    }
+
+    const rect = currentTarget.getBoundingClientRect()
+    const rootRect = root.getBoundingClientRect()
+    const nearTop = rect.height > 12 && e.clientY - rect.top < 8
+    const nearBottom = rect.height > 12 && rect.bottom - e.clientY < 8
+
+    if (nearTop) {
+      onAddRowTriggerChange?.({
+        row: rowData,
+        rowIndex,
+        insertIndex: rowIndex,
+        top: rect.top - rootRect.top,
+        placement: 'below',
+      })
+      return
+    }
+
+    if (nearBottom && !isAddRow && !isGhostRow) {
+      onAddRowTriggerChange?.({
+        row: rowData,
+        rowIndex,
+        insertIndex: rowIndex + 1,
+        top: rect.bottom - rootRect.top,
+        placement: 'above',
+      })
+      return
+    }
+
+    clearAddRowTrigger()
+  }
+
+  const handlerMouseOut = (e: MouseEvent) => {
+    const currentTarget = e.currentTarget as HTMLElement | null
+    const relatedTarget = e.relatedTarget as Node | null
+    const triggerSelector = `.${ns.e('add-row-trigger')}`
+
+    if (
+      currentTarget &&
+      relatedTarget &&
+      currentTarget.contains(relatedTarget)
+    ) {
+      return
+    }
+
+    if (
+      relatedTarget instanceof HTMLElement &&
+      relatedTarget.closest(triggerSelector)
+    ) {
+      return
+    }
+
+    clearAddRowTrigger()
+  }
+
   return (
     <Row
       {..._rowProps}
       onClick={handlerClick}
+      onMousemove={handlerMouseMove}
+      onMouseout={handlerMouseOut}
       onRowExpand={onRowExpanded}
       onMouseenter={handlerMouseEnter}
       onMouseleave={handlerMouseLeave}

@@ -21,9 +21,11 @@ export const useStyles = (
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
   }: UseStyleProps
-) => {
+  ) => {
   const addRowHeight = computed(() =>
-    props.canEditTable && props.editable ? props.rowHeight : 0
+    (props.canEditTable && props.editable) || (props.ghostTable && props.editTable)
+      ? props.rowHeight
+      : 0
   )
 
   const bodyWidth = computed(() => {

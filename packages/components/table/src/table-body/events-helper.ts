@@ -10,6 +10,7 @@ import {
   removePopper,
   toggleRowClassByCell,
 } from '../util'
+import { ghostRowSign } from '../private'
 import { TABLE_INJECTION_KEY } from '../tokens'
 
 import type { TableColumnCtx } from '../table-column/defaults'
@@ -113,6 +114,7 @@ function useEvents<T extends DefaultRow>(
     const rect = currentTarget.getBoundingClientRect()
     const nearTop = rect.height > 12 && event.clientY - rect.top < 8
     const nearBottom = rect.height > 12 && rect.bottom - event.clientY < 8
+    const isGhostRow = Boolean(row?.[ghostRowSign])
     if (nearTop) {
       emit('update-add-row-trigger', {
         row,
@@ -121,7 +123,7 @@ function useEvents<T extends DefaultRow>(
         top: rect.top - tableRect.top,
         placement: 'below',
       })
-    } else if (nearBottom) {
+    } else if (nearBottom && !isGhostRow) {
       emit('update-add-row-trigger', {
         row,
         rowIndex,

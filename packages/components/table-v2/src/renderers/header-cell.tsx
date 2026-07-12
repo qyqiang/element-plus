@@ -1,19 +1,48 @@
 import { renderSlot } from 'vue'
+import ElButton from '@element-plus/components/button'
 import { HeaderCell, SortIcon } from '../components'
 // import ColumnResizer from '../table-column-resizer'
 import { Alignment, SortOrder, oppositeOrderMap } from '../constants'
-import { placeholderSign } from '../private'
+import { placeholderSign, rowDeleteColumnKey } from '../private'
 import { componentToSlot, enforceUnit, tryCall } from '../utils'
 
 import type { FunctionalComponent, UnwrapNestedRefs } from 'vue'
 import type { UseNamespaceReturn } from '@element-plus/hooks'
 import type { TableV2HeaderRowCellRendererParams } from '../components'
 import type { UseTableReturn } from '../use-table'
-import type { TableV2Props } from '../table'
+import type { ColumnInsertParams, TableV2Props } from '../table'
+
+type ColumnTriggerState = Omit<ColumnInsertParams<any>, 'event'> & {
+  left: number
+}
 
 export type HeaderCellRendererProps = TableV2HeaderRowCellRendererParams &
-  UnwrapNestedRefs<Pick<UseTableReturn, 'onColumnSorted'>> &
-  Pick<TableV2Props, 'sortBy' | 'sortState' | 'headerCellProps'> & {
+  UnwrapNestedRefs<
+    Pick<
+      UseTableReturn,
+      'onColumnSorted' | 'updateColumnWidth' | 'visibleColumns'
+    >
+  > &
+  Pick<
+    TableV2Props,
+    | 'sortBy'
+    | 'sortState'
+    | 'headerCellProps'
+    | 'canEditTable'
+    | 'editable'
+    | 'editTable'
+    | 'ghostTable'
+    | 'showAddColumnTrigger'
+    | 'addColumnButton'
+  > & {
+    onAddColumnTriggerChange?: (payload: ColumnTriggerState | null) => void
+    onTailAddColumn?: (payload: ColumnInsertParams<any>) => void
+    onHeaderDragend?: (
+      newWidth: number,
+      oldWidth: number,
+      column: TableV2HeaderRowCellRendererParams['column'],
+      event: MouseEvent
+    ) => void
     ns: UseNamespaceReturn
   }
 
@@ -21,7 +50,23 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
   props,
   { slots }
 ) => {
-  const { column, ns, style, onColumnSorted } = props
+  const {
+    column,
+    ns,
+    style,
+    onColumnSorted,
+    updateColumnWidth,
+    visibleColumns,
+    canEditTable,
+    editable,
+    editTable,
+    ghostTable,
+    showAddColumnTrigger,
+    addColumnButton,
+    onAddColumnTriggerChange,
+    onTailAddColumn,
+    onHeaderDragend,
+  } = props
 
   const cellStyle = enforceUnit(style)
 
@@ -31,7 +76,7 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
     )
   }
 
-  const { headerCellRenderer, headerClass, sortable } = column
+  const { diagonalHeader, headerCellRenderer, headerClass, sortable } = column
 
   /**
    * render Cell children
@@ -45,10 +90,17 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
   const columnCellRenderer =
     componentToSlot<typeof cellProps>(headerCellRenderer)
 
+  const diagonalHeaderContent = diagonalHeader ? (
+    <div class={[ns.e('diagonal-header'), ns.e('header-cell-text')]}>
+      <span class={ns.e('diagonal-header-text')}>{diagonalHeader.from}</span>
+      <span class={ns.e('diagonal-header-text')}>{diagonalHeader.to}</span>
+    </div>
+  ) : null
+
   const Cell = columnCellRenderer
     ? columnCellRenderer(cellProps)
     : renderSlot(slots, 'default', cellProps, () => [
-        <HeaderCell {...cellProps} />,
+        diagonalHeaderContent ?? <HeaderCell {...cellProps} />,
       ])
 
   /**
@@ -68,6 +120,7 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
 
   const cellKls = [
     ns.e('header-cell'),
+    diagonalHeader && ns.is('diagonal-header'),
     column.required && 'required-column',
     tryCall(headerClass, props, ''),
     column.align === Alignment.CENTER && ns.is('align-center'),
@@ -75,13 +128,186 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
     sortable && ns.is('sortable'),
   ]
 
+  const clearAddColumnTrigger = () => {
+    onAddColumnTriggerChange?.(null)
+  }
+
+  const getVisibleColumnIndex = () =>
+    visibleColumns.findIndex((item) => item.key === column.key)
+
+  const emitAddColumnTrigger = (
+    insertIndex: number,
+    left: number,
+    columnIndex = getVisibleColumnIndex()
+  ) => {
+    if (columnIndex < 0) {
+      clearAddColumnTrigger()
+      return
+    }
+
+    onAddColumnTriggerChange?.({
+      column,
+      columnIndex,
+      insertIndex,
+      left,
+    })
+  }
+
+  const getColumnWidth = () => Number(column.width) || 0
+  const getMinWidth = () =>
+    Number(column.minWidth) > 0 ? Number(column.minWidth) : 88
+  const getMaxWidth = () =>
+    Number(column.maxWidth) > 0
+      ? Number(column.maxWidth)
+      : Number.POSITIVE_INFINITY
+
+  const handleResizeMouseDown = (event: MouseEvent) => {
+    if (event.button !== 0 || column.resizable === false) return
+
+    event.preventDefault()
+    event.stopPropagation()
+
+    const startX = event.clientX
+    const oldWidth = getColumnWidth()
+    const minWidth = getMinWidth()
+    const maxWidth = getMaxWidth()
+    const previousCursor = document.body.style.cursor
+    const previousUserSelect = document.body.style.userSelect
+
+    document.body.style.cursor = 'col-resize'
+    document.body.style.userSelect = 'none'
+
+    const handleMouseMove = (moveEvent: MouseEvent) => {
+      const deltaX = moveEvent.clientX - startX
+      const nextWidth = Math.min(maxWidth, Math.max(minWidth, oldWidth + deltaX))
+
+      updateColumnWidth(column, nextWidth)
+    }
+
+    const handleMouseUp = (upEvent: MouseEvent) => {
+      document.removeEventListener('mousemove', handleMouseMove)
+      document.removeEventListener('mouseup', handleMouseUp)
+      document.body.style.cursor = previousCursor
+      document.body.style.userSelect = previousUserSelect
+
+      onHeaderDragend?.(getColumnWidth(), oldWidth, column, upEvent)
+    }
+
+    document.addEventListener('mousemove', handleMouseMove)
+    document.addEventListener('mouseup', handleMouseUp)
+  }
+
+  const handleHeaderMouseMove = (event: MouseEvent) => {
+    const canUseAddColumnTrigger = ghostTable ? editTable : canEditTable && editable
+
+    if (
+      !showAddColumnTrigger ||
+      !canUseAddColumnTrigger ||
+      column.placeholderSign === placeholderSign
+    ) {
+      clearAddColumnTrigger()
+      return
+    }
+
+    const currentTarget = event.currentTarget as HTMLElement | null
+    const root = currentTarget?.closest(`.${ns.b()}`) as HTMLElement | null
+    if (!currentTarget || !root) {
+      clearAddColumnTrigger()
+      return
+    }
+
+    if (column.key === rowDeleteColumnKey) {
+      clearAddColumnTrigger()
+      return
+    }
+
+    const rect = currentTarget.getBoundingClientRect()
+    const rootRect = root.getBoundingClientRect()
+    const columnIndex = getVisibleColumnIndex()
+    if (columnIndex < 0 || rect.width <= 8) {
+      clearAddColumnTrigger()
+      return
+    }
+
+    const isLeftHalf = event.clientX < rect.left + rect.width / 2
+    const disableInsertBeforeFirstColumn =
+      columnIndex === 0 &&
+      isLeftHalf &&
+      column.allowInsertBeforeFirstColumn === false
+
+    if (disableInsertBeforeFirstColumn) {
+      clearAddColumnTrigger()
+      return
+    }
+
+    emitAddColumnTrigger(
+      isLeftHalf ? columnIndex : columnIndex + 1,
+      isLeftHalf ? rect.left - rootRect.left : rect.right - rootRect.left,
+      columnIndex
+    )
+  }
+
+  const handleHeaderMouseOut = (event: MouseEvent) => {
+    const currentTarget = event.currentTarget as HTMLElement | null
+    const relatedTarget = event.relatedTarget as Node | null
+    const triggerSelector = `.${ns.e('add-column-trigger')}`
+
+    if (
+      currentTarget &&
+      relatedTarget &&
+      currentTarget.contains(relatedTarget)
+    ) {
+      return
+    }
+
+    if (
+      relatedTarget instanceof HTMLElement &&
+      relatedTarget.closest(triggerSelector)
+    ) {
+      return
+    }
+
+    clearAddColumnTrigger()
+  }
+
+  const handleTailAddColumn = (event: MouseEvent) => {
+    event.stopPropagation()
+
+    const realColumns = visibleColumns.filter(
+      (item) =>
+        item.key !== rowDeleteColumnKey && item.placeholderSign !== placeholderSign
+    )
+    const targetColumn = realColumns[realColumns.length - 1]
+
+    if (!targetColumn) return
+
+    const columnIndex = visibleColumns.findIndex(
+      (item) => item.key === targetColumn.key
+    )
+
+    onTailAddColumn?.({
+      column: targetColumn,
+      columnIndex,
+      insertIndex: columnIndex + 1,
+      event,
+    })
+  }
+
   const cellWrapperProps = {
     ...tryCall(headerCellProps, props),
     onClick: column.sortable ? onColumnSorted : undefined,
+    onMousemove: handleHeaderMouseMove,
+    onMouseout: handleHeaderMouseOut,
     class: cellKls,
     style: cellStyle,
     ['data-key']: column.key,
   }
+
+  const shouldRenderTailAddColumnButton =
+    (ghostTable ? editTable : canEditTable && editable) &&
+    showAddColumnTrigger &&
+    addColumnButton &&
+    column.key === visibleColumns[visibleColumns.length - 1]?.key
 
   // For now we don't deliver resizable column feature since it has some UX issue.
   return (
@@ -94,6 +320,33 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
           sortOrder={sortOrder}
           sorting={sorting}
         />
+      )}
+
+      {column.resizable !== false && (
+        <div
+          class={ns.e('column-resizer')}
+          onClick={(event: MouseEvent) => event.stopPropagation()}
+          onMousedown={handleResizeMouseDown}
+        />
+      )}
+
+      {shouldRenderTailAddColumnButton && (
+        <ElButton
+          text
+          class={[ns.e('header-add-column-button'), 'icon-button']}
+          onClick={handleTailAddColumn}
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+          >
+            <path d="M2.49988 12L2.49988 0L1.49988 0L1.49988 12H2.49988Z" />
+            <path d="M5 12L5 0L4 0L4 12H5Z" />
+            <path d="M9.5 8.25V6.75H11V5.25H9.5V3.75H8V5.25H6.5V6.75H8V8.25H9.5Z" />
+          </svg>
+        </ElButton>
       )}
     </div>
   )

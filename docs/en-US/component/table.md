@@ -2,6 +2,11 @@
 title: Table
 lang: en-US
 ---
+# Table
+
+Display multiple data with similar format. You can sort, filter, compare your data in a table.
+
+
 ## Ghost table
 
 Combine editable cells, the bottom ghost row, and add-column or add-row triggers to create a spreadsheet-like table that can grow from hover actions.
@@ -11,9 +16,6 @@ Combine editable cells, the bottom ghost row, and add-column or add-row triggers
 table/ghost-table
 
 :::
-# Table
-
-Display multiple data with similar format. You can sort, filter, compare your data in a table.
 
 ## Demo
 

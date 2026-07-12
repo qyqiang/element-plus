@@ -56,10 +56,16 @@ export type HeaderClassGetter<T> = (
  * Renderer/Getter types
  */
 export type CellRenderer<T> = (params: CellRendererParams<T>) => VNode
+export type EditCellRenderer<T> = (params: CellRendererParams<T>) => VNode
 
 export type HeaderCellRenderer<T> = (
   params: HeaderCellRendererParams<T>
 ) => VNode
+
+export type DiagonalHeaderConfig = {
+  from: string
+  to: string
+}
 
 export type Column<T = any> = {
   /**
@@ -75,9 +81,12 @@ export type Column<T = any> = {
   title?: string
   hidden?: boolean
   headerClass?: HeaderClassGetter<T> | string
+  diagonalHeader?: DiagonalHeaderConfig
+  allowInsertBeforeFirstColumn?: boolean
   maxWidth?: number
   minWidth?: number
   required?: boolean
+  resizable?: boolean
   style?: CSSProperties
   sortable?: boolean
   width: number
@@ -85,6 +94,7 @@ export type Column<T = any> = {
    * Renderers
    */
   cellRenderer?: CellRenderer<T>
+  editCellRenderer?: EditCellRenderer<T>
   headerCellRenderer?: HeaderCellRenderer<T>
   /**
    * Extendable sections

@@ -1,7 +1,25 @@
-import { computed, defineComponent, provide, unref } from 'vue'
+import {
+  computed,
+  defineComponent,
+  provide,
+  ref,
+  shallowRef,
+  unref,
+  watch,
+} from 'vue'
 import { useNamespace } from '@element-plus/hooks'
 import { useTable } from './use-table'
-import { rowAddKey, rowAddSign } from './private'
+import {
+  ghostRowFieldKey,
+  ghostRowKey,
+  ghostRowSign,
+  rowAddKey,
+  rowAddSign,
+} from './private'
+import ElButton from '@element-plus/components/button'
+import ElIcon from '@element-plus/components/icon'
+import ElTooltip from '@element-plus/components/tooltip'
+import { isEmptyRequiredValue } from './ghost-table'
 import { TABLE_V2_GRID_INJECTION_KEY, TableV2InjectionKey } from './tokens'
 import { tableV2Emits, tableV2Props } from './table'
 // renderers
@@ -28,6 +46,20 @@ import type {
 } from './components'
 import type { KeyType } from './types'
 import type { RowAddHandler, RowDeleteHandler } from './row'
+import type {
+  ColumnInsertParams,
+  GhostRowAddParams,
+  RowInsertParams,
+} from './table'
+
+type AddColumnTrigger = Omit<ColumnInsertParams<any>, 'event'> & {
+  left: number
+}
+
+type AddRowTrigger = Omit<RowInsertParams<any>, 'event'> & {
+  top: number
+  placement: 'above' | 'below'
+}
 
 const COMPONENT_NAME = 'ElTableV2'
 
@@ -43,6 +75,7 @@ const TableV2 = defineComponent({
       fixedColumnsOnLeft,
       fixedColumnsOnRight,
       mainColumns,
+      visibleColumns,
       mainTableHeight,
       fixedTableHeight,
       leftTableWidth,
@@ -73,6 +106,7 @@ const TableV2 = defineComponent({
       scrollToRow,
 
       getRowHeight,
+      updateColumnWidth,
       onColumnSorted,
       onRowHeightChange,
       onRowHovered,
@@ -82,6 +116,136 @@ const TableV2 = defineComponent({
       onVerticalScroll,
       scrollPos,
     } = useTable(props)
+
+    const addColumnTrigger = shallowRef<AddColumnTrigger | null>(null)
+    const addRowTrigger = ref<AddRowTrigger | null>(null)
+    const createGhostRowData = () => ({
+      [props.rowKey]: 'ghost-row',
+      [ghostRowKey]: 'ghost-row',
+      [ghostRowFieldKey]: props.rowKey,
+      [ghostRowSign]: true,
+    })
+    const ghostRowDraft = ref(createGhostRowData())
+    const isLegacyEditMode = computed(
+      () => props.canEditTable && props.editable
+    )
+    const isGhostEditMode = computed(() => props.ghostTable && props.editTable)
+
+    const clearAddColumnTrigger = () => {
+      addColumnTrigger.value = null
+    }
+
+    const updateAddColumnTrigger = (payload: AddColumnTrigger | null) => {
+      addColumnTrigger.value = payload
+    }
+
+    const clearAddRowTrigger = () => {
+      addRowTrigger.value = null
+    }
+
+    const updateAddRowTrigger = (payload: AddRowTrigger | null) => {
+      addRowTrigger.value = payload
+    }
+
+    const handleAddColumnClick = (event: MouseEvent) => {
+      const trigger = addColumnTrigger.value
+      if (!trigger) return
+      emit('add-column', {
+        column: trigger.column,
+        columnIndex: trigger.columnIndex,
+        insertIndex: trigger.insertIndex,
+        event,
+      })
+      clearAddColumnTrigger()
+    }
+
+    const handleAddColumnTailClick = (payload: ColumnInsertParams<any>) => {
+      emit('add-column', payload)
+      clearAddColumnTrigger()
+    }
+
+    const handleAddRowClick = (event: MouseEvent) => {
+      const trigger = addRowTrigger.value
+      if (!trigger) return
+
+      emit('add-row', {
+        row: trigger.row,
+        rowIndex: trigger.rowIndex,
+        insertIndex: trigger.insertIndex,
+        event,
+      })
+      clearAddRowTrigger()
+    }
+
+    const handleTableMouseLeave = () => {
+      clearAddColumnTrigger()
+      clearAddRowTrigger()
+    }
+
+    const validateRequiredColumns = () => {
+      const requiredColumns = props.columns.filter(
+        (column) => column.required && column.dataKey != null
+      )
+
+      if (!requiredColumns.length) return true
+
+      return props.data.every((row) =>
+        requiredColumns.every(
+          (column) =>
+            !isEmptyRequiredValue(row?.[column.dataKey as keyof typeof row])
+        )
+      )
+    }
+
+    const handleTableScroll = (params: Parameters<typeof onScroll>[0]) => {
+      clearAddColumnTrigger()
+      clearAddRowTrigger()
+      onScroll(params)
+    }
+
+    const handleVerticalTableScroll = (
+      params: Parameters<typeof onVerticalScroll>[0]
+    ) => {
+      clearAddColumnTrigger()
+      clearAddRowTrigger()
+      onVerticalScroll(params)
+    }
+
+    const effectiveShowAddColumnTrigger = computed(
+      () =>
+        (isLegacyEditMode.value || isGhostEditMode.value) &&
+        props.showAddColumnTrigger
+    )
+
+    const effectiveShowAddRowTrigger = computed(
+      () =>
+        (isLegacyEditMode.value || isGhostEditMode.value) &&
+        props.showAddRowTrigger
+    )
+
+    const addColumnTriggerStyle = computed<CSSProperties>(() => {
+      if (!addColumnTrigger.value) return {}
+
+      return {
+        left: `${addColumnTrigger.value.left}px`,
+      }
+    })
+
+    const addRowTriggerStyle = computed<CSSProperties>(() => {
+      if (!addRowTrigger.value) return {}
+
+      return {
+        top: `${addRowTrigger.value.top}px`,
+      }
+    })
+
+    watch(effectiveShowAddColumnTrigger, (enabled: boolean) => {
+      if (!enabled) clearAddColumnTrigger()
+    })
+
+    watch(effectiveShowAddRowTrigger, (enabled: boolean) => {
+      if (!enabled) clearAddRowTrigger()
+    })
 
     expose({
       /**
@@ -105,6 +269,7 @@ const TableV2 = defineComponent({
        * @params @optional strategy {ScrollStrategy} use what strategy to scroll to
        */
       scrollToRow,
+      validateRequiredColumns,
     })
 
     provide(TableV2InjectionKey, {
@@ -122,6 +287,17 @@ const TableV2 = defineComponent({
     }
     const onRowAdd: RowAddHandler = (params) => {
       emit('row-add', params)
+    }
+    const onAddGhostRow = (params: GhostRowAddParams<any>) => {
+      emit('add-ghost-row', params)
+    }
+    const onHeaderDragend = (
+      newWidth: number,
+      oldWidth: number,
+      column: TableV2HeaderRowCellRendererParams['column'],
+      event: MouseEvent
+    ) => {
+      emit('header-dragend', newWidth, oldWidth, column, event)
     }
 
     return () => {
@@ -173,7 +349,7 @@ const TableV2 = defineComponent({
         width,
         getRowHeight,
         onRowsRendered,
-        onScroll,
+        onScroll: handleTableScroll,
       }
 
       const leftColumnsWidth = unref(leftTableWidth)
@@ -199,7 +375,7 @@ const TableV2 = defineComponent({
         useIsScrolling,
         width: leftColumnsWidth,
         getRowHeight,
-        onScroll: onVerticalScroll,
+        onScroll: handleVerticalTableScroll,
       }
 
       const rightColumnsWidth = unref(rightTableWidth)
@@ -227,7 +403,7 @@ const TableV2 = defineComponent({
         )}: ${vScrollbarSize}px` as unknown as CSSProperties,
         useIsScrolling,
         getRowHeight,
-        onScroll: onVerticalScroll,
+        onScroll: handleVerticalTableScroll,
       }
       const _columnsStyles = unref(columnsStyles)
 
@@ -247,15 +423,24 @@ const TableV2 = defineComponent({
         onRowHovered,
         onRowExpanded,
         onRowHeightChange,
+        onAddRowTriggerChange: updateAddRowTrigger,
+        canEditTable: props.canEditTable,
+        editable: props.editable,
+        editTable: props.editTable,
+        ghostTable: props.ghostTable,
+        showAddRowTrigger: effectiveShowAddRowTrigger.value,
       }
 
       const tableCellProps = {
         canEditTable: props.canEditTable,
         cellProps,
         editable: props.editable,
+        editTable: props.editTable,
         expandColumnKey,
+        ghostTable: props.ghostTable,
         indentSize,
         iconSize,
+        onAddGhostRow,
         onRowAdd,
         onRowDelete,
         rowKey,
@@ -272,11 +457,21 @@ const TableV2 = defineComponent({
 
       const tableHeaderCellProps = {
         ns,
-
         sortBy,
         sortState,
         headerCellProps,
+        canEditTable: props.canEditTable,
+        editable: props.editable,
+        editTable: props.editTable,
+        ghostTable: props.ghostTable,
+        showAddColumnTrigger: effectiveShowAddColumnTrigger.value,
+        addColumnButton: props.addColumnButton,
+        onHeaderDragend,
+        onAddColumnTriggerChange: updateAddColumnTrigger,
+        onTailAddColumn: handleAddColumnTailClick,
         onColumnSorted,
+        updateColumnWidth,
+        visibleColumns: unref(visibleColumns),
       }
 
       const tableSlots = {
@@ -333,6 +528,8 @@ const TableV2 = defineComponent({
         ns.b(),
         ns.e('root'),
         ns.is('dynamic', unref(isDynamic)),
+        effectiveShowAddColumnTrigger.value && ns.m('with-add-column-trigger'),
+        effectiveShowAddRowTrigger.value && ns.m('with-add-row-trigger'),
       ]
 
       const footerProps = {
@@ -341,13 +538,22 @@ const TableV2 = defineComponent({
         total: props.total,
         updateTime: props.updateTime,
       }
-      const showAddRow = props.canEditTable && props.editable
+      const showAddRow = isLegacyEditMode.value && !isGhostEditMode.value
+      const showGhostRow = isGhostEditMode.value
       const addRowData = {
         [rowKey]: rowAddKey,
         [rowAddSign]: true,
       }
+      const ghostRowData = unref(ghostRowDraft)
       const addRowHeaderProps = {
         fixedHeaderData: [addRowData],
+        headerData: _data,
+        headerHeight: [] as number[],
+        rowHeight,
+        height: unref(addRowHeight),
+      }
+      const ghostRowHeaderProps = {
+        fixedHeaderData: [ghostRowData],
         headerData: _data,
         headerHeight: [] as number[],
         rowHeight,
@@ -358,7 +564,11 @@ const TableV2 = defineComponent({
       }
 
       return (
-        <div class={rootKls} style={unref(rootStyle)}>
+        <div
+          class={rootKls}
+          style={unref(rootStyle)}
+          onMouseleave={handleTableMouseLeave}
+        >
           <MainTable {...mainTableProps}>{tableSlots}</MainTable>
           <LeftTable {...leftTableProps}>{tableSlots}</LeftTable>
           <RightTable {...rightTableProps}>{tableSlots}</RightTable>
@@ -412,6 +622,56 @@ const TableV2 = defineComponent({
               )}
             </>
           )}
+          {showGhostRow && (
+            <>
+              <div class={ns.e('add-row-main')} style={addRowWrapperStyle}>
+                <Header
+                  {...ghostRowHeaderProps}
+                  {...tableHeaderProps}
+                  columns={unref(mainColumns)}
+                  class={ns.e('add-row-main-inner')}
+                  rowWidth={width}
+                  width={width}
+                >
+                  {{
+                    fixed: tableSlots.row,
+                  }}
+                </Header>
+              </div>
+              {leftColumnsWidth > 0 && (
+                <div class={ns.e('add-row-left')} style={addRowWrapperStyle}>
+                  <Header
+                    {...ghostRowHeaderProps}
+                    {...tableHeaderProps}
+                    columns={unref(fixedColumnsOnLeft)}
+                    class={ns.e('add-row-left-inner')}
+                    rowWidth={leftColumnsWidth}
+                    width={leftColumnsWidth}
+                  >
+                    {{
+                      fixed: tableSlots.row,
+                    }}
+                  </Header>
+                </div>
+              )}
+              {rightColumnsWidth > 0 && (
+                <div class={ns.e('add-row-right')} style={addRowWrapperStyle}>
+                  <Header
+                    {...ghostRowHeaderProps}
+                    {...tableHeaderProps}
+                    columns={unref(fixedColumnsOnRight)}
+                    class={ns.e('add-row-right-inner')}
+                    rowWidth={rightColumnsWidth}
+                    width={rightColumnsWidth}
+                  >
+                    {{
+                      fixed: tableSlots.row,
+                    }}
+                  </Header>
+                </div>
+              )}
+            </>
+          )}
           {slots.footer ? (
             <Footer {...footerProps}>{{ default: slots.footer }}</Footer>
           ) : props.isFooterDefault ? (
@@ -428,6 +688,69 @@ const TableV2 = defineComponent({
             <Overlay class={ns.e('overlay')}>
               {{ default: slots.overlay }}
             </Overlay>
+          )}
+          {effectiveShowAddColumnTrigger.value && addColumnTrigger.value && (
+            <div
+              class={ns.e('add-column-trigger')}
+              style={unref(addColumnTriggerStyle)}
+            >
+              <ElTooltip content={'Add Column'} placement={'top'}>
+                <ElButton
+                  class={[ns.e('add-column-trigger-button'), 'icon-button']}
+                  onClick={handleAddColumnClick}
+                >
+                  <ElIcon color={'#2A3F4D'} size={'12px'}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                    >
+                      <g clip-path="url(#clip0_35669_24470)">
+                        <path d="M12 5.25H6.75V0H5.25V5.25H0V6.75H5.25V12H6.75V6.75H12V5.25Z" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_35669_24470">
+                          <rect width="12" height="12" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </ElIcon>
+                </ElButton>
+              </ElTooltip>
+            </div>
+          )}
+          {effectiveShowAddRowTrigger.value && addRowTrigger.value && (
+            <div
+              class={ns.e('add-row-trigger')}
+              style={unref(addRowTriggerStyle)}
+            >
+              <ElTooltip content={'Add Row'} placement={'top'}>
+                <ElButton
+                  class={[ns.e('add-row-trigger-button'), 'icon-button']}
+                  aria-label={'Add Row'}
+                  onClick={handleAddRowClick}
+                >
+                  <ElIcon color={'#2A3F4D'} size={'12px'}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="12"
+                      height="12"
+                      viewBox="0 0 12 12"
+                    >
+                      <g clip-path="url(#clip0_35669_24470)">
+                        <path d="M12 5.25H6.75V0H5.25V5.25H0V6.75H5.25V12H6.75V6.75H12V5.25Z" />
+                      </g>
+                      <defs>
+                        <clipPath id="clip0_35669_24470">
+                          <rect width="12" height="12" fill="white" />
+                        </clipPath>
+                      </defs>
+                    </svg>
+                  </ElIcon>
+                </ElButton>
+              </ElTooltip>
+            </div>
           )}
         </div>
       )
@@ -459,4 +782,8 @@ export type TableV2Instance = InstanceType<typeof TableV2> & {
    * @params strategy {ScrollStrategy} use what strategy to scroll to
    */
   scrollToRow(row: number, strategy?: ScrollStrategy): void
+  /**
+   * @description validates current table data against required columns
+   */
+  validateRequiredColumns: () => boolean
 }

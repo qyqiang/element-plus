@@ -5,7 +5,18 @@ import { get, set } from 'lodash-unified'
 import { isFunction, isObject } from '@element-plus/utils'
 import { ExpandIcon, TableCell } from '../components'
 import { Alignment } from '../constants'
-import { placeholderSign, rowAddSign, rowDeleteColumnKey } from '../private'
+import {
+  ghostRowKey,
+  ghostRowSign,
+  placeholderSign,
+  rowAddSign,
+  rowDeleteColumnKey,
+} from '../private'
+import {
+  applyRequiredInputState,
+  isEmptyRequiredValue,
+  isGhostTableRow,
+} from '../ghost-table'
 import { componentToSlot, enforceUnit, tryCall } from '../utils'
 
 import type { FunctionalComponent, UnwrapNestedRefs, VNode } from 'vue'
@@ -13,7 +24,7 @@ import type { TableV2RowCellRenderParam } from '../components'
 import type { UseNamespaceReturn } from '@element-plus/hooks'
 import type { RowAddHandler, RowDeleteHandler } from '../row'
 import type { UseTableReturn } from '../use-table'
-import type { TableV2Props } from '../table'
+import type { GhostRowAddParams, TableV2Props } from '../table'
 
 type CellRendererProps = TableV2RowCellRenderParam &
   Pick<
@@ -21,13 +32,16 @@ type CellRendererProps = TableV2RowCellRenderParam &
     | 'canEditTable'
     | 'cellProps'
     | 'editable'
+    | 'editTable'
     | 'expandColumnKey'
+    | 'ghostTable'
     | 'indentSize'
     | 'iconSize'
     | 'rowKey'
   > &
   UnwrapNestedRefs<Pick<UseTableReturn, 'expandedRowKeys'>> & {
     onRowAdd?: RowAddHandler
+    onAddGhostRow?: (params: GhostRowAddParams<any>) => void
     onRowDelete?: RowDeleteHandler
     ns: UseNamespaceReturn
   }
@@ -51,9 +65,12 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     canEditTable,
     cellProps: _cellProps,
     editable,
+    editTable,
     expandColumnKey,
+    ghostTable,
     indentSize,
     iconSize,
+    onAddGhostRow,
     onRowAdd,
     onRowDelete,
     rowKey,
@@ -65,7 +82,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
   if (column.placeholderSign === placeholderSign) {
     return <div class={ns.em('row-cell', 'placeholder')} style={cellStyle} />
   }
-  const { cellRenderer, dataKey, dataGetter } = column
+  const { cellRenderer, dataKey, dataGetter, editCellRenderer } = column
 
   const getCellData = () =>
     isFunction(dataGetter)
@@ -103,14 +120,41 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
 
   const extraCellProps = tryCall(_cellProps, cellProps)
   const isAddRow = Boolean(rowData[rowAddSign])
+  const isGhostRow = isGhostTableRow(rowData)
   const isRowDeleteColumn = column.key === rowDeleteColumnKey
   const columnCellRenderer = componentToSlot<typeof cellProps>(cellRenderer)
+  const editColumnCellRenderer = componentToSlot<typeof cellProps>(editCellRenderer)
   const shouldRenderEditor = canEditTable ? editable : true
+  const actualColumns = columns.filter((item) => item.placeholderSign !== placeholderSign)
+  const actualColumnCount = actualColumns.length
+  const actualColumnIndex = actualColumns.findIndex((item) => item.key === column.key)
+  const shouldRenderGhostAddButton =
+    ghostTable &&
+    editTable &&
+    isGhostRow &&
+    actualColumnIndex > -1 &&
+    (actualColumnCount === 1
+      ? actualColumnIndex === 0
+      : actualColumnIndex === actualColumnCount - 1)
+  const shouldRenderGhostEditCell =
+    ghostTable &&
+    editTable &&
+    Boolean(editColumnCellRenderer) &&
+    !shouldRenderGhostAddButton
+  const requiredColumns = actualColumns.filter(
+    (item) =>
+      item.required &&
+      item.dataKey != null &&
+      item.key !== rowDeleteColumnKey
+  )
+  const isGhostRowAddDisabled = requiredColumns.some((item) =>
+    isEmptyRequiredValue(get(rowData, item.dataKey ?? ''))
+  )
   const Cell = isRowDeleteColumn ? (
     isAddRow ? (
       <ElButton
-        type="text"
-        class="icon-button"
+        text
+        class={[ns.e('row-add-button'), 'icon-button']}
         onClick={(event: MouseEvent) => {
           event.stopPropagation()
           onRowAdd?.({
@@ -158,6 +202,38 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
         </ElIcon>
       </ElButton>
     )
+  ) : shouldRenderGhostAddButton ? (
+    <ElButton
+      text
+      class="icon-button"
+      disabled={isGhostRowAddDisabled}
+      onClick={(event: MouseEvent) => {
+        event.stopPropagation()
+        if (isGhostRowAddDisabled) return
+        onAddGhostRow?.({
+          event,
+          row: rowData,
+          rowIndex,
+          rowKey: rowData[ghostRowKey] ?? rowData[rowKey],
+        })
+      }}
+    >
+      <ElIcon size={12}>
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="12"
+          height="12"
+          viewBox="0 0 12 12"
+        >
+          <path d="M3.82026 11.0062C3.64674 11.0063 3.4749 10.9711 3.3146 10.9026C3.1543 10.8341 3.00868 10.7337 2.88608 10.6072L0 7.6341L1.10129 6.49954L3.82026 9.30198L10.8987 2.00623L12 3.14079L4.75443 10.6072C4.63183 10.7337 4.48621 10.8341 4.32591 10.9026C4.16561 10.9711 3.99378 11.0063 3.82026 11.0062Z" />
+        </svg>
+      </ElIcon>
+    </ElButton>
+  ) : shouldRenderGhostEditCell ? (
+    (() => {
+      const rendered = editColumnCellRenderer!(cellProps)
+      return applyRequiredInputState(rendered, column, rowData)
+    })()
   ) : shouldRenderEditor && columnCellRenderer ? (
     columnCellRenderer(cellProps)
   ) : (
@@ -168,6 +244,9 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
 
   const kls = [
     ns.e('row-cell'),
+    column.diagonalHeader && 'is-diagonal-header-column',
+    ghostTable && 'is-full-width',
+    isGhostRow && ns.is('ghost-row'),
     column.required && 'required-column',
     column.class,
     column.align === Alignment.CENTER && ns.is('align-center'),

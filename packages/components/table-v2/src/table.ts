@@ -42,6 +42,27 @@ export type ColumnSortParams<T> = {
   order: SortOrder
 }
 
+export type ColumnInsertParams<T> = {
+  column: Column<T>
+  columnIndex: number
+  insertIndex: number
+  event: MouseEvent
+}
+
+export type RowInsertParams<T> = {
+  row: T
+  rowIndex: number
+  insertIndex: number
+  event: MouseEvent
+}
+
+export type GhostRowAddParams<T> = {
+  row: T
+  rowIndex: number
+  rowKey: KeyType
+  event: MouseEvent
+}
+
 /**
  * Renderer/Getter types
  */
@@ -77,14 +98,26 @@ export type RowClassNameGetter<T> = (
  * Handler types
  */
 export type ColumnSortHandler<T> = (params: ColumnSortParams<T>) => void
-export type ColumnResizeHandler<T> = (column: Column<T>, width: number) => void
 export type ExpandedRowsChangeHandler = (expandedRowKeys: KeyType[]) => void
 
 export const tableV2Emits = {
   'update:expandedRowKeys': (expandedRowKeys: KeyType[]) =>
     Array.isArray(expandedRowKeys),
+  'header-dragend': (
+    newWidth: number,
+    oldWidth: number,
+    column: Column<any>,
+    event: MouseEvent
+  ) =>
+    Number.isFinite(newWidth) &&
+    Number.isFinite(oldWidth) &&
+    Boolean(column) &&
+    event instanceof MouseEvent,
   'row-delete': (params: RowDeleteParams) => Boolean(params),
   'row-add': (params: RowAddParams) => Boolean(params),
+  'add-column': (params: ColumnInsertParams<any>) => Boolean(params),
+  'add-row': (params: RowInsertParams<any>) => Boolean(params),
+  'add-ghost-row': (params: GhostRowAddParams<any>) => Boolean(params),
 }
 
 export const tableV2Props = buildProps({
@@ -127,6 +160,14 @@ export const tableV2Props = buildProps({
     default: true,
   },
   canEditTable: Boolean,
+  ghostTable: Boolean,
+  editTable: Boolean,
+  showAddColumnTrigger: Boolean,
+  addColumnButton: {
+    type: Boolean,
+    default: true,
+  },
+  showAddRowTrigger: Boolean,
   total: {
     type: Number,
     default: 0,

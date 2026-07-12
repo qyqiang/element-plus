@@ -5004,6 +5004,62 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('does not show add-row trigger below the ghost row', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData" border ghost-table edit-table show-add-row-trigger>
+          <el-table-column prop="name" label="Name">
+            <template #edit-cell="{ row }">
+              <span>{{ row.name }}</span>
+            </template>
+          </el-table-column>
+          <el-table-column prop="director" label="Director" />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData().slice(0, 1),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const ghostRowWrapper = wrapper.find('tbody tr.is-ghost-row')
+    const ghostRow = ghostRowWrapper.element as HTMLElement
+    const rect = {
+      left: 0,
+      right: 480,
+      top: 44,
+      bottom: 88,
+      width: 480,
+      height: 44,
+      x: 0,
+      y: 44,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi
+      .spyOn(ghostRow, 'getBoundingClientRect')
+      .mockReturnValue(rect)
+
+    await ghostRowWrapper.trigger('mousemove', {
+      clientX: 120,
+      clientY: 84,
+    })
+    await doubleWait()
+
+    expect(wrapper.find('.el-table__add-row-trigger-button').exists()).toBe(
+      false
+    )
+
+    rectSpy.mockRestore()
+    wrapper.unmount()
+  })
+
   it('does not show add-row trigger when edit-table is false', async () => {
     const wrapper = mount({
       components: {

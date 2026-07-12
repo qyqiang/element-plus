@@ -97,7 +97,7 @@ select-v2/grouping
 
 ## Clearable selector
 
-We can clear all the selected options at once, also applicable for single select.
+We can clear all the selected options at once, also applicable for single select. In single-select mode, when `clearable` is `false` and there is exactly one enabled option, Select-V2 will automatically use that option as its initial value.
 
 :::demo
 
@@ -338,12 +338,13 @@ select-v2/custom-width
 
 | Name             | Description                                                                                     | Subtags                                                                                                        |
 | ---------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- |
-| default          | Option renderer                                                                                 | —                                                                                                              |
+| default          | Option renderer                                                                                 | ^[object]`{ item: Option, index: number, disabled: boolean }`                                                 |
 | header ^(2.5.2)  | content at the top of the dropdown                                                              | —                                                                                                              |
 | footer ^(2.5.2)  | content at the bottom of the dropdown                                                           | —                                                                                                              |
 | empty            | content when options is empty                                                                   | —                                                                                                              |
 | prefix           | prefix content of input                                                                         | —                                                                                                              |
 | suffix           | suffix content of input                                                                         | —                                                                                                              |
+| optionIcon       | custom content displayed before the option label                                                | —                                                                                                              |
 | tag ^(2.5.0)     | content as Select tag, subTags `data`, `selectDisabled` and `deleteTag` introduced in ^(2.10.3) | ^[object]`{ data: Option[], selectDisabled: boolean, deleteTag: (event: MouseEvent, option: Option) => void }` |
 | loading ^(2.5.2) | content as Select loading                                                                       | —                                                                                                              |
 | label ^(2.7.4)   | content as Select label. `index` introduced in ^(2.11.2)                                        | ^[object]`{ index: number, label: string \| any, value: string \| any }`                                       |

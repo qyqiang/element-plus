@@ -3,299 +3,57 @@ title: Virtualized Table
 lang: en-US
 ---
 
-# Virtualized Table ^(beta)
+# Virtualized Table
 
 Along with evolutionary web development, table component has always been the most popular component in our web apps especially for dashboards, data analysis. For Table V1, with even just 1000 records of data, it can be very annoying when using it, because of the poor performance.
 
 With Virtualized Table, you can render massive chunks of data in a blink of an eye.
 
-:::tip
+## Editable Table
 
-This component is **still under testing**, use at your own risk. If you find any bugs or issues, please report them at GitHub for us to fix. Also there were some APIs which are not mentioned in this documentation, some of them were not
-fully developed yet, which is why they are not mentioned here.
-
-**Even though** Virtualized Table is efficient, when the data load is too large, your **network** and **memory size** can become the bottleneck of your app. So keep in mind that Virtualized Table is never the ultimate solution for everything, consider paginating your data, adding filters etc.
-:::
-
-## Edit Table
+Use `can-edit-table` together with `editable` to reuse each column's `cellRenderer` in the legacy editable mode. This mode appends the built-in delete column and bottom add row, and emits `row-add` / `row-delete` for your own data updates.
 
 :::demo
 
 table-v2/editable-table
 :::
 
-## Basic usage
+## Ghost Table
 
-Let's demonstrate the performance of the Virtualized Table by rendering a basic example with 10 columns and 1000 rows.
+:::demo Use `ghost-table`, `edit-table`, and column `editCellRenderer` together with `show-add-column-trigger` and `show-add-row-trigger`. This example now carries the richer editable-table feel as well, mixing checkbox, input, and select editors in the same grid while still keeping the bottom ghost row editable through the same rendering path. In multi-column ghost rows, the leading cells stay editable while the trailing cell renders the built-in add action. Columns marked with `required` automatically drive empty editable `ElInput` renderers into the built-in error state once the ghost row starts receiving values, and the table instance exposes `validateRequiredColumns()` so submit handlers can block incomplete rows. You can also listen to `add-ghost-row` to turn the draft row into real table data.
+
+table-v2/ghost-table
+:::
+
+## Add column and row trigger
+
+Hover near a header or row divider to show an add button, then insert a new column or row at that position.
+
+:::demo Use `show-add-column-trigger` and `show-add-row-trigger` together with `can-edit-table` and `editable`. The `add-column` and `add-row` events return the insertion position so you can update your own column and row arrays.
+
+table-v2/add-column-trigger
+
+:::
+
+
+
+## Resizable columns
+
+Drag the header border to resize a column. After the drag ends, the table emits the `header-dragend` event with the new width, old width, and column config.
 
 :::demo
 
-table-v2/basic
+table-v2/resizable-columns
 
 :::
 
-## Auto resizer
+## Diagonal header
 
-When you do not want to manually pass the `width` and `height` properties to the table, you can wrap the table component with the AutoResizer.
-This will automatically update the width and height for you.
-
-Resize your browser to see how it works.
-
-:::tip
-
-Make sure the parent node of the `AutoResizer` **HAS A FIXED HEIGHT**, since its default height value is set to 100%.
-Alternatively, you can define it by passing the `style` attribute to `AutoResizer`.
-
-:::
+Use `diagonalHeader` on a column when the first header cell needs both `From` and `To` labels in the same area.
 
 :::demo
 
-table-v2/auto-resizer
-
-:::
-
-## Customize Cell Renderer{#customize-cell-renderer}
-
-Of course, you can render the table cell according to your needs. Here's a simple example of how to customize your cell.
-
-:::demo
-
-table-v2/cell-templating
-
-:::
-
-## Table with selections
-
-Using customized cell renderer to allow selection for your table.
-
-:::demo
-
-table-v2/selection
-
-:::
-
-## Inline editing
-
-Just as we demonstrated with selections above, you can use the same method to enable inline editing.
-
-:::demo
-
-table-v2/inline-editing
-
-:::
-
-## Table with status
-
-You can highlight your table content to distinguish between "success, information, warning, danger" and other states.
-
-To customize the appearance of rows, use the `row-class-name` attribute. For example, every 10th row is highlighted using the `bg-blue-200` class, and every 5th row with the `bg-red-100` class.
-
-:::demo
-
-table-v2/row-class
-
-:::
-
-## Table with sticky rows
-
-You can make some rows stick to the top of the table, and that can be very easily achieved by using the `fixed-data` attribute.
-
-You can dynamically set the sticky row based on scroll events, as shown in this example.
-
-:::demo
-
-table-v2/sticky-rows
-
-:::
-
-## Table with fixed columns
-
-If you want to have columns stick to the left or right for some reason, you can achieve this by adding special attributes to the table.
-
-You can set the column's attribute `fixed` to `true` (representing `FixedDir.LEFT`) or `FixedDir.LEFT` or `FixedDir.RIGHT`
-
-:::demo
-
-table-v2/fixed-columns
-
-:::
-
-## Grouping header
-
-By customizing your header renderer, you can group your header as shown in this example.
-
-:::tip
-
-In this case we used `JSX` feature which is not supported in the playground. You may try them out in your local environment or on online IDEs such as `codesandbox`.
-
-It is recommended that you write your table component in JSX, since it contains VNode manipulations.
-
-:::
-
-:::demo
-
-table-v2/grouping-header
-
-:::
-
-## Filter
-
-Virtualized Table provides custom header renderers for creating customized headers. We can then utilize these to render filters.
-
-:::demo
-
-table-v2/filter
-
-:::
-
-## Sortable
-
-You can sort the table with sort state.
-
-:::demo
-
-table-v2/sort
-
-:::
-
-## Controlled Sort
-
-You can define multiple sortable columns as needed. Keep in mind that if you define multiple sortable columns, the UI
-may appear confusing to your users, as it becomes unclear which column is currently being sorted.
-
-:::demo
-
-table-v2/controlled-sort
-
-:::
-
-## Cross hovering
-
-When dealing with a large list, it's easy to lose track of the current row and column you are visiting. In such cases, using this feature can be very helpful.
-
-:::demo
-
-table-v2/cross-hovering
-
-:::
-
-## Colspan
-
-The virtualized table doesn't use the built-in `table` element, so `colspan` and `rowspan` behave a bit differently compared to TableV1. However, with a customized row renderer, these features can still be implemented. In this section, we'll demonstrate how to achieve this.
-
-:::demo
-
-table-v2/colspan
-
-:::
-
-## Rowspan
-
-Since we have covered Colspan, it's worth noting that we also have row span. It's a little bit different from colspan but the idea
-is basically the same.
-
-:::demo
-
-table-v2/rowspan
-
-:::
-
-## Rowspan and Colspan together
-
-We can combine rowspan and colspan together to meet your business goal!
-
-:::demo
-
-table-v2/spans
-
-:::
-
-## Tree data
-
-Virtual Table can also render data in a tree-like structure. By clicking the arrow icon, you can expand or collapse the tree nodes.
-
-:::demo
-
-table-v2/tree-data
-
-:::
-
-## Dynamic height rows
-
-Virtual Table is capable of rendering rows with dynamic heights. If you're working with data and are uncertain about the content size,
-this feature is ideal for rendering rows that adjust to the content's height. To enable this, pass down the `estimated-row-height` attribute.
-The closer the estimated height matches the actual content, the smoother the rendering experience.
-
-:::tip
-
-Each row's height is dynamically measured during rendering the rows. As a result, if you're trying to display a large amount of data,
-the UI **might be** bouncing.
-
-:::
-
-:::demo
-
-table-v2/dynamic-height
-
-:::
-
-## Detail view
-
-Using dynamic height rendering, you can also display a detailed view within the table.
-
-:::demo
-
-table-v2/detailed-view
-
-:::
-
-## Customized Footer
-
-Render a customized footer when you want to show a concluding message or information.
-
-:::demo
-
-table-v2/footer
-
-:::
-
-## Customized Empty Renderer
-
-Render a customized empty element.
-
-:::demo
-
-table-v2/empty
-
-:::
-
-## Overlay
-
-Render an overlay on top of the table when you want to show a loading indicator or something else.
-
-:::demo
-
-table-v2/overlay
-
-:::
-
-## Manual scrolling
-
-Use the methods provided by Table V2 to scroll manually/programmatically with desired offset/rows.
-
-:::tip
-
-The second parameter for `scrollToRow` is the scrolling strategy which by default is `auto`, it calculates the position
-to scroll by itself. If you wish to scroll to a specific position, you can define the strategy yourself.
-The available options are `"auto" | "center" | "end" | "start" | "smart"`
-
-The difference between `smart` and `auto` is that `auto` is a subset of `smart` scroll strategy.
-
-:::
-
-:::demo
-
-table-v2/manual-scroll
+table-v2/diagonal-header
 
 :::
 
@@ -307,24 +65,31 @@ table-v2/manual-scroll
 | ------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ | --------- |
 | cache                     | Number of rows rendered in advance to boost the performance                                                                | `number`                                               | 2         |
 | estimated-row-height      | The estimated row height for rendering dynamic height rows                                                                 | `number`                                               | —         |
-| header-class              | Customized class name passed to header wrapper                                                                             | `string` / Function<HeaderClassGetter>     | —         |
-| header-props              | Customized props name passed to header component                                                                           | `object` / Function<HeaderPropsGetter>     | —         |
-| header-cell-props         | Customized props name passed to header cell component                                                                      | `object` / Function<HeaderCellPropsGetter> | —         |
+| header-class              | Customized class name passed to header wrapper                                                                             | `string` / `Function<HeaderClassGetter>`     | —         |
+| header-props              | Customized props name passed to header component                                                                           | `object` / `Function<HeaderPropsGetter>`     | —         |
+| header-cell-props         | Customized props name passed to header cell component                                                                      | `object` / `Function<HeaderCellPropsGetter>` | —         |
 | header-height             | The height of the header is set by `height`. If given an array, it renders header rows equal to its length                 | `number`/ `number[]`                                   | 44        |
 | footer-height             | The height of the footer element, when provided, will be part to the calculation of the table's height.                    | `number`                                               | 0         |
-| is-footer-default         | Whether to render the built-in default footer when no `footer` slot is provided                                            | `boolean`                                              | false     |
+| is-footer-default         | Whether to render the built-in default footer when no `footer` slot is provided                                            | `boolean`                                              | true      |
+| can-edit-table           | Whether to enable the legacy editable table mode that reuses `cellRenderer`, appends a delete column, and shows the legacy add row | `boolean`                                         | false     |
+| editable                 | Whether the legacy editable table mode should render its editable content                                                   | `boolean`                                              | true      |
+| ghost-table              | Whether to enable ghost table rendering with a bottom draft row                                                             | `boolean`                                              | false     |
+| edit-table               | Whether to render column `editCellRenderer` output for table rows and the ghost row when `ghost-table` is enabled          | `boolean`                                              | false     |
+| show-add-column-trigger   | Whether to show an add-column trigger when hovering a header divider                                                       | `boolean`                                              | false     |
+| add-column-button         | Whether to show the add-column button in the last header cell when `show-add-column-trigger` is enabled                    | `boolean`                                              | true      |
+| show-add-row-trigger      | Whether to show an add-row trigger when hovering a row divider                                                             | `boolean`                                              | false     |
 | total                     | Total value displayed by the built-in default footer                                                                       | `number`                                               | 0         |
 | update-time               | Update time displayed by the built-in default footer                                                                       | `string`                                               | ''        |
-| row-class                 | Customized class name passed to row wrapper                                                                                | `string` / Function<RowClassGetter>        | —         |
+| row-class                 | Customized class name passed to row wrapper                                                                                | `string` / `Function<RowClassGetter>`        | —         |
 | row-key                   | The key of each row, if not provided, will be the index of the row                                                         | `string` / `Symbol` / `number`                         | id        |
-| row-props                 | Customized props name passed to row component                                                                              | `object` / Function<RowPropsGetter>        | —         |
+| row-props                 | Customized props name passed to row component                                                                              | `object` / `Function<RowPropsGetter>`        | —         |
 | row-height                | The height of each row, used for calculating the total height of the table                                                 | `number`                                               | 44        |
-| row-event-handlers        | A collection of handlers attached to each row                                                                              | `object`\<RowEventHandlers\>               | —         |
-| cell-props                | extra props passed to each cell (except header cells)                                                                      | `object` / Function<CellPropsGetter>       | —         |
+| row-event-handlers        | A collection of handlers attached to each row                                                                              | `object<RowEventHandlers>`               | —         |
+| cell-props                | extra props passed to each cell (except header cells)                                                                      | `object` / `Function<CellPropsGetter>`       | —         |
 | columns                   | An array of column definitions.                                                                                            | [Column[]](#column-attribute)                          | —         |
 | data                      | An array of data to be rendered in the table.                                                                              | [Data[]](#typings)                                     | []        |
-| data-getter               | A method to customize data fetch from the data source.                                                                     | Function<DataGetter\<T\>>                  | —         |
-| fixed-data                | Data for rendering rows above the main content and below the header                                                        | `object`\<Data\>                           | —         |
+| data-getter               | A method to customize data fetch from the data source.                                                                     | `Function<DataGetter<T>>`                  | —         |
+| fixed-data                | Data for rendering rows above the main content and below the header                                                        | `object<Data>`                           | —         |
 | expand-column-key         | The column key indicates which row is expandable                                                                           | `string`                                               | —         |
 | expanded-row-keys         | An array of keys for expanded rows, can be used with `v-model`                                                             | [KeyType[]](#typings)                                  | —         |
 | default-expanded-row-keys | An array of keys for default expanded rows, **NON REACTIVE**                                                               | [KeyType[]](#typings)                                  | —         |
@@ -337,17 +102,17 @@ table-v2/manual-scroll
 | h-scrollbar-size          | Indicates the horizontal scrollbar's size for the table, used to prevent the horizontal and vertical scrollbar to collapse | `number`                                               | 6         |
 | v-scrollbar-size          | Indicates the vertical scrollbar's size for the table, used to prevent the horizontal and vertical scrollbar to collapse   | `number`                                               | 6         |
 | scrollbar-always-on       | If true, the scrollbar will always be shown instead of when mouse is placed above the table                                | `boolean`                                              | false     |
-| sort-by                   | Sort indicator                                                                                                             | `object`\<SortBy\>                         | {}        |
-| sort-state                | Multiple sort indicator                                                                                                    | `object`\<SortState\>                      | undefined |
+| sort-by                   | Sort indicator                                                                                                             | `object<SortBy>`                         | {}        |
+| sort-state                | Multiple sort indicator                                                                                                    | `object<SortState>`                      | undefined |
 
 ### TableV2 Slots
 
 | Name        | Params                                      |
 | ----------- | ------------------------------------------- |
-| cell        | `object`\<CellSlotProps\>       |
-| header      | `object`\<HeaderSlotProps\>     |
-| header-cell | `object`\<HeaderCellSlotProps\> |
-| row         | `object`\<RowSlotProps\>        |
+| cell        | `object<CellSlotProps>`       |
+| header      | `object<HeaderSlotProps>`     |
+| header-cell | `object<HeaderCellSlotProps>` |
+| row         | `object<RowSlotProps>`        |
 | footer      | —                                           |
 | empty       | —                                           |
 | overlay     | —                                           |
@@ -356,14 +121,18 @@ table-v2/manual-scroll
 
 | Name                 | Description                                                                                                                     | Parameters                                    |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------- |
-| column-sort          | Invoked when column sorted                                                                                                      | `object`\<ColumnSortParam\>       |
+| column-sort          | Invoked when column sorted                                                                                                      | `object<ColumnSortParam>`       |
 | expanded-rows-change | Invoked when expanded rows changed                                                                                              | [KeyType[]](#typings)                         |
 | end-reached          | Invoked when the end of the table is reached. The callback contain the remain distance, it is the usually the scrollbar height. | ^[Function]`(remainDistance: number) => void` |
-| scroll               | Invoked after scrolling                                                                                                         | `object`\<ScrollParams\>          |
-| rows-rendered        | Invoked when rows are rendered                                                                                                  | `object`\<RowsRenderedParams\>    |
-| row-expand           | Invoked when expand/collapse the tree node by clicking the arrow icon                                                           | `object`\<RowExpandParams\>       |
-| row-add              | Invoked when the editable ghost row or its action button is clicked                                                             | `object`\<RowAddParams\>          |
-| row-delete           | Invoked when the editable delete action is clicked                                                                              | `object`\<RowDeleteParams\>       |
+| scroll               | Invoked after scrolling                                                                                                         | `object<ScrollParams>`          |
+| rows-rendered        | Invoked when rows are rendered                                                                                                  | `object<RowsRenderedParams>`    |
+| row-expand           | Invoked when expand/collapse the tree node by clicking the arrow icon                                                           | `object<RowExpandParams>`       |
+| header-dragend       | Invoked after a resizable header drag ends                                                                                      | `number, number, Column, MouseEvent` |
+| add-column           | Invoked when the add-column button on a header divider or the last header cell is clicked                                      | `object<ColumnInsertParams>`    |
+| add-row              | Invoked when the add-row button on a row divider is clicked                                                                    | `object<RowInsertParams>`       |
+| add-ghost-row        | Invoked when the built-in add action in the ghost row is clicked                                                               | `object<GhostRowAddParams>`     |
+| row-add              | Invoked when the editable ghost row or its action button is clicked                                                             | `object<RowAddParams>`          |
+| row-delete           | Invoked when the editable delete action is clicked                                                                              | `object<RowDeleteParams>`       |
 
 ### TableV2 Exposes
 
@@ -373,6 +142,7 @@ table-v2/manual-scroll
 | scrollToLeft | Scroll to a given horizontal position                | ^[Function]`(scrollLeft: number) => void`                                              |
 | scrollToTop  | Scroll to a given vertical position                  | ^[Function]`(scrollTop: number) => void`                                               |
 | scrollToRow  | scroll to a given row with specified scroll strategy | ^[Function]`(row: number, strategy?: 'center' \| 'end' \| 'start' \| 'smart') => void` |
+| validateRequiredColumns | validates current table data against `required` columns and returns `false` when any required cell is empty | ^[Function]`() => boolean` |
 
 :::tip
 
@@ -393,14 +163,18 @@ Note that these are `JavaScript` Objects, so you **CANNOT USE** kebab-case for t
 | flexShrink         | CSSProperties flex shrink, Only useful when this is not a fixed table | `number`                                                                                                                                                             | 1       |
 | headerClass        | Used for customizing header column class                              | `string`                                                                                                                                                             | —       |
 | hidden             | Whether the column is invisible                                       | `boolean`                                                                                                                                                            | —       |
+| diagonalHeader     | Renders a diagonal header layout in the column header cell            | `object<{ from: string; to: string }>`                                                                                                                               | —       |
+| allowInsertBeforeFirstColumn | Whether the first column can show an add-column trigger on the left half of its header to insert before itself | `boolean`                                                                                                                                                            | true    |
 | style              | Customized style for column cell, will be merged with grid cell       | ^[object]`CSSProperties`                                                                                                                                             | —       |
 | sortable           | Indicates whether the column is sortable                              | `boolean`                                                                                                                                                            | —       |
 | required           | Whether to add the `required-column` class to the column header and cells | `boolean`                                                                                                                                                            | false   |
+| resizable         | Whether the column can be resized by dragging the header border        | `boolean`                                                                                                                                                            | true    |
 | title              | The default text rendered in header cell                              | `string`                                                                                                                                                             | —       |
 | maxWidth           | Maximum width for the column                                          | `number`                                                                                                                                                             | —       |
 | minWidth           | Minimum width for the column                                          | `number`                                                                                                                                                             | —       |
 | width ^(required)  | Width for the column                                                  | `number`                                                                                                                                                             | —       |
 | cellRenderer       | Customized Cell renderer                                              | `VueComponent` / (props: CellRenderProps) => VNode                                                                                                       | —       |
+| editCellRenderer   | Customized editable cell renderer used by `ghost-table` + `edit-table` | `VueComponent` / (props: CellRenderProps) => VNode                                                                                                       | —       |
 | headerCellRenderer | Customized Header renderer                                            | `VueComponent` / (props: HeaderRenderProps) => VNode                                                                                                     | —       |
 
 ## Typings{#typings}
@@ -455,6 +229,27 @@ type DataGetterParams<T> = {
 } & RowCommonParams
 
 type DataGetter<T> = (params: DataGetterParams<T>) => T
+
+type ColumnInsertParams<T> = {
+  column: Column<T>
+  columnIndex: number
+  insertIndex: number
+  event: MouseEvent
+}
+
+type RowInsertParams<T> = {
+  row: T
+  rowIndex: number
+  insertIndex: number
+  event: MouseEvent
+}
+
+type GhostRowAddParams<T> = {
+  row: T
+  rowIndex: number
+  rowKey: KeyType
+  event: MouseEvent
+}
 
 type CellRenderProps<T> = {
   cellData: T
@@ -514,6 +309,13 @@ type HeaderCellSlotProps = {
   sortBy: SortBy
   sortState?: SortState | undefined
   onColumnSorted: (e: MouseEvent) => void
+  updateColumnWidth: (column: Column<any>, width: number) => void
+  onHeaderDragend?: (
+    newWidth: number,
+    oldWidth: number,
+    column: Column<any>,
+    event: MouseEvent
+  ) => void
 }
 
 type RowCommonParams = {
@@ -595,17 +397,3 @@ type SortState = Record<KeyType, SortOrder>
 ```
 
 </details>
-
-## FAQs
-
-#### How do I render a list with a checkbox in the first column?
-
-Since you are allowed to define your own cell renderer, you can do what the example
-Customize Cell Renderer did to render `checkbox` yourself, and maintain the
-state by yourself.
-
-#### Why does virtualized table provide less features than TableV1
-
-For virtualized table, we intend to provide less feature and let our users implement their own features as needed.
-Integrating too many features makes the code hard to maintain and for most users the basic features are enough. Some key
-features were not developed yet. We would love to hear from you. Join Discord to stay tuned.

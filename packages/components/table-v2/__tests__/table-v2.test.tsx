@@ -443,6 +443,150 @@ describe('TableV2.vue', () => {
     ])
   })
 
+  test('shows add-column button in editable mode and emits add-column after the last data column', async () => {
+    const columns = ref(generateColumns(3))
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+        showAddColumnTrigger
+      />
+    ))
+
+    const trigger = wrapper.find('.el-table-v2__header-add-column-button')
+    const table = wrapper.findComponent(TableV2)
+
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    expect(table.emitted('add-column')).toEqual([
+      [
+        expect.objectContaining({
+          columnIndex: 2,
+          insertIndex: 3,
+        }),
+      ],
+    ])
+  })
+
+  test('shows add-column trigger on header hover and emits add-column with the hover insert index', async () => {
+    const columns = ref(generateColumns(3))
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+        showAddColumnTrigger
+      />
+    ))
+
+    const headerCell = wrapper.findAll('.el-table-v2__header-cell')[1]
+    const rect = {
+      left: 120,
+      right: 240,
+      top: 0,
+      bottom: 40,
+      width: 120,
+      height: 40,
+      x: 120,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi
+      .spyOn(headerCell.element, 'getBoundingClientRect')
+      .mockReturnValue(rect)
+
+    await headerCell.trigger('mousemove', {
+      clientX: 145,
+      clientY: 20,
+    })
+    await nextTick()
+
+    const trigger = wrapper.find('.el-table-v2__add-column-trigger-button')
+    const table = wrapper.findComponent(TableV2)
+
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    expect(table.emitted('add-column')).toEqual([
+      [
+        expect.objectContaining({
+          columnIndex: 1,
+          insertIndex: 1,
+        }),
+      ],
+    ])
+
+    rectSpy.mockRestore()
+  })
+
+  test('shows add-row trigger on row hover and emits add-row', async () => {
+    const columns = ref(generateColumns(3))
+    const data = ref(generateData(columns.value, 2))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+        showAddRowTrigger
+      />
+    ))
+
+    const row = wrapper.findAll('.el-table-v2__row')[0]
+    const rect = {
+      left: 0,
+      right: 480,
+      top: 0,
+      bottom: 44,
+      width: 480,
+      height: 44,
+      x: 0,
+      y: 0,
+      toJSON: () => ({}),
+    } as DOMRect
+    const rectSpy = vi
+      .spyOn(row.element, 'getBoundingClientRect')
+      .mockReturnValue(rect)
+
+    await row.trigger('mousemove', {
+      clientX: 120,
+      clientY: 40,
+    })
+    await nextTick()
+
+    const trigger = wrapper.find('.el-table-v2__add-row-trigger-button')
+    const table = wrapper.findComponent(TableV2)
+
+    expect(trigger.exists()).toBe(true)
+
+    await trigger.trigger('click')
+
+    expect(table.emitted('add-row')).toEqual([
+      [
+        expect.objectContaining({
+          rowIndex: 0,
+          insertIndex: 1,
+        }),
+      ],
+    ])
+
+    rectSpy.mockRestore()
+  })
+
   test('does not render add row when editable mode is disabled', async () => {
     const columns = ref(generateColumns(1))
     const data = ref(generateData(columns.value, 1))
@@ -458,6 +602,307 @@ describe('TableV2.vue', () => {
     ))
 
     expect(wrapper.find('.el-table-v2__add-row-main').exists()).toBe(false)
+  })
+
+  test('renders editCellRenderer and appends a ghost row when ghostTable and editTable are true', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        cellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="view-cell">{cellData}</span>
+        ),
+        editCellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="edit-cell">{cellData || 'ghost'}</span>
+        ),
+      },
+    ])
+    const data = ref([
+      { id: 'row-0', name: 'Alpha' },
+      { id: 'row-1', name: 'Beta' },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        ghostTable
+        editTable
+      />
+    ))
+
+    expect(wrapper.find('.el-table-v2__add-row-main').exists()).toBe(true)
+    expect(wrapper.findAll('.edit-cell')).toHaveLength(2)
+    expect(wrapper.findAll('.view-cell')).toHaveLength(0)
+    expect(wrapper.findAll('.el-table-v2__row-delete-button')).toHaveLength(0)
+    expect(
+      wrapper
+        .findAll('.el-table-v2__row-cell')
+        .every((node) => node.classes().includes('is-full-width'))
+    ).toBe(true)
+    expect(
+      wrapper.findAll('.el-table-v2__add-row-main .icon-button')
+    ).toHaveLength(1)
+    expect(
+      wrapper.find('.el-table-v2__add-row-main .edit-cell').exists()
+    ).toBe(false)
+  })
+
+  test('emits add-ghost-row from the ghost row add button and keeps the placeholder from the column title', async () => {
+    const InputStub = defineComponent({
+      name: 'ElInput',
+      props: {
+        modelValue: {
+          type: String,
+          default: '',
+        },
+        placeholder: {
+          type: String,
+          default: '',
+        },
+      },
+      setup(props) {
+        return () => (
+          <input
+            class="edit-cell"
+            value={props.modelValue}
+            placeholder={props.placeholder}
+          />
+        )
+      },
+    })
+
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        editCellRenderer: ({ cellData, column }: { cellData: string; column: any }) => (
+          <InputStub modelValue={cellData} placeholder={column.title} />
+        ),
+      },
+      {
+        key: 'action',
+        dataKey: 'action',
+        title: 'Action',
+        width: 36,
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: 'Alpha', action: '' }])
+    const onAddGhostRow = vi.fn()
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        rowKey="id"
+        ghostTable
+        editTable
+        onAddGhostRow={onAddGhostRow}
+      />
+    ))
+
+    const ghostRow = wrapper.find('.el-table-v2__add-row-main')
+    const addButton = ghostRow.find('.icon-button')
+    const table = wrapper.findComponent(TableV2)
+
+    expect(ghostRow.findAll('.edit-cell')).toHaveLength(1)
+    expect(ghostRow.find('.edit-cell').attributes('placeholder')).toBe('Name')
+
+    await addButton.trigger('click')
+
+    expect(onAddGhostRow).toHaveBeenCalledTimes(1)
+    expect(table.emitted('add-ghost-row')).toEqual([
+      [
+        expect.objectContaining({
+          rowIndex: -1,
+          rowKey: 'ghost-row',
+          row: expect.objectContaining({
+            __ep_table_v2_ghost_row__: true,
+          }),
+        }),
+      ],
+    ])
+  })
+
+  test('disables the ghost-row add button when a required column is empty', async () => {
+    const InputStub = defineComponent({
+      name: 'ElInput',
+      props: {
+        modelValue: {
+          type: String,
+          default: '',
+        },
+      },
+      setup(props) {
+        return () => <input value={props.modelValue} />
+      },
+    })
+
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        required: true,
+        editCellRenderer: ({ cellData }: { cellData: string }) => (
+          <InputStub modelValue={cellData} />
+        ),
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: '' }])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        ghostTable
+        editTable
+      />
+    ))
+
+    const addButton = wrapper.find('.el-table-v2__add-row-main .icon-button')
+    const table = wrapper.findComponent(TableV2)
+
+    expect(addButton.attributes('disabled')).toBeDefined()
+
+    await addButton.trigger('click')
+
+    expect(table.emitted('add-ghost-row')).toBeUndefined()
+  })
+
+  test('does not apply error input props to required ghost-row inputs until the row has values', async () => {
+    const InputStub = defineComponent({
+      name: 'ElInput',
+      props: {
+        modelValue: {
+          type: String,
+          default: '',
+        },
+        inputType: {
+          type: String,
+          default: '',
+        },
+        infoTip: {
+          type: String,
+          default: '',
+        },
+      },
+      setup(props) {
+        return () => (
+          <div
+            class="input-stub"
+            data-input-type={props.inputType}
+            data-info-tip={props.infoTip}
+          >
+            {props.modelValue}
+          </div>
+        )
+      },
+    })
+
+    let ghostRowRef: Record<string, any> | null = null
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        required: true,
+        editCellRenderer: ({
+          cellData,
+          rowData,
+        }: {
+          cellData: string
+          rowData: Record<string, any>
+        }) => {
+          if (rowData.__ep_table_v2_ghost_row__) {
+            ghostRowRef = rowData
+          }
+          return <InputStub modelValue={cellData} />
+        },
+      },
+      {
+        key: 'note',
+        dataKey: 'note',
+        title: 'Note',
+        width: 180,
+        editCellRenderer: ({
+          cellData,
+          rowData,
+        }: {
+          cellData: string
+          rowData: Record<string, any>
+        }) => {
+          if (rowData.__ep_table_v2_ghost_row__) {
+            ghostRowRef = rowData
+          }
+          return <InputStub modelValue={cellData} />
+        },
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: '', note: '' }])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        ghostTable
+        editTable
+      />
+    ))
+
+    let ghostInputs = wrapper.findAllComponents(InputStub)
+    expect(ghostInputs[ghostInputs.length - 2].props('inputType')).toBe('')
+
+    ghostRowRef!.note = 'typed'
+    await nextTick()
+
+    ghostInputs = wrapper.findAllComponents(InputStub)
+    expect(ghostInputs[ghostInputs.length - 1].props('inputType')).toBe(
+      'error'
+    )
+    expect(ghostInputs[ghostInputs.length - 1].props('infoTip')).toBe(
+      'Required'
+    )
+  })
+
+  test('validateRequiredColumns returns false when required table data is empty', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        required: true,
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: '' }])
+    const table = ref<any>()
+    const wrapper = mount(() => (
+      <TableV2
+        ref={table}
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+      />
+    ))
+
+    expect(table.value?.validateRequiredColumns()).toBe(false)
+
+    data.value[0].name = 'Filled'
+    await nextTick()
+
+    expect(table.value?.validateRequiredColumns()).toBe(true)
   })
 
   test('slots header-cell scope', async () => {
@@ -510,6 +955,90 @@ describe('TableV2.vue', () => {
 
     expect(headerCell.classes()).toContain('required-column')
     expect(bodyCell.classes()).toContain('required-column')
+  })
+
+  test('renders diagonal header content and diagonal classes from the column config', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        diagonalHeader: {
+          from: 'From',
+          to: 'To',
+        },
+      },
+      generateColumns(1, 'state-')[0],
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+      />
+    ))
+
+    const headerCells = wrapper.findAll('.el-table-v2__header-cell')
+    const bodyCells = wrapper.findAll('.el-table-v2__row-cell')
+    const diagonalTexts = headerCells[0].findAll(
+      '.el-table-v2__diagonal-header-text'
+    )
+
+    expect(headerCells[0].classes()).toContain('is-diagonal-header')
+    expect(headerCells[1].classes()).not.toContain('is-diagonal-header')
+    expect(bodyCells[0].classes()).toContain('is-diagonal-header-column')
+    expect(bodyCells[1].classes()).not.toContain('is-diagonal-header-column')
+    expect(diagonalTexts.map((node) => node.text())).toEqual(['From', 'To'])
+  })
+
+  test('updates the column width and emits header-dragend when resizing ends', async () => {
+    const columns = ref(generateColumns(2))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+      />
+    ))
+
+    const headerCell = wrapper.findAll('.el-table-v2__header-cell')[0]
+    const resizer = headerCell.find('.el-table-v2__column-resizer')
+
+    expect(resizer.exists()).toBe(true)
+
+    await resizer.trigger('mousedown', {
+      clientX: 150,
+      button: 0,
+    })
+
+    document.dispatchEvent(
+      new MouseEvent('mousemove', {
+        clientX: 190,
+        bubbles: true,
+      })
+    )
+
+    document.dispatchEvent(
+      new MouseEvent('mouseup', {
+        clientX: 190,
+        bubbles: true,
+      })
+    )
+
+    await nextTick()
+
+    const emitted = wrapper.findComponent(TableV2).emitted('header-dragend')
+
+    expect(headerCell.attributes('style')).toContain('width: 190px;')
+    expect(emitted).toHaveLength(1)
+    expect(emitted?.[0]?.[0]).toBe(190)
+    expect(emitted?.[0]?.[1]).toBe(150)
+    expect(emitted?.[0]?.[2]).toMatchObject({
+      key: columns.value[0].key,
+      width: 190,
+    })
   })
 
   test('sortable header icon uses default color when sortState is not provided', async () => {
@@ -576,8 +1105,8 @@ describe('TableV2.vue', () => {
     const time = footer.find('.time')
 
     expect(footer.classes()).toContain('el-table-v2__footer')
-    expect(count.text()).toBe('12')
-    expect(time.text()).toBe('2026-07-07 12:30')
+    expect(count.text()).toBe('12 items')
+    expect(time.text()).toBe('Last Updated 2026-07-07 12:30')
   })
 
   test('default footer is hidden when isFooterDefault is false', async () => {

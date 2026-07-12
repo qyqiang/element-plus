@@ -59,9 +59,19 @@ select/disabled
 
 You can clear Select using a clear icon.
 
-:::demo Set `clearable` attribute for `el-select` and a clear icon will appear.
+:::demo Set `clearable` attribute for `el-select` and a clear icon will appear. In single-select mode, when `clearable` is `false` and there is exactly one enabled option, Select will automatically use that option as its initial value.
 
 select/clearable
+
+:::
+
+## Custom dropdown width
+
+When `fit-input-width` is `false`, you can use `option-width` to control the dropdown width with either a number or a CSS width string such as `320` or `360px`.
+
+:::demo
+
+select/custom-width
 
 :::
 
