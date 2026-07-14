@@ -60,6 +60,7 @@ const clickClearButton = async (wrapper) => {
 
 interface SelectProps {
   popperClass?: string
+  inputType?: 'error' | 'info' | 'warning'
   value?: string | string[] | number | number[]
   beforeChange?: any
   options?: any[]
@@ -136,6 +137,7 @@ const createSelect = (
         :clearable="clearable"
         :have-all="haveAll"
         :multiple="multiple"
+        :input-type="inputType"
         :collapseTags="collapseTags"
         :collapseTagsTooltip="collapseTagsTooltip"
         :max-collapse-tags="maxCollapseTags"
@@ -189,6 +191,7 @@ const createSelect = (
           disabled: false,
           clearable: false,
           haveAll: undefined,
+          inputType: undefined,
           multiple: false,
           collapseTags: false,
           collapseTagsTooltip: false,
@@ -275,6 +278,78 @@ describe('Select', () => {
     expect([...document.querySelector('.el-popper').classList]).toContain(
       'custom-dropdown'
     )
+  })
+
+  it('inputType adds status classes and filled state', async () => {
+    const wrapper = createSelect({
+      data() {
+        return {
+          inputType: 'warning',
+        }
+      },
+    })
+
+    await nextTick()
+
+    expect(wrapper.classes('el-select--warning')).toBe(true)
+    expect(wrapper.classes('el-select--inputType')).toBe(true)
+    expect(wrapper.classes('el-select--filled')).toBe(false)
+
+    await wrapper.setData({
+      inputType: 'error',
+      value: 'option_1',
+    })
+    await nextTick()
+    await nextTick()
+
+    expect(wrapper.classes('el-select--error')).toBe(true)
+    expect(wrapper.classes('el-select--filled')).toBe(true)
+  })
+
+  it('outer error tooltip shows Required when error select is empty', async () => {
+    const wrapper = createSelect({
+      data() {
+        return {
+          inputType: 'error',
+        }
+      },
+    })
+
+    await nextTick()
+
+    const hoverTooltip = wrapper
+      .findAllComponents({ name: 'ElTooltip' })
+      .find((tooltip) => tooltip.props('trigger') === 'hover')
+
+    expect(hoverTooltip?.props('content')).toBe('Required')
+    expect(hoverTooltip?.props('disabled')).toBe(false)
+  })
+
+  it('outer error tooltip prefers form-item validation message', async () => {
+    const wrapper = _mount(
+      `
+      <el-form-item error="Select is required">
+        <el-select v-model="value" input-type="error" :options="options" />
+      </el-form-item>
+      `,
+      {
+        data() {
+          return {
+            options: createData(),
+            value: '',
+          }
+        },
+      }
+    )
+
+    await nextTick()
+
+    const hoverTooltip = wrapper
+      .findAllComponents({ name: 'ElTooltip' })
+      .find((tooltip) => tooltip.props('trigger') === 'hover')
+
+    expect(hoverTooltip?.props('content')).toBe('Select is required')
+    expect(hoverTooltip?.props('disabled')).toBe(false)
   })
 
   it('should show placeholder when no model-value setted', async () => {

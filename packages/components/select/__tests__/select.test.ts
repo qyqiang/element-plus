@@ -36,6 +36,7 @@ interface SelectProps {
   filterMethod?: any
   remoteMethod?: any
   beforeChange?: any
+  inputType?: 'error' | 'info' | 'warning'
   multiple?: boolean
   clearable?: boolean
   filterable?: boolean
@@ -152,6 +153,7 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
       :automatic-dropdown="automaticDropdown"
       :size="size"
       :before-change="beforeChange"
+      :input-type="inputType"
       :fit-input-width="fitInputWidth"
       :option-width="optionWidth">
       <el-option
@@ -182,6 +184,7 @@ const getSelectVm = (configs: SelectProps = {}, options?) => {
       remote: configs.remote,
       remoteMethod: configs.remoteMethod,
       beforeChange: configs.beforeChange,
+      inputType: configs.inputType,
       value: configs.multiple ? [] : '',
       size: configs.size || 'default',
     })
@@ -367,6 +370,58 @@ describe('Select', () => {
     wrapper = getSelectVm({ popperClass: 'custom-dropdown' })
     const dropdown = wrapper.findComponent({ name: 'ElSelectDropdown' })
     expect(dropdown.classes()).toContain('custom-dropdown')
+  })
+
+  test('inputType adds status classes and filled state', async () => {
+    wrapper = getSelectVm({ inputType: 'warning' })
+    await nextTick()
+
+    expect(wrapper.classes('el-select--warning')).toBe(true)
+    expect(wrapper.classes('el-select--inputType')).toBe(true)
+    expect(wrapper.classes('el-select--filled')).toBe(false)
+
+    await wrapper.setData({
+      inputType: 'error',
+      value: 'Option 1',
+    })
+    await nextTick()
+    await nextTick()
+
+    expect(wrapper.classes('el-select--error')).toBe(true)
+    expect(wrapper.classes('el-select--filled')).toBe(true)
+  })
+
+  test('outer error tooltip shows Required when error select is empty', async () => {
+    wrapper = getSelectVm({ inputType: 'error' })
+    await nextTick()
+
+    const hoverTooltip = wrapper
+      .findAllComponents({ name: 'ElTooltip' })
+      .find((tooltip) => tooltip.props('trigger') === 'hover')
+
+    expect(hoverTooltip?.props('content')).toBe('Required')
+    expect(hoverTooltip?.props('disabled')).toBe(false)
+  })
+
+  test('outer error tooltip prefers form-item validation message', async () => {
+    wrapper = _mount(
+      `
+      <el-form-item error="Select is required">
+        <el-select v-model="value" input-type="error"></el-select>
+      </el-form-item>
+      `,
+      () => ({
+        value: '',
+      })
+    )
+    await nextTick()
+
+    const hoverTooltip = wrapper
+      .findAllComponents({ name: 'ElTooltip' })
+      .find((tooltip) => tooltip.props('trigger') === 'hover')
+
+    expect(hoverTooltip?.props('content')).toBe('Select is required')
+    expect(hoverTooltip?.props('disabled')).toBe(false)
   })
 
   test('custom popper style', async () => {

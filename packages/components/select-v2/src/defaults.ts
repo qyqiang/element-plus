@@ -64,6 +64,13 @@ export const selectV2Props = buildProps({
    */
   automaticDropdown: Boolean,
   /**
+   * @description visual status style of select
+   */
+  inputType: {
+    type: String,
+    values: ['error', 'info', 'warning'],
+  },
+  /**
    * @description whether select can be cleared
    */
   clearable: Boolean,

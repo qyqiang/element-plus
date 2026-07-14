@@ -10,11 +10,7 @@
       :option-width="400"
       style="width: 240px"
     >
-      <el-option
-        :label="test"
-        :value="1"
-      >
-      </el-option>
+      <el-option :label="test" :value="1"> </el-option>
     </el-select>
     <el-select
       v-model="value"
@@ -285,12 +281,68 @@
       </el-option>
     </el-option-group>
   </el-select>
+  <div class="demo-select-status">
+    <el-select
+      v-model="warningValue"
+      input-type="warning"
+      placeholder="Warning state"
+    >
+      <el-option
+        v-for="item in optionsStyle"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <el-select
+      v-model="errorValue"
+      input-type="error"
+      placeholder="Error state"
+    >
+      <el-option
+        v-for="item in optionsStyle"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <el-select
+      v-model="filledWarningValue"
+      input-type="warning"
+      placeholder="Filled warning"
+    >
+      <el-option
+        v-for="item in optionsStyle"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+    <el-select v-model="infoValue" input-type="info" placeholder="Info state">
+      <el-option
+        v-for="item in optionsStyle"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      />
+    </el-select>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref } from 'vue'
 import { InfoFilled, Search } from '@element-plus/icons-vue'
 
+const warningValue = ref('')
+const errorValue = ref('')
+const filledWarningValue = ref('gravel')
+const infoValue = ref('cement')
+
+const optionsStyle = [
+  { value: 'sand', label: 'Sand' },
+  { value: 'gravel', label: 'Gravel' },
+  { value: 'cement', label: 'Cement' },
+]
 const value = ref('Option1')
 const value7 = ref()
 const value1 = ref([])
@@ -311,44 +363,44 @@ const options1 = ref([])
 const options = ref([
   {
     value: 'Option1',
-    label: '45545'
+    label: '45545',
   },
   {
     value: 'Option2',
-    label: 'Option2'
+    label: 'Option2',
   },
   {
     value: 'Option3',
-    label: 'Option3'
+    label: 'Option3',
   },
   {
     value: 'Option4',
-    label: 'Option4'
+    label: 'Option4',
   },
   {
     value: 'Option5',
-    label: 'Option5'
+    label: 'Option5',
   },
   {
     value: 'Option6',
-    label: '45545'
+    label: '45545',
   },
   {
     value: 'Option7',
-    label: 'Option2'
+    label: 'Option2',
   },
   {
     value: 'Option8',
-    label: 'Option3'
+    label: 'Option3',
   },
   {
     value: 'Option9',
-    label: 'Option4'
+    label: 'Option4',
   },
   {
     value: 'Option10',
-    label: 'Option5'
-  }
+    label: 'Option5',
+  },
 ])
 const options2 = [
   {
@@ -356,40 +408,40 @@ const options2 = [
     options: [
       {
         value: 'Shanghai',
-        label: 'Shanghai'
+        label: 'Shanghai',
       },
       {
         value: 'Beijing',
-        label: 'Beijing'
-      }
-    ]
+        label: 'Beijing',
+      },
+    ],
   },
   {
     label: 'City name',
     options: [
       {
         value: 'Chengdu',
-        label: 'Chengdu'
+        label: 'Chengdu',
       },
       {
         value: 'Shenzhen',
-        label: 'Shenzhen'
+        label: 'Shenzhen',
       },
       {
         value: 'Guangzhou',
-        label: 'Guangzhou'
+        label: 'Guangzhou',
       },
       {
         value: 'Dalian',
-        label: 'Dalian'
-      }
-    ]
-  }
+        label: 'Dalian',
+      },
+    ],
+  },
 ]
 const handleAdd = (val: string) => {
   options.value.push({
     value: val,
-    label: val
+    label: val,
   })
 }
 </script>
@@ -397,5 +449,10 @@ const handleAdd = (val: string) => {
 <style scoped>
 h5 {
   margin-bottom: 10px;
+}
+.demo-select-status {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
 }
 </style>
