@@ -7,7 +7,7 @@ lang: en-US
 
 ## Demo
 
-Status inputs support `input-type="error" | "warning" | "info"`. When `input-type` is `info`, you can use `info-tip` to render a built-in tooltip icon in the suffix area. When `input-type` is `error` and the value is empty, hovering the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
+Status inputs support `input-type="error" | "warning" | "info"`. When `input-type` is `info`, you can use `info-tip` to render a built-in tooltip icon in the suffix area. Tooltip priority is `error` first, then the overflowing input text, and finally the built-in `info-tip` icon tooltip. When `input-type` is `error` and the value is empty, hovering the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
 
 :::demo
 
@@ -22,6 +22,16 @@ Display value within it's situation with `formatter`, and we usually use `parser
 :::demo
 
 input/formatter
+
+:::
+
+## Autocomplete Status And Validation
+
+Autocomplete inherits the built-in input status styles and tooltip validation behavior. Use `input-type="error" | "warning" | "info"` for status states. When `input-type` is `info`, `info-tip` renders the built-in tooltip icon. Tooltip priority is `error` first, then overflowing input text, and finally the built-in `info-tip` icon tooltip. When `input-type` is `error` and the value is empty, hovering the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
+
+:::demo
+
+input/status-autocomplete
 
 :::
 

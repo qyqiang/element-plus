@@ -532,6 +532,79 @@ describe('Autocomplete.vue', () => {
     mockInputWidth.mockRestore()
   })
 
+  test('inputType renders input status classes', async () => {
+    const wrapper = _mount({
+      inputType: 'warning',
+    })
+    await nextTick()
+
+    const input = wrapper.find('.el-input')
+    expect(input.classes('el-input--warning')).toBe(true)
+    expect(input.classes('el-input--inputType')).toBe(true)
+
+    await wrapper.setProps({
+      inputType: 'error',
+      modelValue: 'Autocomplete value',
+    })
+    await nextTick()
+
+    expect(input.classes('el-input--error')).toBe(true)
+    expect(input.classes('el-input--filled')).toBe(true)
+  })
+
+  test('empty error autocomplete shows Required tooltip by default', async () => {
+    const wrapper = _mount({
+      inputType: 'error',
+    })
+    await nextTick()
+
+    const hoverTooltip = wrapper
+      .findAllComponents({ name: 'ElTooltip' })
+      .find((tooltip) => tooltip.props('trigger') === 'hover')
+
+    expect(hoverTooltip?.props('content')).toBe('Required')
+    expect(hoverTooltip?.props('disabled')).toBe(false)
+  })
+
+  test('infoTip renders built-in info tooltip for autocomplete', async () => {
+    const tip = 'Important Information'
+    const wrapper = _mount({
+      inputType: 'info',
+      infoTip: tip,
+    })
+    await nextTick()
+
+    const tooltips = wrapper.findAllComponents({ name: 'ElTooltip' })
+    expect(tooltips.some((tooltip) => tooltip.props('content') === tip)).toBe(
+      true
+    )
+  })
+
+  test('form item error tooltip has priority over infoTip', async () => {
+    const wrapper = mount(() => (
+      <FormItem error="Autocomplete is required">
+        <Autocomplete
+          fetch-suggestions={[]}
+          inputType="info"
+          infoTip="Important Information"
+        />
+      </FormItem>
+    ))
+
+    await nextTick()
+
+    const tooltips = wrapper.findAllComponents({ name: 'ElTooltip' })
+    const errorTooltip = tooltips.find(
+      (tooltip) => tooltip.props('content') === 'Autocomplete is required'
+    )
+    const infoTooltip = tooltips.find(
+      (tooltip) => tooltip.props('content') === 'Important Information'
+    )
+
+    expect(errorTooltip?.props('disabled')).toBe(false)
+    expect(infoTooltip?.props('disabled')).toBe(true)
+  })
+
   describe('teleported API', () => {
     it('should mount on popper container', async () => {
       expect(document.body.innerHTML).toBe('')

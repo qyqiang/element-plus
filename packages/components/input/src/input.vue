@@ -78,10 +78,11 @@
           <span v-if="suffixVisible" :class="nsInput.e('suffix')">
             <span :class="nsInput.e('suffix-inner')">
               <el-tooltip
-                v-if="showInfoTip"
+                v-if="showInfoTipIcon"
                 placement="top"
                 :content="infoTip"
                 :offset="12"
+                :disabled="infoTipTooltipDisabled"
               >
                 <el-icon :class="nsInput.e('icon')" size="12px" color="#2A3F4D">
                   <svg
@@ -401,21 +402,33 @@ const nativeInputValue = computed(() =>
 const showEmptyErrorTooltip = computed(
   () => props.inputType === 'error' && isEmpty(nativeInputValue.value)
 )
-const inputTooltipContent = computed(() => {
-  if (validateError.value) return validateMsg.value
-  if (showEmptyErrorTooltip.value) return props.infoTip || 'Required'
+const isTextOverflowing = ref(false)
+const inputTooltipSource = computed<'error' | 'overflow' | 'none'>(() => {
+  if (validateError.value && !isEmpty(validateMsg.value)) return 'error'
+  if (showEmptyErrorTooltip.value) return 'error'
+  if (isTextOverflowing.value && !isEmpty(nativeInputValue.value)) {
+    return 'overflow'
+  }
 
-  return nativeInputValue.value
+  return 'none'
 })
-const inputTooltipDisabled = computed(
-  () =>
-    !validateError.value &&
-    !showEmptyErrorTooltip.value &&
-    isEmpty(nativeInputValue.value)
-)
-const inputTooltipTrigger = computed(() =>
-  showEmptyErrorTooltip.value ? 'hover' : 'click'
-)
+const inputTooltipContent = computed(() => {
+  if (inputTooltipSource.value === 'error') {
+    if (validateError.value && !isEmpty(validateMsg.value)) {
+      return validateMsg.value
+    }
+
+    return props.infoTip || 'Required'
+  }
+
+  if (inputTooltipSource.value === 'overflow') {
+    return nativeInputValue.value
+  }
+
+  return ''
+})
+const inputTooltipDisabled = computed(() => inputTooltipSource.value === 'none')
+const inputTooltipTrigger = computed(() => 'hover')
 const showClear = computed(
   () =>
     props.clearable &&
@@ -427,8 +440,11 @@ const showClear = computed(
 const showPwdVisible = computed(
   () => props.showPassword && !inputDisabled.value && !!nativeInputValue.value
 )
-const showInfoTip = computed(
+const showInfoTipIcon = computed(
   () => props.inputType === 'info' && !!props.infoTip
+)
+const infoTipTooltipDisabled = computed(
+  () => inputTooltipSource.value !== 'none'
 )
 const isWordLimitVisible = computed(
   () =>
@@ -449,7 +465,7 @@ const suffixVisible = computed(
   () =>
     !!slots.suffix ||
     !!props.suffixIcon ||
-    showInfoTip.value ||
+    showInfoTipIcon.value ||
     showClear.value ||
     props.showPassword ||
     isWordLimitVisible.value ||
@@ -471,6 +487,33 @@ useResizeObserver(textarea, (entries) => {
     right: `calc(100% - ${width + 15 + 6}px)`,
   }
 })
+
+useResizeObserver(wrapperRef, () => {
+  nextTick(syncTextOverflow)
+})
+
+const syncTextOverflow = () => {
+  const target = _ref.value
+
+  if (!target || isEmpty(nativeInputValue.value)) {
+    isTextOverflowing.value = false
+    return
+  }
+
+  if (props.type === 'textarea') {
+    isTextOverflowing.value =
+      target.scrollHeight > target.clientHeight ||
+      target.scrollWidth > target.clientWidth
+    return
+  }
+
+  if (props.type === 'password' || props.type === 'hidden') {
+    isTextOverflowing.value = false
+    return
+  }
+
+  isTextOverflowing.value = target.scrollWidth > target.clientWidth
+}
 
 const handleTextareaFocus = () => {
   textarea.value?.focus()
@@ -618,6 +661,7 @@ const handleMouseLeave = (evt: MouseEvent) => {
 
 const handleMouseEnter = (evt: MouseEvent) => {
   hovering.value = true
+  nextTick(syncTextOverflow)
   emit('mouseenter', evt)
 }
 
@@ -640,6 +684,7 @@ watch(
   () => props.modelValue,
   () => {
     nextTick(() => resizeTextarea())
+    nextTick(syncTextOverflow)
     if (props.validateEvent) {
       elFormItem?.validate?.('change').catch((err) => debugWarn(err))
     }
@@ -682,6 +727,7 @@ watch(
     await nextTick()
     setNativeInputValue()
     resizeTextarea()
+    syncTextOverflow()
   }
 )
 
@@ -694,6 +740,7 @@ onMounted(() => {
   }
   setNativeInputValue()
   nextTick(resizeTextarea)
+  nextTick(syncTextOverflow)
 })
 
 defineExpose({

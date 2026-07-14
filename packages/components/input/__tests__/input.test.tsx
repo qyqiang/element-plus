@@ -198,6 +198,47 @@ describe('Input.vue', () => {
     expect(tooltip.props('trigger')).toBe('hover')
   })
 
+  test('overflow tooltip shows input value and suppresses infoTip tooltip', async () => {
+    const tip = 'Important Information'
+    const value = 'This is a very long value'
+    const wrapper = mount(() => (
+      <Input inputType="info" infoTip={tip} modelValue={value} />
+    ))
+    const inputElm = wrapper.find('input')
+
+    defineGetter(inputElm.element, 'scrollWidth', 240)
+    defineGetter(inputElm.element, 'clientWidth', 80)
+
+    await wrapper.trigger('mouseenter')
+    await nextTick()
+
+    const tooltips = wrapper.findAllComponents({ name: 'ElTooltip' })
+
+    expect(tooltips[0].props('content')).toBe(value)
+    expect(tooltips[0].props('disabled')).toBe(false)
+    expect(tooltips[1].props('content')).toBe(tip)
+    expect(tooltips[1].props('disabled')).toBe(true)
+  })
+
+  test('error tooltip has priority over overflow tooltip content', async () => {
+    const wrapper = mount(() => (
+      <FormItem error="Field is required">
+        <Input modelValue="This is a very long value" />
+      </FormItem>
+    ))
+    const inputElm = wrapper.find('input')
+
+    defineGetter(inputElm.element, 'scrollWidth', 240)
+    defineGetter(inputElm.element, 'clientWidth', 80)
+
+    await wrapper.findComponent(Input).trigger('mouseenter')
+    await nextTick()
+
+    const tooltip = wrapper.findComponent({ name: 'ElTooltip' })
+    expect(tooltip.props('content')).toBe('Field is required')
+    expect(tooltip.props('disabled')).toBe(false)
+  })
+
   test('rows', () => {
     const wrapper = mount(() => {
       return <Input type="textarea" rows={3} />
