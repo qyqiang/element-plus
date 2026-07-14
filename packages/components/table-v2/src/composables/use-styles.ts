@@ -11,6 +11,7 @@ type UseStyleProps = {
   fixedColumnsOnLeft: UseColumnsReturn['fixedColumnsOnLeft']
   fixedColumnsOnRight: UseColumnsReturn['fixedColumnsOnRight']
   rowsHeight: ComputedRef<number>
+  effectiveWidth: ComputedRef<number>
 }
 
 export const useStyles = (
@@ -20,22 +21,38 @@ export const useStyles = (
     rowsHeight,
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
+    effectiveWidth,
   }: UseStyleProps
-  ) => {
+) => {
   const addRowHeight = computed(() =>
-    (props.canEditTable && props.editable) || (props.ghostTable && props.editTable)
+    (props.canEditTable && props.editable) ||
+    (props.ghostTable && props.editTable)
       ? props.rowHeight
       : 0
   )
 
+  const shouldUseEditableDefaultFooterHeight = computed(
+    () =>
+      props.isFooterDefault &&
+      props.footerHeight === 0 &&
+      ((props.canEditTable && props.editable) ||
+        (props.ghostTable && props.editTable))
+  )
+
+  const effectiveFooterHeight = computed(() =>
+    shouldUseEditableDefaultFooterHeight.value ? 44 : props.footerHeight
+  )
+
   const bodyWidth = computed(() => {
-    const { fixed, width, vScrollbarSize } = props
-    const ret = width - vScrollbarSize
+    const { fixed, vScrollbarSize } = props
+    const width = unref(effectiveWidth)
+    const ret = Math.max(width - vScrollbarSize, 0)
     return fixed ? Math.max(Math.round(unref(columnsTotalWidth)), ret) : ret
   })
 
   const mainTableHeight = computed(() => {
-    const { height = 0, maxHeight = 0, footerHeight, hScrollbarSize } = props
+    const { height = 0, maxHeight = 0, hScrollbarSize } = props
+    const footerHeight = unref(effectiveFooterHeight)
 
     if (maxHeight > 0) {
       const _fixedRowsHeight = unref(fixedRowsHeight)
@@ -61,7 +78,7 @@ export const useStyles = (
     return Math.min(tableHeight, totalHeight)
   })
 
-  const mapColumn = (column: TableV2Props['columns'][number]) => column.width
+  const mapColumn = (column: TableV2Props['columns'][number]) => column.width ?? 0
 
   const leftTableWidth = computed(() =>
     sum(unref(fixedColumnsOnLeft).map(mapColumn))
@@ -86,18 +103,18 @@ export const useStyles = (
     return enforceUnit({
       ...style,
       height,
-      width,
+      width: width ?? '100%',
     })
   })
 
   const footerHeight = computed(() =>
-    enforceUnit({ height: props.footerHeight })
+    enforceUnit({ height: unref(effectiveFooterHeight) })
   )
 
   const emptyStyle = computed<CSSProperties>(() => ({
     top: addUnit(unref(headerHeight)),
-    bottom: addUnit(props.footerHeight + unref(addRowHeight)),
-    width: addUnit(props.width),
+    bottom: addUnit(unref(effectiveFooterHeight) + unref(addRowHeight)),
+    width: addUnit(unref(effectiveWidth)),
   }))
 
   return {
@@ -109,9 +126,11 @@ export const useStyles = (
     rightTableWidth,
     windowHeight,
     footerHeight,
+    effectiveFooterHeight,
     emptyStyle,
     rootStyle,
     headerHeight,
+    effectiveWidth,
   }
 }
 

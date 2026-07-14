@@ -7,6 +7,7 @@ import {
   unref,
   watch,
 } from 'vue'
+import { useResizeObserver } from '@vueuse/core'
 import { isArray, isNumber } from '@element-plus/utils'
 import { useNamespace } from '@element-plus/hooks'
 import {
@@ -24,6 +25,14 @@ function useTable(props: TableV2Props) {
   const mainTableRef = ref<TableGridInstance>()
   const leftTableRef = ref<TableGridInstance>()
   const rightTableRef = ref<TableGridInstance>()
+  const containerRef = ref<HTMLElement>()
+  const observedWidth = ref(0)
+  const effectiveWidth = computed(() => props.width ?? observedWidth.value)
+
+  useResizeObserver(containerRef, ([entry]) => {
+    observedWidth.value = entry.contentRect.width
+  })
+
   const {
     columns,
     columnsStyles,
@@ -36,7 +45,12 @@ function useTable(props: TableV2Props) {
 
     updateColumnWidth,
     onColumnSorted,
-  } = useColumns(props, toRef(props, 'columns'), toRef(props, 'fixed'))
+  } = useColumns(
+    props,
+    toRef(props, 'columns'),
+    toRef(props, 'fixed'),
+    effectiveWidth
+  )
 
   const {
     scrollTo,
@@ -109,6 +123,7 @@ function useTable(props: TableV2Props) {
     rightTableWidth,
     windowHeight,
     footerHeight,
+    effectiveFooterHeight,
     emptyStyle,
     rootStyle,
     headerHeight,
@@ -117,10 +132,8 @@ function useTable(props: TableV2Props) {
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
     rowsHeight,
+    effectiveWidth,
   })
-
-  // DOM/Component refs
-  const containerRef = ref()
 
   const showEmpty = computed(() => {
     const noData = unref(data).length === 0
@@ -207,7 +220,9 @@ function useTable(props: TableV2Props) {
     bodyWidth,
     emptyStyle,
     rootStyle,
+    effectiveWidth,
     footerHeight,
+    effectiveFooterHeight,
     mainTableHeight,
     fixedTableHeight,
     leftTableWidth,

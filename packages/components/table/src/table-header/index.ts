@@ -12,7 +12,6 @@ import {
 } from 'vue'
 import { useNamespace } from '@element-plus/hooks'
 import ElIcon from '@element-plus/components/icon'
-import ElButton from '@element-plus/components/button'
 import ElCheckbox from '@element-plus/components/checkbox'
 import FilterPanel from '../filter-panel.vue'
 import useLayoutObserver from '../layout-observer'
@@ -221,10 +220,6 @@ export default defineComponent({
       $parent,
       saveIndexSelection,
       isTableLayoutAuto,
-      showAddColumnTrigger,
-      addColumnButton,
-      editTable,
-      handleAddColumn,
     } = this
     let rowSpan = 1
     return h(
@@ -256,12 +251,6 @@ export default defineComponent({
             }
             const diagonalHeader = column.diagonalHeader
             const isDiagonalHeaderCell = !!diagonalHeader
-            const shouldRenderAddColumnButton =
-              editTable &&
-              showAddColumnTrigger &&
-              addColumnButton &&
-              rowIndex === columnRows.length - 1 &&
-              cellIndex === subColumns.length - 1
             const headerContent = isDiagonalHeaderCell
               ? [
                   h(
@@ -360,51 +349,6 @@ export default defineComponent({
                             }
                           ),
                         ]
-                      ),
-                    shouldRenderAddColumnButton &&
-                      h(
-                        ElButton,
-                        {
-                          class: [
-                            'icon-button',
-                            ns.e('header-add-column-button'),
-                          ],
-                          text: true,
-                          onClick: handleAddColumn,
-                        },
-                        {
-                          default: () => [
-                            h(
-                              ElIcon,
-                              {
-                                size: '12',
-                              },
-                              {
-                                default: () =>
-                                  h(
-                                    'svg',
-                                    {
-                                      xmlns: 'http://www.w3.org/2000/svg',
-                                      width: '12',
-                                      height: '12',
-                                      viewBox: '0 0 12 12',
-                                    },
-                                    [
-                                      h('path', {
-                                        d: 'M2.49988 12L2.49988 0L1.49988 0L1.49988 12H2.49988Z',
-                                      }),
-                                      h('path', {
-                                        d: 'M5 12L5 0L4 0L4 12H5Z',
-                                      }),
-                                      h('path', {
-                                        d: 'M9.5 8.25V6.75H11V5.25H9.5V3.75H8V5.25H6.5V6.75H8V8.25H9.5Z',
-                                      }),
-                                    ]
-                                  ),
-                              }
-                            ),
-                          ],
-                        }
                       ),
                     column.filterable &&
                       h(

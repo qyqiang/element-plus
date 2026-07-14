@@ -41,6 +41,10 @@ export const requiredNumber = {
   required: true,
 } as const
 
+export const optionalNumber = {
+  type: Number,
+} as const
+
 export const rowKey = {
   type: definePropType<KeyType>([String, Number, Symbol]),
   default: 'id',

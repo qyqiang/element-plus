@@ -310,6 +310,7 @@ import { inputEmits, inputProps } from './input'
 import { calcTextareaHeight, looseToNumber } from './utils'
 
 import type { StyleValue } from 'vue'
+import type { TooltipTriggerType } from '@element-plus/components/tooltip/src/trigger'
 
 type TargetElement = HTMLInputElement | HTMLTextAreaElement
 
@@ -428,7 +429,7 @@ const inputTooltipContent = computed(() => {
   return ''
 })
 const inputTooltipDisabled = computed(() => inputTooltipSource.value === 'none')
-const inputTooltipTrigger = computed(() => 'hover')
+const inputTooltipTrigger = computed<TooltipTriggerType>(() => 'hover')
 const showClear = computed(
   () =>
     props.clearable &&

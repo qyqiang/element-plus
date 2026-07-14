@@ -89,7 +89,7 @@ export type Column<T = any> = {
   resizable?: boolean
   style?: CSSProperties
   sortable?: boolean
-  width: number
+  width?: number
   /**
    * Renderers
    */

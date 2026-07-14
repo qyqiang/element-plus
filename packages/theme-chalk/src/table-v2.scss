@@ -152,6 +152,9 @@
       .time {
         margin-left: auto;
         text-align: right;
+        display: flex;
+        gap: 4px;
+        align-items: center;
       }
     }
   }

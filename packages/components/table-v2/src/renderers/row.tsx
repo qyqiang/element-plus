@@ -159,7 +159,9 @@ const RowRenderer: FunctionalComponent<RowRendererProps> = (
   }
 
   const handlerMouseMove = (e: MouseEvent) => {
-    const canUseAddRowTrigger = ghostTable ? editTable : canEditTable && editable
+    const canUseAddRowTrigger = ghostTable
+      ? editTable
+      : canEditTable && editable
 
     if (!showAddRowTrigger || !canUseAddRowTrigger) {
       clearAddRowTrigger()

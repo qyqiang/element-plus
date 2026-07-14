@@ -1,5 +1,5 @@
 <template>
-  <el-table-v2 :columns="columns" :data="data" :width="480" :height="220" />
+  <el-table-v2 :columns="columns" :data="data"  :height="220" />
 </template>
 
 <script lang="ts" setup>

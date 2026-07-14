@@ -9,6 +9,7 @@ import {
   dataType,
   expandKeys,
   fixedDataType,
+  optionalNumber,
   requiredNumber,
   rowKey,
 } from './common'
@@ -224,7 +225,7 @@ export const tableV2Props = buildProps({
   style: {
     type: definePropType<CSSProperties>(Object),
   },
-  width: requiredNumber,
+  width: optionalNumber,
   height: requiredNumber,
   maxHeight: Number,
   useIsScrolling: Boolean,

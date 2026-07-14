@@ -12,7 +12,11 @@ export const isGhostTableRow = (row: Record<string, any> | undefined) =>
   Boolean(row?.[ghostRowSign])
 
 export const hasGhostRowValue = <T extends Record<string, any>>(row: T) => {
-  const rowField = row?.[ghostRowFieldKey] as string | number | symbol | undefined
+  const rowField = row?.[ghostRowFieldKey] as
+    | string
+    | number
+    | symbol
+    | undefined
 
   return Object.entries(row ?? {}).some(([key, value]) => {
     if (
@@ -53,5 +57,7 @@ export const applyRequiredInputState = <T extends Record<string, any>>(
     })
   }
 
-  return isArray(vnodes) ? vnodes.map((vnode) => patchVNode(vnode)) : patchVNode(vnodes)
+  return isArray(vnodes)
+    ? vnodes.map((vnode) => patchVNode(vnode))
+    : patchVNode(vnodes)
 }

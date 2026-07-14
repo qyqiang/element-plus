@@ -1,5 +1,4 @@
 import { renderSlot } from 'vue'
-import ElButton from '@element-plus/components/button'
 import { HeaderCell, SortIcon } from '../components'
 // import ColumnResizer from '../table-column-resizer'
 import { Alignment, SortOrder, oppositeOrderMap } from '../constants'
@@ -62,9 +61,7 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
     editTable,
     ghostTable,
     showAddColumnTrigger,
-    addColumnButton,
     onAddColumnTriggerChange,
-    onTailAddColumn,
     onHeaderDragend,
   } = props
 
@@ -179,7 +176,10 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
 
     const handleMouseMove = (moveEvent: MouseEvent) => {
       const deltaX = moveEvent.clientX - startX
-      const nextWidth = Math.min(maxWidth, Math.max(minWidth, oldWidth + deltaX))
+      const nextWidth = Math.min(
+        maxWidth,
+        Math.max(minWidth, oldWidth + deltaX)
+      )
 
       updateColumnWidth(column, nextWidth)
     }
@@ -198,7 +198,9 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
   }
 
   const handleHeaderMouseMove = (event: MouseEvent) => {
-    const canUseAddColumnTrigger = ghostTable ? editTable : canEditTable && editable
+    const canUseAddColumnTrigger = ghostTable
+      ? editTable
+      : canEditTable && editable
 
     if (
       !showAddColumnTrigger ||
@@ -270,29 +272,6 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
     clearAddColumnTrigger()
   }
 
-  const handleTailAddColumn = (event: MouseEvent) => {
-    event.stopPropagation()
-
-    const realColumns = visibleColumns.filter(
-      (item) =>
-        item.key !== rowDeleteColumnKey && item.placeholderSign !== placeholderSign
-    )
-    const targetColumn = realColumns[realColumns.length - 1]
-
-    if (!targetColumn) return
-
-    const columnIndex = visibleColumns.findIndex(
-      (item) => item.key === targetColumn.key
-    )
-
-    onTailAddColumn?.({
-      column: targetColumn,
-      columnIndex,
-      insertIndex: columnIndex + 1,
-      event,
-    })
-  }
-
   const cellWrapperProps = {
     ...tryCall(headerCellProps, props),
     onClick: column.sortable ? onColumnSorted : undefined,
@@ -302,12 +281,6 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
     style: cellStyle,
     ['data-key']: column.key,
   }
-
-  const shouldRenderTailAddColumnButton =
-    (ghostTable ? editTable : canEditTable && editable) &&
-    showAddColumnTrigger &&
-    addColumnButton &&
-    column.key === visibleColumns[visibleColumns.length - 1]?.key
 
   // For now we don't deliver resizable column feature since it has some UX issue.
   return (
@@ -328,25 +301,6 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
           onClick={(event: MouseEvent) => event.stopPropagation()}
           onMousedown={handleResizeMouseDown}
         />
-      )}
-
-      {shouldRenderTailAddColumnButton && (
-        <ElButton
-          text
-          class={[ns.e('header-add-column-button'), 'icon-button']}
-          onClick={handleTailAddColumn}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 12 12"
-          >
-            <path d="M2.49988 12L2.49988 0L1.49988 0L1.49988 12H2.49988Z" />
-            <path d="M5 12L5 0L4 0L4 12H5Z" />
-            <path d="M9.5 8.25V6.75H11V5.25H9.5V3.75H8V5.25H6.5V6.75H8V8.25H9.5Z" />
-          </svg>
-        </ElButton>
       )}
     </div>
   )

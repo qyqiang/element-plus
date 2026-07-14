@@ -7,7 +7,6 @@ import { ExpandIcon, TableCell } from '../components'
 import { Alignment } from '../constants'
 import {
   ghostRowKey,
-  ghostRowSign,
   placeholderSign,
   rowAddSign,
   rowDeleteColumnKey,
@@ -123,11 +122,16 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
   const isGhostRow = isGhostTableRow(rowData)
   const isRowDeleteColumn = column.key === rowDeleteColumnKey
   const columnCellRenderer = componentToSlot<typeof cellProps>(cellRenderer)
-  const editColumnCellRenderer = componentToSlot<typeof cellProps>(editCellRenderer)
+  const editColumnCellRenderer =
+    componentToSlot<typeof cellProps>(editCellRenderer)
   const shouldRenderEditor = canEditTable ? editable : true
-  const actualColumns = columns.filter((item) => item.placeholderSign !== placeholderSign)
+  const actualColumns = columns.filter(
+    (item) => item.placeholderSign !== placeholderSign
+  )
   const actualColumnCount = actualColumns.length
-  const actualColumnIndex = actualColumns.findIndex((item) => item.key === column.key)
+  const actualColumnIndex = actualColumns.findIndex(
+    (item) => item.key === column.key
+  )
   const shouldRenderGhostAddButton =
     ghostTable &&
     editTable &&
@@ -143,9 +147,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     !shouldRenderGhostAddButton
   const requiredColumns = actualColumns.filter(
     (item) =>
-      item.required &&
-      item.dataKey != null &&
-      item.key !== rowDeleteColumnKey
+      item.required && item.dataKey != null && item.key !== rowDeleteColumnKey
   )
   const isGhostRowAddDisabled = requiredColumns.some((item) =>
     isEmptyRequiredValue(get(rowData, item.dataKey ?? ''))

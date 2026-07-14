@@ -84,6 +84,7 @@ const TableV2 = defineComponent({
       depthMap,
       expandedRowKeys,
       hasFixedColumns,
+      containerRef,
       mainTableRef,
       leftTableRef,
       rightTableRef,
@@ -96,6 +97,8 @@ const TableV2 = defineComponent({
       emptyStyle,
       rootStyle,
       footerHeight,
+      effectiveFooterHeight,
+      effectiveWidth,
 
       showEmpty,
 
@@ -323,7 +326,6 @@ const TableV2 = defineComponent({
         iconSize,
         useIsScrolling,
         vScrollbarSize,
-        width,
       } = props
 
       const _data = unref(data)
@@ -346,7 +348,7 @@ const TableV2 = defineComponent({
         scrollbarStartGap: 2,
         scrollbarEndGap: vScrollbarSize,
         useIsScrolling,
-        width,
+        width: unref(effectiveWidth),
         getRowHeight,
         onRowsRendered,
         onScroll: handleTableScroll,
@@ -560,11 +562,12 @@ const TableV2 = defineComponent({
         height: unref(addRowHeight),
       }
       const addRowWrapperStyle = {
-        bottom: `${props.footerHeight}px`,
+        bottom: `${unref(effectiveFooterHeight)}px`,
       }
 
       return (
         <div
+          ref={containerRef}
           class={rootKls}
           style={unref(rootStyle)}
           onMouseleave={handleTableMouseLeave}
@@ -580,8 +583,8 @@ const TableV2 = defineComponent({
                   {...tableHeaderProps}
                   columns={unref(mainColumns)}
                   class={ns.e('add-row-main-inner')}
-                  rowWidth={width}
-                  width={width}
+                  rowWidth={unref(effectiveWidth)}
+                  width={unref(effectiveWidth)}
                 >
                   {{
                     fixed: tableSlots.row,
@@ -630,8 +633,8 @@ const TableV2 = defineComponent({
                   {...tableHeaderProps}
                   columns={unref(mainColumns)}
                   class={ns.e('add-row-main-inner')}
-                  rowWidth={width}
-                  width={width}
+                  rowWidth={unref(effectiveWidth)}
+                  width={unref(effectiveWidth)}
                 >
                   {{
                     fixed: tableSlots.row,

@@ -13,8 +13,11 @@
     }
 
     .el-select__wrapper {
-      background-color: var(--color-red-100);
-      border-color: var(--color-gray-500);
+      background-color: var(--color-red-200);
+
+      .float-label {
+        color: var(--color-gray-990);
+      }
     }
 
     .el-input__validateIcon {

@@ -12,28 +12,59 @@ import type { CSSProperties, Ref } from 'vue'
 import type { TableV2Props } from '../table'
 import type { AnyColumns, Column, KeyType } from '../types'
 
+const AUTO_COLUMN_PADDING = 48
+const FALLBACK_HEADER_CHAR_WIDTH = 8
+const textWidthCache = new Map<string, number>()
+
+const measureHeaderTextWidth = (text: string) => {
+  if (textWidthCache.has(text)) return textWidthCache.get(text)!
+
+  let width = text.length * FALLBACK_HEADER_CHAR_WIDTH
+  const isJsdom =
+    typeof navigator !== 'undefined' && /jsdom/i.test(navigator.userAgent)
+
+  if (typeof document !== 'undefined' && !isJsdom) {
+    try {
+      const canvas = document.createElement('canvas')
+      const context = canvas.getContext('2d')
+
+      if (context) {
+        context.font = '400 14px Inter, sans-serif'
+        width = Math.ceil(context.measureText(text).width)
+      }
+    } catch {
+      // jsdom does not implement canvas measurement, so keep the fallback width.
+    }
+  }
+
+  textWidthCache.set(text, width)
+  return width
+}
+
+const getAutoColumnWidth = (column: Column<any>) =>
+  measureHeaderTextWidth(String(column.title ?? '')) + AUTO_COLUMN_PADDING
+
 function useColumns(
   props: TableV2Props,
   columns: Ref<AnyColumns>,
-  fixed: Ref<boolean>
+  fixed: Ref<boolean>,
+  effectiveWidth: Ref<number>
 ) {
   const columnWidths = ref<Record<KeyType, number>>({})
 
   const _columns = computed<AnyColumns>(() => {
     const normalizedColumns: AnyColumns = unref(columns).map(
-      (column, index) => ({
-        ...column,
-        key: column.key ?? column.dataKey ?? index,
-        resizable: column.resizable !== false,
-        width:
-          columnWidths.value[column.key ?? column.dataKey ?? index] ??
-          column.width,
-      })
-    )
+      (column, index) => {
+        const key = column.key ?? column.dataKey ?? index
 
-    if (!(props.canEditTable && props.editable) || props.ghostTable) {
-      return normalizedColumns
-    }
+        return {
+          ...column,
+          key,
+          resizable: column.resizable !== false,
+          width: columnWidths.value[key] ?? column.width,
+        }
+      }
+    )
 
     const rowDeleteColumn: Column<any> = {
       key: rowDeleteColumnKey,
@@ -47,7 +78,55 @@ function useColumns(
       headerClass: 'is-row-delete-column',
     }
 
-    return [...normalizedColumns, rowDeleteColumn]
+    const columnsWithEditAction =
+      !(props.canEditTable && props.editable) || props.ghostTable
+        ? normalizedColumns
+        : [...normalizedColumns, rowDeleteColumn]
+
+    const visibleColumns = columnsWithEditAction.filter(
+      (column) => !column.hidden
+    )
+    const autoWidthCandidates = visibleColumns.filter(
+      (column) => column.width == null
+    )
+
+    if (!autoWidthCandidates.length) return columnsWithEditAction
+
+    const stretchColumn = autoWidthCandidates[autoWidthCandidates.length - 1]
+    const availableWidth = Math.max(
+      unref(effectiveWidth) - props.vScrollbarSize,
+      0
+    )
+
+    const resolvedColumns = columnsWithEditAction.map((column) => {
+      if (column.width != null) return column
+
+      return {
+        ...column,
+        width: getAutoColumnWidth(column),
+      }
+    })
+
+    const otherWidth = resolvedColumns
+      .filter(
+        (column) =>
+          !column.hidden && (column.key ?? column.dataKey) !== stretchColumn.key
+      )
+      .reduce((width, column) => width + (column.width ?? 0), 0)
+
+    const stretchWidth = Math.max(
+      getAutoColumnWidth(stretchColumn),
+      availableWidth - otherWidth
+    )
+
+    return resolvedColumns.map((column) =>
+      column.key === stretchColumn.key
+        ? {
+            ...column,
+            width: stretchWidth,
+          }
+        : column
+    )
   })
 
   const visibleColumns = computed(() => {
@@ -109,7 +188,7 @@ function useColumns(
 
   const columnsTotalWidth = computed(() => {
     return unref(visibleColumns).reduce(
-      (width, column) => width + column.width,
+      (width, column) => width + (column.width ?? 0),
       0
     )
   })

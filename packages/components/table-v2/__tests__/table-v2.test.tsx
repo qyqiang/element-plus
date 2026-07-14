@@ -37,6 +37,56 @@ const generateData = (
   })
 
 describe('TableV2.vue', () => {
+  test('defaults root width to 100% when width is not provided', async () => {
+    const columns = ref(generateColumns(2))
+    const data = ref(generateData(columns.value, 2))
+    const wrapper = mount(() => (
+      <TableV2 columns={columns.value} data={data.value} height={400} />
+    ))
+
+    expect(wrapper.find('.el-table-v2__root').attributes('style')).toContain(
+      'width: 100%;'
+    )
+  })
+
+  test('auto sizes widthless columns and stretches the last widthless column', async () => {
+    const columns = ref([
+      {
+        key: 'short',
+        dataKey: 'short',
+        title: 'ID',
+      },
+      {
+        key: 'medium',
+        dataKey: 'medium',
+        title: 'Status',
+      },
+      {
+        key: 'tail',
+        dataKey: 'tail',
+        title: 'Description',
+      },
+    ])
+    const data = ref([
+      {
+        id: 'row-0',
+        short: '1',
+        medium: 'Open',
+        tail: 'First row',
+      },
+    ])
+    const wrapper = mount(() => (
+      <TableV2 columns={columns.value as any} data={data.value} width={700} height={400} />
+    ))
+    await nextTick()
+
+    const headerCells = wrapper.findAll('.el-table-v2__header-cell')
+
+    expect(headerCells[0].attributes('style')).toContain('width: 64px;')
+    expect(headerCells[1].attributes('style')).toContain('width: 96px;')
+    expect(headerCells[2].attributes('style')).toContain('width: 534px;')
+  })
+
   test('slots cell', async () => {
     const columns = ref(generateColumns(10))
     const data = ref(generateData(columns.value, 20))
@@ -387,6 +437,31 @@ describe('TableV2.vue', () => {
     expect(wrapper.findAll('.el-table-v2__row-delete-button')).toHaveLength(1)
   })
 
+  test('shows default footer in editable mode even when footerHeight is not provided', async () => {
+    const columns = ref(generateColumns(2))
+    const data = ref(generateData(columns.value, 2))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+        isFooterDefault
+        total={12}
+        updateTime="2026-07-07 12:30"
+      />
+    ))
+
+    const footer = wrapper.find('.footer-default')
+    const addRow = wrapper.find('.el-table-v2__add-row-main')
+
+    expect(footer.exists()).toBe(true)
+    expect(footer.attributes('style')).toContain('height: 44px;')
+    expect(addRow.attributes('style')).toContain('bottom: 44px;')
+  })
+
   test('emits row-add when add row is clicked', async () => {
     const columns = ref(generateColumns(1))
     const data = ref(generateData(columns.value, 1))
@@ -646,9 +721,9 @@ describe('TableV2.vue', () => {
     expect(
       wrapper.findAll('.el-table-v2__add-row-main .icon-button')
     ).toHaveLength(1)
-    expect(
-      wrapper.find('.el-table-v2__add-row-main .edit-cell').exists()
-    ).toBe(false)
+    expect(wrapper.find('.el-table-v2__add-row-main .edit-cell').exists()).toBe(
+      false
+    )
   })
 
   test('emits add-ghost-row from the ghost row add button and keeps the placeholder from the column title', async () => {
@@ -681,9 +756,13 @@ describe('TableV2.vue', () => {
         dataKey: 'name',
         title: 'Name',
         width: 180,
-        editCellRenderer: ({ cellData, column }: { cellData: string; column: any }) => (
-          <InputStub modelValue={cellData} placeholder={column.title} />
-        ),
+        editCellRenderer: ({
+          cellData,
+          column,
+        }: {
+          cellData: string
+          column: any
+        }) => <InputStub modelValue={cellData} placeholder={column.title} />,
       },
       {
         key: 'action',
@@ -867,9 +946,7 @@ describe('TableV2.vue', () => {
     await nextTick()
 
     ghostInputs = wrapper.findAllComponents(InputStub)
-    expect(ghostInputs[ghostInputs.length - 1].props('inputType')).toBe(
-      'error'
-    )
+    expect(ghostInputs[ghostInputs.length - 1].props('inputType')).toBe('error')
     expect(ghostInputs[ghostInputs.length - 1].props('infoTip')).toBe(
       'Required'
     )

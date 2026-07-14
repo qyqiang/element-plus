@@ -2,7 +2,6 @@
   <el-table-v2
     :columns="columns"
     :data="data"
-    :width="700"
     fixed
     :height="400"
     :editable="editable"
