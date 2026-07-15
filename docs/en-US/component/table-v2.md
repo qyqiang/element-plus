@@ -20,7 +20,7 @@ table-v2/editable-table
 
 ## Ghost Table
 
-:::demo Use `ghost-table`, `edit-table`, and column `editCellRenderer` together with `show-add-column-trigger` and `show-add-row-trigger`. This example now carries the richer editable-table feel as well, mixing checkbox, input, and select editors in the same grid while still keeping the bottom ghost row editable through the same rendering path. In multi-column ghost rows, the leading cells stay editable while the trailing cell renders the built-in add action. Columns marked with `required` automatically drive empty editable `ElInput` renderers into the built-in error state once the ghost row starts receiving values, and the table instance exposes `validateRequiredColumns()` so submit handlers can block incomplete rows. You can also listen to `add-ghost-row` to turn the draft row into real table data.
+:::demo Use `ghost-table`, `edit-table`, `ghost-row-template`, and column `editCellRenderer` together with `show-add-column-trigger` and `show-add-row-trigger`. This example now carries the richer editable-table feel as well, mixing checkbox, input, and select editors in the same grid while still keeping the bottom ghost row editable through the same rendering path. The built-in right-side action column now matches Editable Table: regular rows render delete actions there, and the ghost row uses that same column for the built-in add action. Columns marked with `required` automatically drive empty editable renderers into the built-in error state once the ghost row starts receiving values, and the table instance exposes `validateRequiredColumns()` so submit handlers can block incomplete rows. You can also listen to `add-ghost-row` to turn the draft row into real table data while preserving any extra template fields.
 
 table-v2/ghost-table
 :::
@@ -44,6 +44,16 @@ Drag the header border to resize a column. After the drag ends, the table emits 
 :::demo
 
 table-v2/resizable-columns
+
+:::
+
+## Percentage widths
+
+Set `column.width` to a percentage string such as `50%` to size a column against the current table width.
+
+:::demo
+
+table-v2/percentage-widths
 
 :::
 
@@ -75,6 +85,7 @@ table-v2/diagonal-header
 | editable                 | Whether the legacy editable table mode should render its editable content                                                   | `boolean`                                              | true      |
 | ghost-table              | Whether to enable ghost table rendering with a bottom draft row                                                             | `boolean`                                              | false     |
 | edit-table               | Whether to render column `editCellRenderer` output for table rows and the ghost row when `ghost-table` is enabled          | `boolean`                                              | false     |
+| ghost-row-template       | Default draft row payload for `ghost-table`. The template is merged into the ghost row, emitted through `add-ghost-row`, and used again when the draft row resets after adding | `object`                                               | `{}`      |
 | show-add-column-trigger   | Whether to show an add-column trigger when hovering a header divider                                                       | `boolean`                                              | false     |
 | add-column-button         | Whether to show the add-column button in the last header cell when `show-add-column-trigger` is enabled                    | `boolean`                                              | true      |
 | show-add-row-trigger      | Whether to show an add-row trigger when hovering a row divider                                                             | `boolean`                                              | false     |
@@ -96,8 +107,8 @@ table-v2/diagonal-header
 | class                     | Class name for the virtual table, will be applied to all three tables (left, right, main)                                  | `string` / `array` / `object`                          | —         |
 | fixed                     | Flag indicates the table column's width to be fixed or flexible.                                                           | `boolean`                                              | false     |
 | width                     | Width of the table. When omitted, the table root defaults to `100%` and uses the rendered container width for layout      | `number`                                               | `100%`    |
-| height ^(required)        | Height of the table                                                                                                        | `number`                                               | —         |
-| max-height                | Maximum height of the table                                                                                                | `number`                                               | —         |
+| height                    | Height of the table. When omitted, the table grows with its content. Use `max-height` by itself to let the table auto-size until it reaches the limit | `number`                                               | auto      |
+| max-height                | Maximum height of the table. When `height` is omitted, the table auto-sizes up to this value and then shows scrollbars    | `number`                                               | —         |
 | indent-size               | horizontal indentation of tree table                                                                                       | `number`                                               | 12        |
 | h-scrollbar-size          | Indicates the horizontal scrollbar's size for the table, used to prevent the horizontal and vertical scrollbar to collapse | `number`                                               | 6         |
 | v-scrollbar-size          | Indicates the vertical scrollbar's size for the table, used to prevent the horizontal and vertical scrollbar to collapse   | `number`                                               | 6         |
@@ -172,7 +183,7 @@ Note that these are `JavaScript` Objects, so you **CANNOT USE** kebab-case for t
 | title              | The default text rendered in header cell                              | `string`                                                                                                                                                             | —       |
 | maxWidth           | Maximum width for the column                                          | `number`                                                                                                                                                             | —       |
 | minWidth           | Minimum width for the column                                          | `number`                                                                                                                                                             | —       |
-| width              | Width for the column. If omitted, earlier widthless columns use header text width plus `48px`, and the last widthless column fills the remaining space | `number`                                                                                                                                                             | auto    |
+| width              | Width for the column. Supports pixel numbers and percentage strings like `50%`. If omitted, earlier widthless columns use header text width plus `48px`, and the last widthless column fills the remaining space | `number` / `string`                                                                                                                                                             | auto    |
 | cellRenderer       | Customized Cell renderer                                              | `VueComponent` / (props: CellRenderProps) => VNode                                                                                                       | —       |
 | editCellRenderer   | Customized editable cell renderer used by `ghost-table` + `edit-table` | `VueComponent` / (props: CellRenderProps) => VNode                                                                                                       | —       |
 | headerCellRenderer | Customized Header renderer                                            | `VueComponent` / (props: HeaderRenderProps) => VNode                                                                                                     | —       |

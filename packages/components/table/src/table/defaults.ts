@@ -91,6 +91,7 @@ interface Table<T extends DefaultRow = any> extends ComponentInternalInstance {
   editingRow?: Ref<EditingRow<T>>
   activeEditableCell?: Ref<ActiveEditableCell<T>>
   ghostRowData?: Ref<DefaultRow>
+  scheduleGhostRowScroll?: () => void
   startRowEdit?: (
     row: DefaultRow,
     prop: string,

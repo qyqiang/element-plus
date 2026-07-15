@@ -56,6 +56,7 @@ const isDisabled = computed(() =>
 const handleAdd = (event: MouseEvent) => {
   if (isDisabled.value) return
 
+  table?.scheduleGhostRowScroll?.()
   table?.emit('add-ghost-row', {
     event,
     row: props.row,

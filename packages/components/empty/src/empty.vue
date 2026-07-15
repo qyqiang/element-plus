@@ -2,9 +2,7 @@
   <div :class="ns.b()">
     <div :class="ns.e('image')" :style="imageStyle">
       <img v-if="image" :src="image" ondragstart="return false" />
-      <slot v-else name="image">
-        <img-empty />
-      </slot>
+      <slot v-else name="image"> </slot>
     </div>
     <div :class="ns.e('description')">
       <slot v-if="$slots.description" name="description" />
@@ -20,7 +18,6 @@
 import { computed } from 'vue'
 import { useLocale, useNamespace } from '@element-plus/hooks'
 import { addUnit } from '@element-plus/utils'
-import ImgEmpty from './img-empty.vue'
 import { emptyProps } from './empty'
 
 import type { CSSProperties } from 'vue'

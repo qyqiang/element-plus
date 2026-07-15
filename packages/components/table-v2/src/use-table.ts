@@ -117,6 +117,7 @@ function useTable(props: TableV2Props) {
   const {
     addRowHeight,
     bodyWidth,
+    effectiveHScrollbarSize,
     fixedTableHeight,
     mainTableHeight,
     leftTableWidth,
@@ -164,7 +165,7 @@ function useTable(props: TableV2Props) {
     const clientHeight = unref(windowHeight)
 
     const remainDistance =
-      _totalHeight - (scrollTop + clientHeight) + props.hScrollbarSize
+      _totalHeight - (scrollTop + clientHeight) + unref(effectiveHScrollbarSize)
 
     if (
       !isEndReached.value &&
@@ -219,6 +220,7 @@ function useTable(props: TableV2Props) {
     addRowHeight,
     bodyWidth,
     emptyStyle,
+    effectiveHScrollbarSize,
     rootStyle,
     effectiveWidth,
     footerHeight,

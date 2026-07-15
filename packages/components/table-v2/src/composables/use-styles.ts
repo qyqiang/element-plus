@@ -24,6 +24,19 @@ export const useStyles = (
     effectiveWidth,
   }: UseStyleProps
 ) => {
+  const availableBodyWidth = computed(() =>
+    Math.max(unref(effectiveWidth) - props.vScrollbarSize, 0)
+  )
+
+  const hasHorizontalScrollbar = computed(
+    () =>
+      props.fixed && unref(columnsTotalWidth) > unref(availableBodyWidth)
+  )
+
+  const effectiveHScrollbarSize = computed(() =>
+    hasHorizontalScrollbar.value ? props.hScrollbarSize : 0
+  )
+
   const addRowHeight = computed(() =>
     (props.canEditTable && props.editable) ||
     (props.ghostTable && props.editTable)
@@ -31,40 +44,48 @@ export const useStyles = (
       : 0
   )
 
-  const shouldUseEditableDefaultFooterHeight = computed(
-    () =>
-      props.isFooterDefault &&
-      props.footerHeight === 0 &&
-      ((props.canEditTable && props.editable) ||
-        (props.ghostTable && props.editTable))
+  const shouldUseDefaultFooterHeight = computed(
+    () => props.isFooterDefault && props.footerHeight === 0
   )
 
   const effectiveFooterHeight = computed(() =>
-    shouldUseEditableDefaultFooterHeight.value ? 44 : props.footerHeight
+    shouldUseDefaultFooterHeight.value ? 44 : props.footerHeight
   )
 
+  const contentHeight = computed(() => {
+    const _fixedRowsHeight = unref(fixedRowsHeight)
+    const _rowsHeight = unref(rowsHeight)
+    const _headerHeight = unref(headerHeight)
+
+    return (
+      _headerHeight +
+      _fixedRowsHeight +
+      _rowsHeight +
+      unref(effectiveHScrollbarSize)
+    )
+  })
+
   const bodyWidth = computed(() => {
-    const { fixed, vScrollbarSize } = props
-    const width = unref(effectiveWidth)
-    const ret = Math.max(width - vScrollbarSize, 0)
+    const { fixed } = props
+    const ret = unref(availableBodyWidth)
     return fixed ? Math.max(Math.round(unref(columnsTotalWidth)), ret) : ret
   })
 
   const mainTableHeight = computed(() => {
-    const { height = 0, maxHeight = 0, hScrollbarSize } = props
+    const { height, maxHeight = 0 } = props
     const footerHeight = unref(effectiveFooterHeight)
+    const addRowSpace = unref(addRowHeight)
+    const availableMaxHeight = Math.max(maxHeight - footerHeight - addRowSpace, 0)
 
     if (maxHeight > 0) {
-      const _fixedRowsHeight = unref(fixedRowsHeight)
-      const _rowsHeight = unref(rowsHeight)
-      const _headerHeight = unref(headerHeight)
-      const total =
-        _headerHeight + _fixedRowsHeight + _rowsHeight + hScrollbarSize
-
-      return Math.min(total, maxHeight - footerHeight - unref(addRowHeight))
+      return Math.min(unref(contentHeight), availableMaxHeight)
     }
 
-    return height - footerHeight - unref(addRowHeight)
+    if (isNumber(height)) {
+      return Math.max(height - footerHeight - addRowSpace, 0)
+    }
+
+    return unref(contentHeight)
   })
 
   const fixedTableHeight = computed(() => {
@@ -78,7 +99,8 @@ export const useStyles = (
     return Math.min(tableHeight, totalHeight)
   })
 
-  const mapColumn = (column: TableV2Props['columns'][number]) => column.width ?? 0
+  const mapColumn = (column: TableV2Props['columns'][number]) =>
+    typeof column.width === 'number' ? column.width : 0
 
   const leftTableWidth = computed(() =>
     sum(unref(fixedColumnsOnLeft).map(mapColumn))
@@ -98,11 +120,20 @@ export const useStyles = (
     return unref(mainTableHeight) - unref(headerHeight) - unref(fixedRowsHeight)
   })
 
+  const rootHeight = computed(() => {
+    return (
+      unref(mainTableHeight) +
+      unref(effectiveFooterHeight) +
+      unref(addRowHeight)
+    )
+  })
+
   const rootStyle = computed<CSSProperties>(() => {
-    const { style = {}, height, width } = props
+    const { style = {}, height, maxHeight, width } = props
     return enforceUnit({
       ...style,
-      height,
+      height: height ?? unref(rootHeight),
+      maxHeight: height == null ? addUnit(maxHeight) : undefined,
       width: width ?? '100%',
     })
   })
@@ -120,6 +151,7 @@ export const useStyles = (
   return {
     addRowHeight,
     bodyWidth,
+    effectiveHScrollbarSize,
     fixedTableHeight,
     mainTableHeight,
     leftTableWidth,
@@ -131,6 +163,7 @@ export const useStyles = (
     rootStyle,
     headerHeight,
     effectiveWidth,
+    rootHeight,
   }
 }
 

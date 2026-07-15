@@ -1,6 +1,7 @@
 import {
   computed,
   defineComponent,
+  nextTick,
   provide,
   ref,
   shallowRef,
@@ -13,6 +14,7 @@ import {
   ghostRowFieldKey,
   ghostRowKey,
   ghostRowSign,
+  ghostRowTouchedSign,
   rowAddKey,
   rowAddSign,
 } from './private'
@@ -123,16 +125,19 @@ const TableV2 = defineComponent({
     const addColumnTrigger = shallowRef<AddColumnTrigger | null>(null)
     const addRowTrigger = ref<AddRowTrigger | null>(null)
     const createGhostRowData = () => ({
+      ...(props.ghostRowTemplate ?? {}),
       [props.rowKey]: 'ghost-row',
       [ghostRowKey]: 'ghost-row',
       [ghostRowFieldKey]: props.rowKey,
       [ghostRowSign]: true,
+      [ghostRowTouchedSign]: false,
     })
     const ghostRowDraft = ref(createGhostRowData())
     const isLegacyEditMode = computed(
       () => props.canEditTable && props.editable
     )
     const isGhostEditMode = computed(() => props.ghostTable && props.editTable)
+    let stopPendingGhostRowScrollWatch: (() => void) | undefined
 
     const clearAddColumnTrigger = () => {
       addColumnTrigger.value = null
@@ -148,6 +153,30 @@ const TableV2 = defineComponent({
 
     const updateAddRowTrigger = (payload: AddRowTrigger | null) => {
       addRowTrigger.value = payload
+    }
+
+    const clearPendingGhostRowScrollWatch = () => {
+      stopPendingGhostRowScrollWatch?.()
+      stopPendingGhostRowScrollWatch = undefined
+    }
+
+    const scheduleGhostRowScroll = () => {
+      clearPendingGhostRowScrollWatch()
+      const previousLength = props.data.length
+
+      stopPendingGhostRowScrollWatch = watch(
+        () => props.data.length,
+        async (length) => {
+          if (length <= previousLength) return
+
+          clearPendingGhostRowScrollWatch()
+          await nextTick()
+          scrollToRow(length - 1, 'end')
+        },
+        {
+          flush: 'post',
+        }
+      )
     }
 
     const handleAddColumnClick = (event: MouseEvent) => {
@@ -292,7 +321,9 @@ const TableV2 = defineComponent({
       emit('row-add', params)
     }
     const onAddGhostRow = (params: GhostRowAddParams<any>) => {
+      scheduleGhostRowScroll()
       emit('add-ghost-row', params)
+      ghostRowDraft.value = createGhostRowData()
     }
     const onHeaderDragend = (
       newWidth: number,
@@ -356,6 +387,7 @@ const TableV2 = defineComponent({
 
       const leftColumnsWidth = unref(leftTableWidth)
       const _fixedTableHeight = unref(fixedTableHeight)
+      const mainContentWidth = unref(bodyWidth)
 
       const leftTableProps = {
         cache,
@@ -447,6 +479,7 @@ const TableV2 = defineComponent({
         onRowDelete,
         rowKey,
         expandedRowKeys: unref(expandedRowKeys),
+        visibleColumns: unref(visibleColumns),
         ns,
       }
 
@@ -582,8 +615,8 @@ const TableV2 = defineComponent({
                   {...addRowHeaderProps}
                   {...tableHeaderProps}
                   columns={unref(mainColumns)}
-                  class={ns.e('add-row-main-inner')}
-                  rowWidth={unref(effectiveWidth)}
+                  class={`${ns.e('add-row-main-inner')} ${ns.e('header-wrapper')}`}
+                  rowWidth={mainContentWidth}
                   width={unref(effectiveWidth)}
                 >
                   {{
@@ -597,7 +630,7 @@ const TableV2 = defineComponent({
                     {...addRowHeaderProps}
                     {...tableHeaderProps}
                     columns={unref(fixedColumnsOnLeft)}
-                    class={ns.e('add-row-left-inner')}
+                    class={`${ns.e('add-row-left-inner')} ${ns.e('header-wrapper')}`}
                     rowWidth={leftColumnsWidth}
                     width={leftColumnsWidth}
                   >
@@ -613,7 +646,7 @@ const TableV2 = defineComponent({
                     {...addRowHeaderProps}
                     {...tableHeaderProps}
                     columns={unref(fixedColumnsOnRight)}
-                    class={ns.e('add-row-right-inner')}
+                    class={`${ns.e('add-row-right-inner')} ${ns.e('header-wrapper')}`}
                     rowWidth={rightColumnsWidth}
                     width={rightColumnsWidth}
                   >
@@ -632,8 +665,8 @@ const TableV2 = defineComponent({
                   {...ghostRowHeaderProps}
                   {...tableHeaderProps}
                   columns={unref(mainColumns)}
-                  class={ns.e('add-row-main-inner')}
-                  rowWidth={unref(effectiveWidth)}
+                  class={`${ns.e('add-row-main-inner')} ${ns.e('header-wrapper')}`}
+                  rowWidth={mainContentWidth}
                   width={unref(effectiveWidth)}
                 >
                   {{
@@ -647,7 +680,7 @@ const TableV2 = defineComponent({
                     {...ghostRowHeaderProps}
                     {...tableHeaderProps}
                     columns={unref(fixedColumnsOnLeft)}
-                    class={ns.e('add-row-left-inner')}
+                    class={`${ns.e('add-row-left-inner')} ${ns.e('header-wrapper')}`}
                     rowWidth={leftColumnsWidth}
                     width={leftColumnsWidth}
                   >
@@ -663,7 +696,7 @@ const TableV2 = defineComponent({
                     {...ghostRowHeaderProps}
                     {...tableHeaderProps}
                     columns={unref(fixedColumnsOnRight)}
-                    class={ns.e('add-row-right-inner')}
+                    class={`${ns.e('add-row-right-inner')} ${ns.e('header-wrapper')}`}
                     rowWidth={rightColumnsWidth}
                     width={rightColumnsWidth}
                   >

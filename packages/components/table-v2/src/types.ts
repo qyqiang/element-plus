@@ -67,6 +67,8 @@ export type DiagonalHeaderConfig = {
   to: string
 }
 
+export type ColumnWidth = number | string
+
 export type Column<T = any> = {
   /**
    * Attributes
@@ -89,7 +91,7 @@ export type Column<T = any> = {
   resizable?: boolean
   style?: CSSProperties
   sortable?: boolean
-  width?: number
+  width?: ColumnWidth
   /**
    * Renderers
    */

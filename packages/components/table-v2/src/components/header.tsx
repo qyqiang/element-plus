@@ -3,9 +3,9 @@ import {
   defineComponent,
   inject,
   nextTick,
-  onUpdated,
   ref,
   unref,
+  watch,
 } from 'vue'
 import { useNamespace } from '@element-plus/hooks'
 import { ensureArray } from '@element-plus/utils'
@@ -93,11 +93,14 @@ const TableV2Header = defineComponent({
       })
     }
 
-    onUpdated(() => {
-      if (scrollLeftInfo?.value) {
-        scrollToLeft(scrollLeftInfo.value)
+    watch(
+      () => scrollLeftInfo?.value,
+      (left) => {
+        if (typeof left === 'number') {
+          scrollToLeft(left)
+        }
       }
-    })
+    )
     expose({
       /**
        * @description scroll to position based on the provided value

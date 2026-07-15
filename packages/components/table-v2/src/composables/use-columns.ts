@@ -15,6 +15,8 @@ import type { AnyColumns, Column, KeyType } from '../types'
 const AUTO_COLUMN_PADDING = 48
 const FALLBACK_HEADER_CHAR_WIDTH = 8
 const textWidthCache = new Map<string, number>()
+const PERCENTAGE_WIDTH_RE = /^\s*(-?\d+(?:\.\d+)?)%\s*$/
+const PIXEL_WIDTH_RE = /^\s*(-?\d+(?:\.\d+)?)(?:px)?\s*$/
 
 const measureHeaderTextWidth = (text: string) => {
   if (textWidthCache.has(text)) return textWidthCache.get(text)!
@@ -44,6 +46,26 @@ const measureHeaderTextWidth = (text: string) => {
 const getAutoColumnWidth = (column: Column<any>) =>
   measureHeaderTextWidth(String(column.title ?? '')) + AUTO_COLUMN_PADDING
 
+const resolveColumnWidth = (
+  width: Column<any>['width'],
+  referenceWidth: number
+) => {
+  if (typeof width === 'number') return width
+  if (typeof width !== 'string') return undefined
+
+  const percentageMatch = width.match(PERCENTAGE_WIDTH_RE)
+  if (percentageMatch) {
+    return Math.round((referenceWidth * Number(percentageMatch[1])) / 100)
+  }
+
+  const pixelMatch = width.match(PIXEL_WIDTH_RE)
+  if (pixelMatch) {
+    return Number(pixelMatch[1])
+  }
+
+  return undefined
+}
+
 function useColumns(
   props: TableV2Props,
   columns: Ref<AnyColumns>,
@@ -53,6 +75,10 @@ function useColumns(
   const columnWidths = ref<Record<KeyType, number>>({})
 
   const _columns = computed<AnyColumns>(() => {
+    const availableWidth = Math.max(
+      unref(effectiveWidth) - props.vScrollbarSize,
+      0
+    )
     const normalizedColumns: AnyColumns = unref(columns).map(
       (column, index) => {
         const key = column.key ?? column.dataKey ?? index
@@ -61,7 +87,9 @@ function useColumns(
           ...column,
           key,
           resizable: column.resizable !== false,
-          width: columnWidths.value[key] ?? column.width,
+          width:
+            columnWidths.value[key] ??
+            resolveColumnWidth(column.width, availableWidth),
         }
       }
     )
@@ -78,10 +106,13 @@ function useColumns(
       headerClass: 'is-row-delete-column',
     }
 
-    const columnsWithEditAction =
-      !(props.canEditTable && props.editable) || props.ghostTable
-        ? normalizedColumns
-        : [...normalizedColumns, rowDeleteColumn]
+    const shouldAppendActionColumn =
+      (props.canEditTable && props.editable) ||
+      (props.ghostTable && props.editTable)
+
+    const columnsWithEditAction = shouldAppendActionColumn
+      ? [...normalizedColumns, rowDeleteColumn]
+      : normalizedColumns
 
     const visibleColumns = columnsWithEditAction.filter(
       (column) => !column.hidden
@@ -93,10 +124,6 @@ function useColumns(
     if (!autoWidthCandidates.length) return columnsWithEditAction
 
     const stretchColumn = autoWidthCandidates[autoWidthCandidates.length - 1]
-    const availableWidth = Math.max(
-      unref(effectiveWidth) - props.vScrollbarSize,
-      0
-    )
 
     const resolvedColumns = columnsWithEditAction.map((column) => {
       if (column.width != null) return column
@@ -112,7 +139,11 @@ function useColumns(
         (column) =>
           !column.hidden && (column.key ?? column.dataKey) !== stretchColumn.key
       )
-      .reduce((width, column) => width + (column.width ?? 0), 0)
+      .reduce(
+        (width, column) =>
+          width + (typeof column.width === 'number' ? column.width : 0),
+        0
+      )
 
     const stretchWidth = Math.max(
       getAutoColumnWidth(stretchColumn),
@@ -188,7 +219,7 @@ function useColumns(
 
   const columnsTotalWidth = computed(() => {
     return unref(visibleColumns).reduce(
-      (width, column) => width + (column.width ?? 0),
+      (width, column) => width + (typeof column.width === 'number' ? column.width : 0),
       0
     )
   })

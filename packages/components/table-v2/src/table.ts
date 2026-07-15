@@ -10,7 +10,6 @@ import {
   expandKeys,
   fixedDataType,
   optionalNumber,
-  requiredNumber,
   rowKey,
 } from './common'
 import { tableV2RowProps } from './row'
@@ -163,6 +162,10 @@ export const tableV2Props = buildProps({
   canEditTable: Boolean,
   ghostTable: Boolean,
   editTable: Boolean,
+  ghostRowTemplate: {
+    type: definePropType<Record<string, any>>(Object),
+    default: () => ({}),
+  },
   showAddColumnTrigger: Boolean,
   addColumnButton: {
     type: Boolean,
@@ -226,7 +229,7 @@ export const tableV2Props = buildProps({
     type: definePropType<CSSProperties>(Object),
   },
   width: optionalNumber,
-  height: requiredNumber,
+  height: optionalNumber,
   maxHeight: Number,
   useIsScrolling: Boolean,
   indentSize: {

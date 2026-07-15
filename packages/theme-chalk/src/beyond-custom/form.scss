@@ -3,10 +3,6 @@
     .el-input__wrapper, .el-textarea__inner {
       background-color: var(--color-red-200);
 
-      .float-label {
-        color: var(--color-gray-990);
-      }
-
       &.is-focus {
         background-color: #fff;
       }
@@ -14,10 +10,6 @@
 
     .el-select__wrapper {
       background-color: var(--color-red-200);
-
-      .float-label {
-        color: var(--color-gray-990);
-      }
     }
 
     .el-input__validateIcon {

@@ -162,6 +162,9 @@
   @include e('empty') {
     position: absolute;
     left: 0;
+    .el-empty {
+      padding: 12px 0;
+    }
   }
 
   @include e('overlay') {
@@ -197,6 +200,18 @@
     z-index: 4;
     overflow: hidden;
     box-shadow: -2px 0 4px 0 rgb(0 0 0 / 6%);
+  }
+
+  @include e('add-row-main-inner') {
+    overflow: hidden;
+  }
+
+  @include e('add-row-left-inner') {
+    overflow: hidden;
+  }
+
+  @include e('add-row-right-inner') {
+    overflow: hidden;
   }
 
   @include e('header-row') {

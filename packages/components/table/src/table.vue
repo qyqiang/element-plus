@@ -265,6 +265,7 @@ import {
   computed,
   defineComponent,
   getCurrentInstance,
+  nextTick,
   onBeforeUnmount,
   provide,
   ref,
@@ -293,7 +294,7 @@ import { hColgroup } from './h-helper'
 import { useScrollbar } from './composables/use-scrollbar'
 import { ghostRowKey, ghostRowSign } from './private'
 
-import type { CSSProperties } from 'vue'
+import type { CSSProperties, WatchStopHandle } from 'vue'
 import type { DefaultRow, Table } from './table/defaults'
 import type { TableColumnCtx } from './table-column/defaults'
 
@@ -411,12 +412,6 @@ export default defineComponent({
       return editingRow.value
     }
 
-    table.editingRow = editingRow
-    table.activeEditableCell = activeEditableCell
-    table.ghostRowData = ghostRowData
-    table.startRowEdit = startRowEdit
-    table.clearEditingRow = clearEditingRow
-    table.applyEditingRow = applyEditingRow
     const layout = new TableLayout<Row>({
       store: table.store,
       table,
@@ -521,8 +516,45 @@ export default defineComponent({
 
     const { scrollBarRef, scrollTo, setScrollLeft, setScrollTop } =
       useScrollbar()
+    let stopPendingGhostRowScrollWatch: WatchStopHandle | undefined
+
+    const clearPendingGhostRowScrollWatch = () => {
+      stopPendingGhostRowScrollWatch?.()
+      stopPendingGhostRowScrollWatch = undefined
+    }
+
+    const scheduleGhostRowScroll = () => {
+      clearPendingGhostRowScrollWatch()
+      const previousLength = props.data.length
+
+      stopPendingGhostRowScrollWatch = watch(
+        () => props.data.length,
+        async (length) => {
+          if (length <= previousLength) return
+
+          clearPendingGhostRowScrollWatch()
+          await nextTick()
+
+          const scrollHeight = scrollBarRef.value?.wrapRef?.scrollHeight
+          if (scrollHeight != null) {
+            setScrollTop(scrollHeight)
+          }
+        },
+        {
+          flush: 'post',
+        }
+      )
+    }
 
     const debouncedUpdateLayout = debounce(doLayout, 50)
+
+    table.editingRow = editingRow
+    table.activeEditableCell = activeEditableCell
+    table.ghostRowData = ghostRowData
+    table.scheduleGhostRowScroll = scheduleGhostRowScroll
+    table.startRowEdit = startRowEdit
+    table.clearEditingRow = clearEditingRow
+    table.applyEditingRow = applyEditingRow
 
     const tableId = `${ns.namespace.value}-table_${tableIdSeed++}`
     table.tableId = tableId
@@ -599,6 +631,7 @@ export default defineComponent({
     useKeyRender(table)
 
     onBeforeUnmount(() => {
+      clearPendingGhostRowScrollWatch()
       debouncedUpdateLayout.cancel()
     })
 

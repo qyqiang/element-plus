@@ -193,6 +193,22 @@ const columns = ref<ColumnItem[]>([
     options: unitOptions,
   },
   {
+    prop: 'unit',
+    label: 'Unit',
+    minWidth: 140,
+    required: true,
+    editor: 'select',
+    options: unitOptions,
+  },
+  {
+    prop: 'unit',
+    label: 'Unit',
+    minWidth: 140,
+    required: true,
+    editor: 'select',
+    options: unitOptions,
+  },
+  {
     prop: 'rate',
     label: 'Rate',
     minWidth: 140,

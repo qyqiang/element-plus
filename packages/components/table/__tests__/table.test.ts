@@ -461,6 +461,77 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('scrolls to the newly added row after ghost row add', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+        ElInput,
+      },
+      template: `
+        <el-table
+          ref="table"
+          :data="tableData"
+          row-key="id"
+          ghost-table
+          edit-table
+          style="width: 400px"
+          @add-ghost-row="handleGhostRowAdd"
+        >
+          <el-table-column prop="name" label="Name">
+            <template #edit-cell="{ row }">
+              <el-input v-model="row.name" class="edit-cell" />
+            </template>
+          </el-table-column>
+          <el-table-column prop="action" label="Action" width="36">
+            <template #default="{ $index }">
+              <span class="ghost-delete">delete-{{ $index }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 1),
+        }
+      },
+      methods: {
+        handleGhostRowAdd() {
+          this.tableData = [
+            ...this.tableData,
+            {
+              id: this.tableData.length + 1,
+              name: 'Added row',
+              release: '2024-01-01',
+              director: 'Director',
+              runtime: 120,
+            },
+          ]
+        },
+      },
+    })
+
+    await doubleWait()
+
+    const table = wrapper.findComponent(ElTable)
+    const tableVm = table.vm as any
+    const setScrollTopSpy = vi.spyOn(tableVm.scrollBarRef, 'setScrollTop')
+    const wrapRef = tableVm.scrollBarRef.wrapRef ?? {}
+    Object.defineProperty(wrapRef, 'scrollHeight', {
+      configurable: true,
+      get: () => 320,
+    })
+    tableVm.scrollBarRef.wrapRef = wrapRef
+
+    const addButton = wrapper.find('tbody tr.is-ghost-row .icon-button')
+    await addButton.trigger('click')
+    await doubleWait()
+
+    expect(setScrollTopSpy).toHaveBeenCalledWith(320)
+
+    wrapper.unmount()
+  })
+
   it('disables the ghost-row add button when a required column is empty', async () => {
     const onRowAdd = vi.fn()
     const wrapper = mount({

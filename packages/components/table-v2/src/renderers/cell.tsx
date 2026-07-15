@@ -6,7 +6,10 @@ import { isFunction, isObject } from '@element-plus/utils'
 import { ExpandIcon, TableCell } from '../components'
 import { Alignment } from '../constants'
 import {
+  ghostRowFieldKey,
   ghostRowKey,
+  ghostRowSign,
+  ghostRowTouchedSign,
   placeholderSign,
   rowAddSign,
   rowDeleteColumnKey,
@@ -38,7 +41,7 @@ type CellRendererProps = TableV2RowCellRenderParam &
     | 'iconSize'
     | 'rowKey'
   > &
-  UnwrapNestedRefs<Pick<UseTableReturn, 'expandedRowKeys'>> & {
+  UnwrapNestedRefs<Pick<UseTableReturn, 'expandedRowKeys' | 'visibleColumns'>> & {
     onRowAdd?: RowAddHandler
     onAddGhostRow?: (params: GhostRowAddParams<any>) => void
     onRowDelete?: RowDeleteHandler
@@ -59,6 +62,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     // from use-table
     style,
     expandedRowKeys,
+    visibleColumns,
     ns,
     // derived props
     canEditTable,
@@ -88,8 +92,35 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
       ? dataGetter({ columns, column, columnIndex, rowData, rowIndex })
       : get(rowData, dataKey ?? '')
 
+  const markGhostRowTouched = (
+    key: string | number | symbol | undefined,
+    value: unknown
+  ) => {
+    if (!isGhostTableRow(rowData) || key == null) return
+
+    const rowField = rowData?.[ghostRowFieldKey]
+    if (
+      key === ghostRowSign ||
+      key === ghostRowKey ||
+      key === ghostRowFieldKey ||
+      key === ghostRowTouchedSign ||
+      key === rowField
+    ) {
+      return
+    }
+
+    const currentValue =
+      typeof key === 'symbol' ? rowData[key] : get(rowData, String(key))
+
+    if (currentValue !== value) {
+      rowData[ghostRowTouchedSign] = true
+    }
+  }
+
   const setCellData = (value: unknown) => {
     if (!rowData || dataKey == null) return
+
+    markGhostRowTouched(dataKey, value)
 
     if (typeof dataKey === 'symbol') {
       rowData[dataKey] = value
@@ -99,13 +130,25 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     set(rowData, dataKey, value)
   }
 
+  const renderRowData = isGhostTableRow(rowData)
+    ? new Proxy(rowData, {
+        get(target, key) {
+          return Reflect.get(target, key)
+        },
+        set(target, key, value) {
+          markGhostRowTouched(key, value)
+          return Reflect.set(target, key, value)
+        },
+      })
+    : rowData
+
   const baseCellProps = {
     class: ns.e('cell-text'),
     columns,
     column,
     columnIndex,
     isScrolling,
-    rowData,
+    rowData: renderRowData,
     rowIndex,
   }
   const cellProps = Object.defineProperty(baseCellProps, 'cellData', {
@@ -125,25 +168,19 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
   const editColumnCellRenderer =
     componentToSlot<typeof cellProps>(editCellRenderer)
   const shouldRenderEditor = canEditTable ? editable : true
-  const actualColumns = columns.filter(
+  const actualColumns = visibleColumns.filter(
     (item) => item.placeholderSign !== placeholderSign
-  )
-  const actualColumnCount = actualColumns.length
-  const actualColumnIndex = actualColumns.findIndex(
-    (item) => item.key === column.key
   )
   const shouldRenderGhostAddButton =
     ghostTable &&
     editTable &&
     isGhostRow &&
-    actualColumnIndex > -1 &&
-    (actualColumnCount === 1
-      ? actualColumnIndex === 0
-      : actualColumnIndex === actualColumnCount - 1)
+    isRowDeleteColumn
   const shouldRenderGhostEditCell =
     ghostTable &&
     editTable &&
     Boolean(editColumnCellRenderer) &&
+    !isRowDeleteColumn &&
     !shouldRenderGhostAddButton
   const requiredColumns = actualColumns.filter(
     (item) =>
@@ -153,7 +190,34 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     isEmptyRequiredValue(get(rowData, item.dataKey ?? ''))
   )
   const Cell = isRowDeleteColumn ? (
-    isAddRow ? (
+    shouldRenderGhostAddButton ? (
+      <ElButton
+        text
+        class="icon-button"
+        disabled={isGhostRowAddDisabled}
+        onClick={(event: MouseEvent) => {
+          event.stopPropagation()
+          if (isGhostRowAddDisabled) return
+          onAddGhostRow?.({
+            event,
+            row: rowData,
+            rowIndex,
+            rowKey: rowData[ghostRowKey] ?? rowData[rowKey],
+          })
+        }}
+      >
+        <ElIcon size={12}>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="12"
+            height="12"
+            viewBox="0 0 12 12"
+          >
+            <path d="M3.82026 11.0062C3.64674 11.0063 3.4749 10.9711 3.3146 10.9026C3.1543 10.8341 3.00868 10.7337 2.88608 10.6072L0 7.6341L1.10129 6.49954L3.82026 9.30198L10.8987 2.00623L12 3.14079L4.75443 10.6072C4.63183 10.7337 4.48621 10.8341 4.32591 10.9026C4.16561 10.9711 3.99378 11.0063 3.82026 11.0062Z" />
+          </svg>
+        </ElIcon>
+      </ElButton>
+    ) : isAddRow ? (
       <ElButton
         text
         class={[ns.e('row-add-button'), 'icon-button']}
@@ -204,33 +268,6 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
         </ElIcon>
       </ElButton>
     )
-  ) : shouldRenderGhostAddButton ? (
-    <ElButton
-      text
-      class="icon-button"
-      disabled={isGhostRowAddDisabled}
-      onClick={(event: MouseEvent) => {
-        event.stopPropagation()
-        if (isGhostRowAddDisabled) return
-        onAddGhostRow?.({
-          event,
-          row: rowData,
-          rowIndex,
-          rowKey: rowData[ghostRowKey] ?? rowData[rowKey],
-        })
-      }}
-    >
-      <ElIcon size={12}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="12"
-          height="12"
-          viewBox="0 0 12 12"
-        >
-          <path d="M3.82026 11.0062C3.64674 11.0063 3.4749 10.9711 3.3146 10.9026C3.1543 10.8341 3.00868 10.7337 2.88608 10.6072L0 7.6341L1.10129 6.49954L3.82026 9.30198L10.8987 2.00623L12 3.14079L4.75443 10.6072C4.63183 10.7337 4.48621 10.8341 4.32591 10.9026C4.16561 10.9711 3.99378 11.0063 3.82026 11.0062Z" />
-        </svg>
-      </ElIcon>
-    </ElButton>
   ) : shouldRenderGhostEditCell ? (
     (() => {
       const rendered = editColumnCellRenderer!(cellProps)

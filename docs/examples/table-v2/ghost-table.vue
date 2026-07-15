@@ -2,8 +2,8 @@
   <div class="ghost-table-demo">
     <p class="ghost-table-demo__hint">
       Hover a header or row divider to insert a column or row. The bottom ghost
-      row uses `editCellRenderer`, keeps column titles as placeholders, and
-      swaps the trailing action cell for the built-in add action. This example
+      row uses `editCellRenderer`, keeps column titles as placeholders, and uses
+      the same built-in right-side action column as Editable Table. This example
       also folds in the editable table pattern with checkbox, input, and select
       editors in the same grid.
     </p>
@@ -12,15 +12,14 @@
       <el-button @click="handleDisplay">Display mode</el-button>
       <el-button @click="handleSubmit">Submit</el-button>
     </div>
-
     <el-table-v2
       ref="table"
       :columns="columns"
       :data="tableData"
-      :width="900"
-      :height="460"
+      :width="600"
       fixed
       ghost-table
+      :ghost-row-template="ghostRowTemplate"
       :edit-table="editTable"
       show-add-column-trigger
       show-add-row-trigger
@@ -31,6 +30,7 @@
       @add-column="handleAddColumn"
       @add-row="handleAddRow"
       @add-ghost-row="handleGhostRowAdd"
+      @row-delete="handleDelete"
     />
   </div>
 </template>
@@ -40,7 +40,6 @@ import { ref } from 'vue'
 import {
   ElButton,
   ElCheckbox,
-  ElIcon,
   ElInput,
   ElMessage,
   ElOption,
@@ -65,15 +64,30 @@ interface ColumnItem extends Column<any> {
 
 interface TableRow {
   id: string
-  [key: string]: string | boolean
+  [key: string]: string | boolean | null
 }
 
 interface GhostRowAddPayload {
   row: Partial<TableRow>
 }
+interface RowDeletePayload {
+  rowIndex: number
+}
 
 const editTable = ref(true)
 const table = ref<TableV2Instance>()
+const ghostRowTemplate: Partial<TableRow> = {
+  checked: false,
+  product: '',
+  description: '',
+  qty: null,
+  unit: '',
+  rate: '',
+  unitValue: null,
+  quantity: null,
+  commodity: '',
+  commodityValue: null,
+}
 
 const unitOptions: OptionItem[] = [
   { label: 'lbs', value: 'lbs' },
@@ -99,9 +113,25 @@ const renderDisplayCell = (column: ColumnItem, row: TableRow) => {
   return <span>{value}</span>
 }
 
+const handleChange = (
+  row: TableRow,
+  column: ColumnItem,
+  value: string | boolean | null
+) => {
+  console.log(row)
+  console.log(column)
+  console.log(value)
+}
 const renderEditCell = (column: ColumnItem, row: TableRow) => {
   if (column.editor === 'checkbox') {
-    return <ElCheckbox v-model={row[column.dataKey as string]} />
+    return (
+      <ElCheckbox
+        v-model={row[column.dataKey as string]}
+        onChange={(value: string | number | boolean) =>
+          handleChange(row, column, Boolean(value))
+        }
+      />
+    )
   }
 
   if (column.editor === 'select') {
@@ -110,6 +140,7 @@ const renderEditCell = (column: ColumnItem, row: TableRow) => {
         v-model={row[column.dataKey as string]}
         placeholder={column.title}
         float-label={false}
+        onChange={(value: string) => handleChange(row, column, value)}
       >
         {column.options?.map((option) => (
           <ElOption
@@ -127,6 +158,7 @@ const renderEditCell = (column: ColumnItem, row: TableRow) => {
       v-model={row[column.dataKey as string]}
       placeholder={column.title}
       float-label={false}
+      onChange={(value: string) => handleChange(row, column, value)}
     />
   )
 }
@@ -140,7 +172,8 @@ const columns = ref<ColumnItem[]>([
     align: 'center',
     editor: 'checkbox',
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[0], rowData),
-    editCellRenderer: ({ rowData }) => renderEditCell(columns.value[0], rowData),
+    editCellRenderer: ({ rowData }) =>
+      renderEditCell(columns.value[0], rowData),
   },
   {
     key: 'product',
@@ -157,7 +190,8 @@ const columns = ref<ColumnItem[]>([
     required: true,
     editor: 'input',
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[2], rowData),
-    editCellRenderer: ({ rowData }) => renderEditCell(columns.value[2], rowData),
+    editCellRenderer: ({ rowData }) =>
+      renderEditCell(columns.value[2], rowData),
   },
   {
     key: 'qty',
@@ -167,7 +201,8 @@ const columns = ref<ColumnItem[]>([
     required: true,
     editor: 'input',
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[3], rowData),
-    editCellRenderer: ({ rowData }) => renderEditCell(columns.value[3], rowData),
+    editCellRenderer: ({ rowData }) =>
+      renderEditCell(columns.value[3], rowData),
   },
   {
     key: 'unit',
@@ -178,7 +213,8 @@ const columns = ref<ColumnItem[]>([
     editor: 'select',
     options: unitOptions,
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[4], rowData),
-    editCellRenderer: ({ rowData }) => renderEditCell(columns.value[4], rowData),
+    editCellRenderer: ({ rowData }) =>
+      renderEditCell(columns.value[4], rowData),
   },
   {
     key: 'rate',
@@ -187,29 +223,8 @@ const columns = ref<ColumnItem[]>([
     width: 140,
     editor: 'input',
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[5], rowData),
-    editCellRenderer: ({ rowData }) => renderEditCell(columns.value[5], rowData),
-  },
-  {
-    key: 'action',
-    dataKey: 'action',
-    title: '',
-    width: 36,
-    fixed: 'right',
-    align: 'center',
-    cellRenderer: ({ rowIndex }) => (
-      <ElButton class="icon-button" text onClick={() => handleDelete(rowIndex)}>
-        <ElIcon size={12}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 16 16"
-          >
-            <path d="M11.334 2.66667V1.33333C11.334 0.979711 11.1935 0.640573 10.9435 0.390524C10.6934 0.140476 10.3543 0 10.0007 0L6.00065 0C5.64703 0 5.30789 0.140476 5.05784 0.390524C4.80779 0.640573 4.66732 0.979711 4.66732 1.33333V2.66667H1.33398V4H2.66732V14C2.66732 14.5304 2.87803 15.0391 3.2531 15.4142C3.62818 15.7893 4.13688 16 4.66732 16H11.334C11.8644 16 12.3731 15.7893 12.7482 15.4142C13.1233 15.0391 13.334 14.5304 13.334 14V4H14.6673V2.66667H11.334ZM7.33398 11.3333H6.00065V7.33333H7.33398V11.3333ZM10.0007 11.3333H8.66732V7.33333H10.0007V11.3333ZM10.0007 2.66667H6.00065V1.33333H10.0007V2.66667Z" />
-          </svg>
-        </ElIcon>
-      </ElButton>
-    ),
+    editCellRenderer: ({ rowData }) =>
+      renderEditCell(columns.value[5], rowData),
   },
 ])
 
@@ -224,36 +239,12 @@ const tableData = ref<TableRow[]>([
     rate: '3.45',
     action: '',
   },
-  {
-    id: '2',
-    checked: true,
-    product: 'Gravel',
-    description: 'Road mix',
-    qty: '850',
-    unit: 'kg',
-    rate: '2.89',
-    action: '',
-  },
-  {
-    id: '3',
-    checked: false,
-    product: 'Cement',
-    description: 'Bagged stock',
-    qty: '640',
-    unit: 'ton',
-    rate: '4.12',
-    action: '',
-  },
 ])
 
 let extraColumnCount = 0
 let extraRowCount = tableData.value.length
 
-const getActionColumnIndex = () =>
-  columns.value.findIndex((column) => column.key === 'action')
-
 const createRowValue = (column: ColumnItem, seed: number) => {
-  if (column.key === 'action') return ''
   if (column.editor === 'checkbox') return false
   if (column.editor === 'select') {
     return column.options?.[0]?.value ?? ''
@@ -285,43 +276,34 @@ const handleSubmit = () => {
   }
 }
 
-const handleDelete = (rowIndex: number) => {
+const handleDelete = ({ rowIndex }: RowDeletePayload) => {
   tableData.value.splice(rowIndex, 1)
 }
 
 const createRowFromDraft = (draft?: Partial<TableRow>) => {
   extraRowCount += 1
 
-  return columns.value.reduce(
-    (row, column) => {
-      const key = column.dataKey as string
+  const nextRow = {
+    ...ghostRowTemplate,
+    ...(draft ?? {}),
+    id: `row-${extraRowCount}`,
+  } as TableRow
 
-      if (column.key === 'action') {
-        row[key] = ''
-        return row
-      }
+  return columns.value.reduce((row, column) => {
+    const key = column.dataKey as string
 
-      const draftValue = draft?.[key]
-      row[key] =
-        draftValue === undefined || draftValue === ''
-          ? createRowValue(column, extraRowCount)
-          : draftValue
-      return row
-    },
-    {
-      id: `row-${extraRowCount}`,
-    } as TableRow
-  )
+    const draftValue = row[key]
+    row[key] =
+      draftValue === undefined || draftValue === ''
+        ? createRowValue(column, extraRowCount)
+        : draftValue
+    return row
+  }, nextRow)
 }
 
 const handleAddColumn = ({ insertIndex }: { insertIndex: number }) => {
   extraColumnCount += 1
   const key = `extra_${extraColumnCount}`
-  const actionColumnIndex = getActionColumnIndex()
-  const targetInsertIndex =
-    actionColumnIndex === -1
-      ? insertIndex
-      : Math.min(insertIndex, actionColumnIndex)
   const nextColumn: ColumnItem = {
     key,
     dataKey: key,
@@ -338,7 +320,7 @@ const handleAddColumn = ({ insertIndex }: { insertIndex: number }) => {
     ),
   }
 
-  columns.value.splice(targetInsertIndex, 0, nextColumn)
+  columns.value.splice(insertIndex, 0, nextColumn)
   tableData.value = tableData.value.map((row, index) => ({
     ...row,
     [key]: `Value ${extraColumnCount}-${index + 1}`,
@@ -353,11 +335,6 @@ const handleAddRow = ({ insertIndex }: { insertIndex: number }) => {
 
 const handleGhostRowAdd = ({ row }: GhostRowAddPayload) => {
   tableData.value.push(createRowFromDraft(row))
-
-  columns.value.forEach((column) => {
-    const key = column.dataKey as string
-    row[key] = ''
-  })
 }
 </script>
 
@@ -371,5 +348,12 @@ const handleGhostRowAdd = ({ row }: GhostRowAddPayload) => {
   margin: 0;
   color: var(--el-text-color-secondary);
   font-size: 14px;
+}
+
+.ghost-table-demo__event {
+  margin: 0;
+  color: var(--el-text-color-secondary);
+  font-size: 14px;
+  word-break: break-word;
 }
 </style>
