@@ -25,6 +25,16 @@ table-v2/editable-table
 table-v2/ghost-table
 :::
 
+## Custom row action
+
+Use the `row-action` slot to replace the default delete button for regular data rows. The ghost row keeps its built-in add action.
+
+:::demo
+
+table-v2/custom-row-action
+
+:::
+
 ## Empty data
 
 When `data` is empty, the empty area uses one `row-height` instead of stretching to fill the remaining table space. This also keeps the header, empty row, ghost row, horizontal scrollbar, and default footer in sequence.
@@ -134,6 +144,7 @@ table-v2/diagonal-header
 | header      | `object<HeaderSlotProps>`     |
 | header-cell | `object<HeaderCellSlotProps>` |
 | row         | `object<RowSlotProps>`        |
+| row-action  | `object<RowActionSlotProps>`  |
 | footer      | —                                           |
 | empty       | —                                           |
 | overlay     | —                                           |
@@ -342,6 +353,15 @@ type HeaderCellSlotProps = {
 type RowCommonParams = {
   rowData: any
   rowIndex: number
+}
+
+type RowActionSlotProps = {
+  columns: Column<any>[]
+  column: Column<any>
+  columnIndex: number
+  rowData: any
+  rowIndex: number
+  rowKey: KeyType
 }
 
 type RowEventHandlerParams = {

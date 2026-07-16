@@ -482,6 +482,7 @@ const TableV2 = defineComponent({
         onAddGhostRow,
         onRowAdd,
         onRowDelete,
+        rowActionRenderer: slots['row-action'],
         rowKey,
         expandedRowKeys: unref(expandedRowKeys),
         visibleColumns: unref(visibleColumns),

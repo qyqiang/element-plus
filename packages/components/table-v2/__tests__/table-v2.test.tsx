@@ -1176,6 +1176,56 @@ describe('TableV2.vue', () => {
     ])
   })
 
+  test('uses row-action slot for data rows and keeps the ghost add action', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: 'Alpha' }])
+    const onAction = vi.fn()
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        ghostTable
+        editTable
+      >
+        {{
+          'row-action': ({ rowData, rowIndex, rowKey }) => (
+            <button
+              class="custom-row-action"
+              onClick={() => onAction({ rowData, rowIndex, rowKey })}
+            >
+              More
+            </button>
+          ),
+        }}
+      </TableV2>
+    ))
+
+    const customAction = wrapper.find('.custom-row-action')
+
+    expect(customAction.exists()).toBe(true)
+    expect(wrapper.find('.el-table-v2__row-delete-button').exists()).toBe(false)
+    expect(
+      wrapper.find('.el-table-v2__add-row-right .icon-button').exists()
+    ).toBe(true)
+
+    await customAction.trigger('click')
+
+    expect(onAction).toHaveBeenCalledWith({
+      rowData: data.value[0],
+      rowIndex: 0,
+      rowKey: data.value[0].id,
+    })
+  })
+
   test('emits add-ghost-row from the ghost row add button and keeps the placeholder from the column title', async () => {
     const InputStub = defineComponent({
       name: 'ElInput',

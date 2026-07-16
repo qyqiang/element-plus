@@ -35,6 +35,11 @@ export type RowCommonParams = {
   rowIndex: number
 }
 
+export type TableV2RowActionSlotParams<T = any> = RowCommonParams &
+  ColumnCommonParams<T> & {
+    rowKey: KeyType
+  }
+
 export type ClassNameGetterParams<T> = {
   cellData: T
 } & RowCommonParams &

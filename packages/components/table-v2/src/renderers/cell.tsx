@@ -22,12 +22,13 @@ import {
 } from '../ghost-table'
 import { componentToSlot, enforceUnit, tryCall } from '../utils'
 
-import type { FunctionalComponent, UnwrapNestedRefs, VNode } from 'vue'
+import type { FunctionalComponent, Slot, UnwrapNestedRefs, VNode } from 'vue'
 import type { TableV2RowCellRenderParam } from '../components'
 import type { UseNamespaceReturn } from '@element-plus/hooks'
 import type { RowAddHandler, RowDeleteHandler } from '../row'
 import type { UseTableReturn } from '../use-table'
 import type { GhostRowAddParams, TableV2Props } from '../table'
+import type { TableV2RowActionSlotParams } from '../types'
 
 type CellRendererProps = TableV2RowCellRenderParam &
   Pick<
@@ -48,6 +49,7 @@ type CellRendererProps = TableV2RowCellRenderParam &
     onRowAdd?: RowAddHandler
     onAddGhostRow?: (params: GhostRowAddParams<any>) => void
     onRowDelete?: RowDeleteHandler
+    rowActionRenderer?: Slot<TableV2RowActionSlotParams>
     ns: UseNamespaceReturn
   }
 
@@ -79,6 +81,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     onAddGhostRow,
     onRowAdd,
     onRowDelete,
+    rowActionRenderer,
     rowKey,
   },
   { slots }
@@ -242,6 +245,15 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
           </svg>
         </ElIcon>
       </ElButton>
+    ) : rowActionRenderer ? (
+      rowActionRenderer({
+        columns,
+        column,
+        columnIndex,
+        rowData: renderRowData,
+        rowIndex,
+        rowKey: rowData[rowKey],
+      })
     ) : (
       <ElButton
         link
