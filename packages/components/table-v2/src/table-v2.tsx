@@ -17,6 +17,7 @@ import {
   ghostRowTouchedSign,
   rowAddKey,
   rowAddSign,
+  rowDeleteColumnWidth,
 } from './private'
 import ElButton from '@element-plus/components/button'
 import ElIcon from '@element-plus/components/icon'
@@ -96,6 +97,7 @@ const TableV2 = defineComponent({
 
       bodyWidth,
       addRowHeight,
+      effectiveHScrollbarSize,
       emptyStyle,
       rootStyle,
       footerHeight,
@@ -565,6 +567,8 @@ const TableV2 = defineComponent({
         ns.is('dynamic', unref(isDynamic)),
         effectiveShowAddColumnTrigger.value && ns.m('with-add-column-trigger'),
         effectiveShowAddRowTrigger.value && ns.m('with-add-row-trigger'),
+        (isLegacyEditMode.value || isGhostEditMode.value) &&
+          ns.m('with-ghost-row'),
       ]
 
       const footerProps = {
@@ -595,14 +599,21 @@ const TableV2 = defineComponent({
         height: unref(addRowHeight),
       }
       const addRowWrapperStyle = {
-        bottom: `${unref(effectiveFooterHeight)}px`,
+        bottom: `${unref(effectiveFooterHeight) + unref(effectiveHScrollbarSize)}px`,
       }
+      const tableRootStyle = {
+        ...unref(rootStyle),
+        [ns.cssVarName('table-v2-ghost-row-height')]:
+          `${unref(addRowHeight)}px`,
+        [ns.cssVarName('table-v2-row-delete-width')]:
+          `${rowDeleteColumnWidth}px`,
+      } as CSSProperties
 
       return (
         <div
           ref={containerRef}
           class={rootKls}
-          style={unref(rootStyle)}
+          style={tableRootStyle}
           onMouseleave={handleTableMouseLeave}
         >
           <MainTable {...mainTableProps}>{tableSlots}</MainTable>

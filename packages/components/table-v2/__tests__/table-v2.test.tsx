@@ -53,7 +53,12 @@ describe('TableV2.vue', () => {
     const columns = ref(generateColumns(2))
     const data = ref(generateData(columns.value, 1))
     const wrapper = mount(() => (
-      <TableV2 columns={columns.value} data={data.value} width={700} maxHeight={200} />
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        maxHeight={200}
+      />
     ))
 
     const rootStyle = wrapper.find('.el-table-v2__root').attributes('style')
@@ -61,14 +66,19 @@ describe('TableV2.vue', () => {
 
     expect(rootStyle).toContain('max-height: 200px;')
     expect(rootStyle).toContain('height: 132px;')
-    expect(grid.props('height')).toBe(94)
+    expect(grid.props('height')).toBe(88)
   })
 
   test('clamps table height to maxHeight when data exceeds the limit', async () => {
     const columns = ref(generateColumns(2))
     const data = ref(generateData(columns.value, 20))
     const wrapper = mount(() => (
-      <TableV2 columns={columns.value} data={data.value} width={700} maxHeight={200} />
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        maxHeight={200}
+      />
     ))
 
     const rootStyle = wrapper.find('.el-table-v2__root').attributes('style')
@@ -95,16 +105,11 @@ describe('TableV2.vue', () => {
     ])
     const data = ref([{ id: 'row-0', name: 'Alpha', note: 'Beta' }])
     const wrapper = mount(() => (
-      <TableV2
-        fixed
-        columns={columns.value}
-        data={data.value}
-        width={700}
-      />
+      <TableV2 fixed columns={columns.value} data={data.value} width={700} />
     ))
 
     expect(wrapper.find('.el-table-v2__root').attributes('style')).toContain(
-      'height: 88px;'
+      'height: 132px;'
     )
   })
 
@@ -125,16 +130,11 @@ describe('TableV2.vue', () => {
     ])
     const data = ref([{ id: 'row-0', name: 'Alpha', note: 'Beta' }])
     const wrapper = mount(() => (
-      <TableV2
-        fixed
-        columns={columns.value}
-        data={data.value}
-        width={700}
-      />
+      <TableV2 fixed columns={columns.value} data={data.value} width={700} />
     ))
 
     expect(wrapper.find('.el-table-v2__root').attributes('style')).toContain(
-      'height: 94px;'
+      'height: 138px;'
     )
   })
 
@@ -165,7 +165,12 @@ describe('TableV2.vue', () => {
       },
     ])
     const wrapper = mount(() => (
-      <TableV2 columns={columns.value as any} data={data.value} width={700} height={400} />
+      <TableV2
+        columns={columns.value as any}
+        data={data.value}
+        width={700}
+        height={400}
+      />
     ))
     await nextTick()
 
@@ -493,10 +498,17 @@ describe('TableV2.vue', () => {
     ))
 
     const headerCells = wrapper.findAll('.el-table-v2__header-cell')
+    const mainHeader = wrapper.find(
+      '.el-table-v2__main .el-table-v2__header-cell'
+    )
     const deleteButton = wrapper.find('.el-table-v2__row-delete-button')
     const table = wrapper.findComponent(TableV2)
 
     expect(headerCells).toHaveLength(2)
+    expect(
+      wrapper.find('.el-table-v2__header-row-cell--placeholder').exists()
+    ).toBe(false)
+    expect(mainHeader.attributes('style')).toContain('width: 186px;')
     expect(deleteButton.exists()).toBe(true)
 
     await deleteButton.trigger('click')
@@ -518,6 +530,51 @@ describe('TableV2.vue', () => {
         }),
       ],
     ])
+  })
+
+  test('merges the delete placeholder width into the last business column', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+      },
+      {
+        key: 'status',
+        dataKey: 'status',
+        title: 'Status',
+        width: 120,
+        fixed: 'right' as const,
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: 'Alpha', status: 'Ready' }])
+    const wrapper = mount(() => (
+      <TableV2
+        fixed
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+      />
+    ))
+
+    const main = wrapper.find('.el-table-v2__main')
+    const mergedHeader = main.find('[data-key="name"]')
+    const placeholders = main.findAll(
+      '.el-table-v2__header-row-cell--placeholder'
+    )
+    const rightHeaderCells = wrapper.findAll(
+      '.el-table-v2__right .el-table-v2__header-cell'
+    )
+
+    expect(mergedHeader.classes()).toContain('is-row-delete-placeholder-merged')
+    expect(mergedHeader.attributes('style')).toContain('width: 216px;')
+    expect(placeholders).toHaveLength(1)
+    expect(placeholders[0].attributes('style')).toContain('width: 120px;')
+    expect(rightHeaderCells).toHaveLength(2)
   })
 
   test('does not render delete action column when canEditTable is false', async () => {
@@ -595,6 +652,39 @@ describe('TableV2.vue', () => {
     expect(footer.exists()).toBe(true)
     expect(footer.attributes('style')).toContain('height: 44px;')
     expect(addRow.attributes('style')).toContain('bottom: 44px;')
+  })
+
+  test('places the editable add row above the horizontal scrollbar', async () => {
+    const columns = ref([
+      {
+        ...generateColumns(1)[0],
+        width: 360,
+      },
+      {
+        ...generateColumns(1)[0],
+        key: 'column-1',
+        dataKey: 'column-1',
+        width: 360,
+      },
+    ])
+    const data = ref(generateData(columns.value, 1))
+    const wrapper = mount(() => (
+      <TableV2
+        fixed
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        canEditTable
+        editable
+        isFooterDefault
+      />
+    ))
+
+    const root = wrapper.find('.el-table-v2__root')
+    const addRow = wrapper.find('.el-table-v2__add-row-main')
+
+    expect(root.classes()).toContain('el-table-v2--with-ghost-row')
+    expect(addRow.attributes('style')).toContain('bottom: 50px;')
   })
 
   test('emits row-add when add row is clicked', async () => {
@@ -824,7 +914,9 @@ describe('TableV2.vue', () => {
     expect(
       wrapper.findAll('.el-table-v2__add-row-right .icon-button')
     ).toHaveLength(1)
-    expect(wrapper.find('.el-table-v2__add-row-main .edit-cell').exists()).toBe(true)
+    expect(wrapper.find('.el-table-v2__add-row-main .edit-cell').exists()).toBe(
+      true
+    )
   })
 
   test('keeps the ghost row below the table body when only maxHeight is provided', async () => {
@@ -872,6 +964,54 @@ describe('TableV2.vue', () => {
     expect(footer.exists()).toBe(true)
     expect(ghostRow.exists()).toBe(true)
     expect(ghostRow.attributes('style')).toContain('bottom: 44px;')
+    expect(grid.props('height')).toBe(88)
+  })
+
+  test('places the horizontal scrollbar between the ghost row and footer', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 360,
+        editCellRenderer: ({ cellData }: { cellData: string }) => (
+          <input class="edit-cell" value={cellData} />
+        ),
+      },
+      {
+        key: 'note',
+        dataKey: 'note',
+        title: 'Note',
+        width: 360,
+        editCellRenderer: ({ cellData }: { cellData: string }) => (
+          <input class="edit-cell" value={cellData} />
+        ),
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: 'Alpha', note: 'Beta' }])
+    const wrapper = mount(() => (
+      <TableV2
+        fixed
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        ghostTable
+        editTable
+        isFooterDefault
+      />
+    ))
+
+    const root = wrapper.find('.el-table-v2__root')
+    const footer = wrapper.find('.footer-default')
+    const ghostRow = wrapper.find('.el-table-v2__add-row-main')
+    const grid = wrapper.findComponent({ name: 'ElTableV2Grid' })
+
+    expect(root.classes()).toContain('el-table-v2--with-ghost-row')
+    expect(root.attributes('style')).toContain(
+      '--el-table-v2-ghost-row-height: 44px;'
+    )
+    expect(ghostRow.attributes('style')).toContain('bottom: 50px;')
+    expect(footer.attributes('style')).toContain('height: 44px;')
     expect(grid.props('height')).toBe(94)
   })
 
@@ -912,7 +1052,7 @@ describe('TableV2.vue', () => {
     expect(footer.exists()).toBe(true)
     expect(footer.attributes('style')).toContain('height: 44px;')
     expect(rootStyle).toContain('height: 176px;')
-    expect(grid.props('height')).toBe(138)
+    expect(grid.props('height')).toBe(132)
     expect(ghostRow.exists()).toBe(false)
   })
 
@@ -1139,7 +1279,9 @@ describe('TableV2.vue', () => {
       commodityValue: null,
     })
 
-    const resetGhostInput = wrapper.find('.el-table-v2__add-row-main .edit-cell')
+    const resetGhostInput = wrapper.find(
+      '.el-table-v2__add-row-main .edit-cell'
+    )
     expect((resetGhostInput.element as HTMLInputElement).value).toBe(
       'Draft name'
     )
@@ -1345,11 +1487,7 @@ describe('TableV2.vue', () => {
         dataKey: 'note',
         title: 'Note',
         width: 180,
-        editCellRenderer: ({
-          rowData,
-        }: {
-          rowData: Record<string, any>
-        }) => {
+        editCellRenderer: ({ rowData }: { rowData: Record<string, any> }) => {
           if (rowData.__ep_table_v2_ghost_row__) {
             ghostRowRef = rowData
           }
@@ -1438,11 +1576,7 @@ describe('TableV2.vue', () => {
         dataKey: 'note',
         title: 'Note',
         width: 180,
-        editCellRenderer: ({
-          rowData,
-        }: {
-          rowData: Record<string, any>
-        }) => {
+        editCellRenderer: ({ rowData }: { rowData: Record<string, any> }) => {
           if (rowData.__ep_table_v2_ghost_row__) {
             ghostRowRef = rowData
           }

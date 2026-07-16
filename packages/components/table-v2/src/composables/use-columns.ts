@@ -5,6 +5,7 @@ import {
   placeholderSign,
   rowDeleteColumnKey,
   rowDeleteColumnWidth,
+  rowDeletePlaceholderMergedSign,
 } from '../private'
 import { calcColumnStyle } from './utils'
 
@@ -178,8 +179,22 @@ function useColumns(
     unref(visibleColumns).filter((column) => !column.fixed)
   )
 
+  const rowDeletePlaceholderMerge = computed(() => {
+    const rowDeleteColumn = unref(fixedColumnsOnRight).find(
+      (column) => column.key === rowDeleteColumnKey
+    )
+    const targetColumn = [...unref(normalColumns)]
+      .reverse()
+      .find((column) => column.key !== rowDeleteColumnKey)
+
+    return rowDeleteColumn && targetColumn
+      ? { rowDeleteColumn, targetColumn }
+      : undefined
+  })
+
   const mainColumns = computed(() => {
     const ret: AnyColumns = []
+    const merge = unref(rowDeletePlaceholderMerge)
 
     unref(fixedColumnsOnLeft).forEach((column) => {
       ret.push({
@@ -189,10 +204,19 @@ function useColumns(
     })
 
     unref(normalColumns).forEach((column) => {
-      ret.push(column)
+      ret.push(
+        column.key === merge?.targetColumn.key
+          ? {
+              ...column,
+              [rowDeletePlaceholderMergedSign]: true,
+            }
+          : column
+      )
     })
 
     unref(fixedColumnsOnRight).forEach((column) => {
+      if (column.key === merge?.rowDeleteColumn.key) return
+
       ret.push({
         ...column,
         placeholderSign,
@@ -207,7 +231,7 @@ function useColumns(
   })
 
   const columnsStyles = computed(() => {
-    return unref(_columns).reduce<Record<KeyType, CSSProperties>>(
+    const styles = unref(_columns).reduce<Record<KeyType, CSSProperties>>(
       (style, column) => {
         const key = column.key!
         style[key] = calcColumnStyle(column, unref(fixed), props.fixed)
@@ -215,11 +239,32 @@ function useColumns(
       },
       {}
     )
+    const merge = unref(rowDeletePlaceholderMerge)
+
+    if (merge) {
+      const targetKey = merge.targetColumn.key!
+      const targetWidth =
+        typeof merge.targetColumn.width === 'number'
+          ? merge.targetColumn.width
+          : 0
+      const rowDeleteWidth =
+        typeof merge.rowDeleteColumn.width === 'number'
+          ? merge.rowDeleteColumn.width
+          : 0
+
+      styles[targetKey] = {
+        ...styles[targetKey],
+        width: targetWidth + rowDeleteWidth,
+      }
+    }
+
+    return styles
   })
 
   const columnsTotalWidth = computed(() => {
     return unref(visibleColumns).reduce(
-      (width, column) => width + (typeof column.width === 'number' ? column.width : 0),
+      (width, column) =>
+        width + (typeof column.width === 'number' ? column.width : 0),
       0
     )
   })

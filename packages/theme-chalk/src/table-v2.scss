@@ -79,6 +79,18 @@
     overflow: visible;
   }
 
+  @include m('with-ghost-row') {
+    @include e('main') {
+      overflow: visible;
+
+      .#{$namespace}-vl__horizontal {
+        transform: translateY(
+          calc(#{getCssVar('table-v2', 'ghost-row-height')} + 2px)
+        );
+      }
+    }
+  }
+
   @include e('main') {
     @include table-root;
     left: 0;
@@ -250,6 +262,10 @@
         justify-content: center;
       }
 
+      @include when(row-delete-placeholder-merged) {
+        padding-right: calc(8px + #{getCssVar('table-v2', 'row-delete-width')});
+      }
+
       &.is-diagonal-header {
         padding: 0;
         overflow: hidden;
@@ -259,11 +275,11 @@
           position: absolute;
           inset: 0;
           background: linear-gradient(
-              to bottom left,
-              transparent calc(50% - 0.5px),
-              var(--color-gray-300) calc(50% - 0.5px),
-              var(--color-gray-300) calc(50% + 0.5px),
-              transparent calc(50% + 0.5px)
+            to bottom left,
+            transparent calc(50% - 0.5px),
+            var(--color-gray-300) calc(50% - 0.5px),
+            var(--color-gray-300) calc(50% + 0.5px),
+            transparent calc(50% + 0.5px)
           );
           pointer-events: none;
           z-index: 0;
@@ -320,6 +336,10 @@
 
       &.is-row-delete-column {
         padding: 0;
+      }
+
+      @include when(row-delete-placeholder-merged) {
+        padding-right: calc(8px + #{getCssVar('table-v2', 'row-delete-width')});
       }
 
       &.is-full-width {

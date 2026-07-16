@@ -13,6 +13,7 @@ import {
   placeholderSign,
   rowAddSign,
   rowDeleteColumnKey,
+  rowDeletePlaceholderMergedSign,
 } from '../private'
 import {
   applyRequiredInputState,
@@ -41,7 +42,9 @@ type CellRendererProps = TableV2RowCellRenderParam &
     | 'iconSize'
     | 'rowKey'
   > &
-  UnwrapNestedRefs<Pick<UseTableReturn, 'expandedRowKeys' | 'visibleColumns'>> & {
+  UnwrapNestedRefs<
+    Pick<UseTableReturn, 'expandedRowKeys' | 'visibleColumns'>
+  > & {
     onRowAdd?: RowAddHandler
     onAddGhostRow?: (params: GhostRowAddParams<any>) => void
     onRowDelete?: RowDeleteHandler
@@ -172,10 +175,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     (item) => item.placeholderSign !== placeholderSign
   )
   const shouldRenderGhostAddButton =
-    ghostTable &&
-    editTable &&
-    isGhostRow &&
-    isRowDeleteColumn
+    ghostTable && editTable && isGhostRow && isRowDeleteColumn
   const shouldRenderGhostEditCell =
     ghostTable &&
     editTable &&
@@ -287,6 +287,8 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     ghostTable && 'is-full-width',
     isGhostRow && ns.is('ghost-row'),
     column.required && 'required-column',
+    column[rowDeletePlaceholderMergedSign] &&
+      ns.is('row-delete-placeholder-merged'),
     column.class,
     column.align === Alignment.CENTER && ns.is('align-center'),
     column.align === Alignment.RIGHT && ns.is('align-right'),

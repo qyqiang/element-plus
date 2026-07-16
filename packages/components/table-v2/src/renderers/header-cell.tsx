@@ -2,7 +2,11 @@ import { renderSlot } from 'vue'
 import { HeaderCell, SortIcon } from '../components'
 // import ColumnResizer from '../table-column-resizer'
 import { Alignment, SortOrder, oppositeOrderMap } from '../constants'
-import { placeholderSign, rowDeleteColumnKey } from '../private'
+import {
+  placeholderSign,
+  rowDeleteColumnKey,
+  rowDeletePlaceholderMergedSign,
+} from '../private'
 import { componentToSlot, enforceUnit, tryCall } from '../utils'
 
 import type { FunctionalComponent, UnwrapNestedRefs } from 'vue'
@@ -119,6 +123,8 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
     ns.e('header-cell'),
     diagonalHeader && ns.is('diagonal-header'),
     column.required && 'required-column',
+    column[rowDeletePlaceholderMergedSign] &&
+      ns.is('row-delete-placeholder-merged'),
     tryCall(headerClass, props, ''),
     column.align === Alignment.CENTER && ns.is('align-center'),
     column.align === Alignment.RIGHT && ns.is('align-right'),
