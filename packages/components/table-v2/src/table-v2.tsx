@@ -22,7 +22,7 @@ import {
 import ElButton from '@element-plus/components/button'
 import ElIcon from '@element-plus/components/icon'
 import ElTooltip from '@element-plus/components/tooltip'
-import { isEmptyRequiredValue } from './ghost-table'
+import { getGhostRowPayload, isEmptyRequiredValue } from './ghost-table'
 import { TABLE_V2_GRID_INJECTION_KEY, TableV2InjectionKey } from './tokens'
 import { tableV2Emits, tableV2Props } from './table'
 // renderers
@@ -324,7 +324,10 @@ const TableV2 = defineComponent({
     }
     const onAddGhostRow = (params: GhostRowAddParams<any>) => {
       scheduleGhostRowScroll()
-      emit('add-ghost-row', params)
+      emit('add-ghost-row', {
+        ...params,
+        row: getGhostRowPayload(params.row),
+      })
       ghostRowDraft.value = createGhostRowData()
     }
     const onHeaderDragend = (

@@ -19,6 +19,29 @@ export const isGhostTableRow = (row: Record<string, any> | undefined) =>
 export const isGhostRowTouched = (row: Record<string, any> | undefined) =>
   Boolean(row?.[ghostRowTouchedSign])
 
+export const getGhostRowPayload = <T extends Record<PropertyKey, any>>(
+  row: T
+) => {
+  const rowField = row?.[ghostRowFieldKey]
+  const internalKeys = new Set<PropertyKey>([
+    ghostRowSign,
+    ghostRowKey,
+    ghostRowFieldKey,
+    ghostRowTouchedSign,
+    rowField,
+  ])
+
+  return Reflect.ownKeys(row).reduce<Partial<T>>((payload, key) => {
+    if (
+      !internalKeys.has(key) &&
+      Object.prototype.propertyIsEnumerable.call(row, key)
+    ) {
+      payload[key as keyof T] = row[key as keyof T]
+    }
+    return payload
+  }, {})
+}
+
 export const hasGhostRowValue = <T extends Record<string, any>>(row: T) => {
   const rowField = row?.[ghostRowFieldKey] as
     | string

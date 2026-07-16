@@ -130,6 +130,7 @@ export type GridExposes = {
     rowIndex?: number,
     alignment?: Alignment
   ) => void
+  scrollToRow: (rowIndex?: number, alignment?: Alignment) => void
 } & SharedExposes
 
 export type ScrollbarExpose = {

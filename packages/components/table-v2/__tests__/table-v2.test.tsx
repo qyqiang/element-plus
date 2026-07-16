@@ -178,7 +178,7 @@ describe('TableV2.vue', () => {
 
     expect(headerCells[0].attributes('style')).toContain('width: 64px;')
     expect(headerCells[1].attributes('style')).toContain('width: 96px;')
-    expect(headerCells[2].attributes('style')).toContain('width: 534px;')
+    expect(headerCells[2].attributes('style')).toContain('width: 540px;')
   })
 
   test('resolves percentage column widths against the available table width', async () => {
@@ -222,9 +222,43 @@ describe('TableV2.vue', () => {
 
     const headerCells = wrapper.findAll('.el-table-v2__header-cell')
 
-    expect(headerCells[0].attributes('style')).toContain('width: 347px;')
-    expect(headerCells[1].attributes('style')).toContain('width: 208px;')
-    expect(headerCells[2].attributes('style')).toContain('width: 139px;')
+    expect(headerCells[0].attributes('style')).toContain('width: 350px;')
+    expect(headerCells[1].attributes('style')).toContain('width: 210px;')
+    expect(headerCells[2].attributes('style')).toContain('width: 140px;')
+  })
+
+  test('does not reserve vertical scrollbar width in display mode', async () => {
+    const editTable = ref(true)
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 100,
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: 'Alpha' }])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={200}
+        fixed
+        ghostTable
+        editTable={editTable.value}
+      />
+    ))
+
+    const getMainGrid = () =>
+      wrapper.findAllComponents({ name: 'ElTableV2Grid' })[0]
+
+    expect(getMainGrid().props('bodyWidth')).toBe(694)
+
+    editTable.value = false
+    await nextTick()
+
+    expect(getMainGrid().props('bodyWidth')).toBe(700)
   })
 
   test('slots cell', async () => {
@@ -1206,17 +1240,56 @@ describe('TableV2.vue', () => {
     await addButton.trigger('click')
 
     expect(onAddGhostRow).toHaveBeenCalledTimes(1)
-    expect(table.emitted('add-ghost-row')).toEqual([
-      [
-        expect.objectContaining({
-          rowIndex: -1,
-          rowKey: 'ghost-row',
-          row: expect.objectContaining({
-            __ep_table_v2_ghost_row__: true,
-          }),
-        }),
-      ],
+    const emittedPayload = table.emitted('add-ghost-row')?.[0]?.[0] as any
+
+    expect(emittedPayload).toEqual(
+      expect.objectContaining({
+        rowIndex: -1,
+        rowKey: 'ghost-row',
+        row: {},
+      })
+    )
+    expect(emittedPayload.row).not.toHaveProperty('__ep_table_v2_ghost_row__')
+  })
+
+  test('renders a delete action for a row appended from the ghost payload', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+      },
     ])
+    const data = ref([{ id: 'row-0', name: 'Alpha' }])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        rowKey="id"
+        ghostTable
+        editTable
+        onAddGhostRow={({ row }) => {
+          data.value = [
+            ...data.value,
+            {
+              ...row,
+              id: 'row-1',
+              name: 'Beta',
+            },
+          ]
+        }}
+      />
+    ))
+
+    const addButton = wrapper.find('.el-table-v2__add-row-right .icon-button')
+
+    await addButton.trigger('click')
+    await nextTick()
+
+    expect(wrapper.findAll('.el-table-v2__row-delete-button')).toHaveLength(2)
   })
 
   test('applies ghostRowTemplate to the draft row payload and resets it after add', async () => {
@@ -1322,51 +1395,77 @@ describe('TableV2.vue', () => {
   })
 
   test('scrolls to the newly added row after ghost row add', async () => {
-    const columns = ref([
-      {
-        key: 'name',
-        dataKey: 'name',
-        title: 'Name',
-        width: 180,
-        editCellRenderer: ({ cellData }: { cellData: string }) => (
-          <input class="edit-cell" value={cellData} />
-        ),
-      },
-    ])
-    const data = ref([{ id: 'row-0', name: 'Alpha' }])
-    const wrapper = mount(() => (
-      <TableV2
-        columns={columns.value}
-        data={data.value}
-        width={700}
-        height={400}
-        rowKey="id"
-        ghostTable
-        editTable
-        onAddGhostRow={() => {
-          data.value = [
-            ...data.value,
-            {
-              id: `row-${data.value.length}`,
-              name: 'Beta',
-            },
-          ]
-        }}
-      />
-    ))
-
-    const grid = wrapper.findComponent({ name: 'ElTableV2Grid' })
-    const gridExposed = (grid.vm as any).$?.exposed as {
-      scrollToRow: (row: number, strategy?: string) => void
+    const originalScroll = window.HTMLElement.prototype.scroll
+    window.HTMLElement.prototype.scroll = function ({
+      left,
+      top,
+    }: {
+      left?: number
+      top?: number
+    }) {
+      if (typeof left === 'number') this.scrollLeft = left
+      if (typeof top === 'number') this.scrollTop = top
     }
-    const scrollToRowSpy = vi.spyOn(gridExposed, 'scrollToRow')
-    const addButton = wrapper.find('.el-table-v2__add-row-right .icon-button')
+    try {
+      const columns = ref([
+        {
+          key: 'name',
+          dataKey: 'name',
+          title: 'Name',
+          width: 900,
+          editCellRenderer: ({ cellData }: { cellData: string }) => (
+            <input class="edit-cell" value={cellData} />
+          ),
+        },
+      ])
+      const data = ref([{ id: 'row-0', name: 'Alpha' }])
+      const wrapper = mount(() => (
+        <TableV2
+          columns={columns.value}
+          data={data.value}
+          width={420}
+          height={180}
+          rowKey="id"
+          fixed
+          ghostTable
+          editTable
+          onAddGhostRow={() => {
+            data.value = [
+              ...data.value,
+              {
+                id: `row-${data.value.length}`,
+                name: 'Beta',
+              },
+            ]
+          }}
+        />
+      ))
 
-    await addButton.trigger('click')
-    await nextTick()
-    await nextTick()
+      const grid = wrapper.findComponent({ name: 'ElTableV2Grid' })
+      const gridExposed = (grid.vm as any).$?.exposed as {
+        scrollToRow: (row: number, strategy?: string) => void
+      }
+      const scrollToRowSpy = vi.spyOn(gridExposed, 'scrollToRow')
+      const table = wrapper.findComponent(TableV2)
+      const tableExposed = (table.vm as any).$?.exposed as {
+        scrollToLeft: (left: number) => void
+      }
+      const ghostRowHeader = wrapper.find('.el-table-v2__add-row-main-inner')
+      const addButton = wrapper.find('.el-table-v2__add-row-right .icon-button')
 
-    expect(scrollToRowSpy).toHaveBeenCalledWith(1, 'end')
+      tableExposed.scrollToLeft(120)
+      await nextTick()
+      await nextTick()
+
+      await addButton.trigger('click')
+      await nextTick()
+      await nextTick()
+
+      expect(scrollToRowSpy).toHaveBeenCalledWith(1, 'end')
+      expect((ghostRowHeader.element as HTMLElement).scrollLeft).toBe(120)
+    } finally {
+      window.HTMLElement.prototype.scroll = originalScroll
+    }
   })
 
   test('keeps the ghost row horizontally in sync with the table scroll position', async () => {

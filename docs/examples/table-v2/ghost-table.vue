@@ -16,7 +16,7 @@
       ref="table"
       :columns="columns"
       :data="tableData"
-      :width="600"
+      :height="200"
       fixed
       ghost-table
       :ghost-row-template="ghostRowTemplate"
@@ -198,7 +198,6 @@ const columns = ref<ColumnItem[]>([
     dataKey: 'qty',
     title: 'Qty',
     width: 140,
-    required: true,
     editor: 'input',
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[3], rowData),
     editCellRenderer: ({ rowData }) =>
@@ -209,7 +208,6 @@ const columns = ref<ColumnItem[]>([
     dataKey: 'unit',
     title: 'Unit',
     width: 140,
-    required: true,
     editor: 'select',
     options: unitOptions,
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[4], rowData),

@@ -28,6 +28,12 @@ function useTable(props: TableV2Props) {
   const containerRef = ref<HTMLElement>()
   const observedWidth = ref(0)
   const effectiveWidth = computed(() => props.width ?? observedWidth.value)
+  const reservedVScrollbarWidth = computed(() =>
+    (props.canEditTable && props.editable) ||
+    (props.ghostTable && props.editTable)
+      ? props.vScrollbarSize
+      : 0
+  )
 
   useResizeObserver(containerRef, ([entry]) => {
     observedWidth.value = entry.contentRect.width
@@ -49,7 +55,8 @@ function useTable(props: TableV2Props) {
     props,
     toRef(props, 'columns'),
     toRef(props, 'fixed'),
-    effectiveWidth
+    effectiveWidth,
+    reservedVScrollbarWidth
   )
 
   const {
@@ -143,6 +150,7 @@ function useTable(props: TableV2Props) {
     rowsHeight,
     showEmpty,
     effectiveWidth,
+    reservedVScrollbarWidth,
   })
 
   function getRowHeight(rowIndex: number) {

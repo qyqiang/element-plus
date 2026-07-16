@@ -13,6 +13,7 @@ type UseStyleProps = {
   rowsHeight: ComputedRef<number>
   showEmpty: ComputedRef<boolean>
   effectiveWidth: ComputedRef<number>
+  reservedVScrollbarWidth: ComputedRef<number>
 }
 
 export const useStyles = (
@@ -23,11 +24,12 @@ export const useStyles = (
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
     effectiveWidth,
+    reservedVScrollbarWidth,
     showEmpty,
   }: UseStyleProps
 ) => {
   const availableBodyWidth = computed(() =>
-    Math.max(unref(effectiveWidth) - props.vScrollbarSize, 0)
+    Math.max(unref(effectiveWidth) - unref(reservedVScrollbarWidth), 0)
   )
 
   const hasHorizontalScrollbar = computed(

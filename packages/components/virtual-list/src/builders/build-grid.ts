@@ -426,6 +426,28 @@ const createGrid = ({
         })
       }
 
+      const scrollToRow = (
+        rowIndex = 0,
+        alignment: Alignment = AUTO_ALIGNMENT
+      ) => {
+        const _states = unref(states)
+        rowIndex = Math.max(0, Math.min(rowIndex, props.totalRow! - 1))
+        const scrollBarWidth = getScrollBarWidth(ns.namespace.value)
+        const _cache = unref(cache)
+        const estimatedHeight = getEstimatedTotalHeight(props, _cache)
+
+        scrollTo({
+          scrollTop: getRowOffset(
+            props,
+            rowIndex,
+            alignment,
+            _states.scrollTop,
+            _cache,
+            estimatedHeight > (props.height as number) ? scrollBarWidth : 0
+          ),
+        })
+      }
+
       const getItemStyle = (rowIndex: number, columnIndex: number) => {
         const { columnWidth, direction, rowHeight } = props
         const itemStyleCache = getItemStyleCache.value(
@@ -526,6 +548,7 @@ const createGrid = ({
         getItemStyleCache,
         scrollTo,
         scrollToItem,
+        scrollToRow,
         states,
         resetAfterColumnIndex,
         resetAfterRowIndex,
@@ -685,6 +708,7 @@ export type GridInstance = InstanceType<ReturnType<typeof createGrid>> &
       columnIndex: number,
       alignment: Alignment
     ) => void
+    scrollToRow: (rowIndex: number, alignment: Alignment) => void
     states: Ref<{
       isScrolling: boolean
       scrollLeft: number

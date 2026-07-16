@@ -71,13 +71,14 @@ function useColumns(
   props: TableV2Props,
   columns: Ref<AnyColumns>,
   fixed: Ref<boolean>,
-  effectiveWidth: Ref<number>
+  effectiveWidth: Ref<number>,
+  reservedVScrollbarWidth: Ref<number>
 ) {
   const columnWidths = ref<Record<KeyType, number>>({})
 
   const _columns = computed<AnyColumns>(() => {
     const availableWidth = Math.max(
-      unref(effectiveWidth) - props.vScrollbarSize,
+      unref(effectiveWidth) - unref(reservedVScrollbarWidth),
       0
     )
     const normalizedColumns: AnyColumns = unref(columns).map(
