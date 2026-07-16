@@ -39,7 +39,7 @@ function useWatcher<T extends DefaultRow>(
               value = parseMinWidth(newVal)
             }
             const autoWidth =
-              !parseWidth(props_.width) && !parseMinWidth(props_.minWidth)
+              !parseWidth(props_.width) && !parseMinWidth(props_.minWidth ?? '')
             instance.columnConfig.value[columnKey as never] = value as never
             instance.columnConfig.value[key as never] = value as never
             instance.columnConfig.value.autoWidth = autoWidth
@@ -48,7 +48,6 @@ function useWatcher<T extends DefaultRow>(
                 instance.columnConfig.value.label
               )
               instance.columnConfig.value.minWidth = width
-              instance.columnConfig.value.realMinWidth = width
             }
             const updateColumns = columnKey === 'fixed'
             owner.value.store.scheduleLayout(updateColumns)
@@ -93,7 +92,6 @@ function useWatcher<T extends DefaultRow>(
             if (key === 'label' && instance.columnConfig.value.autoWidth) {
               const width = getAutoColumnWidth(newVal)
               instance.columnConfig.value.minWidth = width
-              instance.columnConfig.value.realMinWidth = width
               owner.value.store.scheduleLayout()
             }
           }

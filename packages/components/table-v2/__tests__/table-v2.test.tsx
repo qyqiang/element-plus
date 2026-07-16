@@ -176,9 +176,68 @@ describe('TableV2.vue', () => {
 
     const headerCells = wrapper.findAll('.el-table-v2__header-cell')
 
-    expect(headerCells[0].attributes('style')).toContain('width: 64px;')
+    expect(headerCells[0].attributes('style')).toContain('width: 80px;')
     expect(headerCells[1].attributes('style')).toContain('width: 96px;')
-    expect(headerCells[2].attributes('style')).toContain('width: 540px;')
+    expect(headerCells[2].attributes('style')).toContain('width: 524px;')
+  })
+
+  test('keeps explicit widths when mixed with widthless columns', async () => {
+    const columns = ref([
+      {
+        key: 'short',
+        dataKey: 'short',
+        title: 'ID',
+      },
+      {
+        key: 'fixed-number',
+        dataKey: 'fixedNumber',
+        title: 'Fixed Number',
+        width: 180,
+      },
+      {
+        key: 'medium',
+        dataKey: 'medium',
+        title: 'Status',
+      },
+      {
+        key: 'fixed-pixel',
+        dataKey: 'fixedPixel',
+        title: 'Fixed Pixel',
+        width: '160px',
+      },
+      {
+        key: 'tail',
+        dataKey: 'tail',
+        title: 'Notes',
+      },
+    ])
+    const data = ref([
+      {
+        id: 'row-0',
+        short: '1',
+        fixedNumber: '180px',
+        medium: 'Open',
+        fixedPixel: '160px',
+        tail: 'Remaining width',
+      },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value as any}
+        data={data.value}
+        width={700}
+        height={400}
+      />
+    ))
+    await nextTick()
+
+    const headerCells = wrapper.findAll('.el-table-v2__header-cell')
+
+    expect(headerCells[0].attributes('style')).toContain('width: 80px;')
+    expect(headerCells[1].attributes('style')).toContain('width: 180px;')
+    expect(headerCells[2].attributes('style')).toContain('width: 96px;')
+    expect(headerCells[3].attributes('style')).toContain('width: 160px;')
+    expect(headerCells[4].attributes('style')).toContain('width: 184px;')
   })
 
   test('resolves percentage column widths against the available table width', async () => {

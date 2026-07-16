@@ -167,7 +167,9 @@ class TableLayout<T extends DefaultRow> {
             column.realWidth = Number(column.minWidth || 80)
           })
           const lastFlexColumn = flexColumns[flexColumns.length - 1]
-          lastFlexColumn.realWidth += totalFlexWidth
+          lastFlexColumn.realWidth =
+            Number(lastFlexColumn.realWidth ?? lastFlexColumn.minWidth ?? 80) +
+            totalFlexWidth
         }
       } else {
         // HAVE HORIZONTAL SCROLL BAR

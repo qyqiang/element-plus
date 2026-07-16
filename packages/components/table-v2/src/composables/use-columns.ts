@@ -14,6 +14,7 @@ import type { TableV2Props } from '../table'
 import type { AnyColumns, Column, KeyType } from '../types'
 
 const AUTO_COLUMN_PADDING = 48
+const MIN_AUTO_COLUMN_WIDTH = 80
 const FALLBACK_HEADER_CHAR_WIDTH = 8
 const textWidthCache = new Map<string, number>()
 const PERCENTAGE_WIDTH_RE = /^\s*(-?\d+(?:\.\d+)?)%\s*$/
@@ -45,7 +46,10 @@ const measureHeaderTextWidth = (text: string) => {
 }
 
 const getAutoColumnWidth = (column: Column<any>) =>
-  measureHeaderTextWidth(String(column.title ?? '')) + AUTO_COLUMN_PADDING
+  Math.max(
+    MIN_AUTO_COLUMN_WIDTH,
+    measureHeaderTextWidth(String(column.title ?? '')) + AUTO_COLUMN_PADDING
+  )
 
 const resolveColumnWidth = (
   width: Column<any>['width'],
