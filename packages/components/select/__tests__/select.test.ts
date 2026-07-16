@@ -1362,6 +1362,33 @@ describe('Select', () => {
     expect(suffixIcon.exists()).toBe(true)
   })
 
+  test('append slot is independently clickable', async () => {
+    const appendClick = vi.fn()
+    wrapper = _mount(
+      `<el-select>
+        <template #append>
+          <button class="append-action" @click="appendClick">Action</button>
+        </template>
+      </el-select>`,
+      undefined,
+      { methods: { appendClick } }
+    )
+
+    const select = wrapper.findComponent({ name: 'ElSelect' })
+    expect(wrapper.find('.el-select__append').exists()).toBe(true)
+    expect((select.vm as any).expanded).toBe(false)
+
+    await wrapper.find('.append-action').trigger('click')
+
+    expect(appendClick).toHaveBeenCalledTimes(1)
+    expect((select.vm as any).expanded).toBe(false)
+  })
+
+  test('does not render append area without the append slot', () => {
+    wrapper = _mount(`<el-select></el-select>`)
+    expect(wrapper.find('.el-select__append').exists()).toBe(false)
+  })
+
   test('test remote show suffix', async () => {
     wrapper = _mount(`<el-select></el-select>`)
     await wrapper.setProps({

@@ -75,6 +75,16 @@ select/custom-width
 
 :::
 
+## Append action
+
+Use the `append` slot to add an independently clickable action to the right side of Select. Clicking the appended content does not open or close the dropdown. Without this slot, Select keeps its original appearance and behavior.
+
+:::demo
+
+select/append-action
+
+:::
+
 ## Before change
 
 Use `before-change` to decide whether the next selection should be committed. Return `false`, or return a rejected `Promise`, to keep the current value.
@@ -326,6 +336,7 @@ select/custom-label
 | header ^(2.4.3)  | content at the top of the dropdown                                                              | —                                                                                                                     |
 | footer ^(2.4.3)  | content at the bottom of the dropdown                                                           | —                                                                                                                     |
 | prefix           | content as Select prefix                                                                        | —                                                                                                                     |
+| append           | independently clickable content appended to the right side of Select                            | —                                                                                                                     |
 | empty            | content when there is no options                                                                | —                                                                                                                     |
 | info             | custom content displayed before the suffix icons                                                | —                                                                                                                     |
 | itemIcon         | custom content displayed before the selected label text                                         | ^[object]`{ item?: Record<string, any>, index: number, label: string \| any, value: string \| any }`                  |

@@ -261,6 +261,16 @@ select-v2/custom-width
 
 :::
 
+## Append action
+
+Use the `append` slot to add an independently clickable action to the right side of Select V2. Clicking the appended content does not open or close the dropdown. Without this slot, Select V2 keeps its original appearance and behavior.
+
+:::demo
+
+select-v2/append-action
+
+:::
+
 ## API
 
 ### Attributes
@@ -355,6 +365,7 @@ select-v2/custom-width
 | empty            | content when options is empty                                                                   | —                                                                                                              |
 | prefix           | prefix content of input                                                                         | —                                                                                                              |
 | suffix           | suffix content of input                                                                         | —                                                                                                              |
+| append           | independently clickable content appended to the right side of Select V2                         | —                                                                                                              |
 | optionIcon       | custom content displayed before the option label                                                | —                                                                                                              |
 | tag ^(2.5.0)     | content as Select tag, subTags `data`, `selectDisabled` and `deleteTag` introduced in ^(2.10.3) | ^[object]`{ data: Option[], selectDisabled: boolean, deleteTag: (event: MouseEvent, option: Option) => void }` |
 | loading ^(2.5.2) | content as Select loading                                                                       | —                                                                                                              |

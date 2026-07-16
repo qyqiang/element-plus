@@ -98,6 +98,7 @@ const createSelect = (
     data?: () => SelectProps
     methods?: SelectEvents
     slots?: {
+      append?: string
       empty?: string
       default?: string
       label?: string
@@ -124,6 +125,11 @@ const createSelect = (
     (options.slots &&
       options.slots.tag &&
       `<template #tag="{ data, deleteTag }">${options.slots.tag}</template>`) ||
+    ''
+  const appendSlot =
+    (options.slots &&
+      options.slots.append &&
+      `<template #append>${options.slots.append}</template>`) ||
     ''
 
   return _mount(
@@ -171,6 +177,7 @@ const createSelect = (
         ${emptySlot}
         ${labelSlot}
         ${tagSlot}
+        ${appendSlot}
       </el-select>
     `,
     {
@@ -1719,6 +1726,31 @@ describe('Select', () => {
         .find('.empty-slot')
         .exists()
     ).toBeTruthy()
+  })
+
+  it('keeps the append slot independently clickable', async () => {
+    const appendClick = vi.fn()
+    const wrapper = createSelect({
+      methods: { appendClick },
+      slots: {
+        append:
+          '<button class="append-action" @click="appendClick">Action</button>',
+      },
+    })
+    const select = wrapper.findComponent(Select)
+
+    expect(wrapper.find('.el-select__append').exists()).toBe(true)
+    expect((select.vm as any).expanded).toBe(false)
+
+    await wrapper.find('.append-action').trigger('click')
+
+    expect(appendClick).toHaveBeenCalledTimes(1)
+    expect((select.vm as any).expanded).toBe(false)
+  })
+
+  it('does not render append area without the append slot', () => {
+    const wrapper = createSelect()
+    expect(wrapper.find('.el-select__append').exists()).toBe(false)
   })
 
   it('should render label slot with index', async () => {

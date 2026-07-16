@@ -23,7 +23,12 @@
       :content="errorTooltipContent"
       :disabled="errorTooltipDisabled"
     >
-      <div>
+      <div
+        :class="[
+          nsSelect.e('container'),
+          nsSelect.is('append', !!$slots.append),
+        ]"
+      >
         <el-tooltip
           ref="tooltipRef"
           :visible="dropdownMenuVisible"
@@ -374,6 +379,14 @@
             </el-select-menu>
           </template>
         </el-tooltip>
+        <div
+          v-if="$slots.append"
+          :class="nsSelect.e('append')"
+          @mousedown.stop
+          @click.stop
+        >
+          <slot name="append" />
+        </div>
       </div>
     </el-tooltip>
   </div>
