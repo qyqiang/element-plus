@@ -22,7 +22,7 @@ import {
 } from '../ghost-table'
 import { componentToSlot, enforceUnit, tryCall } from '../utils'
 
-import type { FunctionalComponent, Slot, UnwrapNestedRefs, VNode } from 'vue'
+import type { FunctionalComponent, UnwrapNestedRefs, VNode } from 'vue'
 import type { TableV2RowCellRenderParam } from '../components'
 import type { UseNamespaceReturn } from '@element-plus/hooks'
 import type { RowAddHandler, RowDeleteHandler } from '../row'
@@ -49,7 +49,7 @@ type CellRendererProps = TableV2RowCellRenderParam &
     onRowAdd?: RowAddHandler
     onAddGhostRow?: (params: GhostRowAddParams<any>) => void
     onRowDelete?: RowDeleteHandler
-    rowActionRenderer?: Slot<TableV2RowActionSlotParams>
+    rowActionRenderer?: (props: TableV2RowActionSlotParams) => VNode[]
     ns: UseNamespaceReturn
   }
 

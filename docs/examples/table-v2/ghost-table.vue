@@ -16,7 +16,7 @@
       ref="table"
       :columns="columns"
       :data="tableData"
-      :height="200"
+      :height="400"
       fixed
       ghost-table
       :ghost-row-template="ghostRowTemplate"
@@ -218,7 +218,6 @@ const columns = ref<ColumnItem[]>([
     key: 'rate',
     dataKey: 'rate',
     title: 'Rate',
-    width: 140,
     editor: 'input',
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[5], rowData),
     editCellRenderer: ({ rowData }) =>
