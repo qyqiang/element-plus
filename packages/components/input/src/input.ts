@@ -153,7 +153,10 @@ export const inputProps = buildProps({
   /**
    * @description native input readonly
    */
-  clearable: Boolean,
+  clearable: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description custom clear icon component
    */

@@ -11,6 +11,7 @@ type UseStyleProps = {
   fixedColumnsOnLeft: UseColumnsReturn['fixedColumnsOnLeft']
   fixedColumnsOnRight: UseColumnsReturn['fixedColumnsOnRight']
   rowsHeight: ComputedRef<number>
+  showEmpty: ComputedRef<boolean>
   effectiveWidth: ComputedRef<number>
 }
 
@@ -22,6 +23,7 @@ export const useStyles = (
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
     effectiveWidth,
+    showEmpty,
   }: UseStyleProps
 ) => {
   const availableBodyWidth = computed(() =>
@@ -29,8 +31,7 @@ export const useStyles = (
   )
 
   const hasHorizontalScrollbar = computed(
-    () =>
-      props.fixed && unref(columnsTotalWidth) > unref(availableBodyWidth)
+    () => props.fixed && unref(columnsTotalWidth) > unref(availableBodyWidth)
   )
 
   const effectiveHScrollbarSize = computed(() =>
@@ -61,6 +62,7 @@ export const useStyles = (
       _headerHeight +
       _fixedRowsHeight +
       _rowsHeight +
+      (unref(showEmpty) ? props.rowHeight : 0) +
       unref(effectiveHScrollbarSize)
     )
   })
@@ -75,7 +77,10 @@ export const useStyles = (
     const { height, maxHeight = 0 } = props
     const footerHeight = unref(effectiveFooterHeight)
     const addRowSpace = unref(addRowHeight)
-    const availableMaxHeight = Math.max(maxHeight - footerHeight - addRowSpace, 0)
+    const availableMaxHeight = Math.max(
+      maxHeight - footerHeight - addRowSpace,
+      0
+    )
 
     if (maxHeight > 0) {
       return Math.min(unref(contentHeight), availableMaxHeight)
@@ -144,7 +149,7 @@ export const useStyles = (
 
   const emptyStyle = computed<CSSProperties>(() => ({
     top: addUnit(unref(headerHeight)),
-    bottom: addUnit(unref(effectiveFooterHeight) + unref(addRowHeight)),
+    height: addUnit(props.rowHeight),
     width: addUnit(unref(effectiveWidth)),
   }))
 

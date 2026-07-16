@@ -321,6 +321,40 @@ describe('TableV2.vue', () => {
     expect(defaultEmpty.exists()).toBe(true)
   })
 
+  test('uses one row height for empty data with a ghost row', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        editCellRenderer: ({ cellData }: { cellData: string }) => (
+          <input value={cellData} />
+        ),
+      },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={[]}
+        width={700}
+        maxHeight={240}
+        ghostTable
+        editTable
+        isFooterDefault
+      />
+    ))
+
+    const rootStyle = wrapper.find('.el-table-v2__root').attributes('style')
+    const emptyStyle = wrapper.find('.el-table-v2__empty').attributes('style')
+    const grid = wrapper.findComponent({ name: 'ElTableV2Grid' })
+
+    expect(rootStyle).toContain('height: 176px;')
+    expect(emptyStyle).toContain('top: 44px;')
+    expect(emptyStyle).toContain('height: 44px;')
+    expect(grid.props('height')).toBe(88)
+  })
+
   test('slots cell scope', async () => {
     const columns = ref(generateColumns(10))
     const data = ref(generateData(columns.value, 20))

@@ -2,28 +2,87 @@
   <el-table-v2
     :columns="columns"
     :data="[]"
-    :row-height="40"
     :width="700"
-    :height="400"
-    :footer-height="50"
+    :max-height="240"
+    fixed
+    ghost-table
+    edit-table
+    :ghost-row-template="ghostRowTemplate"
+    :total="0"
+    update-time="2026-07-16 10:08"
+    is-footer-default
   >
     <template #empty>
-      <div class="flex items-center justify-center h-100%">
-        <el-empty />
-      </div>
+      <span class="empty-text">No Data</span>
     </template>
   </el-table-v2>
 </template>
 
 <script lang="tsx" setup>
-const generateColumns = (length = 10, prefix = 'column-', props?: any) =>
-  Array.from({ length }).map((_, columnIndex) => ({
-    ...props,
-    key: `${prefix}${columnIndex}`,
-    dataKey: `${prefix}${columnIndex}`,
-    title: `Column ${columnIndex}`,
-    width: 150,
-  }))
+import { ElInput, ElOption, ElSelect } from 'element-plus'
 
-const columns = generateColumns(10)
+import type { Column } from 'element-plus'
+
+interface EmptyRow {
+  id: string
+  product: string
+  qty: string
+  unit: string
+}
+
+const ghostRowTemplate: EmptyRow = {
+  id: 'ghost-row',
+  product: '',
+  qty: '',
+  unit: '',
+}
+
+const unitOptions = ['lbs', 'kg', 'ton']
+
+const columns: Column<EmptyRow>[] = [
+  {
+    key: 'product',
+    dataKey: 'product',
+    title: 'Product',
+    width: 280,
+    editCellRenderer: ({ rowData }) => (
+      <ElSelect
+        v-model={rowData.product}
+        placeholder="Product"
+        float-label={false}
+      >
+        <ElOption label="Sand" value="sand" />
+        <ElOption label="Gravel" value="gravel" />
+      </ElSelect>
+    ),
+  },
+  {
+    key: 'qty',
+    dataKey: 'qty',
+    title: 'Qty',
+    width: 220,
+    editCellRenderer: ({ rowData }) => (
+      <ElInput v-model={rowData.qty} placeholder="Qty" float-label={false} />
+    ),
+  },
+  {
+    key: 'unit',
+    dataKey: 'unit',
+    title: 'Unit',
+    width: 160,
+    editCellRenderer: ({ rowData }) => (
+      <ElSelect v-model={rowData.unit} placeholder="Unit" float-label={false}>
+        {unitOptions.map((unit) => (
+          <ElOption key={unit} label={unit} value={unit} />
+        ))}
+      </ElSelect>
+    ),
+  },
+]
 </script>
+
+<style scoped>
+.empty-text {
+  color: var(--color-gray-500);
+}
+</style>

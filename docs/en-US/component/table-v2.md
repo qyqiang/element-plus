@@ -25,6 +25,16 @@ table-v2/editable-table
 table-v2/ghost-table
 :::
 
+## Empty data
+
+When `data` is empty, the empty area uses one `row-height` instead of stretching to fill the remaining table space. This also keeps the header, empty row, ghost row, horizontal scrollbar, and default footer in sequence.
+
+:::demo
+
+table-v2/empty
+
+:::
+
 ## Add column and row trigger
 
 Hover near a header or row divider to show an add button, then insert a new column or row at that position.

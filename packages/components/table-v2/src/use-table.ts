@@ -100,6 +100,14 @@ function useTable(props: TableV2Props) {
     resetAfterIndex,
   })
 
+  const showEmpty = computed(() => {
+    const noData = unref(data).length === 0
+
+    return isArray(props.fixedData)
+      ? props.fixedData.length === 0 && noData
+      : noData
+  })
+
   const rowsHeight = computed(() => {
     const { estimatedRowHeight, rowHeight } = props
     const _data = unref(data)
@@ -133,15 +141,8 @@ function useTable(props: TableV2Props) {
     fixedColumnsOnLeft,
     fixedColumnsOnRight,
     rowsHeight,
+    showEmpty,
     effectiveWidth,
-  })
-
-  const showEmpty = computed(() => {
-    const noData = unref(data).length === 0
-
-    return isArray(props.fixedData)
-      ? props.fixedData.length === 0 && noData
-      : noData
   })
 
   function getRowHeight(rowIndex: number) {
