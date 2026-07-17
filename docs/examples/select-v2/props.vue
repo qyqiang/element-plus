@@ -5,7 +5,6 @@
     :props="props"
     placeholder="Please select"
     style="width: 240px"
-    filterable
     multiple
   />
 </template>

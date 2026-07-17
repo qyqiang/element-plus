@@ -368,6 +368,26 @@ describe('Select', () => {
     ).toBe('Select')
   })
 
+  it('floats the label after entering a filter value', async () => {
+    const wrapper = createSelect({
+      data: () => ({
+        filterable: true,
+        value: '',
+      }),
+    })
+    const input = wrapper.find('input')
+    const floatLabel = wrapper.find('.float-label')
+
+    expect(floatLabel.classes()).not.toContain('select-visible')
+
+    input.element.value = 'option'
+    await input.trigger('input')
+    await nextTick()
+
+    expect(floatLabel.classes()).toContain('select-visible')
+    wrapper.unmount()
+  })
+
   it('default value', async () => {
     const wrapper = createSelect({
       data: () => ({

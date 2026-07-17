@@ -65,9 +65,16 @@
               ]"
               @click.prevent="toggleMenu"
             >
-              <span v-if="floatLabel" class="float-label">{{
-                placeholder
-              }}</span>
+              <span
+                v-if="floatLabel"
+                class="float-label"
+                :class="{
+                  'prefix-label': $slots.prefix,
+                  'select-visible': dropdownMenuVisible || !!states.inputValue,
+                }"
+              >
+                {{ placeholder }}
+              </span>
               <div
                 v-if="$slots.prefix"
                 ref="prefixRef"

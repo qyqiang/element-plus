@@ -2,7 +2,6 @@
   <el-select-v2
     v-model="value"
     :options="options"
-    filterable
     add-show-tip="test"
     placeholder="Please select"
     style="width: 240px"
@@ -10,7 +9,6 @@
   <el-select-v2
     v-model="value7"
     :options="options1"
-    filterable
     add-show-tip="test"
     placeholder="Test Only 1"
     style="width: 240px"
@@ -26,10 +24,12 @@ const value = ref()
 const value7 = ref()
 const options = Array.from({ length: 1000 }).map((_, idx) => ({
   value: `Option ${idx + 1}`,
-  label: `${initials[idx % 10]}${idx}`
+  label: `${initials[idx % 10]}${idx}`,
 }))
-const options1 = ref([{
-  value: `Option 1`,
-  label: `Option 1`
-}])
+const options1 = ref([
+  {
+    value: `Option 1`,
+    label: `Option 1`,
+  },
+])
 </script>

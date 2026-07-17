@@ -8,7 +8,6 @@
         style="width: 240px; margin-right: 16px; vertical-align: middle"
         allow-create
         default-first-option
-        filterable
         multiple
         clearable
       />
@@ -19,7 +18,6 @@
         style="width: 240px; vertical-align: middle"
         allow-create
         default-first-option
-        filterable
         clearable
       />
     </div>
@@ -34,7 +32,6 @@
         style="width: 240px; margin-right: 16px; vertical-align: middle"
         allow-create
         default-first-option
-        filterable
         multiple
         clearable
         :reserve-keyword="false"

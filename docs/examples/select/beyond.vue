@@ -18,7 +18,6 @@
       pre-star
       placeholder="float -value"
       label="label1"
-      filterable
       :float-label="false"
       :fit-input-width="false"
       :filter-max-length="24"
@@ -48,7 +47,6 @@
       pre-star
       placeholder="Please Selectgg"
       label="label1"
-      filterable
       :filter-max-length="24"
       add-item
       add-show-tip="test"
@@ -72,7 +70,6 @@
       v-model="value"
       clearable
       pre-star
-      filterable
       placeholder="Please Select2"
       label="label1"
       style="width: 240px"

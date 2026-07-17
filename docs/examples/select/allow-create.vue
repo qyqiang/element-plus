@@ -2,7 +2,6 @@
   <el-select
     v-model="value"
     multiple
-    filterable
     allow-create
     default-first-option
     :reserve-keyword="false"

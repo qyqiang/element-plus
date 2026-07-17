@@ -5,7 +5,6 @@
       <el-select-v2
         v-model="value"
         multiple
-        filterable
         remote
         reserve-keyword
         placeholder="Please enter a keyword"
@@ -26,7 +25,6 @@
       <el-select-v2
         v-model="value"
         multiple
-        filterable
         remote
         reserve-keyword
         placeholder="Please enter a keyword"

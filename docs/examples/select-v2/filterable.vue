@@ -1,7 +1,6 @@
 <template>
   <el-select-v2
     v-model="value"
-    filterable
     :options="options"
     placeholder="Please select"
     style="width: 240px"
