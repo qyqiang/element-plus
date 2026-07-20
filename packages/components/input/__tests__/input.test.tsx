@@ -49,6 +49,23 @@ describe('Input.vue', () => {
     expect(inputElm.element.value).toBe('')
   })
 
+  test('renders prepend and append slots around the input', () => {
+    const wrapper = mount(() => (
+      <Input
+        v-slots={{
+          prepend: () => <span class="prepend-content">Before</span>,
+          append: () => <span class="append-content">After</span>,
+        }}
+      />
+    ))
+
+    expect(wrapper.find('input').exists()).toBe(true)
+    expect(wrapper.find('.prepend-content').text()).toBe('Before')
+    expect(wrapper.find('.append-content').text()).toBe('After')
+    expect(wrapper.find('.el-input-group__prepend').exists()).toBe(true)
+    expect(wrapper.find('.el-input-group__append').exists()).toBe(true)
+  })
+
   test('disabled', async () => {
     const wrapper = mount(() => <Input disabled />)
     const inputElm = wrapper.find('input')

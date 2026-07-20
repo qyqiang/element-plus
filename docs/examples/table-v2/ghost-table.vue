@@ -209,6 +209,7 @@ const columns = ref<ColumnItem[]>([
     title: 'Unit',
     width: 140,
     editor: 'select',
+    required: true,
     options: unitOptions,
     cellRenderer: ({ rowData }) => renderDisplayCell(columns.value[4], rowData),
     editCellRenderer: ({ rowData }) =>

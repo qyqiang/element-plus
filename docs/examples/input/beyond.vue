@@ -3,6 +3,9 @@
   <el-divider />
   <div class="flex flex-wrap gap-4 items-center">
     <el-input v-model="input" style="width: 240px" placeholder="Please input" />
+    <el-input v-model="input" style="width: 240px" placeholder="Append input">
+      <template #append> TEST </template>
+    </el-input>
     <el-input
       v-model="input"
       input-type="warning"

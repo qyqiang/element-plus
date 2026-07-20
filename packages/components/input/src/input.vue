@@ -11,20 +11,20 @@
     @mouseenter="handleMouseEnter"
     @mouseleave="handleMouseLeave"
   >
-    <el-tooltip
-      :content="inputTooltipContent"
-      placement="top-start"
-      :disabled="inputTooltipDisabled"
-      :offset="12"
-      :trigger="inputTooltipTrigger"
-    >
-      <!-- input -->
-      <template v-if="type !== 'textarea'">
-        <!-- prepend slot -->
-        <div v-if="$slots.prepend" :class="nsInput.be('group', 'prepend')">
-          <slot name="prepend" />
-        </div>
+    <!-- input -->
+    <template v-if="type !== 'textarea'">
+      <!-- prepend slot -->
+      <div v-if="$slots.prepend" :class="nsInput.be('group', 'prepend')">
+        <slot name="prepend" />
+      </div>
 
+      <el-tooltip
+        :content="inputTooltipContent"
+        placement="top-start"
+        :disabled="inputTooltipDisabled"
+        :offset="12"
+        :trigger="inputTooltipTrigger"
+      >
         <div ref="wrapperRef" :class="wrapperKls">
           <!-- prefix slot -->
           <span v-if="$slots.prefix || prefixIcon" :class="nsInput.e('prefix')">
@@ -201,13 +201,21 @@
             </span>
           </span>
         </div>
-        <!-- append slot -->
-        <div v-if="$slots.append" :class="nsInput.be('group', 'append')">
-          <slot name="append" />
-        </div>
-      </template>
-      <!-- textarea -->
-      <template v-else>
+      </el-tooltip>
+      <!-- append slot -->
+      <div v-if="$slots.append" :class="nsInput.be('group', 'append')">
+        <slot name="append" />
+      </div>
+    </template>
+    <!-- textarea -->
+    <template v-else>
+      <el-tooltip
+        :content="inputTooltipContent"
+        placement="top-start"
+        :disabled="inputTooltipDisabled"
+        :offset="12"
+        :trigger="inputTooltipTrigger"
+      >
         <textarea
           :id="inputId"
           ref="textarea"
@@ -235,32 +243,32 @@
           @change="handleChange"
           @keydown="handleKeydown"
         />
-        <span v-if="$slots.textareaPrefix" class="textarea-prefix">
-          <slot name="textareaPrefix" />
-        </span>
-        <span v-if="$slots.textareaSuffix" class="textarea-suffix">
-          <slot name="textareaSuffix" />
-        </span>
-        <span
-          v-if="floatLabel && placeholder"
-          class="float-label"
-          :class="{ 'has-value': !isEmpty(modelValue) }"
-          @click="handleTextareaFocus"
-        >
-          {{ placeholder }}
-        </span>
-        <span
-          v-if="isWordLimitVisible"
-          :style="countStyle"
-          :class="[
-            nsInput.e('count'),
-            nsInput.is('outside', wordLimitPosition === 'outside'),
-          ]"
-        >
-          {{ textLength }} / {{ maxlength }}
-        </span>
-      </template>
-    </el-tooltip>
+      </el-tooltip>
+      <span v-if="$slots.textareaPrefix" class="textarea-prefix">
+        <slot name="textareaPrefix" />
+      </span>
+      <span v-if="$slots.textareaSuffix" class="textarea-suffix">
+        <slot name="textareaSuffix" />
+      </span>
+      <span
+        v-if="floatLabel && placeholder"
+        class="float-label"
+        :class="{ 'has-value': !isEmpty(modelValue) }"
+        @click="handleTextareaFocus"
+      >
+        {{ placeholder }}
+      </span>
+      <span
+        v-if="isWordLimitVisible"
+        :style="countStyle"
+        :class="[
+          nsInput.e('count'),
+          nsInput.is('outside', wordLimitPosition === 'outside'),
+        ]"
+      >
+        {{ textLength }} / {{ maxlength }}
+      </span>
+    </template>
   </div>
 </template>
 
