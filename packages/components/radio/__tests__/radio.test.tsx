@@ -17,6 +17,14 @@ describe('Radio', () => {
     expect(wrapper.classes()).toContain('is-checked')
   })
 
+  test('does not render an empty label element', () => {
+    const wrapper = mount(() => <Radio value="a" />)
+    const radioWithSlot = mount(() => <Radio value="a">Custom label</Radio>)
+
+    expect(wrapper.find('.el-radio__label').exists()).toBe(false)
+    expect(radioWithSlot.find('.el-radio__label').text()).toBe('Custom label')
+  })
+
   test('disabled', async () => {
     const radio = ref('')
     const wrapper = mount(() => (

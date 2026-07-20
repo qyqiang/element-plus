@@ -32,7 +32,14 @@
       />
       <span :class="ns.e('inner')" />
     </span>
-    <span :class="ns.e('label')" @keydown.stop>
+    <span
+      v-if="
+        $slots.default ||
+        (label !== undefined && label !== null && label !== '')
+      "
+      :class="ns.e('label')"
+      @keydown.stop
+    >
       <slot>
         {{ label }}
       </slot>

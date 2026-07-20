@@ -25,6 +25,16 @@ table-v2/editable-table
 table-v2/ghost-table
 :::
 
+## Editable rate matrix
+
+This example combines a diagonal route header, editable destination headers and cells, dynamic column insertion, the fixed row action column, and the bottom ghost row in one rate matrix. Use the Input and Select buttons to switch the first-column editor and destination-header editor together.
+
+:::demo
+
+table-v2/rate-matrix
+
+:::
+
 ## Custom row action
 
 Use the `row-action` slot to replace the default delete button for regular data rows. The ghost row keeps its built-in add action.

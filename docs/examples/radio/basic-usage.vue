@@ -28,6 +28,8 @@
     <el-radio :value="6">Option B</el-radio>
     <el-radio :value="9">Option C</el-radio>
   </el-radio-group>
+  <h2>No Label</h2>
+  <el-radio :value="9"></el-radio>
 </template>
 
 <script lang="ts" setup>
