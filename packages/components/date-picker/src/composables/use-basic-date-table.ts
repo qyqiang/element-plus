@@ -152,6 +152,10 @@ export const useBasicDateTable = (
 
   const rows = computed(() => {
     const { minDate, maxDate, rangeState, showWeekNumber } = props
+    const rangeAnchorDate =
+      props.rangePickType === 'end' && rangeState.selecting && maxDate
+        ? maxDate
+        : minDate
 
     const offset = unref(offsetDay)
     const rows_ = unref(tableRows)
@@ -159,12 +163,12 @@ export const useBasicDateTable = (
     let count = 1
 
     buildPickerTable({ row: 6, column: 7 }, rows_, {
-      startDate: minDate,
+      startDate: rangeAnchorDate,
       columnIndexOffset: showWeekNumber ? 1 : 0,
       nextEndDate:
         rangeState.endDate ||
         maxDate ||
-        (rangeState.selecting && minDate) ||
+        (rangeState.selecting && rangeAnchorDate) ||
         null,
       now: dayjs().locale(unref(lang)).startOf(dateUnit),
       unit: dateUnit,
@@ -340,7 +344,10 @@ export const useBasicDateTable = (
   }
 
   const handleRangePick = (newDate: Dayjs) => {
-    if (!props.rangeState.selecting || !props.minDate) {
+    const rangePickType = props.rangePickType
+    const anchorDate = rangePickType === 'end' ? props.maxDate : props.minDate
+
+    if (!props.rangeState.selecting || !anchorDate) {
       if (props.cycleType === 'week') {
         const offsetWeek = newDate.day()
         newDate = newDate.subtract(offsetWeek, 'days')
@@ -363,17 +370,35 @@ export const useBasicDateTable = (
         emit('pick', { minDate: v3, maxDate }, false)
         emit('select', false)
       } else {
-        emit('pick', { minDate: newDate, maxDate: null })
+        emit(
+          'pick',
+          rangePickType === 'end'
+            ? { minDate: null, maxDate: newDate }
+            : { minDate: newDate, maxDate: null }
+        )
         emit('select', true)
       }
-    } else {
-      if (newDate >= props.minDate) {
-        emit('pick', { minDate: props.minDate, maxDate: newDate })
-      } else {
-        emit('pick', { minDate: newDate, maxDate: props.minDate })
-      }
-      emit('select', false)
+      return
     }
+
+    if (rangePickType === 'start' && newDate.isBefore(anchorDate)) {
+      emit('pick', { minDate: newDate, maxDate: null }, false)
+      emit('select', true)
+      return
+    }
+
+    if (rangePickType === 'end' && newDate.isAfter(anchorDate)) {
+      emit('pick', { minDate: null, maxDate: newDate }, false)
+      emit('select', true)
+      return
+    }
+
+    if (newDate >= anchorDate) {
+      emit('pick', { minDate: anchorDate, maxDate: newDate })
+    } else {
+      emit('pick', { minDate: newDate, maxDate: anchorDate })
+    }
+    emit('select', false)
   }
 
   const handleWeekPick = (newDate: Dayjs) => {

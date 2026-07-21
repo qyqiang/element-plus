@@ -21,7 +21,10 @@ export type BasicDateTablePropsPublic = __ExtractPublicPropTypes<
 >
 export type BasicDateTableEmits = typeof basicDateTableEmits
 
-export type RangePickerEmits = { minDate: Dayjs; maxDate: null }
+export type RangePickerEmits = {
+  minDate: Dayjs | null
+  maxDate: Dayjs | null
+}
 export type DatePickerEmits = Dayjs
 export type DatesPickerEmits = Dayjs[]
 export type MonthsPickerEmits = Dayjs[]

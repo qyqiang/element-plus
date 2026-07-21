@@ -21,9 +21,18 @@ export type RangeState = {
   selecting: boolean
 }
 
+export const rangePickTypes = ['start', 'end'] as const
+export type RangePickType = (typeof rangePickTypes)[number]
+
+export const rangePickTypeProp = {
+  type: definePropType<RangePickType>(String),
+  values: rangePickTypes,
+}
+
 export type DisabledDateType = (date: Date) => boolean
 
 export const datePickerSharedProps = buildProps({
+  rangePickType: rangePickTypeProp,
   cycle: {
     type: Number,
     default: 0,
@@ -71,6 +80,7 @@ export const panelSharedProps = buildProps({
 } as const)
 
 export const panelRangeSharedProps = buildProps({
+  rangePickType: rangePickTypeProp,
   unlinkPanels: Boolean,
   visible: Boolean,
   parsedValue: {

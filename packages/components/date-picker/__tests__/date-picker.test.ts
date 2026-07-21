@@ -19,7 +19,9 @@ import { EVENT_CODE } from '@element-plus/constants'
 import { ElFormItem } from '@element-plus/components/form'
 import DatePicker from '../src/date-picker'
 import DatePickerRange from '@element-plus/components/date-picker-panel/src/date-picker-com/panel-date-range.vue'
+import DatePickerLocalRange from '../src/date-picker-com/panel-date-range.vue'
 import DatePickerStartRange from '../src/date-picker-com/panel-start-range.vue'
+import DatePickerEndRange from '../src/date-picker-com/panel-end-range.vue'
 
 const _mount = (template: string, data = () => ({}), otherObj?) =>
   mount(
@@ -2090,7 +2092,7 @@ describe('DateRangePicker', () => {
     expect(endInput.element.value).not.toBe('')
   })
 
-  it('updates only the start value for datestartrange when only start exists', async () => {
+  it('selects start then end before closing datestartrange', async () => {
     const wrapper = _mount(
       `<el-date-picker
         v-model="value"
@@ -2114,9 +2116,44 @@ describe('DateRangePicker', () => {
     findAvailableDateCell('20').click()
     await nextTick()
 
+    expect(startRangePanelWrapper.vm.visible).toBe(true)
+    expect(wrapper.vm.value).toEqual(['2026-06-03', null])
+
+    findAvailableDateCell('25').click()
+    await nextTick()
+
     expect(startRangePanelWrapper.vm.visible).toBe(false)
-    expect(wrapper.vm.value[0]).toBe('2026-06-20')
-    expect(wrapper.vm.value[1]).toBe(null)
+    expect(wrapper.vm.value).toEqual(['2026-06-20', '2026-06-25'])
+  })
+
+  it('restarts datestartrange when the second date is before the start', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="datestartrange"
+        value-format="YYYY-MM-DD"
+      />`,
+      () => ({
+        value: ['2026-06-10', null],
+      })
+    )
+    const startRangePanelWrapper = wrapper.findComponent(DatePickerStartRange)
+    const [startInput] = wrapper.findAll('input')
+
+    await startInput.trigger('focus')
+    findAvailableDateCell('20').click()
+    await nextTick()
+    findAvailableDateCell('15').click()
+    await nextTick()
+
+    expect(startRangePanelWrapper.vm.visible).toBe(true)
+    expect(document.querySelector('td.start-date')?.textContent).toContain('15')
+
+    findAvailableDateCell('25').click()
+    await nextTick()
+
+    expect(startRangePanelWrapper.vm.visible).toBe(false)
+    expect(wrapper.vm.value).toEqual(['2026-06-15', '2026-06-25'])
   })
 
   it('disables dates after the current end for datestartrange', async () => {
@@ -2160,7 +2197,7 @@ describe('DateRangePicker', () => {
     expect(findDateCell('2').classList.contains('disabled')).toBe(true)
   })
 
-  it('renders the whole range and updates only the end value for dateendrange', async () => {
+  it('selects end then start before closing dateendrange', async () => {
     const wrapper = _mount(
       `<el-date-picker
         v-model="value"
@@ -2171,6 +2208,7 @@ describe('DateRangePicker', () => {
         value: ['2026-06-03', '2026-06-10'],
       })
     )
+    const endRangePanelWrapper = wrapper.findComponent(DatePickerEndRange)
 
     const [, endInput] = wrapper.findAll('input')
     await endInput.trigger('blur')
@@ -2183,7 +2221,115 @@ describe('DateRangePicker', () => {
     findAvailableDateCell('15').click()
     await nextTick()
 
-    expect(wrapper.vm.value).toEqual(['2026-06-03', '2026-06-15'])
+    expect(endRangePanelWrapper.vm.visible).toBe(true)
+    expect(wrapper.vm.value).toEqual(['2026-06-03', '2026-06-10'])
+
+    findAvailableDateCell('5').click()
+    await nextTick()
+
+    expect(endRangePanelWrapper.vm.visible).toBe(false)
+    expect(wrapper.vm.value).toEqual(['2026-06-05', '2026-06-15'])
+  })
+
+  it('restarts dateendrange when the second date is after the end', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="dateendrange"
+        value-format="YYYY-MM-DD"
+      />`,
+      () => ({
+        value: [null, '2026-06-10'],
+      })
+    )
+    const endRangePanelWrapper = wrapper.findComponent(DatePickerEndRange)
+    const [, endInput] = wrapper.findAll('input')
+
+    await endInput.trigger('blur')
+    await endInput.trigger('focus')
+    findAvailableDateCell('15').click()
+    await nextTick()
+
+    expect(endRangePanelWrapper.vm.visible).toBe(true)
+    expect(document.querySelector('td.end-date')?.textContent).toContain('15')
+
+    findAvailableDateCell('20').click()
+    await nextTick()
+
+    expect(endRangePanelWrapper.vm.visible).toBe(true)
+    expect(document.querySelector('td.end-date')?.textContent).toContain('20')
+
+    findAvailableDateCell('5').click()
+    await nextTick()
+
+    expect(endRangePanelWrapper.vm.visible).toBe(false)
+    expect(wrapper.vm.value).toEqual(['2026-06-05', '2026-06-20'])
+  })
+
+  it('uses range-pick-type start to restart an earlier start date', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="daterange"
+        range-pick-type="start"
+        value-format="YYYY-MM-DD"
+      />`,
+      () => ({
+        value: ['2026-06-03', '2026-06-10'],
+      })
+    )
+    const rangePanelWrapper = wrapper.findComponent(DatePickerLocalRange)
+    const [startInput] = wrapper.findAll('input')
+
+    await startInput.trigger('blur')
+    await startInput.trigger('focus')
+    findAvailableDateCell('20').click()
+    await nextTick()
+    findAvailableDateCell('15').click()
+    await nextTick()
+
+    expect(rangePanelWrapper.vm.visible).toBe(true)
+    expect(document.querySelector('td.start-date')?.textContent).toContain('15')
+    expect(wrapper.vm.value).toEqual(['2026-06-03', '2026-06-10'])
+
+    findAvailableDateCell('25').click()
+    await nextTick()
+
+    expect(rangePanelWrapper.vm.visible).toBe(false)
+    expect(wrapper.vm.value).toEqual(['2026-06-15', '2026-06-25'])
+  })
+
+  it('uses range-pick-type end to restart a later end date', async () => {
+    const wrapper = _mount(
+      `<el-date-picker
+        v-model="value"
+        type="daterange"
+        range-pick-type="end"
+        value-format="YYYY-MM-DD"
+      />`,
+      () => ({
+        value: ['2026-06-03', '2026-06-10'],
+      })
+    )
+    const rangePanelWrapper = wrapper.findComponent(DatePickerLocalRange)
+    const [, endInput] = wrapper.findAll('input')
+
+    await endInput.trigger('blur')
+    await endInput.trigger('focus')
+    findAvailableDateCell('15').click()
+    await nextTick()
+    findAvailableDateCell('20').click()
+    await nextTick()
+
+    expect(rangePanelWrapper.vm.visible).toBe(true)
+    expect(document.querySelector('td.end-date')?.textContent).toContain('20')
+    expect(wrapper.vm.value).toEqual(['2026-06-03', '2026-06-10'])
+
+    findAvailableDateCell('5').click()
+    await nextTick()
+
+    expect(rangePanelWrapper.vm.visible).toBe(false)
+    expect(wrapper.vm.value).toEqual(['2026-06-05', '2026-06-20'])
   })
 
   it('does not crash when datestartrange receives a shared model with only end date', async () => {

@@ -9,6 +9,52 @@ import type { DisabledDateType } from './props/shared'
 
 type DayRange = [Dayjs | undefined, Dayjs | undefined]
 type PartialDateRange = [Date | null, Date | null]
+export type RangeEndpoint = 'start' | 'end'
+
+export const getSequentialRangePick = (
+  firstEndpoint: RangeEndpoint,
+  selectingSecondEndpoint: boolean,
+  value: Dayjs,
+  range: DayRange
+) => {
+  const [startDate, endDate] = range
+
+  if (firstEndpoint === 'start') {
+    if (selectingSecondEndpoint && startDate && value.isBefore(startDate)) {
+      return {
+        range: [value, undefined] as DayRange,
+        completed: false,
+      }
+    }
+
+    return selectingSecondEndpoint
+      ? {
+          range: [startDate, value] as DayRange,
+          completed: true,
+        }
+      : {
+          range: [value, undefined] as DayRange,
+          completed: false,
+        }
+  }
+
+  if (selectingSecondEndpoint && endDate && value.isAfter(endDate)) {
+    return {
+      range: [undefined, value] as DayRange,
+      completed: false,
+    }
+  }
+
+  return selectingSecondEndpoint
+    ? {
+        range: [value, endDate] as DayRange,
+        completed: true,
+      }
+    : {
+        range: [undefined, value] as DayRange,
+        completed: false,
+      }
+}
 
 export const isValidRange = (range: DayRange): boolean => {
   if (!isArray(range)) return false

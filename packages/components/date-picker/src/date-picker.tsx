@@ -137,7 +137,7 @@ export default defineComponent({
                     ))}
                   </ElRadioGroup>
                 )}
-                <Component {...scopedProps}>
+                <Component {...scopedProps} rangePickType={props.rangePickType}>
                   {{
                     'prev-month': slots['prev-month'],
                     'next-month': slots['next-month'],

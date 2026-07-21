@@ -197,6 +197,7 @@
             :min-date="minDate"
             :max-date="maxDate"
             :range-state="rangeState"
+            :range-pick-type="rangePickType"
             :cycle="cycle"
             :sett-default-date="settDefaultDate"
             :cycle-type="cycleType"
@@ -318,6 +319,7 @@
             :min-date="minDate"
             :max-date="maxDate"
             :range-state="rangeState"
+            :range-pick-type="rangePickType"
             :cycle="cycle"
             :sett-default-date="settDefaultDate"
             :cycle-type="cycleType"
@@ -696,7 +698,7 @@ const getSelectingDate: any = inject('getSelectingDate', {
 })
 const handleRangePick = (
   val: {
-    minDate: Dayjs
+    minDate: Dayjs | null
     maxDate: Dayjs | null
   },
   close = true
@@ -711,7 +713,7 @@ const handleRangePick = (
   if (maxDate.value === maxDate_ && minDate.value === minDate_) {
     return
   }
-  emit('calendar-change', [min_.toDate(), max_ && max_.toDate()])
+  emit('calendar-change', [min_?.toDate() ?? null, max_?.toDate() ?? null])
   maxDate.value = maxDate_
   minDate.value = minDate_
   if (!close || showTime.value || slots.option?.()) return

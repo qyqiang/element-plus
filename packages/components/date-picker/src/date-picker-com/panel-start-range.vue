@@ -277,6 +277,7 @@ import {
   correctlyParseUserInput,
   getDefaultValue,
   getPartialRangePayload,
+  getSequentialRangePick,
   isValidPartialRange,
 } from '../utils'
 import { usePanelDateRange } from '../composables/use-panel-date-range'
@@ -337,7 +338,12 @@ const rightLabel = computed(() => {
 })
 
 const displayedDate = computed(() => minDate.value ?? maxDate.value)
+const selectingEndDate = ref(false)
 const displayMinDate = computed(() => {
+  if (selectingEndDate.value && minDate.value && rangeState.value.endDate) {
+    return minDate.value
+  }
+
   if (rangeState.value.selecting && maxDate.value && rangeState.value.endDate) {
     return maxDate.value
   }
@@ -345,6 +351,10 @@ const displayMinDate = computed(() => {
   return minDate.value && maxDate.value ? minDate.value : undefined
 })
 const displayMaxDate = computed(() => {
+  if (selectingEndDate.value && minDate.value && rangeState.value.endDate) {
+    return rangeState.value.endDate
+  }
+
   if (rangeState.value.selecting && maxDate.value && rangeState.value.endDate) {
     return rangeState.value.endDate
   }
@@ -520,10 +530,20 @@ const updateRangeValue = (
 }
 
 const handleDatePick = (value: Dayjs, keepOpen = false) => {
-  const nextMinDate = formatEmit(value, 0)
-  if (!nextMinDate) return
+  const endpointIndex = selectingEndDate.value ? 1 : 0
+  const nextDate = formatEmit(value, endpointIndex)
+  if (!nextDate) return
 
-  updateRangeValue(nextMinDate, maxDate.value, keepOpen)
+  const { range, completed } = getSequentialRangePick(
+    'start',
+    selectingEndDate.value,
+    nextDate,
+    [minDate.value, maxDate.value]
+  )
+
+  selectingEndDate.value = !completed
+  updateRangeValue(range[0], range[1], !completed || keepOpen)
+  syncHoverRangeState()
 }
 
 const handleClear = () => {
@@ -574,7 +594,20 @@ const parseUserInput = (value: string | string[]) => {
 }
 
 const syncHoverRangeState = () => {
-  if (!props.visible || !maxDate.value) {
+  if (!props.visible) {
+    selectingEndDate.value = false
+    rangeState.value.selecting = false
+    rangeState.value.endDate = null
+    return
+  }
+
+  if (selectingEndDate.value && minDate.value) {
+    rangeState.value.selecting = true
+    rangeState.value.endDate = minDate.value
+    return
+  }
+
+  if (!maxDate.value) {
     rangeState.value.selecting = false
     rangeState.value.endDate = null
     return

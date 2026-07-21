@@ -26,19 +26,6 @@
     </el-date-picker>
     <div class="demonstration mt-2">Date Range</div>
     <el-divider />
-    <!--    <el-date-picker-->
-    <!--      v-model="rangeValue"-->
-    <!--      type="daterange"-->
-    <!--      :is-ok="false"-->
-    <!--      :clearable="true"-->
-    <!--      float-label="Start date"-->
-    <!--      range-separator=""-->
-    <!--      start-placeholder="Start date"-->
-    <!--    >-->
-    <!--      <template #open>-->
-    <!--       -->
-    <!--      </template>-->
-    <!--    </el-date-picker>-->
     <el-popover
       :width="400"
       placement="bottom-start"
@@ -70,21 +57,67 @@
         </div>
       </div>
     </el-popover>
+    <h2>Date Range</h2>
+    <p>{{ rangeValue }}</p>
+
+    <el-date-picker
+      ref="rangePickerRef"
+      v-model="rangeValue"
+      type="daterange"
+      :range-pick-type="rangePickType"
+      :is-ok="false"
+      :clearable="true"
+      @visible-change="handleVisible"
+    >
+      <template #open>
+        <div class="flex">
+          <el-input
+            v-model="startValue"
+            clearable
+            class="w-60"
+            placeholder="From"
+            @click.stop="openRangePicker('start')"
+          ></el-input>
+          <el-input
+            v-model="endValue"
+            placeholder="To"
+            clearable
+            class="w-60"
+            @click.stop="openRangePicker('end')"
+          ></el-input>
+        </div>
+      </template>
+    </el-date-picker>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 
 const dateRef = ref()
 const value1 = ref(['', ''])
 const value2 = ref('')
+const startValue = ref('')
+const endValue = ref('')
 const rangeValue = ref<[Date, Date] | ''>('')
+const rangePickerRef = ref()
+const rangePickType = ref<'start' | 'end'>('start')
+const openRangePicker = async (type: 'start' | 'end') => {
+  rangePickType.value = type
+  await nextTick()
+  rangePickerRef.value?.handleOpen()
+}
 const dropList = [
   { key: 'before', label: 'Before' },
   { key: 'after', label: 'After' },
   { key: 'between', label: 'Between' },
 ]
+const handleVisible = (value: boolean) => {
+  if (!value) {
+    startValue.value = rangeValue.value[0]
+    endValue.value = rangeValue.value[1]
+  }
+}
 const activeTitle = computed(() => {
   return dropList[0]
 })
