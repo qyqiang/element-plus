@@ -45,6 +45,16 @@ select/disabled-option
 
 :::
 
+## Option tip
+
+Set `tip` on an option to always provide supplementary tooltip content. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`.
+
+:::demo
+
+select/option-tip
+
+:::
+
 ## Disabled select
 
 Disable the whole component.
@@ -377,6 +387,7 @@ select/custom-label
 | -------------------- | -------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- | ------- |
 | value                | value of option                                                                        | ^[string] / ^[number] / ^[boolean] / ^[object]                                           | —       |
 | showTip              | option show tip                                                                        | ^[boolean]                                                                               | true    |
+| tip                  | supplementary tooltip content; displayed below the label when the label overflows      | ^[string]                                                                                | —       |
 | placement            | placement of pop menu                                                                  | ^[enum]`'top' \| 'top-start' \| 'top-end' \| 'bottom' \| 'bottom-start' \| 'bottom-end'` | left    |
 | label                | label of option, same as `value` if omitted                                            | ^[string] / ^[number]                                                                    | —       |
 | disabled             | whether option is disabled                                                             | ^[boolean]                                                                               | false   |

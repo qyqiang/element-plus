@@ -9,6 +9,7 @@ import { CircleClose } from '@element-plus/icons-vue'
 import { usePopperContainerId } from '@element-plus/hooks'
 import { ElForm, ElFormItem } from '@element-plus/components/form'
 import Select from '../src/select.vue'
+import { useProps } from '../src/useProps'
 
 import type { Props } from '../useProps'
 
@@ -57,6 +58,16 @@ const clickClearButton = async (wrapper) => {
   expect(clearBtn.exists()).toBeTruthy()
   await clearBtn.trigger('click')
 }
+
+it('reads option tip with the default and custom field aliases', () => {
+  const defaultOptionProps = useProps({ props: {} } as any)
+  const customOptionProps = useProps({ props: { tip: 'helpText' } } as any)
+
+  expect(defaultOptionProps.getTip({ tip: 'Default tip' })).toBe('Default tip')
+  expect(customOptionProps.getTip({ helpText: 'Custom tip' })).toBe(
+    'Custom tip'
+  )
+})
 
 interface SelectProps {
   popperClass?: string

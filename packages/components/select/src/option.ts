@@ -23,6 +23,10 @@ export const optionProps = buildProps({
     type: Boolean,
     default: true,
   },
+  /**
+   * @description supplementary tooltip content for the option
+   */
+  tip: String,
   placement: {
     type: definePropType<Placement>(String),
     values: placements,

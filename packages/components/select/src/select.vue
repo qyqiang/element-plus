@@ -571,7 +571,8 @@ export default defineComponent({
 
     const API = useSelect(_props, emit)
     const { calculatorRef, inputStyle } = useCalcInputWidth()
-    const { getLabel, getValue, getOptions, getDisabled } = useProps(props)
+    const { getLabel, getValue, getOptions, getDisabled, getTip } =
+      useProps(props)
     const validateError = computed(() => API?.validateState.value === 'error')
     const validateMsg = computed(() => API?.validateMessage.value || '')
     const showEmptyErrorTooltip = computed(
@@ -587,6 +588,7 @@ export default defineComponent({
       label: getLabel(option),
       value: getValue(option),
       disabled: getDisabled(option),
+      tip: getTip(option),
       rawOption: option,
     })
 

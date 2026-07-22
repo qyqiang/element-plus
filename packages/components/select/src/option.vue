@@ -21,11 +21,14 @@
         <el-tooltip
           ref="tooltipRef"
           effect="light"
-          :disabled="!showTip || disabled"
-          :content="currentLabel"
+          :disabled="!showTip || (!isTextOverflowing && !tip)"
           :placement="placement"
           popper-class="optionPopperClass"
         >
+          <template #content>
+            <div v-if="isTextOverflowing">{{ currentLabel }}</div>
+            <div v-if="tip">{{ tip }}</div>
+          </template>
           <div class="option-wrap-content">
             <slot
               name="optionIcon"
@@ -96,7 +99,7 @@ export default defineComponent({
   setup(props) {
     const ns = useNamespace('select')
     const id = useId()
-    const disabled = ref(false)
+    const isTextOverflowing = ref(false)
     const containerKls = computed(() => [
       ns.be('dropdown', 'item'),
       ns.is('disabled', unref(isDisabled)),
@@ -192,7 +195,7 @@ export default defineComponent({
       ) as HTMLElement
       if (!cellChild) return
       if (cellChild && !cellChild?.childNodes.length) {
-        disabled.value = false
+        isTextOverflowing.value = false
         return
       }
 
@@ -207,11 +210,10 @@ export default defineComponent({
       const { top, left, right, bottom } = getPadding(cellChild)
       const horizontalPadding = left + right
       const verticalPadding = top + bottom
-      disabled.value = !(
+      isTextOverflowing.value =
         isGreaterThan(rangeWidth + horizontalPadding, cellChildWidth) ||
         isGreaterThan(rangeHeight + verticalPadding, cellChildHeight) ||
         isGreaterThan(cellChild.scrollWidth, cellChildWidth)
-      )
     }
 
     return {
@@ -227,8 +229,9 @@ export default defineComponent({
       visible,
       hover,
       states,
-      disabled,
+      isTextOverflowing,
       showTip: props.showTip,
+      tip: computed(() => props.tip),
       placement: props.placement,
       optionStyle,
       handleCellMouseEnter,

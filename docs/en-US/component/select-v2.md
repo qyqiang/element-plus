@@ -95,6 +95,16 @@ select-v2/disabled
 
 :::
 
+## Option tip
+
+Add a `tip` field to an option to always provide supplementary tooltip content. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`.
+
+:::demo
+
+select-v2/option-tip
+
+:::
+
 ## Option Grouping
 
 We can group option as we wanted, as long as the data satisfies the pattern.
@@ -343,6 +353,7 @@ select-v2/append-action
 | label     | specify which key of node object is used as the node's label    | ^[string] | label    |
 | options   | specify which key of node object is used as the node's children | ^[string] | options  |
 | disabled  | specify which key of node object is used as the node's disabled | ^[string] | disabled |
+| tip       | specify which key of node object is used as the node's tip      | ^[string] | tip      |
 
 ### Events
 

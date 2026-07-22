@@ -3282,6 +3282,50 @@ describe('Select', () => {
     expect(placeholder).toBe('foo-label|foo|true|false|right')
   })
 
+  it('should show option tip with and without an overflowing label', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="''">
+        <el-option label="Short label" value="short" tip="Supplementary tip" />
+      </el-select>
+    `
+    )
+    await nextTick()
+
+    const option = wrapper.findComponent(Option)
+    const tooltip = option.findComponent({ name: 'ElTooltip' })
+    const getTooltipLines = () =>
+      tooltip.vm.$slots
+        .content?.()
+        .map((node) => node.children)
+        .filter((content) => content !== 'v-if')
+
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(getTooltipLines()).toEqual(['Supplementary tip'])
+    ;(option.vm as any).isTextOverflowing = true
+    await nextTick()
+
+    expect(getTooltipLines()).toEqual(['Short label', 'Supplementary tip'])
+  })
+
+  it('should pass option tip from the options attribute', async () => {
+    const wrapper = _mount(
+      `<el-select :model-value="''" :options="options" />`,
+      () => ({
+        options: [
+          {
+            label: 'Option label',
+            value: 'option',
+            tip: 'Option tip',
+          },
+        ],
+      })
+    )
+    await nextTick()
+
+    expect(wrapper.findComponent(Option).props('tip')).toBe('Option tip')
+  })
+
   it('should expose the raw object value on label slot item', async () => {
     const wrapper = _mount(
       `

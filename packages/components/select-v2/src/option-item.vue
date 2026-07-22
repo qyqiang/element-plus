@@ -26,11 +26,14 @@
         <el-tooltip
           ref="tooltipRef"
           effect="light"
-          :disabled="disabled || showTip"
-          :content="getLabel(item)"
+          :disabled="disabled || (!isTextOverflowing && !currentTip)"
           placement="right"
           popper-class="optionPopperClass"
         >
+          <template #content>
+            <div v-if="isTextOverflowing">{{ getLabel(item) }}</div>
+            <div v-if="currentTip">{{ currentTip }}</div>
+          </template>
           <div class="option-wrap-content">
             <slot name="optionIcon"></slot>
             <span
@@ -82,11 +85,12 @@ export default defineComponent({
   emits: optionV2Emits,
   setup(props, { emit }) {
     const select = inject(selectV2InjectionKey)!
-    const showTip = ref(true)
+    const isTextOverflowing = ref(false)
     const ns = useNamespace('select')
     const multiple = computed(() => select.props.multiple)
     const { hoverItem, selectOptionClick } = useOption(props, { emit })
-    const { getLabel, getValue } = useProps(select.props)
+    const { getLabel, getValue, getTip } = useProps(select.props)
+    const currentTip = computed(() => getTip(props.item))
     const contentId = select.contentId
     const isItemSelected = (item?: Option) => {
       if (!item || item.type === 'Group' || !multiple.value) return false
@@ -131,7 +135,7 @@ export default defineComponent({
       ) as HTMLElement
       if (!cellChild) return
       if (cellChild && !cellChild?.childNodes.length) {
-        showTip.value = false
+        isTextOverflowing.value = false
         return
       }
 
@@ -146,17 +150,17 @@ export default defineComponent({
       const { top, left, right, bottom } = getPadding(cellChild)
       const horizontalPadding = left + right
       const verticalPadding = top + bottom
-      showTip.value = !(
+      isTextOverflowing.value =
         isGreaterThan(rangeWidth + horizontalPadding, cellChildWidth) ||
         isGreaterThan(rangeHeight + verticalPadding, cellChildHeight) ||
         isGreaterThan(cellChild.scrollWidth, cellChildWidth)
-      )
     }
     return {
       ns,
       contentId,
       multiple,
-      showTip,
+      isTextOverflowing,
+      currentTip,
       optionStyle,
       hoverItem,
       selectOptionClick,
