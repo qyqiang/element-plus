@@ -26,5 +26,11 @@ const options = [
     value: 'long-only',
     label: 'Another long option label keeps the original overflow tooltip',
   },
+  {
+    value: 'disabled',
+    label: 'Disabled option',
+    tip: 'Tips remain available for disabled options.',
+    disabled: true,
+  },
 ]
 </script>

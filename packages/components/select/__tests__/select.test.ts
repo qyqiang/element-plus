@@ -3308,6 +3308,33 @@ describe('Select', () => {
     expect(getTooltipLines()).toEqual(['Short label', 'Supplementary tip'])
   })
 
+  it('should show option tip for a disabled option', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="''">
+        <el-option
+          label="Disabled option"
+          value="disabled"
+          tip="Disabled option tip"
+          disabled
+        />
+      </el-select>
+    `
+    )
+    await nextTick()
+
+    const option = wrapper.findComponent(Option)
+    const tooltip = option.findComponent({ name: 'ElTooltip' })
+    const content = tooltip.vm.$slots
+      .content?.()
+      .map((node) => node.children)
+      .filter((value) => value !== 'v-if')
+
+    expect(option.props('disabled')).toBe(true)
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(content).toEqual(['Disabled option tip'])
+  })
+
   it('should pass option tip from the options attribute', async () => {
     const wrapper = _mount(
       `<el-select :model-value="''" :options="options" />`,

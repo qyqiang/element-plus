@@ -14,7 +14,7 @@ const mountOption = (
       item,
       index: 0,
       selected: false,
-      disabled: false,
+      disabled: item.disabled === true,
     },
     global: {
       provide: {
@@ -70,5 +70,23 @@ describe('SelectV2 option tip', () => {
       .filter((value: unknown) => value !== 'v-if')
 
     expect(content).toEqual(['Custom tip'])
+  })
+
+  it('shows tip for a disabled option', () => {
+    const wrapper = mountOption({
+      label: 'Disabled option',
+      value: 'disabled',
+      tip: 'Disabled option tip',
+      disabled: true,
+    })
+    const tooltip = wrapper.findComponent({ name: 'ElTooltip' })
+    const content = tooltip.vm.$slots
+      .content?.()
+      .map((node: { children: unknown }) => node.children)
+      .filter((value: unknown) => value !== 'v-if')
+
+    expect(wrapper.props('disabled')).toBe(true)
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(content).toEqual(['Disabled option tip'])
   })
 })

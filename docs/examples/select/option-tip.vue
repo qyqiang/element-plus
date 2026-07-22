@@ -6,6 +6,7 @@
       :label="item.label"
       :value="item.value"
       :tip="item.tip"
+      :disabled="item.disabled"
     />
   </el-select>
 </template>
@@ -28,6 +29,12 @@ const options = [
   {
     value: 'long-only',
     label: 'Another long option label keeps the original overflow tooltip',
+  },
+  {
+    value: 'disabled',
+    label: 'Disabled option',
+    tip: 'Tips remain available for disabled options.',
+    disabled: true,
   },
 ]
 </script>

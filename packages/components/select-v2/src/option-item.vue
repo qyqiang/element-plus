@@ -26,7 +26,7 @@
         <el-tooltip
           ref="tooltipRef"
           effect="light"
-          :disabled="disabled || (!isTextOverflowing && !currentTip)"
+          :disabled="!isTextOverflowing && !currentTip"
           placement="right"
           popper-class="optionPopperClass"
         >
