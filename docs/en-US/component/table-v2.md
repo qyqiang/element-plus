@@ -45,6 +45,26 @@ table-v2/custom-row-action
 
 :::
 
+## Sorting
+
+Sort the data to find or compare data quickly.
+
+:::demo Set attribute `sortable` in a certain column to sort the data based on this column. It accepts `Boolean` with a default value `false`. Set table attribute `default-sort` to determine default sort column and order. To apply your own sorting rules, use `sort-method` or `sort-by`. If you need remote sorting from backend, set `sortable` to `custom`, and listen to the `sort-change` event on Table. In the event handler, you have access to the sorting column and sorting order so that you can fetch sorted table data from API. In this example we use another attribute named `formatter` to format the value of certain columns. It accepts a function which has two parameters: `row` and `column`. You can handle it according to your own needs.
+
+table-v2/sort
+
+:::
+
+## Default sort state
+
+When a sortable column is not active, its sort icon points down and uses `--color-gray-400`. Clicking cycles through default, ascending, descending, and back to default. An active ascending or descending icon uses `--color-gray-800`.
+
+:::demo The example starts without an active `sort-by` or `sort-state`. Click the sortable header to apply an order and activate the icon.
+
+table-v2/default-sort-state
+
+:::
+
 ## Empty data
 
 When `data` is empty, the empty area uses one `row-height` instead of stretching to fill the remaining table space. This also keeps the header, empty row, ghost row, horizontal scrollbar, and default footer in sequence.
@@ -441,6 +461,7 @@ type KeyType = string | number | symbol
 type ColumnSortParam<T> = { column: Column<T>; key: KeyType; order: SortOrder }
 
 enum SortOrder {
+  DEFAULT = '',
   ASC = 'asc',
   DESC = 'desc',
 }

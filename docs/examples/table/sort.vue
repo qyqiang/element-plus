@@ -1,7 +1,7 @@
 <template>
   <el-table
     :data="tableData"
-    :default-sort="{ prop: 'date', order: 'descending' }"
+    :default-sort="{ prop: 'date', order: '' }"
     style="width: 100%"
   >
     <el-table-column prop="date" label="Date" sortable width="180" />

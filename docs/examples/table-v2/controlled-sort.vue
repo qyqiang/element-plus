@@ -50,8 +50,8 @@ columns[0].sortable = true
 columns[1].sortable = true
 
 const sortState = ref<SortState>({
-  'column-0': '',
-  'column-1': '',
+  'column-0': TableV2SortOrder.DEFAULT,
+  'column-1': TableV2SortOrder.DEFAULT,
 })
 
 const onSort = ({ key, order }: SortBy) => {

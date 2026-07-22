@@ -127,36 +127,6 @@ table/fixed-column-and-header
 
 :::
 
-## Fluid-height Table with fixed header (and columns)
-
-When the the data is dynamically changed, you might want the table to have a maximum height rather than a fixed height and to show the scroll bar if needed.
-
-:::demo By setting the attribute `max-height` of `el-table`, you can fix the table header. The table body scrolls only if the height of the rows exceeds the max height value.
-
-table/fixed-header-with-fluid-header
-
-:::
-
-## Grouping table head
-
-When the data structure is complex, you can use group header to show the data hierarchy.
-
-:::demo Only need to place el-table-column inside a el-table-column, you can achieve group header.
-
-table/grouping-header
-
-:::
-
-## Table with fixed group header
-
-fixed group head is supported
-
-:::demo The attribute `fixed` of the group header is determined by the outermost `el-table-column`
-
-table/fixed-column-and-group-header
-
-:::
-
 ## Single select
 
 Single row selection is supported.
@@ -189,15 +159,6 @@ table/sort
 
 :::
 
-## Filter
-
-Filter the table to find desired data.
-
-:::demo Set attribute `filters` and `filter-method` in `el-table-column` makes this column filterable. `filters` is an array, and `filter-method` is a function deciding which rows are displayed. It has three parameters: `value`, `row` and `column`.
-
-table/filter
-
-:::
 
 ## Custom column template
 

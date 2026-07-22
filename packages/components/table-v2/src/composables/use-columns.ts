@@ -1,6 +1,6 @@
 import { computed, ref, unref } from 'vue'
 import { isObject } from '@element-plus/utils'
-import { FixedDir, SortOrder, oppositeOrderMap } from '../constants'
+import { FixedDir, SortOrder, nextSortOrderMap } from '../constants'
 import {
   placeholderSign,
   rowDeleteColumnKey,
@@ -298,11 +298,11 @@ function useColumns(
     let order = SortOrder.ASC
 
     if (isObject(sortState)) {
-      order = oppositeOrderMap[sortState[key]] ?? SortOrder.ASC
+      order = nextSortOrderMap[sortState[key] ?? SortOrder.DEFAULT]
     } else {
       order =
         sortBy.key === key
-          ? (oppositeOrderMap[sortBy.order] ?? SortOrder.ASC)
+          ? nextSortOrderMap[sortBy.order ?? SortOrder.DEFAULT]
           : SortOrder.ASC
     }
 

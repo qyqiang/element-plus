@@ -1,4 +1,5 @@
 export enum SortOrder {
+  DEFAULT = '',
   ASC = 'asc',
   DESC = 'desc',
 }
@@ -14,9 +15,14 @@ export enum FixedDir {
   RIGHT = 'right',
 }
 
-export const oppositeOrderMap = {
+export const nextSortOrderMap = {
+  [SortOrder.DEFAULT]: SortOrder.ASC,
   [SortOrder.ASC]: SortOrder.DESC,
-  [SortOrder.DESC]: SortOrder.ASC,
+  [SortOrder.DESC]: SortOrder.DEFAULT,
 }
 
-export const sortOrders = [SortOrder.ASC, SortOrder.DESC] as const
+export const sortOrders = [
+  SortOrder.DEFAULT,
+  SortOrder.ASC,
+  SortOrder.DESC,
+] as const

@@ -2,8 +2,11 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 import TableV2 from '../src/table-v2'
+import FilterIconDown from '../src/components/filter-icon-down.vue'
 import { SortOrder } from '../src/constants'
 
+import type { ColumnSortParams } from '../src/table'
+import type { SortBy, SortState } from '../src/types'
 import type {
   TableV2HeaderRowCellRendererParams,
   TableV2RowCellRenderParam,
@@ -2141,7 +2144,74 @@ describe('TableV2.vue', () => {
     const sortIcon = wrapper.find('.el-table-v2__sort-icon')
 
     expect(sortIcon.exists()).toBe(true)
-    expect(sortIcon.attributes('style')).toContain('--color: #9FB1BD')
+    expect(sortIcon.attributes('style')).toContain(
+      '--color: var(--color-gray-400)'
+    )
+    expect(sortIcon.findComponent(FilterIconDown).exists()).toBe(true)
+  })
+
+  test('sortable header icon points down with an empty sortState', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortState={{}}
+      />
+    ))
+
+    const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+    expect(sortIcon.classes()).not.toContain('is-sorting')
+    expect(sortIcon.findComponent(FilterIconDown).exists()).toBe(true)
+  })
+
+  test.each([SortOrder.ASC, SortOrder.DESC])(
+    'sortable header icon uses active color when order is %s',
+    async (order) => {
+      const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+      const data = ref(generateData(columns.value, 5))
+      const wrapper = mount(() => (
+        <TableV2
+          columns={columns.value}
+          data={data.value}
+          width={700}
+          height={400}
+          sortBy={{ key: columns.value[0].key, order }}
+        />
+      ))
+
+      const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+      expect(sortIcon.classes()).toContain('is-sorting')
+      expect(sortIcon.attributes('style')).toContain(
+        '--color: var(--color-gray-800)'
+      )
+    }
+  )
+
+  test('sortable header icon uses active color with sortState', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortState={{ [columns.value[0].key]: SortOrder.DESC }}
+      />
+    ))
+
+    const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+    expect(sortIcon.classes()).toContain('is-sorting')
+    expect(sortIcon.attributes('style')).toContain(
+      '--color: var(--color-gray-800)'
+    )
   })
 
   test('column-sort emits asc order on first click when sortState is not provided', async () => {
@@ -2168,6 +2238,74 @@ describe('TableV2.vue', () => {
         order: SortOrder.ASC,
       })
     )
+  })
+
+  test('column-sort cycles through default, asc, desc, and default', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const sortBy = ref<SortBy>({
+      key: columns.value[0].key,
+      order: SortOrder.DEFAULT,
+    })
+    const onColumnSort = vi.fn((value: ColumnSortParams<any>) => {
+      sortBy.value = { key: value.key, order: value.order }
+    })
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortBy={sortBy.value}
+        onColumnSort={onColumnSort}
+      />
+    ))
+    const headerCell = wrapper.find('.el-table-v2__header-cell.is-sortable')
+
+    for (let index = 0; index < 4; index++) {
+      await headerCell.trigger('click')
+      await nextTick()
+    }
+
+    expect(onColumnSort.mock.calls.map(([value]) => value.order)).toEqual([
+      SortOrder.ASC,
+      SortOrder.DESC,
+      SortOrder.DEFAULT,
+      SortOrder.ASC,
+    ])
+  })
+
+  test('column-sort cycles each sortState column back to default', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const sortState = ref<SortState>({
+      [columns.value[0].key]: SortOrder.DEFAULT,
+    })
+    const onColumnSort = vi.fn((value: ColumnSortParams<any>) => {
+      sortState.value[value.key] = value.order
+    })
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortState={sortState.value}
+        onColumnSort={onColumnSort}
+      />
+    ))
+    const headerCell = wrapper.find('.el-table-v2__header-cell.is-sortable')
+
+    for (let index = 0; index < 3; index++) {
+      await headerCell.trigger('click')
+      await nextTick()
+    }
+
+    expect(onColumnSort.mock.calls.map(([value]) => value.order)).toEqual([
+      SortOrder.ASC,
+      SortOrder.DESC,
+      SortOrder.DEFAULT,
+    ])
   })
 
   test('default footer uses total and updateTime props', async () => {
