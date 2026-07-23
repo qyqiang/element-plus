@@ -145,9 +145,8 @@ class TableLayout<T extends DefaultRow> {
       (column) => !isNumber(column.width)
     )
     flattenColumns.forEach((column) => {
-      if (isNumber(column.width)) {
-        column.realWidth = column.width
-      }
+      // Clean those columns whose width changed from flex to unflex
+      if (isNumber(column.width) && column.realWidth) column.realWidth = null
     })
     if (flexColumns.length > 0 && fit) {
       flattenColumns.forEach((column) => {
@@ -163,13 +162,26 @@ class TableLayout<T extends DefaultRow> {
           flexColumns[0].realWidth =
             Number(flexColumns[0].minWidth || 80) + totalFlexWidth
         } else {
-          flexColumns.forEach((column) => {
-            column.realWidth = Number(column.minWidth || 80)
+          const allColumnsWidth = flexColumns.reduce(
+            (prev, column) => prev + Number(column.minWidth || 80),
+            0
+          )
+          const flexWidthPerPixel = totalFlexWidth / allColumnsWidth
+          let noneFirstWidth = 0
+
+          flexColumns.forEach((column, index) => {
+            if (index === 0) return
+            const flexWidth = Math.floor(
+              Number(column.minWidth || 80) * flexWidthPerPixel
+            )
+            noneFirstWidth += flexWidth
+            column.realWidth = Number(column.minWidth || 80) + flexWidth
           })
-          const lastFlexColumn = flexColumns[flexColumns.length - 1]
-          lastFlexColumn.realWidth =
-            Number(lastFlexColumn.realWidth ?? lastFlexColumn.minWidth ?? 80) +
-            totalFlexWidth
+
+          flexColumns[0].realWidth =
+            Number(flexColumns[0].minWidth || 80) +
+            totalFlexWidth -
+            noneFirstWidth
         }
       } else {
         // HAVE HORIZONTAL SCROLL BAR

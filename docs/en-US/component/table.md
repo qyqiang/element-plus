@@ -47,11 +47,7 @@ table/add-column-first-column-control
 
 ## Basic table
 
-Basic table is just for data display. Columns without `width` or `min-width`
-automatically use the measured header text width plus `48px`, with a minimum of
-`80px`. If the calculated column widths do not fill the table, the last
-widthless column receives all remaining space. Columns with an explicit
-`width` always keep that configured width.
+Basic table is just for data display.
 
 :::demo After setting attribute `data` of `el-table` with an object array, you can use `prop` (corresponding to a key of the object in `data` array) in `el-table-column` to insert data to table columns, and set the attribute `label` to define the column name. You can also use the attribute `width` to define the width of columns.
 
@@ -127,36 +123,6 @@ table/fixed-column-and-header
 
 :::
 
-## Fluid-height Table with fixed header (and columns)
-
-When the the data is dynamically changed, you might want the table to have a maximum height rather than a fixed height and to show the scroll bar if needed.
-
-:::demo By setting the attribute `max-height` of `el-table`, you can fix the table header. The table body scrolls only if the height of the rows exceeds the max height value.
-
-table/fixed-header-with-fluid-header
-
-:::
-
-## Grouping table head
-
-When the data structure is complex, you can use group header to show the data hierarchy.
-
-:::demo Only need to place el-table-column inside a el-table-column, you can achieve group header.
-
-table/grouping-header
-
-:::
-
-## Table with fixed group header
-
-fixed group head is supported
-
-:::demo The attribute `fixed` of the group header is determined by the outermost `el-table-column`
-
-table/fixed-column-and-group-header
-
-:::
-
 ## Single select
 
 Single row selection is supported.
@@ -186,16 +152,6 @@ Sort the data to find or compare data quickly.
 :::demo Set attribute `sortable` in a certain column to sort the data based on this column. It accepts `Boolean` with a default value `false`. Set table attribute `default-sort` to determine default sort column and order. To apply your own sorting rules, use `sort-method` or `sort-by`. If you need remote sorting from backend, set `sortable` to `custom`, and listen to the `sort-change` event on Table. In the event handler, you have access to the sorting column and sorting order so that you can fetch sorted table data from API. In this example we use another attribute named `formatter` to format the value of certain columns. It accepts a function which has two parameters: `row` and `column`. You can handle it according to your own needs.
 
 table/sort
-
-:::
-
-## Filter
-
-Filter the table to find desired data.
-
-:::demo Set attribute `filters` and `filter-method` in `el-table-column` makes this column filterable. `filters` is an array, and `filter-method` is a function deciding which rows are displayed. It has three parameters: `value`, `row` and `column`.
-
-table/filter
 
 :::
 

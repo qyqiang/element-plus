@@ -17,7 +17,7 @@ const SortIcon: FunctionalComponent<SortIconProps> = (props) => {
     <ElIcon
       size={12}
       class={props.class}
-      color={sorting ? '#ff5b05' : '#9FB1BD'}
+      color={sorting ? 'var(--color-gray-800)' : 'var(--color-gray-400)'}
     >
       {sortOrder === SortOrder.ASC ? <FilterIconUp /> : <FilterIconDown />}
     </ElIcon>

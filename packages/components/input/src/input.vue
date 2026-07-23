@@ -437,7 +437,9 @@ const inputTooltipContent = computed(() => {
   return ''
 })
 const inputTooltipDisabled = computed(() => inputTooltipSource.value === 'none')
-const inputTooltipTrigger = computed<TooltipTriggerType>(() => 'hover')
+const inputTooltipTrigger = computed<TooltipTriggerType>(() =>
+  inputTooltipSource.value === 'error' ? 'click' : 'hover'
+)
 const showClear = computed(
   () =>
     props.clearable &&

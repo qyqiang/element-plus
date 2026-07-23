@@ -23,6 +23,7 @@ export type {
   SortBy,
   SortState,
   TableV2CustomizedHeaderSlotParam,
+  TableV2OverflowTooltipOptions,
 } from './src/types'
 export type { TableV2Instance } from './src/table-v2'
 export * from './src/table'

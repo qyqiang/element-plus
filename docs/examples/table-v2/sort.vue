@@ -54,7 +54,6 @@ const sortState = ref<SortBy>({
 })
 
 const onSort = (sortBy: SortBy) => {
-  console.log(sortBy)
   data = data.reverse()
   sortState.value = sortBy
 }

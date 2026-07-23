@@ -9,6 +9,7 @@ import { CircleClose } from '@element-plus/icons-vue'
 import { usePopperContainerId } from '@element-plus/hooks'
 import { ElForm, ElFormItem } from '@element-plus/components/form'
 import Select from '../src/select.vue'
+import { useProps } from '../src/useProps'
 
 import type { Props } from '../useProps'
 
@@ -57,6 +58,16 @@ const clickClearButton = async (wrapper) => {
   expect(clearBtn.exists()).toBeTruthy()
   await clearBtn.trigger('click')
 }
+
+it('reads option tip with the default and custom field aliases', () => {
+  const defaultOptionProps = useProps({ props: {} } as any)
+  const customOptionProps = useProps({ props: { tip: 'helpText' } } as any)
+
+  expect(defaultOptionProps.getTip({ tip: 'Default tip' })).toBe('Default tip')
+  expect(customOptionProps.getTip({ helpText: 'Custom tip' })).toBe(
+    'Custom tip'
+  )
+})
 
 interface SelectProps {
   popperClass?: string
@@ -324,12 +335,19 @@ describe('Select', () => {
 
     await nextTick()
 
-    const hoverTooltip = wrapper
+    const clickTooltip = wrapper
       .findAllComponents({ name: 'ElTooltip' })
-      .find((tooltip) => tooltip.props('trigger') === 'hover')
+      .find((tooltip) => tooltip.props('trigger') === 'click')
 
-    expect(hoverTooltip?.props('content')).toBe('Required')
-    expect(hoverTooltip?.props('disabled')).toBe(false)
+    expect(clickTooltip?.props('content')).toBe('Required')
+    expect(clickTooltip?.props('disabled')).toBe(false)
+
+    await wrapper.find('.el-select__wrapper').trigger('click')
+    await nextTick()
+
+    expect(clickTooltip?.props('visible')).toBe(true)
+    expect(document.body.textContent).toContain('Required')
+    expect((wrapper.findComponent(Select).vm as any).expanded).toBe(true)
   })
 
   it('outer error tooltip prefers form-item validation message', async () => {
@@ -351,12 +369,16 @@ describe('Select', () => {
 
     await nextTick()
 
-    const hoverTooltip = wrapper
+    const clickTooltip = wrapper
       .findAllComponents({ name: 'ElTooltip' })
-      .find((tooltip) => tooltip.props('trigger') === 'hover')
+      .find(
+        (tooltip) =>
+          tooltip.props('trigger') === 'click' &&
+          tooltip.props('content') === 'Select is required'
+      )
 
-    expect(hoverTooltip?.props('content')).toBe('Select is required')
-    expect(hoverTooltip?.props('disabled')).toBe(false)
+    expect(clickTooltip?.props('content')).toBe('Select is required')
+    expect(clickTooltip?.props('disabled')).toBe(false)
   })
 
   it('should show placeholder when no model-value setted', async () => {

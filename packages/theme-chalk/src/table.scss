@@ -138,10 +138,7 @@
 
     th {
       font-weight: 400;
-
-      &.#{$namespace}-table__cell {
-        padding: 6px 0;
-      }
+      height: 44px;
     }
 
     &.is-group {
@@ -324,13 +321,8 @@
     }
   }
 
-  th.#{$namespace}-table__cell.is-sortable {
-    cursor: pointer;
-  }
-
   th.#{$namespace}-table__cell {
     background-color: getCssVar('table-header-bg-color');
-    vertical-align: baseline;
 
     > .cell.highlight {
       color: getCssVar('color-primary');

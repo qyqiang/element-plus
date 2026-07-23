@@ -29,7 +29,7 @@ select-v2/basic-usage
 
 ## Status styles
 
-Select-V2 supports the same status background behavior as Input through `input-type="error" | "warning" | "info"`. `error` and `warning` show the tinted background while empty, and the background returns to white once the component is focused or has a value. When the select is empty and `input-type` is `error`, hovering the component shows an outer error tooltip with `Required`. If the select is inside `el-form-item` with a validation error, that form error message takes priority. This status mode does not add a built-in info icon or `info-tip`.
+Select-V2 supports the same status background behavior as Input through `input-type="error" | "warning" | "info"`. `error` and `warning` show the tinted background while empty, and the background returns to white once the component is focused or has a value. When the select is empty and `input-type` is `error`, clicking the component shows an outer error tooltip with `Required`. If the select is inside `el-form-item` with a validation error, that form error message takes priority. This status mode does not add a built-in info icon or `info-tip`.
 
 :::demo
 
@@ -92,6 +92,16 @@ You can choose to disable selector itself or the option.
 :::demo
 
 select-v2/disabled
+
+:::
+
+## Option tip
+
+Add a `tip` field to an option to always provide supplementary tooltip content. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`. Disabled options still display the tooltip; `disabled` only prevents selection.
+
+:::demo
+
+select-v2/option-tip
 
 :::
 
@@ -343,6 +353,7 @@ select-v2/append-action
 | label     | specify which key of node object is used as the node's label    | ^[string] | label    |
 | options   | specify which key of node object is used as the node's children | ^[string] | options  |
 | disabled  | specify which key of node object is used as the node's disabled | ^[string] | disabled |
+| tip       | specify which key of node object is used as the node's tip      | ^[string] | tip      |
 
 ### Events
 

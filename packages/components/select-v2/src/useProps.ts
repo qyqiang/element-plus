@@ -9,6 +9,7 @@ export interface Props {
   value?: string
   disabled?: string
   options?: string
+  tip?: string
 }
 
 export const defaultProps: Required<Props> = {
@@ -16,6 +17,7 @@ export const defaultProps: Required<Props> = {
   value: 'value',
   disabled: 'disabled',
   options: 'options',
+  tip: 'tip',
 }
 
 export function useProps(props: Pick<SelectV2Props, 'props'>) {
@@ -25,6 +27,7 @@ export function useProps(props: Pick<SelectV2Props, 'props'>) {
   const getValue = (option: Option) => get(option, aliasProps.value.value)
   const getDisabled = (option: Option) => get(option, aliasProps.value.disabled)
   const getOptions = (option: Option) => get(option, aliasProps.value.options)
+  const getTip = (option: Option) => get(option, aliasProps.value.tip)
 
   return {
     aliasProps,
@@ -32,5 +35,6 @@ export function useProps(props: Pick<SelectV2Props, 'props'>) {
     getValue,
     getDisabled,
     getOptions,
+    getTip,
   }
 }

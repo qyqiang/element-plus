@@ -1,7 +1,7 @@
 import { renderSlot } from 'vue'
 import { HeaderCell, SortIcon } from '../components'
 // import ColumnResizer from '../table-column-resizer'
-import { Alignment, SortOrder, oppositeOrderMap } from '../constants'
+import { Alignment, SortOrder } from '../constants'
 import {
   placeholderSign,
   rowDeleteColumnKey,
@@ -112,11 +112,13 @@ const HeaderCellRenderer: FunctionalComponent<HeaderCellRendererProps> = (
   let sorting: boolean, sortOrder: SortOrder
   if (sortState) {
     const order = sortState[column.key!]
-    sorting = Boolean(oppositeOrderMap[order])
-    sortOrder = sorting ? order : SortOrder.ASC
+    sorting = order === SortOrder.ASC || order === SortOrder.DESC
+    sortOrder = sorting ? order : SortOrder.DESC
   } else {
-    sorting = column.key === sortBy.key
-    sortOrder = sorting ? sortBy.order : SortOrder.ASC
+    sorting =
+      column.key === sortBy.key &&
+      (sortBy.order === SortOrder.ASC || sortBy.order === SortOrder.DESC)
+    sortOrder = sorting ? sortBy.order : SortOrder.DESC
   }
 
   const cellKls = [

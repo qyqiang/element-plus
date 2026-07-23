@@ -17,7 +17,6 @@ import {
   getDefaultClassName,
   treeCellPrefix,
 } from '../config'
-import { getAutoColumnWidth } from '../column-width'
 import { parseMinWidth, parseWidth } from '../util'
 import { ghostRowKey, ghostRowSign } from '../private'
 import GhostRowAddButton from '../ghost-row-add-button.vue'
@@ -114,11 +113,7 @@ function useRender<T extends DefaultRow>(
     if (!realWidth.value && realMinWidth.value) {
       column.width = undefined
     }
-    column.autoWidth =
-      isUndefined(column.width) && !realWidth.value && !realMinWidth.value
-    if (column.autoWidth) {
-      column.minWidth = getAutoColumnWidth(column.label)
-    } else if (!column.minWidth) {
+    if (!column.minWidth) {
       column.minWidth = 80
     }
     column.realWidth = Number(

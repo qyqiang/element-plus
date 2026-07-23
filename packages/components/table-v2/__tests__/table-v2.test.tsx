@@ -2,8 +2,11 @@ import { defineComponent, h, nextTick, ref } from 'vue'
 import { mount } from '@vue/test-utils'
 import { describe, expect, test, vi } from 'vitest'
 import TableV2 from '../src/table-v2'
+import FilterIconDown from '../src/components/filter-icon-down.vue'
 import { SortOrder } from '../src/constants'
 
+import type { ColumnSortParams } from '../src/table'
+import type { SortBy, SortState } from '../src/types'
 import type {
   TableV2HeaderRowCellRendererParams,
   TableV2RowCellRenderParam,
@@ -348,6 +351,44 @@ describe('TableV2.vue', () => {
     expect(cell[1].find('span').exists()).toBe(false)
     expect(cell[1].find('.el-table-v2__cell-text').exists()).toBe(true)
     expect(cell[1].find('.el-table-v2__cell-text').text()).toBe('Row 0 - Col 1')
+  })
+
+  test('supports overflow tooltips on individual columns', () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        showOverflowTooltip: true,
+      },
+      {
+        key: 'note',
+        dataKey: 'note',
+        title: 'Note',
+        width: 180,
+      },
+    ])
+    const data = ref([
+      {
+        id: 'row-0',
+        name: 'A long name',
+        note: 'A long note',
+      },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={360}
+        height={132}
+        fixed
+      />
+    ))
+    const cells = wrapper.findAll('.el-table-v2__row-cell')
+
+    expect(cells[0].findComponent({ name: 'ElTooltip' }).exists()).toBe(true)
+    expect(cells[1].findComponent({ name: 'ElTooltip' }).exists()).toBe(false)
   })
 
   test('slots header-cell', async () => {
@@ -1503,6 +1544,83 @@ describe('TableV2.vue', () => {
     )
   })
 
+  test('keeps fields assigned by a ghost row editor in the add payload', async () => {
+    const Editor = defineComponent({
+      props: {
+        modelValue: {
+          type: String,
+          default: '',
+        },
+      },
+      emits: ['change'],
+      setup(props, { emit }) {
+        const value = ref(props.modelValue)
+
+        return () => (
+          <input
+            class="edit-cell"
+            value={value.value}
+            onInput={(event) => {
+              value.value = (event.target as HTMLInputElement).value
+            }}
+            onBlur={() => emit('change', value.value)}
+          />
+        )
+      },
+    })
+    const columns = [
+      {
+        key: 'unit',
+        dataKey: 'unit',
+        title: 'Unit',
+        width: 180,
+        editCellRenderer: ({ rowData }: { rowData: Record<string, any> }) => (
+          <Editor
+            modelValue={rowData.unit}
+            onChange={(value: string) => {
+              rowData.unit = value
+              rowData.unitValue = value
+            }}
+          />
+        ),
+      },
+    ]
+    const wrapper = mount(
+      () => (
+        <TableV2
+          columns={columns}
+          data={[]}
+          width={700}
+          height={400}
+          rowKey="id"
+          ghostTable
+          editTable
+          ghostRowTemplate={{ unit: '', unitValue: null }}
+        />
+      ),
+      {
+        attachTo: document.body,
+      }
+    )
+
+    const ghostInput = wrapper.find('.el-table-v2__add-row-main .edit-cell')
+    const addButton = wrapper.find('.el-table-v2__add-row-right .icon-button')
+
+    ;(ghostInput.element as HTMLInputElement).focus()
+    await nextTick()
+    await ghostInput.setValue('lbs')
+    await addButton.trigger('click')
+
+    const table = wrapper.findComponent(TableV2)
+    const emittedPayload = table.emitted('add-ghost-row')?.[0]?.[0] as any
+
+    expect(emittedPayload.row).toMatchObject({
+      unit: 'lbs',
+      unitValue: 'lbs',
+    })
+    wrapper.unmount()
+  })
+
   test('scrolls to the newly added row after ghost row add', async () => {
     const originalScroll = window.HTMLElement.prototype.scroll
     window.HTMLElement.prototype.scroll = function ({
@@ -2141,7 +2259,74 @@ describe('TableV2.vue', () => {
     const sortIcon = wrapper.find('.el-table-v2__sort-icon')
 
     expect(sortIcon.exists()).toBe(true)
-    expect(sortIcon.attributes('style')).toContain('--color: #9FB1BD')
+    expect(sortIcon.attributes('style')).toContain(
+      '--color: var(--color-gray-400)'
+    )
+    expect(sortIcon.findComponent(FilterIconDown).exists()).toBe(true)
+  })
+
+  test('sortable header icon points down with an empty sortState', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortState={{}}
+      />
+    ))
+
+    const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+    expect(sortIcon.classes()).not.toContain('is-sorting')
+    expect(sortIcon.findComponent(FilterIconDown).exists()).toBe(true)
+  })
+
+  test.each([SortOrder.ASC, SortOrder.DESC])(
+    'sortable header icon uses active color when order is %s',
+    async (order) => {
+      const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+      const data = ref(generateData(columns.value, 5))
+      const wrapper = mount(() => (
+        <TableV2
+          columns={columns.value}
+          data={data.value}
+          width={700}
+          height={400}
+          sortBy={{ key: columns.value[0].key, order }}
+        />
+      ))
+
+      const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+      expect(sortIcon.classes()).toContain('is-sorting')
+      expect(sortIcon.attributes('style')).toContain(
+        '--color: var(--color-gray-800)'
+      )
+    }
+  )
+
+  test('sortable header icon uses active color with sortState', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortState={{ [columns.value[0].key]: SortOrder.DESC }}
+      />
+    ))
+
+    const sortIcon = wrapper.find('.el-table-v2__sort-icon')
+
+    expect(sortIcon.classes()).toContain('is-sorting')
+    expect(sortIcon.attributes('style')).toContain(
+      '--color: var(--color-gray-800)'
+    )
   })
 
   test('column-sort emits asc order on first click when sortState is not provided', async () => {
@@ -2168,6 +2353,74 @@ describe('TableV2.vue', () => {
         order: SortOrder.ASC,
       })
     )
+  })
+
+  test('column-sort cycles through default, asc, desc, and default', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const sortBy = ref<SortBy>({
+      key: columns.value[0].key,
+      order: SortOrder.DEFAULT,
+    })
+    const onColumnSort = vi.fn((value: ColumnSortParams<any>) => {
+      sortBy.value = { key: value.key, order: value.order }
+    })
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortBy={sortBy.value}
+        onColumnSort={onColumnSort}
+      />
+    ))
+    const headerCell = wrapper.find('.el-table-v2__header-cell.is-sortable')
+
+    for (let index = 0; index < 4; index++) {
+      await headerCell.trigger('click')
+      await nextTick()
+    }
+
+    expect(onColumnSort.mock.calls.map(([value]) => value.order)).toEqual([
+      SortOrder.ASC,
+      SortOrder.DESC,
+      SortOrder.DEFAULT,
+      SortOrder.ASC,
+    ])
+  })
+
+  test('column-sort cycles each sortState column back to default', async () => {
+    const columns = ref(generateColumns(3, 'column-', { sortable: true }))
+    const data = ref(generateData(columns.value, 5))
+    const sortState = ref<SortState>({
+      [columns.value[0].key]: SortOrder.DEFAULT,
+    })
+    const onColumnSort = vi.fn((value: ColumnSortParams<any>) => {
+      sortState.value[value.key] = value.order
+    })
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        sortState={sortState.value}
+        onColumnSort={onColumnSort}
+      />
+    ))
+    const headerCell = wrapper.find('.el-table-v2__header-cell.is-sortable')
+
+    for (let index = 0; index < 3; index++) {
+      await headerCell.trigger('click')
+      await nextTick()
+    }
+
+    expect(onColumnSort.mock.calls.map(([value]) => value.order)).toEqual([
+      SortOrder.ASC,
+      SortOrder.DESC,
+      SortOrder.DEFAULT,
+    ])
   })
 
   test('default footer uses total and updateTime props', async () => {

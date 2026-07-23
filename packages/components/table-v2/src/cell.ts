@@ -6,6 +6,7 @@ import type {
   StyleValue,
   __ExtractPublicPropTypes,
 } from 'vue'
+import type { TableV2OverflowTooltipOptions } from './types'
 
 export const tableV2CellProps = buildProps({
   class: String,
@@ -21,6 +22,13 @@ export const tableV2CellProps = buildProps({
     type: definePropType<any>(Object),
   },
   rowIndex: Number,
+  showOverflowTooltip: {
+    type: definePropType<boolean | TableV2OverflowTooltipOptions>([
+      Boolean,
+      Object,
+    ]),
+    default: false,
+  },
 } as const)
 
 export type TableV2CellProps = ExtractPropTypes<typeof tableV2CellProps>

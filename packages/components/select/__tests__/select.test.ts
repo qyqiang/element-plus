@@ -395,12 +395,19 @@ describe('Select', () => {
     wrapper = getSelectVm({ inputType: 'error' })
     await nextTick()
 
-    const hoverTooltip = wrapper
+    const clickTooltip = wrapper
       .findAllComponents({ name: 'ElTooltip' })
-      .find((tooltip) => tooltip.props('trigger') === 'hover')
+      .find((tooltip) => tooltip.props('trigger') === 'click')
 
-    expect(hoverTooltip?.props('content')).toBe('Required')
-    expect(hoverTooltip?.props('disabled')).toBe(false)
+    expect(clickTooltip?.props('content')).toBe('Required')
+    expect(clickTooltip?.props('disabled')).toBe(false)
+
+    await wrapper.find('.el-select__wrapper').trigger('click')
+    await nextTick()
+
+    expect(clickTooltip?.props('visible')).toBe(true)
+    expect(document.body.textContent).toContain('Required')
+    expect((wrapper.findComponent(Select).vm as any).expanded).toBe(true)
   })
 
   test('outer error tooltip prefers form-item validation message', async () => {
@@ -416,12 +423,16 @@ describe('Select', () => {
     )
     await nextTick()
 
-    const hoverTooltip = wrapper
+    const clickTooltip = wrapper
       .findAllComponents({ name: 'ElTooltip' })
-      .find((tooltip) => tooltip.props('trigger') === 'hover')
+      .find(
+        (tooltip) =>
+          tooltip.props('trigger') === 'click' &&
+          tooltip.props('content') === 'Select is required'
+      )
 
-    expect(hoverTooltip?.props('content')).toBe('Select is required')
-    expect(hoverTooltip?.props('disabled')).toBe(false)
+    expect(clickTooltip?.props('content')).toBe('Select is required')
+    expect(clickTooltip?.props('disabled')).toBe(false)
   })
 
   test('custom popper style', async () => {
@@ -3280,6 +3291,77 @@ describe('Select', () => {
     await nextTick()
     const placeholder = wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()
     expect(placeholder).toBe('foo-label|foo|true|false|right')
+  })
+
+  it('should show option tip with and without an overflowing label', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="''">
+        <el-option label="Short label" value="short" tip="Supplementary tip" />
+      </el-select>
+    `
+    )
+    await nextTick()
+
+    const option = wrapper.findComponent(Option)
+    const tooltip = option.findComponent({ name: 'ElTooltip' })
+    const getTooltipLines = () =>
+      tooltip.vm.$slots
+        .content?.()
+        .map((node) => node.children)
+        .filter((content) => content !== 'v-if')
+
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(getTooltipLines()).toEqual(['Supplementary tip'])
+    ;(option.vm as any).isTextOverflowing = true
+    await nextTick()
+
+    expect(getTooltipLines()).toEqual(['Short label', 'Supplementary tip'])
+  })
+
+  it('should show option tip for a disabled option', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="''">
+        <el-option
+          label="Disabled option"
+          value="disabled"
+          tip="Disabled option tip"
+          disabled
+        />
+      </el-select>
+    `
+    )
+    await nextTick()
+
+    const option = wrapper.findComponent(Option)
+    const tooltip = option.findComponent({ name: 'ElTooltip' })
+    const content = tooltip.vm.$slots
+      .content?.()
+      .map((node) => node.children)
+      .filter((value) => value !== 'v-if')
+
+    expect(option.props('disabled')).toBe(true)
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(content).toEqual(['Disabled option tip'])
+  })
+
+  it('should pass option tip from the options attribute', async () => {
+    const wrapper = _mount(
+      `<el-select :model-value="''" :options="options" />`,
+      () => ({
+        options: [
+          {
+            label: 'Option label',
+            value: 'option',
+            tip: 'Option tip',
+          },
+        ],
+      })
+    )
+    await nextTick()
+
+    expect(wrapper.findComponent(Option).props('tip')).toBe('Option tip')
   })
 
   it('should expose the raw object value on label slot item', async () => {
