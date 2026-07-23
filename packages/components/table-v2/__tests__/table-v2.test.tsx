@@ -353,6 +353,44 @@ describe('TableV2.vue', () => {
     expect(cell[1].find('.el-table-v2__cell-text').text()).toBe('Row 0 - Col 1')
   })
 
+  test('supports overflow tooltips on individual columns', () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        showOverflowTooltip: true,
+      },
+      {
+        key: 'note',
+        dataKey: 'note',
+        title: 'Note',
+        width: 180,
+      },
+    ])
+    const data = ref([
+      {
+        id: 'row-0',
+        name: 'A long name',
+        note: 'A long note',
+      },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={360}
+        height={132}
+        fixed
+      />
+    ))
+    const cells = wrapper.findAll('.el-table-v2__row-cell')
+
+    expect(cells[0].findComponent({ name: 'ElTooltip' }).exists()).toBe(true)
+    expect(cells[1].findComponent({ name: 'ElTooltip' }).exists()).toBe(false)
+  })
+
   test('slots header-cell', async () => {
     const columns = ref(generateColumns(10))
     const data = ref(generateData(columns.value, 20))

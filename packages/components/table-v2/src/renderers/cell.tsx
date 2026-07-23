@@ -289,7 +289,10 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     columnCellRenderer(cellProps)
   ) : (
     renderSlot(slots, 'default', cellProps, () => [
-      <TableCell {...cellProps}></TableCell>,
+      <TableCell
+        {...cellProps}
+        showOverflowTooltip={column.showOverflowTooltip}
+      ></TableCell>,
     ])
   )
 

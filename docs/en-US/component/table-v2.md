@@ -115,6 +115,16 @@ table-v2/automatic-column-widths
 
 :::
 
+## Overflow tooltip
+
+Set `showOverflowTooltip` on a column to hide overflowing default cell text and display the complete value in a tooltip on hover. It accepts a boolean or Tooltip options. Columns without this setting keep their original behavior.
+
+:::demo
+
+table-v2/show-overflow-tooltip
+
+:::
+
 ## Diagonal header
 
 Use `diagonalHeader` on a column when the first header cell needs both `From` and `To` labels in the same area.
@@ -239,6 +249,7 @@ Note that these are `JavaScript` Objects, so you **CANNOT USE** kebab-case for t
 | sortable                     | Indicates whether the column is sortable                                                                                                                                                                                                                          | `boolean`                                            | —       |
 | required                     | Whether to add the `required-column` class to the column header and cells                                                                                                                                                                                         | `boolean`                                            | false   |
 | resizable                    | Whether the column can be resized by dragging the header border                                                                                                                                                                                                   | `boolean`                                            | true    |
+| showOverflowTooltip          | Whether to show a tooltip when this column's default cell text overflows. Also accepts Tooltip options                                                                                                                                                            | `boolean` / `object`                                 | —       |
 | title                        | The default text rendered in header cell                                                                                                                                                                                                                          | `string`                                             | —       |
 | maxWidth                     | Maximum width for the column                                                                                                                                                                                                                                      | `number`                                             | —       |
 | minWidth                     | Minimum width for the column                                                                                                                                                                                                                                      | `number`                                             | —       |
