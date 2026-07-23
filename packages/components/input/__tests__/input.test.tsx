@@ -202,7 +202,7 @@ describe('Input.vue', () => {
 
     expect(tooltip.props('content')).toBe('Required')
     expect(tooltip.props('disabled')).toBe(false)
-    expect(tooltip.props('trigger')).toBe('hover')
+    expect(tooltip.props('trigger')).toBe('click')
   })
 
   test('error inputType uses infoTip as tooltip content when empty', () => {
@@ -212,7 +212,7 @@ describe('Input.vue', () => {
 
     expect(tooltip.props('content')).toBe(tip)
     expect(tooltip.props('disabled')).toBe(false)
-    expect(tooltip.props('trigger')).toBe('hover')
+    expect(tooltip.props('trigger')).toBe('click')
   })
 
   test('overflow tooltip shows input value and suppresses infoTip tooltip', async () => {
@@ -233,6 +233,7 @@ describe('Input.vue', () => {
 
     expect(tooltips[0].props('content')).toBe(value)
     expect(tooltips[0].props('disabled')).toBe(false)
+    expect(tooltips[0].props('trigger')).toBe('hover')
     expect(tooltips[1].props('content')).toBe(tip)
     expect(tooltips[1].props('disabled')).toBe(true)
   })

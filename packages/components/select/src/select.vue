@@ -1,7 +1,7 @@
 <template>
   <div
     ref="selectRef"
-    v-click-outside:[popperRef]="handleClickOutside"
+    v-click-outside:[popperRef]="handleSelectClickOutside"
     :class="[
       nsSelect.b(),
       nsSelect.m(selectSize),
@@ -16,12 +16,13 @@
     @mouseleave="states.inputHovering = false"
   >
     <el-tooltip
-      trigger="hover"
+      trigger="click"
       effect="light"
       placement="top"
       :offset="4"
       :content="errorTooltipContent"
       :disabled="errorTooltipDisabled"
+      :visible="errorTooltipVisible"
     >
       <div
         :class="[
@@ -63,7 +64,7 @@
                 nsSelect.is('disabled', selectDisabled),
                 nsSelect.is('value', hasModelValue),
               ]"
-              @click.prevent="toggleMenu"
+              @click.prevent="handleSelectClick"
             >
               <span
                 v-if="floatLabel"
@@ -479,6 +480,7 @@ import {
   onBeforeUnmount,
   provide,
   reactive,
+  ref,
   toRefs,
   watch,
 } from 'vue'
@@ -584,6 +586,19 @@ export default defineComponent({
       return ''
     })
     const errorTooltipDisabled = computed(() => !errorTooltipContent.value)
+    const errorTooltipVisible = ref(false)
+    const handleSelectClick = () => {
+      API.toggleMenu()
+      errorTooltipVisible.value =
+        !errorTooltipDisabled.value && !errorTooltipVisible.value
+    }
+    const handleSelectClickOutside = (event: Event) => {
+      errorTooltipVisible.value = false
+      API.handleClickOutside(event)
+    }
+    watch(errorTooltipDisabled, (disabled) => {
+      if (disabled) errorTooltipVisible.value = false
+    })
     const getOptionProps = (option: Record<string, any>) => ({
       label: getLabel(option),
       value: getValue(option),
@@ -688,6 +703,9 @@ export default defineComponent({
       validateMsg,
       errorTooltipContent,
       errorTooltipDisabled,
+      errorTooltipVisible,
+      handleSelectClick,
+      handleSelectClickOutside,
       handleAddSelect,
       getLabel,
       isEmpty,

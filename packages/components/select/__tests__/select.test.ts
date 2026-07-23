@@ -395,12 +395,19 @@ describe('Select', () => {
     wrapper = getSelectVm({ inputType: 'error' })
     await nextTick()
 
-    const hoverTooltip = wrapper
+    const clickTooltip = wrapper
       .findAllComponents({ name: 'ElTooltip' })
-      .find((tooltip) => tooltip.props('trigger') === 'hover')
+      .find((tooltip) => tooltip.props('trigger') === 'click')
 
-    expect(hoverTooltip?.props('content')).toBe('Required')
-    expect(hoverTooltip?.props('disabled')).toBe(false)
+    expect(clickTooltip?.props('content')).toBe('Required')
+    expect(clickTooltip?.props('disabled')).toBe(false)
+
+    await wrapper.find('.el-select__wrapper').trigger('click')
+    await nextTick()
+
+    expect(clickTooltip?.props('visible')).toBe(true)
+    expect(document.body.textContent).toContain('Required')
+    expect((wrapper.findComponent(Select).vm as any).expanded).toBe(true)
   })
 
   test('outer error tooltip prefers form-item validation message', async () => {
@@ -416,12 +423,16 @@ describe('Select', () => {
     )
     await nextTick()
 
-    const hoverTooltip = wrapper
+    const clickTooltip = wrapper
       .findAllComponents({ name: 'ElTooltip' })
-      .find((tooltip) => tooltip.props('trigger') === 'hover')
+      .find(
+        (tooltip) =>
+          tooltip.props('trigger') === 'click' &&
+          tooltip.props('content') === 'Select is required'
+      )
 
-    expect(hoverTooltip?.props('content')).toBe('Select is required')
-    expect(hoverTooltip?.props('disabled')).toBe(false)
+    expect(clickTooltip?.props('content')).toBe('Select is required')
+    expect(clickTooltip?.props('disabled')).toBe(false)
   })
 
   test('custom popper style', async () => {

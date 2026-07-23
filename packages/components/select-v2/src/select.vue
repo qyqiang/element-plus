@@ -1,7 +1,7 @@
 <template>
   <div
     ref="selectRef"
-    v-click-outside:[popperRef]="handleClickOutside"
+    v-click-outside:[popperRef]="handleSelectClickOutside"
     :class="[
       nsSelect.b(),
       nsSelect.m(selectSize),
@@ -16,12 +16,13 @@
     @mouseleave="states.inputHovering = false"
   >
     <el-tooltip
-      trigger="hover"
+      trigger="click"
       effect="light"
       placement="top"
       :offset="4"
       :content="errorTooltipContent"
       :disabled="errorTooltipDisabled"
+      :visible="errorTooltipVisible"
     >
       <div
         :class="[
@@ -63,7 +64,7 @@
                 nsSelect.is('disabled', selectDisabled),
                 nsSelect.is('value', hasModelValue),
               ]"
-              @click.prevent="toggleMenu"
+              @click.prevent="handleSelectClick"
             >
               <span
                 v-if="floatLabel"
@@ -400,7 +401,15 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, provide, reactive, toRefs } from 'vue'
+import {
+  computed,
+  defineComponent,
+  provide,
+  reactive,
+  ref,
+  toRefs,
+  watch,
+} from 'vue'
 import { isArray } from '@element-plus/utils'
 import { ClickOutside } from '@element-plus/directives'
 import ElTooltip from '@element-plus/components/tooltip'
@@ -456,6 +465,19 @@ export default defineComponent({
       return ''
     })
     const errorTooltipDisabled = computed(() => !errorTooltipContent.value)
+    const errorTooltipVisible = ref(false)
+    const handleSelectClick = () => {
+      API.toggleMenu()
+      errorTooltipVisible.value =
+        !errorTooltipDisabled.value && !errorTooltipVisible.value
+    }
+    const handleSelectClickOutside = (event: Event) => {
+      errorTooltipVisible.value = false
+      API.handleClickOutside(event)
+    }
+    watch(errorTooltipDisabled, (disabled) => {
+      if (disabled) errorTooltipVisible.value = false
+    })
     provide(selectV2InjectionKey, {
       props: reactive({
         ...toRefs(props),
@@ -488,6 +510,9 @@ export default defineComponent({
       validateMsg,
       errorTooltipContent,
       errorTooltipDisabled,
+      errorTooltipVisible,
+      handleSelectClick,
+      handleSelectClickOutside,
       contentId,
       BORDER_HORIZONTAL_WIDTH,
     }

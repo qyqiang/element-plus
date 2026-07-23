@@ -29,7 +29,7 @@ select-v2/basic-usage
 
 ## Status styles
 
-Select-V2 supports the same status background behavior as Input through `input-type="error" | "warning" | "info"`. `error` and `warning` show the tinted background while empty, and the background returns to white once the component is focused or has a value. When the select is empty and `input-type` is `error`, hovering the component shows an outer error tooltip with `Required`. If the select is inside `el-form-item` with a validation error, that form error message takes priority. This status mode does not add a built-in info icon or `info-tip`.
+Select-V2 supports the same status background behavior as Input through `input-type="error" | "warning" | "info"`. `error` and `warning` show the tinted background while empty, and the background returns to white once the component is focused or has a value. When the select is empty and `input-type` is `error`, clicking the component shows an outer error tooltip with `Required`. If the select is inside `el-form-item` with a validation error, that form error message takes priority. This status mode does not add a built-in info icon or `info-tip`.
 
 :::demo
 

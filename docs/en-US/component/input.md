@@ -7,7 +7,7 @@ lang: en-US
 
 ## Demo
 
-Status inputs support `input-type="error" | "warning" | "info"`. When `input-type` is `info`, you can use `info-tip` to render a built-in tooltip icon in the suffix area. Tooltip priority is `error` first, then the overflowing input text, and finally the built-in `info-tip` icon tooltip. When `input-type` is `error` and the value is empty, hovering the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
+Status inputs support `input-type="error" | "warning" | "info"`. When `input-type` is `info`, you can use `info-tip` to render a built-in tooltip icon in the suffix area. Tooltip priority is `error` first, then the overflowing input text, and finally the built-in `info-tip` icon tooltip. When `input-type` is `error` and the value is empty, clicking the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
 
 :::demo
 
@@ -27,7 +27,7 @@ input/formatter
 
 ## Autocomplete Status And Validation
 
-Autocomplete inherits the built-in input status styles and tooltip validation behavior. Use `input-type="error" | "warning" | "info"` for status states. When `input-type` is `info`, `info-tip` renders the built-in tooltip icon. Tooltip priority is `error` first, then overflowing input text, and finally the built-in `info-tip` icon tooltip. When `input-type` is `error` and the value is empty, hovering the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
+Autocomplete inherits the built-in input status styles and tooltip validation behavior. Use `input-type="error" | "warning" | "info"` for status states. When `input-type` is `info`, `info-tip` renders the built-in tooltip icon. Tooltip priority is `error` first, then overflowing input text, and finally the built-in `info-tip` icon tooltip. When `input-type` is `error` and the value is empty, clicking the input shows an error tooltip. The tooltip content comes from `info-tip`, and defaults to `Required`.
 
 :::demo
 
@@ -43,7 +43,7 @@ input/status-autocomplete
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ----------- |
 | type                          | type of input                                                                                                                                           | ^[string]`'text' \| 'textarea' \| 'password' \| 'button' \| 'checkbox' \| 'file' \| 'number' \| 'radio' \| ...` native input types | text        |
 | input-type                    | visual status style of input                                                                                                                            | ^[enum]`'error' \| 'info' \| 'warning'`                                                                                            | —           |
-| info-tip                      | tooltip content shown by the built-in info icon when `input-type` is `info`; also used by the empty `error` hover tooltip, which defaults to `Required` | ^[string]                                                                                                                          | —           |
+| info-tip                      | tooltip content shown by the built-in info icon when `input-type` is `info`; also used by the empty `error` click tooltip, which defaults to `Required` | ^[string]                                                                                                                          | —           |
 | model-value / v-model         | binding value                                                                                                                                           | ^[string] / ^[number]                                                                                                              | —           |
 | model-modifiers ^(2.11.5)     | v-model modifiers, reference Vue modifiers                                                                                                              | ^[object]`{ lazy?: boolean, number?: boolean, trim?: boolean }`                                                                    | —           |
 | maxlength                     | same as `maxlength` in native input                                                                                                                     | ^[string] / ^[number]                                                                                                              | —           |
