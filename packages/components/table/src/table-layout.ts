@@ -141,16 +141,12 @@ class TableLayout<T extends DefaultRow> {
     let bodyMinWidth = 0
 
     const flattenColumns = this.getFlattenColumns()
-    const lastNonFixedColumn = [...flattenColumns]
-      .reverse()
-      .find((column) => !column.fixed)
     const flexColumns = flattenColumns.filter(
       (column) => !isNumber(column.width)
     )
     flattenColumns.forEach((column) => {
-      if (isNumber(column.width)) {
-        column.realWidth = column.width
-      }
+      // Clean those columns whose width changed from flex to unflex
+      if (isNumber(column.width) && column.realWidth) column.realWidth = null
     })
     if (flexColumns.length > 0 && fit) {
       flattenColumns.forEach((column) => {
@@ -162,17 +158,30 @@ class TableLayout<T extends DefaultRow> {
 
         const totalFlexWidth = bodyWidth - bodyMinWidth
 
-        flexColumns.forEach((column) => {
-          column.realWidth = Number(column.minWidth || 80)
-        })
-        if (lastNonFixedColumn) {
-          lastNonFixedColumn.realWidth =
-            Number(
-              lastNonFixedColumn.realWidth ??
-                lastNonFixedColumn.width ??
-                lastNonFixedColumn.minWidth ??
-                80
-            ) + totalFlexWidth
+        if (flexColumns.length === 1) {
+          flexColumns[0].realWidth =
+            Number(flexColumns[0].minWidth || 80) + totalFlexWidth
+        } else {
+          const allColumnsWidth = flexColumns.reduce(
+            (prev, column) => prev + Number(column.minWidth || 80),
+            0
+          )
+          const flexWidthPerPixel = totalFlexWidth / allColumnsWidth
+          let noneFirstWidth = 0
+
+          flexColumns.forEach((column, index) => {
+            if (index === 0) return
+            const flexWidth = Math.floor(
+              Number(column.minWidth || 80) * flexWidthPerPixel
+            )
+            noneFirstWidth += flexWidth
+            column.realWidth = Number(column.minWidth || 80) + flexWidth
+          })
+
+          flexColumns[0].realWidth =
+            Number(flexColumns[0].minWidth || 80) +
+            totalFlexWidth -
+            noneFirstWidth
         }
       } else {
         // HAVE HORIZONTAL SCROLL BAR
@@ -193,22 +202,9 @@ class TableLayout<T extends DefaultRow> {
         }
         bodyMinWidth += column.realWidth
       })
-      if (fit && bodyMinWidth <= bodyWidth && lastNonFixedColumn) {
-        this.scrollX.value = false
-        lastNonFixedColumn.realWidth =
-          Number(
-            lastNonFixedColumn.realWidth ??
-              lastNonFixedColumn.width ??
-              lastNonFixedColumn.minWidth ??
-              80
-          ) +
-          (bodyWidth - bodyMinWidth)
-        this.bodyWidth.value = bodyWidth
-        this.table.state.resizeState.value.width = bodyWidth
-      } else {
-        this.scrollX.value = bodyMinWidth > bodyWidth
-        this.bodyWidth.value = bodyMinWidth
-      }
+      this.scrollX.value = bodyMinWidth > bodyWidth
+
+      this.bodyWidth.value = bodyMinWidth
     }
 
     const fixedColumns = this.store.states.fixedColumns.value
