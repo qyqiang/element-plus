@@ -1,4 +1,4 @@
-import { renderSlot } from 'vue'
+import { nextTick, renderSlot } from 'vue'
 import ElIcon from '@element-plus/components/icon'
 import ElButton from '@element-plus/components/button'
 import { get, set } from 'lodash-unified'
@@ -192,15 +192,29 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
   const isGhostRowAddDisabled = requiredColumns.some((item) =>
     isEmptyRequiredValue(get(rowData, item.dataKey ?? ''))
   )
+  const commitGhostRowEditor = (event: MouseEvent) => {
+    const activeElement = (event.currentTarget as HTMLElement)?.ownerDocument
+      ?.activeElement
+
+    if (
+      activeElement &&
+      activeElement !== event.currentTarget &&
+      'blur' in activeElement
+    ) {
+      ;(activeElement as HTMLElement).blur()
+    }
+  }
   const Cell = isRowDeleteColumn ? (
     shouldRenderGhostAddButton ? (
       <ElButton
         text
         class="icon-button"
         disabled={isGhostRowAddDisabled}
-        onClick={(event: MouseEvent) => {
+        onClick={async (event: MouseEvent) => {
           event.stopPropagation()
           if (isGhostRowAddDisabled) return
+          commitGhostRowEditor(event)
+          await nextTick()
           onAddGhostRow?.({
             event,
             row: rowData,

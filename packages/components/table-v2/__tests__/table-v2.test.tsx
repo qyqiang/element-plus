@@ -1544,6 +1544,83 @@ describe('TableV2.vue', () => {
     )
   })
 
+  test('keeps fields assigned by a ghost row editor in the add payload', async () => {
+    const Editor = defineComponent({
+      props: {
+        modelValue: {
+          type: String,
+          default: '',
+        },
+      },
+      emits: ['change'],
+      setup(props, { emit }) {
+        const value = ref(props.modelValue)
+
+        return () => (
+          <input
+            class="edit-cell"
+            value={value.value}
+            onInput={(event) => {
+              value.value = (event.target as HTMLInputElement).value
+            }}
+            onBlur={() => emit('change', value.value)}
+          />
+        )
+      },
+    })
+    const columns = [
+      {
+        key: 'unit',
+        dataKey: 'unit',
+        title: 'Unit',
+        width: 180,
+        editCellRenderer: ({ rowData }: { rowData: Record<string, any> }) => (
+          <Editor
+            modelValue={rowData.unit}
+            onChange={(value: string) => {
+              rowData.unit = value
+              rowData.unitValue = value
+            }}
+          />
+        ),
+      },
+    ]
+    const wrapper = mount(
+      () => (
+        <TableV2
+          columns={columns}
+          data={[]}
+          width={700}
+          height={400}
+          rowKey="id"
+          ghostTable
+          editTable
+          ghostRowTemplate={{ unit: '', unitValue: null }}
+        />
+      ),
+      {
+        attachTo: document.body,
+      }
+    )
+
+    const ghostInput = wrapper.find('.el-table-v2__add-row-main .edit-cell')
+    const addButton = wrapper.find('.el-table-v2__add-row-right .icon-button')
+
+    ;(ghostInput.element as HTMLInputElement).focus()
+    await nextTick()
+    await ghostInput.setValue('lbs')
+    await addButton.trigger('click')
+
+    const table = wrapper.findComponent(TableV2)
+    const emittedPayload = table.emitted('add-ghost-row')?.[0]?.[0] as any
+
+    expect(emittedPayload.row).toMatchObject({
+      unit: 'lbs',
+      unitValue: 'lbs',
+    })
+    wrapper.unmount()
+  })
+
   test('scrolls to the newly added row after ghost row add', async () => {
     const originalScroll = window.HTMLElement.prototype.scroll
     window.HTMLElement.prototype.scroll = function ({

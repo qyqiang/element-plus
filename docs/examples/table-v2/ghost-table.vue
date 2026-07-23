@@ -36,7 +36,7 @@
 </template>
 
 <script lang="tsx" setup>
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import {
   ElButton,
   ElCheckbox,
@@ -119,8 +119,9 @@ const handleChange = (
   value: string | boolean | null
 ) => {
   console.log(row)
-  console.log(column)
-  console.log(value)
+  // console.log(column)
+  // console.log(value)
+  row.unitValue = value
 }
 const renderEditCell = (column: ColumnItem, row: TableRow) => {
   if (column.editor === 'checkbox') {
@@ -138,7 +139,7 @@ const renderEditCell = (column: ColumnItem, row: TableRow) => {
     return (
       <ElSelect
         v-model={row[column.dataKey as string]}
-        placeholder={column.title}
+        placeholder={'ee'}
         float-label={false}
         onChange={(value: string) => handleChange(row, column, value)}
       >
@@ -334,6 +335,13 @@ const handleAddRow = ({ insertIndex }: { insertIndex: number }) => {
 const handleGhostRowAdd = ({ row }: GhostRowAddPayload) => {
   tableData.value.push(createRowFromDraft(row))
 }
+watch(
+  () => tableData.value,
+  (val) => {
+    console.log(val)
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style scoped>
