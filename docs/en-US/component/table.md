@@ -49,9 +49,10 @@ table/add-column-first-column-control
 
 Basic table is just for data display. Columns without `width` or `min-width`
 automatically use the measured header text width plus `48px`, with a minimum of
-`80px`. If the calculated column widths do not fill the table, the last
-widthless column receives all remaining space. Columns with an explicit
-`width` always keep that configured width.
+`80px`. If the calculated column widths do not fill the table, the rightmost
+non-fixed column receives all remaining space, including after a column is
+resized. Fixed columns are skipped when assigning that space. An explicit
+`width` remains the column's base width.
 
 :::demo After setting attribute `data` of `el-table` with an object array, you can use `prop` (corresponding to a key of the object in `data` array) in `el-table-column` to insert data to table columns, and set the attribute `label` to define the column name. You can also use the attribute `width` to define the width of columns.
 
@@ -158,7 +159,6 @@ Sort the data to find or compare data quickly.
 table/sort
 
 :::
-
 
 ## Custom column template
 

@@ -39,13 +39,13 @@
   </el-table>
   <h3>Fill the remaining width</h3>
   <p class="table-width-description">
-    When the calculated widths do not fill the table, the last widthless column
-    receives all remaining space.
+    When the calculated widths do not fill the table, the rightmost non-fixed
+    column receives all remaining space. Fixed columns are skipped.
   </p>
   <el-table :data="tableData" border class="mt-4" style="width: 100%">
     <el-table-column prop="date" label="Date" />
     <el-table-column prop="name" label="Name" />
-    <el-table-column prop="address" label="Address" />
+    <el-table-column prop="address" label="Address" width="136" fixed="right" />
   </el-table>
   <h2>Basic Table</h2>
   <el-table

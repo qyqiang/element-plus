@@ -141,6 +141,9 @@ class TableLayout<T extends DefaultRow> {
     let bodyMinWidth = 0
 
     const flattenColumns = this.getFlattenColumns()
+    const lastNonFixedColumn = [...flattenColumns]
+      .reverse()
+      .find((column) => !column.fixed)
     const flexColumns = flattenColumns.filter(
       (column) => !isNumber(column.width)
     )
@@ -159,17 +162,17 @@ class TableLayout<T extends DefaultRow> {
 
         const totalFlexWidth = bodyWidth - bodyMinWidth
 
-        if (flexColumns.length === 1) {
-          flexColumns[0].realWidth =
-            Number(flexColumns[0].minWidth || 80) + totalFlexWidth
-        } else {
-          flexColumns.forEach((column) => {
-            column.realWidth = Number(column.minWidth || 80)
-          })
-          const lastFlexColumn = flexColumns[flexColumns.length - 1]
-          lastFlexColumn.realWidth =
-            Number(lastFlexColumn.realWidth ?? lastFlexColumn.minWidth ?? 80) +
-            totalFlexWidth
+        flexColumns.forEach((column) => {
+          column.realWidth = Number(column.minWidth || 80)
+        })
+        if (lastNonFixedColumn) {
+          lastNonFixedColumn.realWidth =
+            Number(
+              lastNonFixedColumn.realWidth ??
+                lastNonFixedColumn.width ??
+                lastNonFixedColumn.minWidth ??
+                80
+            ) + totalFlexWidth
         }
       } else {
         // HAVE HORIZONTAL SCROLL BAR
@@ -190,9 +193,22 @@ class TableLayout<T extends DefaultRow> {
         }
         bodyMinWidth += column.realWidth
       })
-      this.scrollX.value = bodyMinWidth > bodyWidth
-
-      this.bodyWidth.value = bodyMinWidth
+      if (fit && bodyMinWidth <= bodyWidth && lastNonFixedColumn) {
+        this.scrollX.value = false
+        lastNonFixedColumn.realWidth =
+          Number(
+            lastNonFixedColumn.realWidth ??
+              lastNonFixedColumn.width ??
+              lastNonFixedColumn.minWidth ??
+              80
+          ) +
+          (bodyWidth - bodyMinWidth)
+        this.bodyWidth.value = bodyWidth
+        this.table.state.resizeState.value.width = bodyWidth
+      } else {
+        this.scrollX.value = bodyMinWidth > bodyWidth
+        this.bodyWidth.value = bodyMinWidth
+      }
     }
 
     const fixedColumns = this.store.states.fixedColumns.value
