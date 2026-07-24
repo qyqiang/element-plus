@@ -31,7 +31,7 @@
         effect="light"
         :disabled="!isTextOverflowing && !currentTip"
         placement="right"
-        popper-class="optionPopperClass"
+        popper-class="tipPopperClass"
       >
         <template #content>
           <div v-if="isTextOverflowing">{{ getLabel(item) }}</div>

@@ -91,12 +91,15 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
   if (column.placeholderSign === placeholderSign) {
     return <div class={ns.em('row-cell', 'placeholder')} style={cellStyle} />
   }
-  const { cellRenderer, dataKey, dataGetter, editCellRenderer } = column
+  const { cellRenderer, dataKey, dataGetter, editCellRenderer, labelKey } =
+    column
 
   const getCellData = () =>
     isFunction(dataGetter)
       ? dataGetter({ columns, column, columnIndex, rowData, rowIndex })
       : get(rowData, dataKey ?? '')
+  const getDisplayCellData = () =>
+    labelKey == null ? getCellData() : get(rowData, labelKey)
 
   const markGhostRowTouched = (
     key: string | number | symbol | undefined,
@@ -305,6 +308,7 @@ const CellRenderer: FunctionalComponent<CellRendererProps> = (
     renderSlot(slots, 'default', cellProps, () => [
       <TableCell
         {...cellProps}
+        cellData={getDisplayCellData()}
         showOverflowTooltip={column.showOverflowTooltip}
       ></TableCell>,
     ])

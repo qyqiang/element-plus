@@ -97,7 +97,7 @@ select-v2/disabled
 
 ## Option tip
 
-Add a `tip` field to an option to always provide supplementary tooltip content. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`. Disabled options still display the tooltip; `disabled` only prevents selection.
+Add a `tip` field to an option, then right-click the option to display its supplementary tooltip content. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`. Disabled options still display the tooltip; `disabled` only prevents selection.
 
 :::demo
 

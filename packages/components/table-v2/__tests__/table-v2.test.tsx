@@ -353,6 +353,49 @@ describe('TableV2.vue', () => {
     expect(cell[1].find('.el-table-v2__cell-text').text()).toBe('Row 0 - Col 1')
   })
 
+  test('uses labelKey for default cell text without changing renderer data', () => {
+    const columns = ref([
+      {
+        key: 'status',
+        dataKey: 'statusValue',
+        labelKey: 'statusLabel',
+        title: 'Status',
+        width: 180,
+      },
+      {
+        key: 'owner',
+        dataKey: 'ownerValue',
+        labelKey: 'ownerLabel',
+        title: 'Owner',
+        width: 180,
+        cellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="custom-owner">{cellData}</span>
+        ),
+      },
+    ])
+    const data = ref([
+      {
+        id: 'row-0',
+        statusValue: 'in_transit',
+        statusLabel: 'In transit',
+        ownerValue: 'owner-1',
+        ownerLabel: 'Alice',
+      },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={200}
+      />
+    ))
+    const cells = wrapper.findAll('.el-table-v2__row-cell')
+
+    expect(cells[0].find('.el-table-v2__cell-text').text()).toBe('In transit')
+    expect(cells[1].find('.custom-owner').text()).toBe('owner-1')
+  })
+
   test('supports overflow tooltips on individual columns', () => {
     const columns = ref([
       {
