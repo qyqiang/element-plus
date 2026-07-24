@@ -125,6 +125,18 @@ select-v2/clearable
 
 :::
 
+## Single option initialization
+
+In single-select mode, when `clearable` is `false`, the current value is empty,
+and there is exactly one enabled option, Select-V2 automatically updates
+`model-value` with that option and emits the `change` event once.
+
+:::demo The displayed value is initialized automatically while the `change` event count becomes one.
+
+select-v2/single-option-default
+
+:::
+
 ## Before change
 
 Use `before-change` to intercept selection changes. Return `false`, or return a rejected `Promise`, to keep the current value.
@@ -142,6 +154,17 @@ We can define our own template for rendering the option in the popup.
 :::demo
 
 select-v2/customized-option
+
+:::
+
+## Custom option selected check
+
+Custom content passed through the default slot only replaces the option content
+area. The selected option keeps the built-in check area.
+
+:::demo Open the dropdown to see the selected option's check next to the custom content.
+
+select-v2/custom-option-check
 
 :::
 

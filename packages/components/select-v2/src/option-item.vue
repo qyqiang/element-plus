@@ -16,53 +16,63 @@
     @click.stop="selectOptionClick"
     @mouseenter="handleCellMouseEnter"
   >
-    <slot :item="item" :index="index" :disabled="disabled">
-      <div class="option-wrap">
-        <el-checkbox
-          v-if="multiple"
-          :model-value="selected"
-          :disabled="disabled"
-        />
-        <el-tooltip
-          ref="tooltipRef"
-          effect="light"
-          :disabled="!isTextOverflowing && !currentTip"
-          placement="right"
-          popper-class="optionPopperClass"
-        >
-          <template #content>
-            <div v-if="isTextOverflowing">{{ getLabel(item) }}</div>
-            <div v-if="currentTip">{{ currentTip }}</div>
-          </template>
-          <div class="option-wrap-content">
-            <slot name="optionIcon"></slot>
-            <span
-              class="select-label"
-              :class="{ 'select-margin': $slots?.optionIcon }"
-              >{{ getLabel(item) }}</span
-            >
-          </div>
-        </el-tooltip>
-        <div v-if="selected && !multiple" class="option-wrap-icon">
-          <el-icon size="16px" color="#2A3F4D"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M5.20006 14.2833C4.97716 14.2834 4.75643 14.2395 4.55052 14.1542C4.3446 14.0688 4.15754 13.9437 4.00006 13.786L0.292725 10.0807L1.70739 8.66665L5.20006 12.1593L14.2927 3.06665L15.7074 4.48065L6.40006 13.786C6.24257 13.9437 6.05552 14.0688 5.8496 14.1542C5.64369 14.2395 5.42296 14.2834 5.20006 14.2833Z"
-              /></svg
-          ></el-icon>
-        </div>
+    <div class="option-wrap">
+      <el-checkbox
+        v-if="multiple"
+        :model-value="selected"
+        :disabled="disabled"
+      />
+      <div v-if="hasDefaultSlot" class="option-wrap-custom-content">
+        <slot :item="item" :index="index" :disabled="disabled" />
       </div>
-    </slot>
+      <el-tooltip
+        v-else
+        ref="tooltipRef"
+        effect="light"
+        :disabled="!isTextOverflowing && !currentTip"
+        placement="right"
+        popper-class="optionPopperClass"
+      >
+        <template #content>
+          <div v-if="isTextOverflowing">{{ getLabel(item) }}</div>
+          <div v-if="currentTip">{{ currentTip }}</div>
+        </template>
+        <div class="option-wrap-content">
+          <slot name="optionIcon"></slot>
+          <span
+            class="select-label"
+            :class="{ 'select-margin': $slots?.optionIcon }"
+            >{{ getLabel(item) }}</span
+          >
+        </div>
+      </el-tooltip>
+      <div v-if="!multiple" class="option-wrap-icon">
+        <el-icon v-if="selected" size="16px" color="#2A3F4D"
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M5.20006 14.2833C4.97716 14.2834 4.75643 14.2395 4.55052 14.1542C4.3446 14.0688 4.15754 13.9437 4.00006 13.786L0.292725 10.0807L1.70739 8.66665L5.20006 12.1593L14.2927 3.06665L15.7074 4.48065L6.40006 13.786C6.24257 13.9437 6.05552 14.0688 5.8496 14.1542C5.64369 14.2395 5.42296 14.2834 5.20006 14.2833Z"
+            /></svg
+        ></el-icon>
+      </div>
+    </div>
   </li>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, inject, ref } from 'vue'
+import {
+  Comment,
+  Fragment,
+  Text,
+  computed,
+  defineComponent,
+  inject,
+  ref,
+} from 'vue'
 import { get, isObject } from 'lodash-unified'
 import {
   getPadding,
@@ -78,12 +88,33 @@ import { optionV2Emits, optionV2Props } from './defaults'
 import { selectV2InjectionKey } from './token'
 
 import type { Option } from './select.types'
+import type { VNode } from 'vue'
+
+const hasMeaningfulSlotContent = (content: unknown): boolean => {
+  if (Array.isArray(content)) {
+    return content.some(hasMeaningfulSlotContent)
+  }
+  if (typeof content === 'string' || typeof content === 'number') {
+    return Boolean(String(content).trim())
+  }
+  if (!content || typeof content !== 'object') return false
+
+  const node = content as VNode
+  if (node.type === Comment) return false
+  if (node.type === Text) {
+    return Boolean(String(node.children ?? '').trim())
+  }
+  if (node.type === Fragment) {
+    return hasMeaningfulSlotContent(node.children)
+  }
+  return true
+}
 
 export default defineComponent({
   components: { ElCheckbox, ElIcon, ElTooltip },
   props: optionV2Props,
   emits: optionV2Emits,
-  setup(props, { emit }) {
+  setup(props, { emit, slots }) {
     const select = inject(selectV2InjectionKey)!
     const isTextOverflowing = ref(false)
     const ns = useNamespace('select')
@@ -91,6 +122,15 @@ export default defineComponent({
     const { hoverItem, selectOptionClick } = useOption(props, { emit })
     const { getLabel, getValue, getTip } = useProps(select.props)
     const currentTip = computed(() => getTip(props.item))
+    const hasDefaultSlot = computed(() =>
+      hasMeaningfulSlotContent(
+        slots.default?.({
+          item: props.item,
+          index: props.index,
+          disabled: props.disabled,
+        }) ?? []
+      )
+    )
     const contentId = select.contentId
     const isItemSelected = (item?: Option) => {
       if (!item || item.type === 'Group' || !multiple.value) return false
@@ -159,6 +199,7 @@ export default defineComponent({
       ns,
       contentId,
       multiple,
+      hasDefaultSlot,
       isTextOverflowing,
       currentTip,
       optionStyle,

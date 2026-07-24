@@ -11,58 +11,62 @@
     @click.stop="selectOptionClick"
     @mouseenter="handleCellMouseEnter"
   >
-    <slot>
-      <div class="option-wrap">
-        <el-checkbox
-          v-if="multiple"
-          v-model="itemSelected"
-          :disabled="isDisabled"
-        ></el-checkbox>
-        <el-tooltip
-          ref="tooltipRef"
-          effect="light"
-          :disabled="!showTip || (!isTextOverflowing && !tip)"
-          :placement="placement"
-          popper-class="optionPopperClass"
-        >
-          <template #content>
-            <div v-if="isTextOverflowing">{{ currentLabel }}</div>
-            <div v-if="tip">{{ tip }}</div>
-          </template>
-          <div class="option-wrap-content">
-            <slot
-              name="optionIcon"
-              :item="rawOption"
-              :value="select.props.modelValue"
-            ></slot>
-            <span
-              class="select-label"
-              :class="{ 'select-margin': $slots?.optionIcon }"
-              >{{ currentLabel }}</span
-            >
-          </div>
-        </el-tooltip>
-        <div v-if="itemSelected && !multiple" class="option-wrap-icon">
-          <el-icon size="16px" color="#2A3F4D"
-            ><svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-            >
-              <path
-                d="M5.20006 14.2833C4.97716 14.2834 4.75643 14.2395 4.55052 14.1542C4.3446 14.0688 4.15754 13.9437 4.00006 13.786L0.292725 10.0807L1.70739 8.66665L5.20006 12.1593L14.2927 3.06665L15.7074 4.48065L6.40006 13.786C6.24257 13.9437 6.05552 14.0688 5.8496 14.1542C5.64369 14.2395 5.42296 14.2834 5.20006 14.2833Z"
-              /></svg
-          ></el-icon>
-        </div>
+    <div class="option-wrap">
+      <el-checkbox
+        v-if="multiple"
+        v-model="itemSelected"
+        :disabled="isDisabled"
+      ></el-checkbox>
+      <div v-if="hasDefaultSlot" class="option-wrap-custom-content">
+        <slot></slot>
       </div>
-    </slot>
+      <el-tooltip
+        v-else
+        ref="tooltipRef"
+        effect="light"
+        :disabled="!showTip || (!isTextOverflowing && !tip)"
+        :placement="placement"
+        popper-class="optionPopperClass"
+      >
+        <template #content>
+          <div v-if="isTextOverflowing">{{ currentLabel }}</div>
+          <div v-if="tip">{{ tip }}</div>
+        </template>
+        <div class="option-wrap-content">
+          <slot
+            name="optionIcon"
+            :item="rawOption"
+            :value="select.props.modelValue"
+          ></slot>
+          <span
+            class="select-label"
+            :class="{ 'select-margin': $slots?.optionIcon }"
+            >{{ currentLabel }}</span
+          >
+        </div>
+      </el-tooltip>
+      <div v-if="!multiple" class="option-wrap-icon">
+        <el-icon v-if="itemSelected" size="16px" color="#2A3F4D"
+          ><svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M5.20006 14.2833C4.97716 14.2834 4.75643 14.2395 4.55052 14.1542C4.3446 14.0688 4.15754 13.9437 4.00006 13.786L0.292725 10.0807L1.70739 8.66665L5.20006 12.1593L14.2927 3.06665L15.7074 4.48065L6.40006 13.786C6.24257 13.9437 6.05552 14.0688 5.8496 14.1542C5.64369 14.2395 5.42296 14.2834 5.20006 14.2833Z"
+            /></svg
+        ></el-icon>
+      </div>
+    </div>
   </li>
 </template>
 
 <script lang="ts">
 // @ts-nocheck
 import {
+  Comment,
+  Text,
   computed,
   defineComponent,
   getCurrentInstance,
@@ -96,10 +100,19 @@ export default defineComponent({
   },
   props: optionProps,
 
-  setup(props) {
+  setup(props, { slots }) {
     const ns = useNamespace('select')
     const id = useId()
     const isTextOverflowing = ref(false)
+    const hasDefaultSlot = computed(() =>
+      (slots.default?.() ?? []).some((node) => {
+        if (node.type === Comment) return false
+        if (node.type === Text) {
+          return Boolean(String(node.children ?? '').trim())
+        }
+        return true
+      })
+    )
     const containerKls = computed(() => [
       ns.be('dropdown', 'item'),
       ns.is('disabled', unref(isDisabled)),
@@ -220,6 +233,7 @@ export default defineComponent({
       multiple,
       ns,
       id,
+      hasDefaultSlot,
       containerKls,
       rawOption: props.rawOption,
       currentLabel,

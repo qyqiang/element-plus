@@ -153,19 +153,37 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
       : !isEmptyValue(props.modelValue)
   })
 
+  const noPendingAutoSelection = Symbol('noPendingAutoSelection')
+  let pendingAutoSelectValue:
+    | SelectV2ModelValue
+    | typeof noPendingAutoSelection = noPendingAutoSelection
+
   const tryAutoSelectSingleOption = () => {
-    if (props.multiple || props.clearable || hasModelValue.value) return
+    if (props.multiple || props.clearable || hasModelValue.value) {
+      pendingAutoSelectValue = noPendingAutoSelection
+      return
+    }
 
     const availableOptions = allOptions.value.filter(
       (option) => option.type !== 'Group' && !getDisabled(option)
     )
 
-    if (availableOptions.length !== 1) return
+    if (availableOptions.length !== 1) {
+      pendingAutoSelectValue = noPendingAutoSelection
+      return
+    }
 
     const optionValue = getValue(availableOptions[0])
     if (isEmptyValue(optionValue)) return
+    if (
+      pendingAutoSelectValue !== noPendingAutoSelection &&
+      isEqual(pendingAutoSelectValue, optionValue)
+    ) {
+      return
+    }
 
-    emit(UPDATE_MODEL_EVENT, optionValue)
+    pendingAutoSelectValue = optionValue
+    update(optionValue)
   }
 
   const showClearBtn = computed(() => {
@@ -988,6 +1006,12 @@ const useSelect = (props: SelectV2Props, emit: SelectV2EmitFn) => {
   watch(
     () => props.modelValue,
     (val, oldVal) => {
+      if (
+        pendingAutoSelectValue !== noPendingAutoSelection &&
+        isEqual(val, pendingAutoSelectValue)
+      ) {
+        pendingAutoSelectValue = noPendingAutoSelection
+      }
       const isValEmpty = !val || (isArray(val) && val.length === 0)
 
       if (

@@ -1,20 +1,23 @@
 <template>
-  <el-select v-model="value" multiple placeholder="Select" style="width: 240px">
-    <el-option
-      v-for="item in colors"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-    >
-      <div class="flex items-center">
-        <el-tag :color="item.value" style="margin-right: 8px" size="small" />
-        <span :style="{ color: item.value }">{{ item.label }}</span>
-      </div>
-    </el-option>
-    <template #tag>
-      <el-tag v-for="color in value" :key="color" :color="color" />
-    </template>
-  </el-select>
+  <div class="h-8 relative">
+    <el-select v-model="value" multiple placeholder="Select" style="width: 240px">
+      <el-option
+        v-for="item in colors"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+      >
+        <div class="flex items-center">
+          <el-tag :color="item.value" style="margin-right: 8px" size="small" />
+          <span :style="{ color: item.value }">{{ item.label }}</span>
+        </div>
+      </el-option>
+      <template #tag>
+        <el-tag v-for="color in value" :key="color" :color="color" />
+      </template>
+    </el-select>
+  </div>
+
 </template>
 
 <script lang="ts" setup>

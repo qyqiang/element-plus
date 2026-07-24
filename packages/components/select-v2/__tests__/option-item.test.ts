@@ -6,7 +6,12 @@ import { selectV2InjectionKey } from '../src/token'
 
 const mountOption = (
   item: Record<string, unknown>,
-  props: Record<string, string> = {}
+  props: Record<string, string> = {},
+  config: {
+    optionProps?: Record<string, unknown>
+    selectProps?: Record<string, unknown>
+    slots?: Record<string, string>
+  } = {}
 ) =>
   mount(OptionItem, {
     props: {
@@ -15,7 +20,9 @@ const mountOption = (
       index: 0,
       selected: false,
       disabled: item.disabled === true,
+      ...config.optionProps,
     },
+    slots: config.slots,
     global: {
       provide: {
         namespace: 'el',
@@ -25,6 +32,7 @@ const mountOption = (
             multiple: false,
             props,
             valueKey: 'value',
+            ...config.selectProps,
           },
           contentId: ref('select-v2-option-tip'),
         },
@@ -33,6 +41,53 @@ const mountOption = (
   })
 
 describe('SelectV2 option tip', () => {
+  it('keeps the selected check area with custom option content', () => {
+    const wrapper = mountOption(
+      {
+        label: 'Custom option',
+        value: 'custom',
+      },
+      {},
+      {
+        optionProps: {
+          selected: true,
+        },
+        slots: {
+          default: '<div class="custom-option">Custom option</div>',
+        },
+      }
+    )
+
+    expect(wrapper.find('.custom-option').exists()).toBe(true)
+    expect(wrapper.find('.option-wrap-icon svg').exists()).toBe(true)
+  })
+
+  it('keeps the checkbox area with custom multiple option content', () => {
+    const wrapper = mountOption(
+      {
+        label: 'Custom option',
+        value: 'custom',
+      },
+      {},
+      {
+        optionProps: {
+          selected: true,
+        },
+        selectProps: {
+          modelValue: ['custom'],
+          multiple: true,
+        },
+        slots: {
+          default: '<div class="custom-option">Custom option</div>',
+        },
+      }
+    )
+
+    expect(wrapper.find('.custom-option').exists()).toBe(true)
+    expect(wrapper.find('.el-checkbox').exists()).toBe(true)
+    expect(wrapper.find('.option-wrap-icon').exists()).toBe(false)
+  })
+
   it('shows only tip for fitting text and adds the label when it overflows', async () => {
     const wrapper = mountOption({
       label: 'Short label',

@@ -63,7 +63,7 @@ export default defineComponent({
   setup(props, { slots, expose }) {
     const select = inject(selectV2InjectionKey)!
     const ns = useNamespace('select')
-    const { getLabel, getValue, getDisabled } = useProps(select.props)
+    const { getValue, getDisabled } = useProps(select.props)
 
     const cachedHeights = ref<Array<number>>([])
 
@@ -202,8 +202,7 @@ export default defineComponent({
           onHover={onHover}
         >
           {{
-            default: (props: OptionItemProps) =>
-              slots.default?.(props) || <span>{getLabel(item)}</span>,
+            default: (props: OptionItemProps) => slots.default?.(props),
           }}
         </OptionItem>
       )

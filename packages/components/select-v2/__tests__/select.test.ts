@@ -455,6 +455,7 @@ describe('Select', () => {
 
     expect(vm.value).toBe('1')
     expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('option_a')
+    expect(wrapper.findComponent(Select).emitted('change')).toEqual([['1']])
   })
 
   it('auto selects the only option when options become available and clearable is false', async () => {
@@ -479,6 +480,7 @@ describe('Select', () => {
 
     expect(vm.value).toBe('1')
     expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('option_a')
+    expect(wrapper.findComponent(Select).emitted('change')).toEqual([['1']])
   })
 
   it('default value is null or undefined', async () => {

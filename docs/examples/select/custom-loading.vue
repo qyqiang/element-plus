@@ -2,64 +2,68 @@
   <div class="flex flex-wrap">
     <div class="m-4">
       <p>loading icon1</p>
-      <el-select
-        v-model="value"
-        multiple
-        remote
-        reserve-keyword
-        placeholder="Please enter a keyword"
-        :remote-method="remoteMethod"
-        :loading="loading"
-        style="width: 240px"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-        <template #loading>
-          <svg class="circular" viewBox="0 0 50 50">
-            <circle class="path" cx="25" cy="25" r="20" fill="none" />
-          </svg>
-        </template>
-      </el-select>
+      <div class="h-8 relative">
+        <el-select
+          v-model="value"
+          multiple
+          remote
+          reserve-keyword
+          placeholder="Please enter a keyword"
+          :remote-method="remoteMethod"
+          :loading="loading"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+          <template #loading>
+            <svg class="circular" viewBox="0 0 50 50">
+              <circle class="path" cx="25" cy="25" r="20" fill="none" />
+            </svg>
+          </template>
+        </el-select>
+      </div>
     </div>
     <div class="m-4">
       <p>loading icon2</p>
-      <el-select
-        v-model="value"
-        multiple
-        remote
-        reserve-keyword
-        placeholder="Please enter a keyword"
-        :remote-method="remoteMethod"
-        :loading="loading"
-        style="width: 240px"
-      >
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-        <template #loading>
-          <el-icon class="is-loading">
-            <svg class="circular" viewBox="0 0 20 20">
-              <g
-                class="path2 loading-path"
-                stroke-width="0"
-                style="animation: none; stroke: none"
-              >
-                <circle r="3.375" class="dot1" rx="0" ry="0" />
-                <circle r="3.375" class="dot2" rx="0" ry="0" />
-                <circle r="3.375" class="dot4" rx="0" ry="0" />
-                <circle r="3.375" class="dot3" rx="0" ry="0" />
-              </g>
-            </svg>
-          </el-icon>
-        </template>
-      </el-select>
+      <div class="h-8 relative">
+        <el-select
+          v-model="value"
+          multiple
+          remote
+          reserve-keyword
+          placeholder="Please enter a keyword"
+          :remote-method="remoteMethod"
+          :loading="loading"
+          style="width: 240px"
+        >
+          <el-option
+            v-for="item in options"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+          <template #loading>
+            <el-icon class="is-loading">
+              <svg class="circular" viewBox="0 0 20 20">
+                <g
+                  class="path2 loading-path"
+                  stroke-width="0"
+                  style="animation: none; stroke: none"
+                >
+                  <circle r="3.375" class="dot1" rx="0" ry="0" />
+                  <circle r="3.375" class="dot2" rx="0" ry="0" />
+                  <circle r="3.375" class="dot4" rx="0" ry="0" />
+                  <circle r="3.375" class="dot3" rx="0" ry="0" />
+                </g>
+              </svg>
+            </el-icon>
+          </template>
+        </el-select>
+      </div>
     </div>
   </div>
 </template>

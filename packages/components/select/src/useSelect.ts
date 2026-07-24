@@ -243,19 +243,37 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
     })
   }
 
+  const noPendingAutoSelection = Symbol('noPendingAutoSelection')
+  let pendingAutoSelectValue: OptionValue | typeof noPendingAutoSelection =
+    noPendingAutoSelection
+
   const tryAutoSelectSingleOption = () => {
-    if (props.multiple || props.clearable || hasModelValue.value) return
+    if (props.multiple || props.clearable || hasModelValue.value) {
+      pendingAutoSelectValue = noPendingAutoSelection
+      return
+    }
 
     const availableOptions = optionsArray.value.filter(
       (option) => !option.isDisabled
     )
 
-    if (availableOptions.length !== 1) return
+    if (availableOptions.length !== 1) {
+      pendingAutoSelectValue = noPendingAutoSelection
+      return
+    }
 
     const [option] = availableOptions
     if (isEmptyValue(option.value)) return
+    if (
+      pendingAutoSelectValue !== noPendingAutoSelection &&
+      isEqual(pendingAutoSelectValue, option.value)
+    ) {
+      return
+    }
 
+    pendingAutoSelectValue = option.value
     emit(UPDATE_MODEL_EVENT, option.value)
+    emitChange(option.value)
   }
 
   const selectSize = useFormSize()
@@ -303,6 +321,12 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
   watch(
     () => props.modelValue,
     (val, oldVal) => {
+      if (
+        pendingAutoSelectValue !== noPendingAutoSelection &&
+        isEqual(val, pendingAutoSelectValue)
+      ) {
+        pendingAutoSelectValue = noPendingAutoSelection
+      }
       if (props.multiple) {
         if (props.filterable && !props.reserveKeyword) {
           states.inputValue = ''

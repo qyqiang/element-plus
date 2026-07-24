@@ -75,6 +75,18 @@ select/clearable
 
 :::
 
+## Single option initialization
+
+In single-select mode, when `clearable` is `false`, the current value is empty,
+and there is exactly one enabled option, Select automatically updates
+`model-value` with that option and emits the `change` event once.
+
+:::demo The displayed value is initialized automatically while the `change` event count becomes one.
+
+select/single-option-default
+
+:::
+
 ## Custom dropdown width
 
 When `fit-input-width` is `false`, you can use `option-width` to control the dropdown width with either a number or a CSS width string such as `320` or `360px`.
@@ -105,14 +117,6 @@ select/before-change
 
 :::
 
-## Sizes
-
-:::demo Add `size` attribute to change the size of Select. In addition to the default size, there are two other options: `large`, `small`.
-
-select/size
-
-:::
-
 ## Basic multiple select
 
 Multiple select uses tags to display selected options.
@@ -130,6 +134,17 @@ You can customize HTML templates for options.
 :::demo Insert customized HTML templates into the slot of `el-option`.
 
 select/custom-template
+
+:::
+
+## Custom option selected check
+
+Custom content passed through the default slot of `el-option` only replaces the
+option content area. The selected option keeps the built-in check area.
+
+:::demo Open the dropdown to see the selected option's check next to the custom content.
+
+select/custom-option-check
 
 :::
 

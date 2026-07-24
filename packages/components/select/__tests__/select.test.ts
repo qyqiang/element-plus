@@ -474,6 +474,34 @@ describe('Select', () => {
     )
   })
 
+  test('keeps the selected check area with custom option content', async () => {
+    wrapper = _mount(
+      `
+      <el-select v-model="value">
+        <el-option label="Golden Cake" value="Option 1">
+          <span class="custom-option">Custom Golden Cake</span>
+        </el-option>
+        <el-option label="Double Skin Milk" value="Option 2" />
+      </el-select>
+    `,
+      () => ({
+        value: 'Option 1',
+      })
+    )
+    await wrapper.find(`.${WRAPPER_CLASS_NAME}`).trigger('click')
+    await nextTick()
+
+    const selectedOption = getOptions().find((option) =>
+      option.classList.contains('is-selected')
+    )
+
+    expect(selectedOption?.querySelector('.custom-option')?.textContent).toBe(
+      'Custom Golden Cake'
+    )
+    expect(selectedOption?.querySelector('.option-wrap-icon')).not.toBeNull()
+    wrapper.unmount()
+  })
+
   test('auto selects the only option when clearable is false', async () => {
     wrapper = _mount(
       `
@@ -502,6 +530,9 @@ describe('Select', () => {
     expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
       'Golden Cake'
     )
+    expect(wrapper.findComponent(Select).emitted('change')).toEqual([
+      ['Option 1'],
+    ])
   })
 
   test('auto selects the only option when options become available and clearable is false', async () => {
@@ -537,6 +568,9 @@ describe('Select', () => {
     expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
       'Golden Cake'
     )
+    expect(wrapper.findComponent(Select).emitted('change')).toEqual([
+      ['Option 1'],
+    ])
   })
 
   test('the scenario of rendering label when there is a default value and persistent is false', async () => {
