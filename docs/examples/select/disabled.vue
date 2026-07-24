@@ -7,6 +7,15 @@
       :value="item.value"
     />
   </el-select>
+  <el-select v-model="value" placeholder="Select" style="width: 240px">
+    <el-option
+      v-for="item in options"
+      :key="item.value"
+      :disabled="item?.disabled"
+      :label="item.label"
+      :value="item.value"
+    />
+  </el-select>
 </template>
 
 <script lang="ts" setup>
@@ -17,6 +26,7 @@ const options = [
   {
     value: 'Option1',
     label: 'Option1',
+    disabled: true,
   },
   {
     value: 'Option2',

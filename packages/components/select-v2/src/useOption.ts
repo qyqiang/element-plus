@@ -6,9 +6,7 @@ export function useOption(
 ) {
   return {
     hoverItem: () => {
-      if (!props.disabled) {
-        emit('hover', props.index)
-      }
+      emit('hover', props.disabled ? -1 : props.index)
     },
     selectOptionClick: () => {
       if (!props.disabled) {

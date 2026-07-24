@@ -41,6 +41,26 @@ const mountOption = (
   })
 
 describe('SelectV2 option tip', () => {
+  it('clears the previous hover when moving to a disabled option', async () => {
+    const wrapper = mountOption(
+      {
+        label: 'Disabled option',
+        value: 'disabled',
+        disabled: true,
+      },
+      {},
+      {
+        optionProps: {
+          index: 1,
+        },
+      }
+    )
+
+    await wrapper.trigger('mousemove')
+
+    expect(wrapper.emitted('hover')).toEqual([[-1]])
+  })
+
   it('keeps the selected check area with custom option content', () => {
     const wrapper = mountOption(
       {

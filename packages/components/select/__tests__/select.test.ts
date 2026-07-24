@@ -366,6 +366,32 @@ describe('Select', () => {
     expect(result).toBe(true)
   })
 
+  test('clears the previous hover when moving to a disabled option', async () => {
+    wrapper = getSelectVm({}, [
+      {
+        value: 'enabled',
+        label: 'Enabled option',
+      },
+      {
+        value: 'disabled',
+        label: 'Disabled option',
+        disabled: true,
+      },
+    ])
+    const select = wrapper.findComponent({ name: 'ElSelect' })
+    const options = wrapper.findAllComponents(Option)
+
+    await options[0].trigger('mousemove')
+    await nextTick()
+    expect((select.vm as any).states.hoveringIndex).toBe(0)
+    expect(options[0].classes()).toContain('is-hovering')
+
+    await options[1].trigger('mousemove')
+    await nextTick()
+    expect((select.vm as any).states.hoveringIndex).toBe(-1)
+    expect(options[0].classes()).not.toContain('is-hovering')
+  })
+
   test('custom dropdown class', () => {
     wrapper = getSelectVm({ popperClass: 'custom-dropdown' })
     const dropdown = wrapper.findComponent({ name: 'ElSelectDropdown' })

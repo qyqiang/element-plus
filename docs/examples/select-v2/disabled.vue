@@ -1,19 +1,23 @@
 <template>
-  <el-select-v2
-    v-model="value"
-    :options="options"
-    placeholder="Please select"
-    style="width: 240px; margin-right: 16px; vertical-align: middle"
-    multiple
-  />
-  <el-select-v2
-    v-model="value"
-    disabled
-    :options="options"
-    placeholder="Please select"
-    style="width: 240px; vertical-align: middle"
-    multiple
-  />
+  <div class="h-32 relative">
+    <el-select-v2
+      v-model="value"
+      :options="options"
+      placeholder="Please select"
+      style="width: 240px; margin-right: 16px; vertical-align: middle"
+      multiple
+    />
+  </div>
+  <div class="h-32 relative">
+    <el-select-v2
+      v-model="value"
+      disabled
+      :options="options"
+      placeholder="Please select"
+      style="width: 240px; vertical-align: middle"
+      multiple
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
