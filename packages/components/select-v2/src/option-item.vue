@@ -22,11 +22,7 @@
         :model-value="selected"
         :disabled="disabled"
       />
-      <div v-if="hasDefaultSlot" class="option-wrap-custom-content">
-        <slot :item="item" :index="index" :disabled="disabled" />
-      </div>
       <el-tooltip
-        v-else
         ref="tooltipRef"
         effect="light"
         :disabled="!isTextOverflowing && !currentTip"
@@ -37,13 +33,24 @@
           <div v-if="isTextOverflowing">{{ getLabel(item) }}</div>
           <div v-if="currentTip">{{ currentTip }}</div>
         </template>
-        <div class="option-wrap-content">
-          <slot name="optionIcon"></slot>
-          <span
-            class="select-label"
-            :class="{ 'select-margin': $slots?.optionIcon }"
-            >{{ getLabel(item) }}</span
-          >
+        <div
+          class="option-wrap-content"
+          :class="{ 'option-wrap-custom-content': hasDefaultSlot }"
+        >
+          <slot
+            v-if="hasDefaultSlot"
+            :item="item"
+            :index="index"
+            :disabled="disabled"
+          />
+          <template v-else>
+            <slot name="optionIcon"></slot>
+            <span
+              class="select-label"
+              :class="{ 'select-margin': $slots?.optionIcon }"
+              >{{ getLabel(item) }}</span
+            >
+          </template>
         </div>
       </el-tooltip>
       <div v-if="!multiple" class="option-wrap-icon">

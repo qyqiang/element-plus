@@ -59,6 +59,7 @@ describe('SelectV2 option tip', () => {
     )
 
     expect(wrapper.find('.custom-option').exists()).toBe(true)
+    expect(wrapper.findComponent({ name: 'ElTooltip' }).exists()).toBe(true)
     expect(wrapper.find('.option-wrap-icon svg').exists()).toBe(true)
   })
 
@@ -88,6 +89,32 @@ describe('SelectV2 option tip', () => {
     expect(wrapper.find('.option-wrap-icon').exists()).toBe(false)
   })
 
+  it('shows option tip with custom option content', () => {
+    const wrapper = mountOption(
+      {
+        label: 'Custom option',
+        value: 'custom',
+        tip: 'Custom option tip',
+      },
+      {},
+      {
+        slots: {
+          default: '<div class="custom-option">Rendered by slot</div>',
+        },
+      }
+    )
+    const tooltip = wrapper.findComponent({ name: 'ElTooltip' })
+    const content = tooltip.vm.$slots
+      .content?.()
+      .map((node: { children: unknown }) => node.children)
+      .filter((value: unknown) => value !== 'v-if')
+
+    expect(wrapper.find('.custom-option').text()).toBe('Rendered by slot')
+    expect(tooltip.props('trigger')).toBe('contextmenu')
+    expect(tooltip.props('disabled')).toBe(false)
+    expect(content).toEqual(['Custom option tip'])
+  })
+
   it('shows only tip for fitting text and adds the label when it overflows', async () => {
     const wrapper = mountOption({
       label: 'Short label',
@@ -101,6 +128,7 @@ describe('SelectV2 option tip', () => {
         .map((node: { children: unknown }) => node.children)
         .filter((content: unknown) => content !== 'v-if')
 
+    expect(tooltip.props('trigger')).toBe('contextmenu')
     expect(tooltip.props('disabled')).toBe(false)
     expect(getTooltipLines()).toEqual(['Supplementary tip'])
     ;(wrapper.vm as any).isTextOverflowing = true

@@ -4,7 +4,12 @@
     :options="options"
     placeholder="Please select"
     style="width: 240px"
-  />
+  >
+    <template #default="{ item }">
+      <span class="option-label">{{ item.label }}</span>
+      <span class="option-value">{{ item.value }}</span>
+    </template>
+  </el-select-v2>
 </template>
 
 <script lang="ts" setup>
@@ -34,3 +39,18 @@ const options = [
   },
 ]
 </script>
+
+<style scoped>
+.option-label {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.option-value {
+  flex: none;
+  margin-left: 8px;
+  color: var(--el-text-color-secondary);
+  font-size: 12px;
+}
+</style>
