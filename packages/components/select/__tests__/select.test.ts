@@ -428,12 +428,21 @@ describe('Select', () => {
     expect(clickTooltip?.props('content')).toBe('Required')
     expect(clickTooltip?.props('disabled')).toBe(false)
 
-    await wrapper.find('.el-select__wrapper').trigger('click')
+    await wrapper.find('.el-select__wrapper').trigger('focus')
     await nextTick()
 
     expect(clickTooltip?.props('visible')).toBe(true)
     expect(document.body.textContent).toContain('Required')
+
+    await wrapper.find('.el-select__wrapper').trigger('click')
+    await nextTick()
+
+    expect(clickTooltip?.props('visible')).toBe(true)
     expect((wrapper.findComponent(Select).vm as any).expanded).toBe(true)
+
+    await wrapper.find('.el-select__wrapper').trigger('blur')
+    await nextTick()
+    expect(clickTooltip?.props('visible')).toBe(false)
   })
 
   test('outer error tooltip prefers form-item validation message', async () => {
@@ -459,6 +468,10 @@ describe('Select', () => {
 
     expect(clickTooltip?.props('content')).toBe('Select is required')
     expect(clickTooltip?.props('disabled')).toBe(false)
+
+    await wrapper.find('.el-select__wrapper').trigger('focus')
+    await nextTick()
+    expect(clickTooltip?.props('visible')).toBe(true)
   })
 
   test('custom popper style', async () => {

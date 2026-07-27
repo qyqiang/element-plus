@@ -589,15 +589,14 @@ export default defineComponent({
     const errorTooltipVisible = ref(false)
     const handleSelectClick = () => {
       API.toggleMenu()
-      errorTooltipVisible.value =
-        !errorTooltipDisabled.value && !errorTooltipVisible.value
+      errorTooltipVisible.value = !errorTooltipDisabled.value
     }
     const handleSelectClickOutside = (event: Event) => {
       errorTooltipVisible.value = false
       API.handleClickOutside(event)
     }
-    watch(errorTooltipDisabled, (disabled) => {
-      if (disabled) errorTooltipVisible.value = false
+    watch([API.isFocused, errorTooltipDisabled], ([focused, disabled]) => {
+      errorTooltipVisible.value = focused && !disabled
     })
     const getOptionProps = (option: Record<string, any>) => ({
       label: getLabel(option),
