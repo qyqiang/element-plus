@@ -139,6 +139,60 @@ describe('table column', () => {
       wrapper.unmount()
     })
 
+    it('disables resizing for columns with an explicit width', async () => {
+      const wrapper = createTable(
+        'width="120"',
+        'min-width="120"',
+        '',
+        ':resizable="false"',
+        {},
+        'border'
+      )
+      await doubleWait()
+      const table = wrapper.findComponent(ElTable)
+      const columns = (table.vm as any).store.states.columns.value
+
+      expect(columns[0].resizable).toBe(false)
+      expect(columns[1].resizable).toBe(true)
+      expect(columns[2].resizable).toBe(true)
+      expect(columns[3].resizable).toBe(false)
+      wrapper.unmount()
+    })
+
+    it('updates resizable when the explicit width changes', async () => {
+      const wrapper = mount({
+        components: {
+          ElTable,
+          ElTableColumn,
+        },
+        template: `
+          <el-table :data="testData" border>
+            <el-table-column prop="name" :width="width" />
+          </el-table>
+        `,
+        data() {
+          return {
+            testData: getTestData(),
+            width: 120,
+          }
+        },
+      })
+      await doubleWait()
+      const table = wrapper.findComponent(ElTable)
+      const getColumn = () => (table.vm as any).store.states.columns.value[0]
+
+      expect(getColumn().resizable).toBe(false)
+
+      wrapper.vm.width = ''
+      await doubleWait()
+      expect(getColumn().resizable).toBe(true)
+
+      wrapper.vm.width = '160px'
+      await doubleWait()
+      expect(getColumn().resizable).toBe(false)
+      wrapper.unmount()
+    })
+
     it('formatter', async () => {
       const wrapper = createTable(':formatter="renderCell"', '', '', '', {
         methods: {

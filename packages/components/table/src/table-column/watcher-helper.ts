@@ -63,7 +63,6 @@ function useWatcher<T extends DefaultRow>(
       'filterClassName',
       'showOverflowTooltip',
       'tooltipFormatter',
-      'resizable',
     ]
     const parentProps = ['showOverflowTooltip']
     const aliases: Record<string, string> = {
@@ -93,6 +92,14 @@ function useWatcher<T extends DefaultRow>(
         )
       }
     })
+    watch(
+      [() => props_.resizable, () => props_.width],
+      ([resizable, width]) => {
+        instance.columnConfig.value.resizable =
+          Boolean(resizable) && !parseWidth(width)
+      },
+      { immediate: true }
+    )
   }
 
   return {
