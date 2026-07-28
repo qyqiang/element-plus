@@ -159,6 +159,7 @@ export const useStyles = (
     addRowHeight,
     bodyWidth,
     effectiveHScrollbarSize,
+    hasHorizontalScrollbar,
     fixedTableHeight,
     mainTableHeight,
     leftTableWidth,

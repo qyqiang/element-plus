@@ -18,6 +18,16 @@ Use `can-edit-table` together with `editable` to reuse each column's `cellRender
 table-v2/editable-table
 :::
 
+## Fixed action column behavior
+
+When all business columns fit within the table, the built-in right action column is rendered without a fixed-column shadow, matching Table. When the business columns overflow and horizontal scrolling becomes available, the action column keeps its fixed position and restores the shadow. Use the buttons to compare both states.
+
+:::demo
+
+table-v2/fixed-action-column
+
+:::
+
 ## Ghost Table
 
 :::demo Use `ghost-table`, `edit-table`, `ghost-row-template`, and column `editCellRenderer` together with `show-add-column-trigger` and `show-add-row-trigger`. This example now carries the richer editable-table feel as well, mixing checkbox, input, and select editors in the same grid while still keeping the bottom ghost row editable through the same rendering path. The built-in right-side action column now matches Editable Table: regular rows render delete actions there, and the ghost row uses that same column for the built-in add action. Columns marked with `required` automatically drive empty editable renderers into the built-in error state once the ghost row starts receiving values, and the table instance exposes `validateRequiredColumns()` so submit handlers can block incomplete rows. You can also listen to `add-ghost-row` to turn the draft row into real table data while preserving any extra template fields.

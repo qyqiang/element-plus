@@ -98,6 +98,7 @@ const TableV2 = defineComponent({
       bodyWidth,
       addRowHeight,
       effectiveHScrollbarSize,
+      hasHorizontalScrollbar,
       emptyStyle,
       rootStyle,
       footerHeight,
@@ -573,6 +574,7 @@ const TableV2 = defineComponent({
         effectiveShowAddRowTrigger.value && ns.m('with-add-row-trigger'),
         (isLegacyEditMode.value || isGhostEditMode.value) &&
           ns.m('with-ghost-row'),
+        !unref(hasHorizontalScrollbar) && ns.m('without-horizontal-scroll'),
       ]
 
       const footerProps = {

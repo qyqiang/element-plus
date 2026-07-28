@@ -808,6 +808,39 @@ describe('TableV2.vue', () => {
     expect(rightHeaderCells).toHaveLength(2)
   })
 
+  test('removes fixed column shadows when horizontal scrolling is unavailable', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+      },
+    ])
+    const data = ref([{ id: 'row-0', name: 'Alpha' }])
+    const wrapper = mount(() => (
+      <TableV2
+        fixed
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        canEditTable
+        editable
+      />
+    ))
+    const root = wrapper.find('.el-table-v2__root')
+
+    expect(root.classes()).toContain('el-table-v2--without-horizontal-scroll')
+
+    columns.value = [{ ...columns.value[0], width: 700 }]
+    await nextTick()
+
+    expect(root.classes()).not.toContain(
+      'el-table-v2--without-horizontal-scroll'
+    )
+  })
+
   test('does not render delete action column when canEditTable is false', async () => {
     const columns = ref(generateColumns(1))
     const data = ref(generateData(columns.value, 1))
