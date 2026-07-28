@@ -295,7 +295,7 @@ function useColumns(
     if (!key) return
     const { sortState, sortBy } = props
 
-    let order = SortOrder.ASC
+    let order = SortOrder.DESC
 
     if (isObject(sortState)) {
       order = nextSortOrderMap[sortState[key] ?? SortOrder.DEFAULT]
@@ -303,7 +303,7 @@ function useColumns(
       order =
         sortBy.key === key
           ? nextSortOrderMap[sortBy.order ?? SortOrder.DEFAULT]
-          : SortOrder.ASC
+          : SortOrder.DESC
     }
 
     props.onColumnSort?.({ column: getColumn(key)!, key, order })

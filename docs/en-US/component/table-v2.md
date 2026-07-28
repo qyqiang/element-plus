@@ -67,7 +67,7 @@ table-v2/sort
 
 ## Default sort state
 
-When a sortable column is not active, its sort icon points down and uses `--color-gray-400`. Clicking cycles through default, ascending, descending, and back to default. An active ascending or descending icon uses `--color-gray-800`.
+When a sortable column is not active, its sort icon points down and uses `--color-gray-400`. Clicking cycles through default, descending, ascending, and back to default. An active ascending or descending icon uses `--color-gray-800`.
 
 :::demo The example starts without an active `sort-by` or `sort-state`. Click the sortable header to apply an order and activate the icon.
 

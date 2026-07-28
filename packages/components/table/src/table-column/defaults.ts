@@ -264,7 +264,7 @@ export default {
   sortOrders: {
     type: Array as PropType<TableColumnCtx<any>['sortOrders']>,
     default: () => {
-      return ['ascending', 'descending', null]
+      return ['descending', 'ascending', null]
     },
     validator: (val: TableColumnCtx<any>['sortOrders']) => {
       return val.every((order: TableSortOrder | null) =>

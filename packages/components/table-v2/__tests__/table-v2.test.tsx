@@ -2425,7 +2425,7 @@ describe('TableV2.vue', () => {
     )
   })
 
-  test('column-sort emits asc order on first click when sortState is not provided', async () => {
+  test('column-sort emits desc order on first click when sortState is not provided', async () => {
     const columns = ref(generateColumns(3, 'column-', { sortable: true }))
     const data = ref(generateData(columns.value, 5))
     const onColumnSort = vi.fn()
@@ -2446,12 +2446,12 @@ describe('TableV2.vue', () => {
     expect(onColumnSort).toHaveBeenCalledWith(
       expect.objectContaining({
         key: columns.value[0].key,
-        order: SortOrder.ASC,
+        order: SortOrder.DESC,
       })
     )
   })
 
-  test('column-sort cycles through default, asc, desc, and default', async () => {
+  test('column-sort cycles through default, desc, asc, and default', async () => {
     const columns = ref(generateColumns(3, 'column-', { sortable: true }))
     const data = ref(generateData(columns.value, 5))
     const sortBy = ref<SortBy>({
@@ -2479,10 +2479,10 @@ describe('TableV2.vue', () => {
     }
 
     expect(onColumnSort.mock.calls.map(([value]) => value.order)).toEqual([
-      SortOrder.ASC,
       SortOrder.DESC,
-      SortOrder.DEFAULT,
       SortOrder.ASC,
+      SortOrder.DEFAULT,
+      SortOrder.DESC,
     ])
   })
 
@@ -2513,8 +2513,8 @@ describe('TableV2.vue', () => {
     }
 
     expect(onColumnSort.mock.calls.map(([value]) => value.order)).toEqual([
-      SortOrder.ASC,
       SortOrder.DESC,
+      SortOrder.ASC,
       SortOrder.DEFAULT,
     ])
   })

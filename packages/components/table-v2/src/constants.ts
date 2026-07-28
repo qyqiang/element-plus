@@ -16,13 +16,13 @@ export enum FixedDir {
 }
 
 export const nextSortOrderMap = {
-  [SortOrder.DEFAULT]: SortOrder.ASC,
-  [SortOrder.ASC]: SortOrder.DESC,
-  [SortOrder.DESC]: SortOrder.DEFAULT,
+  [SortOrder.DEFAULT]: SortOrder.DESC,
+  [SortOrder.DESC]: SortOrder.ASC,
+  [SortOrder.ASC]: SortOrder.DEFAULT,
 }
 
 export const sortOrders = [
   SortOrder.DEFAULT,
-  SortOrder.ASC,
   SortOrder.DESC,
+  SortOrder.ASC,
 ] as const

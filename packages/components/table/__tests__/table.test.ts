@@ -2664,14 +2664,14 @@ describe('Table.vue', () => {
       expect(handleSortChange).toHaveBeenLastCalledWith({
         column: expect.any(Object),
         prop: 'runtime',
-        order: 'ascending',
+        order: 'descending',
       })
 
       elm.trigger('click')
       expect(handleSortChange).toHaveBeenLastCalledWith({
         column: expect.any(Object),
         prop: 'runtime',
-        order: 'descending',
+        order: 'ascending',
       })
 
       elm.trigger('click')

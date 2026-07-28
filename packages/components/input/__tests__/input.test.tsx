@@ -558,7 +558,7 @@ describe('Input.vue', () => {
       expect(value.value).toBe('2')
     })
 
-    test('event:clear', async () => {
+    test('event:clear when clearable uses its default value', async () => {
       const handleClear = vi.fn()
       const handleInput = vi.fn()
       const content = ref('a')
@@ -566,7 +566,6 @@ describe('Input.vue', () => {
       const wrapper = mount(() => (
         <Input
           placeholder="Please input"
-          clearable
           v-model={content.value}
           onClear={handleClear}
           onInput={handleInput}

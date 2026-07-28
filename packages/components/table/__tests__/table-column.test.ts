@@ -3,6 +3,7 @@ import { describe, expect, it, vi } from 'vitest'
 import triggerEvent from '@element-plus/test-utils/trigger-event'
 import ElTable from '../src/table.vue'
 import ElTableColumn from '../src/table-column'
+import tableColumnDefaults from '../src/table-column/defaults'
 import {
   doubleWait,
   getMultiRowTestData,
@@ -664,6 +665,14 @@ describe('table column', () => {
     })
 
     describe('sortable', () => {
+      it('uses descending first in the default sort order', () => {
+        const sortOrders = tableColumnDefaults.sortOrders as {
+          default: () => Array<string | null>
+        }
+
+        expect(sortOrders.default()).toEqual(['descending', 'ascending', null])
+      })
+
       it('render', async () => {
         const wrapper = createTable('', '', '', 'sortable')
         await doubleWait()
@@ -729,11 +738,11 @@ describe('table column', () => {
           '.el-table__body-wrapper tbody tr td:last-child'
         )
         expect(lastCells.map((node) => node.text())).toEqual([
-          '100',
-          '95',
-          '92',
-          '92',
           '80',
+          '92',
+          '92',
+          '95',
+          '100',
         ])
         wrapper.unmount()
       })
@@ -756,11 +765,11 @@ describe('table column', () => {
           '.el-table__body-wrapper tbody tr td:last-child'
         )
         expect(lastCells.map((node) => node.text())).toEqual([
-          '100',
-          '95',
-          '92',
-          '92',
           '80',
+          '92',
+          '92',
+          '95',
+          '100',
         ])
         wrapper.unmount()
       })
@@ -783,11 +792,11 @@ describe('table column', () => {
           '.el-table__body-wrapper tbody tr td:last-child'
         )
         expect(lastCells.map((node) => node.text())).toEqual([
-          '80',
-          '92',
-          '92',
-          '95',
           '100',
+          '95',
+          '92',
+          '92',
+          '80',
         ])
         wrapper.unmount()
       })
@@ -795,23 +804,6 @@ describe('table column', () => {
 
     describe('click sortable column', () => {
       const wrapper = createTable('', '', '', 'sortable')
-
-      it('ascending', async () => {
-        const elm = wrapper.find('.caret-wrapper')
-
-        elm.trigger('click')
-        await doubleWait()
-        const lastCells = wrapper.findAll(
-          '.el-table__body-wrapper tbody tr td:last-child'
-        )
-        expect(lastCells.map((node) => node.text())).toEqual([
-          '80',
-          '92',
-          '92',
-          '95',
-          '100',
-        ])
-      })
 
       it('descending', async () => {
         const elm = wrapper.find('.caret-wrapper')
@@ -827,6 +819,23 @@ describe('table column', () => {
           '92',
           '92',
           '80',
+        ])
+      })
+
+      it('ascending', async () => {
+        const elm = wrapper.find('.caret-wrapper')
+
+        elm.trigger('click')
+        await doubleWait()
+        const lastCells = wrapper.findAll(
+          '.el-table__body-wrapper tbody tr td:last-child'
+        )
+        expect(lastCells.map((node) => node.text())).toEqual([
+          '80',
+          '92',
+          '92',
+          '95',
+          '100',
         ])
         wrapper.unmount()
       })
