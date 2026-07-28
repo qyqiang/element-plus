@@ -42,7 +42,7 @@ export const useStyles = (
 
   const addRowHeight = computed(() =>
     (props.canEditTable && props.editable) ||
-    (props.ghostTable && props.editTable)
+    (props.ghostTable && props.editTable && props.showGhostRow)
       ? props.rowHeight
       : 0
   )

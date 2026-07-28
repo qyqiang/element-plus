@@ -10,6 +10,7 @@
       <el-button @click="handleEdit">Edit mode</el-button>
       <el-button @click="handleDisplay">Display mode</el-button>
       <el-button @click="handleSubmit">Submit</el-button>
+      <el-switch v-model="showGhostRow" active-text="Show ghost row" />
     </div>
 
     <el-table
@@ -17,6 +18,7 @@
       :data="tableData"
       border
       ghost-table
+      :show-ghost-row="showGhostRow"
       :edit-table="editTable"
       have-table-text
       :total="tableData.length"
@@ -99,6 +101,7 @@ import { ElMessage } from 'element-plus'
 
 type EditorType = 'input' | 'select'
 const editTable = ref(true)
+const showGhostRow = ref(true)
 const table = ref(null)
 const handleEdit = () => {
   editTable.value = true

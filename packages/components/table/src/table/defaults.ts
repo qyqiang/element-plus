@@ -187,6 +187,7 @@ interface TableProps<T extends DefaultRow> {
   flexible?: boolean
   editable?: boolean
   ghostTable?: boolean
+  showGhostRow?: boolean
   editTable?: boolean
   total?: number
   updateTime?: string
@@ -448,6 +449,13 @@ export default {
    * @description whether to enable ghost table behavior
    */
   ghostTable: Boolean,
+  /**
+   * @description whether to show the bottom ghost row
+   */
+  showGhostRow: {
+    type: Boolean,
+    default: true,
+  },
   /**
    * @description whether to render edit cells for ghost table
    */

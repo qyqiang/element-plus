@@ -140,6 +140,9 @@ const TableV2 = defineComponent({
       () => props.canEditTable && props.editable
     )
     const isGhostEditMode = computed(() => props.ghostTable && props.editTable)
+    const isGhostRowVisible = computed(
+      () => isGhostEditMode.value && props.showGhostRow
+    )
     let stopPendingGhostRowScrollWatch: (() => void) | undefined
 
     const clearAddColumnTrigger = () => {
@@ -572,7 +575,7 @@ const TableV2 = defineComponent({
         ns.is('dynamic', unref(isDynamic)),
         effectiveShowAddColumnTrigger.value && ns.m('with-add-column-trigger'),
         effectiveShowAddRowTrigger.value && ns.m('with-add-row-trigger'),
-        (isLegacyEditMode.value || isGhostEditMode.value) &&
+        (isLegacyEditMode.value || isGhostRowVisible.value) &&
           ns.m('with-ghost-row'),
         !unref(hasHorizontalScrollbar) && ns.m('without-horizontal-scroll'),
       ]
@@ -584,7 +587,7 @@ const TableV2 = defineComponent({
         updateTime: props.updateTime,
       }
       const showAddRow = isLegacyEditMode.value && !isGhostEditMode.value
-      const showGhostRow = isGhostEditMode.value
+      const showGhostRow = isGhostRowVisible.value
       const addRowData = {
         [rowKey]: rowAddKey,
         [rowAddSign]: true,

@@ -115,6 +115,7 @@ export default defineComponent({
     const shouldRenderGhostRow =
       this.context?.props?.ghostTable &&
       this.context?.props?.editTable &&
+      this.context?.props?.showGhostRow &&
       this.context?.ghostRowData
 
     const bodyRows = shouldRenderGhostRow

@@ -1183,6 +1183,47 @@ describe('TableV2.vue', () => {
     )
   })
 
+  test('hides the ghost row without disabling editable cells or row actions', async () => {
+    const columns = ref([
+      {
+        key: 'name',
+        dataKey: 'name',
+        title: 'Name',
+        width: 180,
+        cellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="view-cell">{cellData}</span>
+        ),
+        editCellRenderer: ({ cellData }: { cellData: string }) => (
+          <span class="edit-cell">{cellData}</span>
+        ),
+      },
+    ])
+    const data = ref([
+      { id: 'row-0', name: 'Alpha' },
+      { id: 'row-1', name: 'Beta' },
+    ])
+    const wrapper = mount(() => (
+      <TableV2
+        columns={columns.value}
+        data={data.value}
+        width={700}
+        height={400}
+        ghostTable
+        editTable
+        showGhostRow={false}
+      />
+    ))
+
+    expect(wrapper.find('.el-table-v2__add-row-main').exists()).toBe(false)
+    expect(wrapper.findAll('.edit-cell')).toHaveLength(2)
+    expect(wrapper.findAll('.view-cell')).toHaveLength(0)
+    expect(wrapper.findAll('.el-table-v2__row-delete-button')).toHaveLength(2)
+    expect(wrapper.find('.el-table-v2--with-ghost-row').exists()).toBe(false)
+    expect(wrapper.find('.el-table-v2__root').attributes('style')).toContain(
+      '--el-table-v2-ghost-row-height: 0px;'
+    )
+  })
+
   test('keeps the ghost row below the table body when only maxHeight is provided', async () => {
     const columns = ref([
       {

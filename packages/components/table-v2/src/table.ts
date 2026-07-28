@@ -161,6 +161,10 @@ export const tableV2Props = buildProps({
   },
   canEditTable: Boolean,
   ghostTable: Boolean,
+  showGhostRow: {
+    type: Boolean,
+    default: true,
+  },
   editTable: Boolean,
   ghostRowTemplate: {
     type: definePropType<Record<string, any>>(Object),

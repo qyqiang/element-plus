@@ -11,6 +11,7 @@
       <el-button @click="handleEdit">Edit mode</el-button>
       <el-button @click="handleDisplay">Display mode</el-button>
       <el-button @click="handleSubmit">Submit</el-button>
+      <el-switch v-model="showGhostRow" active-text="Show ghost row" />
     </div>
     <el-table-v2
       ref="table"
@@ -19,6 +20,7 @@
       :height="400"
       fixed
       ghost-table
+      :show-ghost-row="showGhostRow"
       :ghost-row-template="ghostRowTemplate"
       :edit-table="editTable"
       show-add-column-trigger
@@ -44,6 +46,7 @@ import {
   ElMessage,
   ElOption,
   ElSelect,
+  ElSwitch,
 } from 'element-plus'
 
 import type { Column, TableV2Instance } from 'element-plus'
@@ -75,6 +78,7 @@ interface RowDeletePayload {
 }
 
 const editTable = ref(true)
+const showGhostRow = ref(true)
 const table = ref<TableV2Instance>()
 const ghostRowTemplate: Partial<TableRow> = {
   checked: false,

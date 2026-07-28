@@ -272,6 +272,45 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('hides the ghost row without disabling editable table cells', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table
+          :data="tableData"
+          ghost-table
+          edit-table
+          :show-ghost-row="false"
+        >
+          <el-table-column prop="name" label="Name">
+            <template #default="{ row }">
+              <span class="view-cell">{{ row.name }}</span>
+            </template>
+            <template #edit-cell="{ row }">
+              <span class="edit-cell">{{ row.name }}</span>
+            </template>
+          </el-table-column>
+        </el-table>
+      `,
+      data() {
+        return {
+          tableData: getTestData().slice(0, 2),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    expect(wrapper.findAll('tbody tr')).toHaveLength(2)
+    expect(wrapper.find('tbody tr.is-ghost-row').exists()).toBe(false)
+    expect(wrapper.findAll('.edit-cell')).toHaveLength(2)
+    expect(wrapper.findAll('.view-cell')).toHaveLength(0)
+    wrapper.unmount()
+  })
+
   it('adds the required-column class when a table column is marked as required', async () => {
     const wrapper = mount({
       components: {
