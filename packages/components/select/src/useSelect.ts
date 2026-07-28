@@ -246,8 +246,12 @@ export const useSelect = (props: SelectProps, emit: SelectEmits) => {
   const noPendingAutoSelection = Symbol('noPendingAutoSelection')
   let pendingAutoSelectValue: OptionValue | typeof noPendingAutoSelection =
     noPendingAutoSelection
+  // Temporarily disable selecting the only available option automatically.
+  const shouldAutoSelectSingleOption = false
 
   const tryAutoSelectSingleOption = () => {
+    if (!shouldAutoSelectSingleOption) return
+
     if (props.multiple || props.clearable || hasModelValue.value) {
       pendingAutoSelectValue = noPendingAutoSelection
       return

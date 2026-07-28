@@ -450,7 +450,7 @@ describe('Select', () => {
     )
   })
 
-  it('auto selects the only option when clearable is false', async () => {
+  it('does not auto select the only option while the behavior is disabled', async () => {
     const wrapper = createSelect({
       data: () => ({
         clearable: false,
@@ -466,12 +466,11 @@ describe('Select', () => {
     const vm = wrapper.vm as any
     await nextTick()
 
-    expect(vm.value).toBe('1')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('option_a')
-    expect(wrapper.findComponent(Select).emitted('change')).toEqual([['1']])
+    expect(vm.value).toBe('')
+    expect(wrapper.findComponent(Select).emitted('change')).toBeUndefined()
   })
 
-  it('auto selects the only option when options become available and clearable is false', async () => {
+  it('does not auto select an asynchronously loaded single option', async () => {
     const wrapper = createSelect({
       data: () => ({
         clearable: false,
@@ -491,9 +490,8 @@ describe('Select', () => {
     await nextTick()
     await nextTick()
 
-    expect(vm.value).toBe('1')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe('option_a')
-    expect(wrapper.findComponent(Select).emitted('change')).toEqual([['1']])
+    expect(vm.value).toBe('')
+    expect(wrapper.findComponent(Select).emitted('change')).toBeUndefined()
   })
 
   it('default value is null or undefined', async () => {

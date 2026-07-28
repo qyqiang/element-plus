@@ -541,7 +541,7 @@ describe('Select', () => {
     wrapper.unmount()
   })
 
-  test('auto selects the only option when clearable is false', async () => {
+  test('does not auto select the only option while the behavior is disabled', async () => {
     wrapper = _mount(
       `
       <el-select v-model="value" :clearable="false">
@@ -565,16 +565,11 @@ describe('Select', () => {
     )
     await nextTick()
 
-    expect((wrapper.vm as any).value).toBe('Option 1')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
-      'Golden Cake'
-    )
-    expect(wrapper.findComponent(Select).emitted('change')).toEqual([
-      ['Option 1'],
-    ])
+    expect((wrapper.vm as any).value).toBe('')
+    expect(wrapper.findComponent(Select).emitted('change')).toBeUndefined()
   })
 
-  test('auto selects the only option when options become available and clearable is false', async () => {
+  test('does not auto select an asynchronously loaded single option', async () => {
     wrapper = _mount(
       `
       <el-select v-model="value" :clearable="false">
@@ -603,13 +598,8 @@ describe('Select', () => {
     await nextTick()
     await nextTick()
 
-    expect(vm.value).toBe('Option 1')
-    expect(wrapper.find(`.${PLACEHOLDER_CLASS_NAME}`).text()).toBe(
-      'Golden Cake'
-    )
-    expect(wrapper.findComponent(Select).emitted('change')).toEqual([
-      ['Option 1'],
-    ])
+    expect(vm.value).toBe('')
+    expect(wrapper.findComponent(Select).emitted('change')).toBeUndefined()
   })
 
   test('the scenario of rendering label when there is a default value and persistent is false', async () => {
