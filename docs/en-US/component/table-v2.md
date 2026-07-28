@@ -67,7 +67,7 @@ table-v2/default-sort-state
 
 ## Empty data
 
-When `data` is empty, the empty area uses one `row-height` instead of stretching to fill the remaining table space. This also keeps the header, empty row, ghost row, horizontal scrollbar, and default footer in sequence.
+When `data` is empty in display mode, the empty area uses one `row-height` instead of stretching to fill the remaining table space. In editable mode, Table V2 does not render `el-table-v2__empty`; the editable add row is shown directly instead. Use the example buttons to compare both states.
 
 :::demo
 

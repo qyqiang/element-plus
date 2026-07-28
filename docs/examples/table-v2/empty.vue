@@ -1,4 +1,8 @@
 <template>
+  <div class="mode-actions">
+    <el-button @click="editTable = true">Edit mode</el-button>
+    <el-button @click="editTable = false">Display mode</el-button>
+  </div>
   <el-table-v2
     :columns="columns"
     :data="[]"
@@ -6,7 +10,7 @@
     :max-height="240"
     fixed
     ghost-table
-    edit-table
+    :edit-table="editTable"
     :ghost-row-template="ghostRowTemplate"
     :total="0"
     update-time="2026-07-16 10:08"
@@ -19,7 +23,8 @@
 </template>
 
 <script lang="tsx" setup>
-import { ElInput, ElOption, ElSelect } from 'element-plus'
+import { ref } from 'vue'
+import { ElButton, ElInput, ElOption, ElSelect } from 'element-plus'
 
 import type { Column } from 'element-plus'
 
@@ -37,6 +42,7 @@ const ghostRowTemplate: EmptyRow = {
   unit: '',
 }
 
+const editTable = ref(true)
 const unitOptions = ['lbs', 'kg', 'ton']
 
 const columns: Column<EmptyRow>[] = [
@@ -82,6 +88,12 @@ const columns: Column<EmptyRow>[] = [
 </script>
 
 <style scoped>
+.mode-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
 .empty-text {
   color: var(--color-gray-500);
 }

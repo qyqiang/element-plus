@@ -498,7 +498,8 @@ describe('TableV2.vue', () => {
     expect(defaultEmpty.exists()).toBe(true)
   })
 
-  test('uses one row height for empty data with a ghost row', async () => {
+  test('hides the empty state in ghost edit mode', async () => {
+    const editTable = ref(true)
     const columns = ref([
       {
         key: 'name',
@@ -517,19 +518,38 @@ describe('TableV2.vue', () => {
         width={700}
         maxHeight={240}
         ghostTable
-        editTable
+        editTable={editTable.value}
         isFooterDefault
       />
     ))
 
     const rootStyle = wrapper.find('.el-table-v2__root').attributes('style')
-    const emptyStyle = wrapper.find('.el-table-v2__empty').attributes('style')
     const grid = wrapper.findComponent({ name: 'ElTableV2Grid' })
 
-    expect(rootStyle).toContain('height: 176px;')
-    expect(emptyStyle).toContain('top: 44px;')
-    expect(emptyStyle).toContain('height: 44px;')
+    expect(wrapper.find('.el-table-v2__empty').exists()).toBe(false)
+    expect(rootStyle).toContain('height: 132px;')
+    expect(grid.props('height')).toBe(44)
+
+    editTable.value = false
+    await nextTick()
+
+    expect(wrapper.find('.el-table-v2__empty').exists()).toBe(true)
     expect(grid.props('height')).toBe(88)
+  })
+
+  test('hides the empty state in legacy editable mode', async () => {
+    const wrapper = mount(() => (
+      <TableV2
+        columns={generateColumns(3)}
+        data={[]}
+        width={700}
+        height={240}
+        canEditTable
+        editable
+      />
+    ))
+
+    expect(wrapper.find('.el-table-v2__empty').exists()).toBe(false)
   })
 
   test('slots cell scope', async () => {

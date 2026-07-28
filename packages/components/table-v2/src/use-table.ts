@@ -109,6 +109,11 @@ function useTable(props: TableV2Props) {
 
   const showEmpty = computed(() => {
     const noData = unref(data).length === 0
+    const isEditMode =
+      (props.canEditTable && props.editable) ||
+      (props.ghostTable && props.editTable)
+
+    if (isEditMode) return false
 
     return isArray(props.fixedData)
       ? props.fixedData.length === 0 && noData
