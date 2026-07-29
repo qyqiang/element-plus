@@ -236,62 +236,85 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
-  it('shows an overflow tooltip for a summary header title', async () => {
-    const label = 'Invoice Amount With A Very Long Header Label'
-    const mockRangeRect = vi
-      .spyOn(Range.prototype, 'getBoundingClientRect')
-      .mockReturnValue({
-        width: 240,
-        height: 20,
-      } as DOMRect)
-    const wrapper = mount({
-      components: {
-        ElTable,
-        ElTableColumn,
-      },
-      template: `
-        <el-table :data="testData">
-          <el-table-column
-            prop="name"
-            :label="label"
-            summary="Total: $613,036.50"
-            sortable
-            width="120"
-          />
-        </el-table>
-      `,
-      data() {
-        return {
-          label,
-          testData: getTestData(),
-        }
-      },
-    })
+  it.each([
+    ['the title', 240, 60, 'Invoice Amount With A Very Long Header Label'],
+    ['the summary', 60, 240, 'Total: $613,036.50'],
+    [
+      'the title and summary',
+      240,
+      240,
+      'Invoice Amount With A Very Long Header Label\nTotal: $613,036.50',
+    ],
+  ])(
+    'shows an overflow tooltip for %s',
+    async (_, titleRangeWidth, summaryRangeWidth, expectedContent) => {
+      const label = 'Invoice Amount With A Very Long Header Label'
+      const mockRangeRect = vi
+        .spyOn(Range.prototype, 'getBoundingClientRect')
+        .mockReturnValueOnce({
+          width: titleRangeWidth,
+          height: 20,
+        } as DOMRect)
+        .mockReturnValueOnce({
+          width: summaryRangeWidth,
+          height: 14,
+        } as DOMRect)
+      const wrapper = mount({
+        components: {
+          ElTable,
+          ElTableColumn,
+        },
+        template: `
+          <el-table :data="testData">
+            <el-table-column
+              prop="name"
+              :label="label"
+              summary="Total: $613,036.50"
+              sortable
+              width="120"
+            />
+          </el-table>
+        `,
+        data() {
+          return {
+            label,
+            testData: getTestData(),
+          }
+        },
+      })
 
-    await doubleWait()
+      await doubleWait()
 
-    const header = wrapper.find('thead th')
-    const headerTitle = header.find('.el-table__header-title')
-    const mockTitleRect = vi
-      .spyOn(headerTitle.element, 'getBoundingClientRect')
-      .mockReturnValue({
-        width: 80,
-        height: 20,
-      } as DOMRect)
+      const header = wrapper.find('thead th')
+      const headerTitle = header.find('.el-table__header-title')
+      const headerSummary = header.find('.el-table__header-summary')
+      const mockTitleRect = vi
+        .spyOn(headerTitle.element, 'getBoundingClientRect')
+        .mockReturnValue({
+          width: 80,
+          height: 20,
+        } as DOMRect)
+      const mockSummaryRect = vi
+        .spyOn(headerSummary.element, 'getBoundingClientRect')
+        .mockReturnValue({
+          width: 80,
+          height: 14,
+        } as DOMRect)
 
-    await header.trigger('mouseenter')
-    await rAF()
+      await header.trigger('mouseenter')
+      await rAF()
 
-    const tooltipContents = Array.from(
-      document.querySelectorAll('.el-popper span')
-    ).map((element) => element.textContent)
-    expect(tooltipContents).toContain(label)
-    expect(tooltipContents).not.toContain(`${label}\nTotal: $613,036.50`)
+      const tooltipContents = Array.from(
+        document.querySelectorAll('.el-popper span')
+      ).map((element) => element.textContent)
+      expect(tooltipContents).toContain(expectedContent)
 
-    mockTitleRect.mockRestore()
-    mockRangeRect.mockRestore()
-    wrapper.unmount()
-  })
+      mockSummaryRect.mockRestore()
+      mockTitleRect.mockRestore()
+      mockRangeRect.mockRestore()
+      wrapper.unmount()
+    }
+  )
 
   it('keeps the diagonal first column background when hovering the row', async () => {
     const tableStyles = readFileSync(

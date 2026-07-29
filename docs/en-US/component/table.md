@@ -179,7 +179,7 @@ table/custom-header
 
 ## Header summary
 
-Set `summary` on `el-table-column` to display supplementary text below the column label. When any column in a header row has a summary, all labels and sort buttons in that row align with the top label line. It can be used together with sorting and custom table layouts.
+Set `summary` on `el-table-column` to display supplementary text below the column label. When any column in a header row has a summary, all labels and sort buttons in that row align with the top label line. Hovering an overflowing label or summary displays that content in a tooltip. If both overflow, the tooltip displays the label above the summary. It can be used together with sorting and custom table layouts.
 
 :::demo
 

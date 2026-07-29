@@ -30,6 +30,26 @@ function useEvent<T extends DefaultRow>(
   const instance = getCurrentInstance()
   const parent = inject(TABLE_INJECTION_KEY)
 
+  const isContentOverflowing = (element: HTMLElement | null) => {
+    if (!element?.childNodes.length) return false
+
+    // Range measurements avoid Firefox scrollWidth inaccuracies.
+    const range = document.createRange()
+    range.setStart(element, 0)
+    range.setEnd(element, element.childNodes.length)
+    const { width: rangeWidth, height: rangeHeight } =
+      range.getBoundingClientRect()
+    const { width: elementWidth, height: elementHeight } =
+      element.getBoundingClientRect()
+    const { top, left, right, bottom } = getPadding(element)
+
+    return (
+      isGreaterThan(rangeWidth + left + right, elementWidth) ||
+      isGreaterThan(rangeHeight + top + bottom, elementHeight) ||
+      isGreaterThan(element.scrollWidth, elementWidth)
+    )
+  }
+
   const handleCellMouseEnter = (event: MouseEvent, row: T) => {
     if (!parent) return
     const table = parent
@@ -55,44 +75,47 @@ function useEvent<T extends DefaultRow>(
           `.${namespace}-table__header-title`
         ) as HTMLElement | null)
       : null
-    const cellChild =
-      summaryHeaderTitle ??
-      ((event.target as HTMLElement).querySelector(
-        column?.sortable ? '.cell-span' : '.cell'
-      ) as HTMLElement | null)
-    if (!cellChild?.childNodes.length) return
-    // use range width instead of scrollWidth to determine whether the text is overflowing
-    // to address a potential FireFox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1074543#c3
-    const range = document.createRange()
-    range.setStart(cellChild, 0)
-    range.setEnd(cellChild, cellChild.childNodes.length)
-    /** detail: https://github.com/element-plus/element-plus/issues/10790
-     *  What went wrong?
-     *  UI > Browser > Zoom, In Blink/WebKit, getBoundingClientRect() sometimes returns inexact values, probably due to lost precision during internal calculations. In the example above:
-     *    - Expected: 188
-     *    - Actual: 188.00000762939453
-     */
-    const { width: rangeWidth, height: rangeHeight } =
-      range.getBoundingClientRect()
-    const { width: cellChildWidth, height: cellChildHeight } =
-      cellChild.getBoundingClientRect()
+    const summaryHeaderText = namespace
+      ? (cell?.querySelector(
+          `.${namespace}-table__header-summary`
+        ) as HTMLElement | null)
+      : null
 
-    const { top, left, right, bottom } = getPadding(cellChild)
-    const horizontalPadding = left + right
-    const verticalPadding = top + bottom
-    const limitWidth = rangeWidth + horizontalPadding
-    if (
-      isGreaterThan(limitWidth, cellChildWidth) ||
-      isGreaterThan(rangeHeight + verticalPadding, cellChildHeight) ||
-      // When using a high-resolution screen, it is possible that a returns cellChild.scrollWidth value of 1921 and
-      // cellChildWidth returns a value of 1920.994140625. #16856 #16673
-      isGreaterThan(cellChild.scrollWidth, cellChildWidth)
-    ) {
+    if (summaryHeaderTitle) {
+      const tooltipLines = [
+        isContentOverflowing(summaryHeaderTitle)
+          ? summaryHeaderTitle.innerText || summaryHeaderTitle.textContent
+          : null,
+        isContentOverflowing(summaryHeaderText)
+          ? summaryHeaderText?.innerText || summaryHeaderText?.textContent
+          : null,
+      ].filter((content): content is string => !!content)
+
+      if (tooltipLines.length) {
+        createTablePopper(
+          {
+            effect: 'light',
+            popperClass: 'table-header-tooltip',
+          },
+          tooltipLines.join('\n'),
+          row,
+          column,
+          cell,
+          table
+        )
+      } else if (removePopper?.trigger === cell) {
+        removePopper?.()
+      }
+      return
+    }
+
+    const cellChild = (event.target as HTMLElement).querySelector(
+      column?.sortable ? '.cell-span' : '.cell'
+    ) as HTMLElement | null
+    if (isContentOverflowing(cellChild)) {
       createTablePopper(
         { effect: 'light' },
-        summaryHeaderTitle
-          ? ((cellChild.innerText || cellChild.textContent) ?? '')
-          : ((cell?.innerText || cell?.textContent) ?? ''),
+        (cell?.innerText || cell?.textContent) ?? '',
         row,
         column,
         cell,
