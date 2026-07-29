@@ -10,7 +10,8 @@
       :option-width="400"
       style="width: 240px"
     >
-      <el-option :label="test" :value="1"> </el-option>
+      <el-option label="testddddddddddddddddddddddddddddddddtestdddddddddddddddddddddddddddddddd" :value="1"> </el-option>
+      <el-option label="testdddd" :value="12"> </el-option>
     </el-select>
     <el-select
       v-model="value"

@@ -31,5 +31,9 @@ const options1 = ref([
     value: `Option 1`,
     label: `Option 1`,
   },
+  {
+    value: `Option 2`,
+    label: `Option 1Option 1Option 1Option 1Option 1Option 1Option 1Option 1Option 1Option 1`,
+  },
 ])
 </script>

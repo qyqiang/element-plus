@@ -97,7 +97,7 @@ select-v2/disabled
 
 ## Option tip
 
-Add a `tip` field to an option, then right-click the option to display its supplementary tooltip content. The tooltip remains available when option content is customized through the `default` slot. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`. Disabled options still display the tooltip; `disabled` only prevents selection. Option tooltips are enabled by default; set `show-option-tooltip` to `false` to disable both overflow and `tip` tooltips for Select V2.
+Add a `tip` field to an option to provide supplementary tooltip content. Option tooltips stay disabled until the pointer enters an option; the component then measures only that option and enables its tooltip when the label overflows or `tip` is present. The tooltip remains available when option content is customized through the `default` slot. If the option label overflows, the tooltip displays the full label and `tip` on separate lines; otherwise it displays only `tip`. Disabled options still display the tooltip; `disabled` only prevents selection. Set `show-option-tooltip` to `false` to disable both overflow and `tip` tooltips for Select V2.
 
 :::demo
 
