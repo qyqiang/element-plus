@@ -215,6 +215,29 @@ describe('Input.vue', () => {
     expect(tooltip.props('trigger')).toBe('click')
   })
 
+  test('error inputType allows a leading space', async () => {
+    const value = ref('')
+    const wrapper = mount(() => (
+      <Input inputType="error" v-model={value.value} />
+    ))
+    const input = wrapper.find('input')
+    const keydownEvent = new KeyboardEvent('keydown', {
+      bubbles: true,
+      cancelable: true,
+      code: 'Space',
+      key: ' ',
+    })
+
+    input.element.dispatchEvent(keydownEvent)
+    expect(keydownEvent.defaultPrevented).toBe(false)
+
+    input.element.value = ' '
+    await input.trigger('input')
+
+    expect(value.value).toBe(' ')
+    expect(input.element.value).toBe(' ')
+  })
+
   test('overflow tooltip shows input value and suppresses infoTip tooltip', async () => {
     const tip = 'Important Information'
     const value = 'This is a very long value'

@@ -24,6 +24,7 @@
         :disabled="inputTooltipDisabled"
         :offset="12"
         :trigger="inputTooltipTrigger"
+        :trigger-keys="[]"
       >
         <div ref="wrapperRef" :class="wrapperKls">
           <!-- prefix slot -->
@@ -215,6 +216,7 @@
         :disabled="inputTooltipDisabled"
         :offset="12"
         :trigger="inputTooltipTrigger"
+        :trigger-keys="[]"
       >
         <textarea
           :id="inputId"
