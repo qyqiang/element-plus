@@ -107,16 +107,21 @@
         :prefix-icon="Search"
         type="textarea"
         placeholder="Please input"
-        pre-star
+        input-type="error"
+        :rows="3"
+        maxlength="10"
+        show-word-limit
       />
     </el-form-item>
     <el-form-item style="width: 240px" error="Input is required">
       <el-input
         v-model="textarea2"
         type="textarea"
-        pre-star
+        :rows="3"
+        maxlength="10"
+        show-word-limit
         placeholder="Please input"
-        autocomplete="off"
+        autocomplete="on"
       />
     </el-form-item>
     <el-input
@@ -124,6 +129,7 @@
       style="width: 240px"
       :autosize="{ minRows: 2, maxRows: 4 }"
       type="textarea"
+      show-word-limit
       placeholder="Please input"
     >
       <template #textareaPrefix>

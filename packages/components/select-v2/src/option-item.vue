@@ -25,7 +25,10 @@
       <el-tooltip
         ref="tooltipRef"
         effect="light"
-        :disabled="!isTextOverflowing && !currentTip"
+        :disabled="
+          select.props.showOptionTooltip === false ||
+          (!isTextOverflowing && !currentTip)
+        "
         placement="right"
         popper-class="tipPopperClass"
       >
@@ -204,6 +207,7 @@ export default defineComponent({
     }
     return {
       ns,
+      select,
       contentId,
       multiple,
       hasDefaultSlot,

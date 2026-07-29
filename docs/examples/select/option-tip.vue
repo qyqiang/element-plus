@@ -1,5 +1,11 @@
 <template>
-  <el-select v-model="value" placeholder="Select" style="width: 240px">
+  <el-switch v-model="showOptionTooltip" active-text="Show option tooltip" />
+  <el-select
+    v-model="value"
+    :show-option-tooltip="showOptionTooltip"
+    placeholder="Select"
+    style="width: 240px"
+  >
     <el-option
       v-for="item in options"
       :key="item.value"
@@ -15,6 +21,7 @@
 import { ref } from 'vue'
 
 const value = ref('')
+const showOptionTooltip = ref(true)
 const options = [
   {
     value: 'short',
@@ -38,3 +45,10 @@ const options = [
   },
 ]
 </script>
+
+<style scoped>
+.el-switch {
+  display: flex;
+  margin-bottom: 16px;
+}
+</style>

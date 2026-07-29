@@ -1,7 +1,9 @@
 <template>
+  <el-switch v-model="showOptionTooltip" active-text="Show option tooltip" />
   <el-select-v2
     v-model="value"
     :options="options"
+    :show-option-tooltip="showOptionTooltip"
     placeholder="Please select"
     style="width: 240px"
   >
@@ -16,6 +18,7 @@
 import { ref } from 'vue'
 
 const value = ref('')
+const showOptionTooltip = ref(true)
 const options = [
   {
     value: 'short',
@@ -41,6 +44,11 @@ const options = [
 </script>
 
 <style scoped>
+.el-switch {
+  display: flex;
+  margin-bottom: 16px;
+}
+
 .option-label {
   overflow: hidden;
   text-overflow: ellipsis;

@@ -192,4 +192,24 @@ describe('SelectV2 option tip', () => {
     expect(tooltip.props('disabled')).toBe(false)
     expect(content).toEqual(['Disabled option tip'])
   })
+
+  it('disables option tooltips from the select prop', () => {
+    const wrapper = mountOption(
+      {
+        label: 'Option label',
+        value: 'option',
+        tip: 'Option tip',
+      },
+      {},
+      {
+        selectProps: {
+          showOptionTooltip: false,
+        },
+      }
+    )
+
+    expect(wrapper.findComponent({ name: 'ElTooltip' }).props('disabled')).toBe(
+      true
+    )
+  })
 })

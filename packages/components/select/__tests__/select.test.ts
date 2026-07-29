@@ -3409,6 +3409,27 @@ describe('Select', () => {
     expect(content).toEqual(['Disabled option tip'])
   })
 
+  it('should disable option tooltips from the select prop', async () => {
+    const wrapper = _mount(
+      `
+      <el-select :model-value="''" :show-option-tooltip="false">
+        <el-option
+          label="Option label"
+          value="option"
+          tip="Option tip"
+        />
+      </el-select>
+    `
+    )
+    await nextTick()
+
+    const tooltip = wrapper
+      .findComponent(Option)
+      .findComponent({ name: 'ElTooltip' })
+
+    expect(tooltip.props('disabled')).toBe(true)
+  })
+
   it('should pass option tip from the options attribute', async () => {
     const wrapper = _mount(
       `<el-select :model-value="''" :options="options" />`,

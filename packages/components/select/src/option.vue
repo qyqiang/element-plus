@@ -24,7 +24,11 @@
         v-else
         ref="tooltipRef"
         effect="light"
-        :disabled="!showTip || (!isTextOverflowing && !tip)"
+        :disabled="
+          !select.props.showOptionTooltip ||
+          !showTip ||
+          (!isTextOverflowing && !tip)
+        "
         :placement="placement"
         popper-class="optionPopperClass"
       >

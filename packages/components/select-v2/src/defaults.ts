@@ -126,6 +126,13 @@ export const selectV2Props = buildProps({
     default: true,
   },
   /**
+   * @description whether to show tooltips for overflowing option labels and option tips
+   */
+  showOptionTooltip: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description hook before the selected value changes. If `false` is returned or a `Promise` is returned and then is rejected, selection will be prevented
    */
   beforeChange: {

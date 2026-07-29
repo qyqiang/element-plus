@@ -269,6 +269,13 @@ export const selectProps = buildProps({
     default: undefined,
   },
   /**
+   * @description whether to show tooltips for overflowing option labels and option tips
+   */
+  showOptionTooltip: {
+    type: Boolean,
+    default: true,
+  },
+  /**
    * @description custom suffix icon component
    */
   suffixIcon: {
