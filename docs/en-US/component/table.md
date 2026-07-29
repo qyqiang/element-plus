@@ -177,6 +177,16 @@ table/custom-header
 
 :::
 
+## Header summary
+
+Set `summary` on `el-table-column` to display supplementary text below the column label. When any column in a header row has a summary, all labels and sort buttons in that row align with the top label line. It can be used together with sorting and custom table layouts.
+
+:::demo
+
+table/header-summary
+
+:::
+
 ## Diagonal header
 
 Use a diagonal first header cell when the first column needs `From` and `To` labels in the same header area.
@@ -390,6 +400,7 @@ table/tooltip-formatter
 | type                             | type of the column. If set to `selection`, the column will display checkbox. If set to `index`, the column will display index of the row (staring from 1). If set to `expand`, the column will display expand icon | ^[enum]`'default' \| 'selection' \| 'index' \| 'expand'`                                                                                                                    | default                           |
 | index                            | customize indices for each row, works on columns with `type=index`                                                                                                                                                 | ^[number] / ^[Function]`(index: number) => number`                                                                                                                          | —                                 |
 | label                            | column label                                                                                                                                                                                                       | ^[string]                                                                                                                                                                   | —                                 |
+| summary                          | supplementary text displayed below the column label                                                                                                                                                                | ^[string] / ^[number]                                                                                                                                                       | —                                 |
 | column-key                       | column's key. If you need to use the filter-change event, you need this attribute to identify which column is being filtered                                                                                       | ^[string]                                                                                                                                                                   | —                                 |
 | prop                             | field name. You can also use its alias: `property`                                                                                                                                                                 | ^[string]                                                                                                                                                                   | —                                 |
 | width                            | fixed column width; columns with this value cannot be resized by dragging                                                                                                                                          | ^[string] / ^[number]                                                                                                                                                       | ''                                |

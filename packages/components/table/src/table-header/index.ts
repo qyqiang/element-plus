@@ -251,6 +251,16 @@ export default defineComponent({
             }
             const diagonalHeader = column.diagonalHeader
             const isDiagonalHeaderCell = !!diagonalHeader
+            const rowHasSummary = subColumns.some(
+              (item) =>
+                !item.diagonalHeader &&
+                item.summary !== undefined &&
+                item.summary !== null
+            )
+            const hasSummary =
+              !isDiagonalHeaderCell &&
+              column.summary !== undefined &&
+              column.summary !== null
             const headerContent = isDiagonalHeaderCell
               ? [
                   h(
@@ -276,6 +286,31 @@ export default defineComponent({
                     _self: $parent,
                   })
                 : column.label
+            const headerMainContent =
+              rowHasSummary && !isDiagonalHeaderCell
+                ? h(
+                    'div',
+                    {
+                      class: ns.e('header-content'),
+                    },
+                    [
+                      h(
+                        'div',
+                        {
+                          class: ns.e('header-title'),
+                        },
+                        [headerContent]
+                      ),
+                      h(
+                        'div',
+                        {
+                          class: ns.e('header-summary'),
+                        },
+                        hasSummary ? String(column.summary) : ''
+                      ),
+                    ]
+                  )
+                : headerContent
 
             return h(
               'th',
@@ -284,6 +319,8 @@ export default defineComponent({
                   _class,
                   {
                     [ns.is('diagonal-header')]: isDiagonalHeaderCell,
+                    [ns.is('summary-row')]:
+                      rowHasSummary && !isDiagonalHeaderCell,
                   },
                 ],
                 colspan: column.colSpan,
@@ -330,7 +367,7 @@ export default defineComponent({
                     ],
                   },
                   [
-                    headerContent,
+                    headerMainContent,
                     column.sortable &&
                       h(
                         'span',

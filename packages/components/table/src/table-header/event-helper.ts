@@ -50,10 +50,17 @@ function useEvent<T extends DefaultRow>(
       }
     }
     // show the tooltip only when text overflow is detected
-    const cellChild = (event.target as HTMLElement).querySelector(
-      column?.sortable ? '.cell-span' : '.cell'
-    ) as HTMLElement
-    if (!cellChild.childNodes.length) return
+    const summaryHeaderTitle = namespace
+      ? (cell?.querySelector(
+          `.${namespace}-table__header-title`
+        ) as HTMLElement | null)
+      : null
+    const cellChild =
+      summaryHeaderTitle ??
+      ((event.target as HTMLElement).querySelector(
+        column?.sortable ? '.cell-span' : '.cell'
+      ) as HTMLElement | null)
+    if (!cellChild?.childNodes.length) return
     // use range width instead of scrollWidth to determine whether the text is overflowing
     // to address a potential FireFox bug: https://bugzilla.mozilla.org/show_bug.cgi?id=1074543#c3
     const range = document.createRange()
@@ -83,7 +90,9 @@ function useEvent<T extends DefaultRow>(
     ) {
       createTablePopper(
         { effect: 'light' },
-        (cell?.innerText || cell?.textContent) ?? '',
+        summaryHeaderTitle
+          ? ((cellChild.innerText || cellChild.textContent) ?? '')
+          : ((cell?.innerText || cell?.textContent) ?? ''),
         row,
         column,
         cell,

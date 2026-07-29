@@ -184,6 +184,115 @@ describe('Table.vue', () => {
     wrapper.unmount()
   })
 
+  it('renders a column summary below the header label', async () => {
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData">
+          <el-table-column
+            prop="name"
+            label="Invoice Amount $"
+            summary="Total: $613,036.50"
+            sortable
+          />
+          <el-table-column
+            prop="runtime"
+            label="Runtime"
+            :summary="0"
+          />
+          <el-table-column
+            prop="director"
+            label="Director"
+            sortable
+          />
+        </el-table>
+      `,
+      data() {
+        return {
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const headers = wrapper.findAll('thead th')
+    expect(headers[0].find('.el-table__header-title').text()).toBe(
+      'Invoice Amount $'
+    )
+    expect(headers[0].find('.el-table__header-summary').text()).toBe(
+      'Total: $613,036.50'
+    )
+    expect(headers[0].find('.icon-wrap').exists()).toBe(true)
+    expect(headers[1].find('.el-table__header-summary').text()).toBe('0')
+    expect(headers[2].classes()).toContain('is-summary-row')
+    expect(headers[2].find('.el-table__header-title').text()).toBe('Director')
+    expect(headers[2].find('.el-table__header-summary').text()).toBe('')
+    expect(headers[2].find('.icon-wrap').exists()).toBe(true)
+
+    wrapper.unmount()
+  })
+
+  it('shows an overflow tooltip for a summary header title', async () => {
+    const label = 'Invoice Amount With A Very Long Header Label'
+    const mockRangeRect = vi
+      .spyOn(Range.prototype, 'getBoundingClientRect')
+      .mockReturnValue({
+        width: 240,
+        height: 20,
+      } as DOMRect)
+    const wrapper = mount({
+      components: {
+        ElTable,
+        ElTableColumn,
+      },
+      template: `
+        <el-table :data="testData">
+          <el-table-column
+            prop="name"
+            :label="label"
+            summary="Total: $613,036.50"
+            sortable
+            width="120"
+          />
+        </el-table>
+      `,
+      data() {
+        return {
+          label,
+          testData: getTestData(),
+        }
+      },
+    })
+
+    await doubleWait()
+
+    const header = wrapper.find('thead th')
+    const headerTitle = header.find('.el-table__header-title')
+    const mockTitleRect = vi
+      .spyOn(headerTitle.element, 'getBoundingClientRect')
+      .mockReturnValue({
+        width: 80,
+        height: 20,
+      } as DOMRect)
+
+    await header.trigger('mouseenter')
+    await rAF()
+
+    const tooltipContents = Array.from(
+      document.querySelectorAll('.el-popper span')
+    ).map((element) => element.textContent)
+    expect(tooltipContents).toContain(label)
+    expect(tooltipContents).not.toContain(`${label}\nTotal: $613,036.50`)
+
+    mockTitleRect.mockRestore()
+    mockRangeRect.mockRestore()
+    wrapper.unmount()
+  })
+
   it('keeps the diagonal first column background when hovering the row', async () => {
     const tableStyles = readFileSync(
       resolve(__dirname, '../../../theme-chalk/src/table.scss'),

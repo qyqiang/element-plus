@@ -49,6 +49,7 @@ function useWatcher<T extends DefaultRow>(
   const registerNormalWatchers = () => {
     const props = [
       'label',
+      'summary',
       'filters',
       'filterMultiple',
       'filteredValue',

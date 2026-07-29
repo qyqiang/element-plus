@@ -35,6 +35,7 @@ type TableColumnCtx<T extends DefaultRow = DefaultRow> = {
   realWidth: number | null
   type: string
   label: string
+  summary?: string | number
   className: string
   labelClassName: string
   property: string
@@ -113,6 +114,10 @@ export default {
    * @description column label
    */
   label: String,
+  /**
+   * @description supplementary text displayed below the column label
+   */
+  summary: [String, Number],
   /**
    * @description class name of cells in the column
    */
