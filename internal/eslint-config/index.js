@@ -290,7 +290,6 @@ export default defineConfig([
             'config',
             'overrides',
             'pnpm',
-            'husky',
             'lint-staged',
             'eslintConfig',
           ],
