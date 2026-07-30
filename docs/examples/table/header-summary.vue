@@ -2,10 +2,11 @@
   <el-table :data="tableData" border style="width: 100%">
     <el-table-column
       prop="amount"
-      label="Invoice Amount With A Long Header $"
-      summary="Total Invoice Amount: $613,036.50"
+      label="Invoice Amount"
+      summary="Total: $613.50"
       sortable
-      width="180"
+      align="right"
+      width="280"
     />
     <el-table-column prop="customer" label="Customer" />
     <el-table-column prop="status" label="Status" />
