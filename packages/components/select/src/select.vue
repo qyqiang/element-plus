@@ -296,12 +296,7 @@
                   <slot name="suffixBeforeIcon" />
                 </template>
                 <el-icon
-                  v-if="
-                    iconComponent &&
-                    !showClearBtn &&
-                    !validateError &&
-                    !$slots.info
-                  "
+                  v-if="iconComponent && !showClearBtn && !$slots.info"
                   :class="[
                     nsSelect.e('caret'),
                     nsSelect.e('icon'),
@@ -342,15 +337,6 @@
                 <template v-if="$slots.suffixAfterIcon">
                   <slot name="suffixAfterIcon" />
                 </template>
-                <el-icon
-                  v-if="validateState && validateIcon"
-                  :class="[
-                    nsInput.e('icon'),
-                    nsInput.e('validateIcon'),
-                    nsInput.is('loading', validateState === 'validating'),
-                  ]"
-                  v-html="validateIcon"
-                />
               </div>
             </div>
           </template>

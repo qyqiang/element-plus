@@ -269,7 +269,7 @@
                 </div>
               </div>
               <div ref="suffixRef" :class="nsSelect.e('suffix')">
-                <template v-if="iconComponent && !validateError">
+                <template v-if="iconComponent">
                   <div
                     v-if="$slots?.suffix"
                     v-show="!showClearBtn"
@@ -319,15 +319,6 @@
                     />
                   </svg>
                 </el-icon>
-                <el-icon
-                  v-if="validateState && validateIcon && needStatusIcon"
-                  :class="[
-                    nsInput.e('icon'),
-                    nsInput.e('validateIcon'),
-                    nsInput.is('loading', validateState === 'validating'),
-                  ]"
-                  v-html="validateIcon"
-                />
               </div>
             </div>
           </template>

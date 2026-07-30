@@ -35,10 +35,10 @@
         <el-option label="Zone 4" :value="6" />
       </el-select>
     </el-form-item>
-    <el-form-item label="Activity zone" prop="region">
+    <el-form-item label="Activity zone" prop="count">
       <el-select
-        v-model="ruleForm.region1"
-        placeholder="Activity zone-singht"
+        v-model="ruleForm.region"
+        placeholder="Please select"
         fit-input-width
         clearable
       >
